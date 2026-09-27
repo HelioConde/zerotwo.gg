@@ -282,7 +282,7 @@ Objetivo: validar o diferencial central do ZeroTwo.
 - [x] Separar evidência de aprendizado no Sync.
 - [x] Evitar conclusões com amostra insuficiente.
 - [x] Atualizar Sync sob demanda reutilizando cache Riot.
-- [ ] Mostrar mudança da hipótese inicial após partidas reais.
+- [x] Mostrar mudança da hipótese inicial após partidas reais — Sync compara intenção do match com contexto e partidas observadas.
 - [ ] Alimentar futuras recomendações com resultados observados.
 
 ---
@@ -306,7 +306,7 @@ Objetivo: validar o diferencial central do ZeroTwo.
 
 - [ ] Depois de novas partidas: **Seu Gaming DNA mudou**.
 - [ ] Depois de match: **Jogue com seu 02 para começar o Sync**.
-- [ ] Depois de partida conjunta: **02 Sync atualizado**.
+- [x] Depois de partida conjunta: **02 Sync atualizado** — novas partidas compartilhadas são destacadas desde a última visita.
 - [ ] Recomendações novas quando o DNA mudar significativamente.
 - [ ] 02 Streak.
 - [ ] Evolução do jogador.
