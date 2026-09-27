@@ -2,9 +2,9 @@
 
 > **You're 01. Find your 02.**
 
-ZeroTwo.gg é uma plataforma de compatibilidade gamer, inicialmente focada em **League of Legends**, que usa perfil + sinais reais das partidas para encontrar um duo e, depois do match, aprender se a dupla realmente funciona.
+ZeroTwo.gg é uma plataforma de **player analytics + Looking For Group**, inicialmente integrada ao **League of Legends**. O produto entrega valor antes do cadastro: busca pública por Riot ID, histórico, dados oficiais e Gaming DNA multimodo. Find Your 02 e 02 Sync entram depois, quando o jogador quer encontrar companhia para jogar.
 
-**Produto:** 01 → Find Your 02 → jogar juntos → 02 Sync → algoritmo aprende → próximas recomendações melhoram.
+**Produto:** busca pública → Player 01 → Gaming DNA → Find Your 02 → jogar juntos → 02 Sync → algoritmo aprende.
 
 A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 
@@ -13,75 +13,100 @@ A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 
 ### Product UX rules — current
 
-- **Result first, explanation on demand:** the primary journey is connect a game → see a Player 02 → play → let 02 Sync learn. DNA and scoring explain the result; they are not prerequisites the player must understand.
-- **Evidence-aware language:** with fewer than 5 valid matches, compatibility is presented as **initial signals**, never as a strong verdict. Confidence grows with evidence.
-- **No fake precision:** matching points and heuristic weights stay internal/debug-oriented. The player sees human reasons, not +25/+20 scoring.
-- **02 Sync is post-match learning:** before shared matches, show the next mission instead of empty analytics. After shared games, surface observed duo patterns.
-- **Multi-game identity:** ZeroTwo is the platform. League DNA is one game-specific signal; future games add to the player's broader Gaming Identity.
+- **Information first:** Riot ID search, player stats and recent history work before account creation.
+- **Account later:** authentication is required only when the player wants to claim Player 01 / use Find Your 02.
+- **Player value does not depend on network size:** ZeroTwo must remain useful even with one user.
+- **Gaming DNA is context-aware:** Ranked, Normal, ARAM and Arena are separate contexts. Never force a Summoner's Rift metric onto another mode.
+- **No fake precision:** ZeroTwo does not create unofficial MMR/ELO or expose matching weights as player-facing truth.
+- **Mode intent is explicit:** Find 02 asks what the player wants to play now instead of assuming Ranked.
+- **02 Sync is post-match learning:** the match creates a hypothesis; shared games and voluntary feedback test it.
+- **Multi-game identity:** ZeroTwo is the platform. League is one integration; VALORANT will require its own opt-in/RSO flow.
 
 ## North Star de UX
 
-### Resultado primeiro. Explicação depois.
+### Primeiro valor em segundos
 
-O usuário não entra no ZeroTwo para configurar um sistema. Ele entra para **encontrar alguém compatível para jogar**.
+The primary activation event is now **First Value**, not First 02.
 
-O primeiro uso deve levar ao primeiro candidato com o mínimo possível de decisões:
+Target public flow:
 
-**Landing → Google → Riot ID → processamento automático → primeiro 02**
+**Landing → Riot ID → useful player profile**
 
-### Regras de UX
+The player should receive useful information before creating an account.
 
-- Nenhum clique deve existir apenas para fazer o sistema continuar.
-- Se o próximo passo puder ser inferido, o ZeroTwo executa automaticamente.
-- O primeiro resultado vem antes das configurações avançadas.
-- Gaming DNA é recompensa e enriquecimento, não bloqueio.
-- Detalhes técnicos aparecem sob demanda.
-- Uma tela deve ter uma ação principal evidente.
-- Dados com baixa amostra devem comunicar incerteza.
-- Não apresentar heurísticas como precisão estatística.
-- Perfil avançado é preenchido progressivamente depois do primeiro valor.
+### Activation ladder
 
-### Evento de ativação
+1. **First Value** — first useful public player result.
+2. **First 01** — user claims/saves a Player 01 identity.
+3. **First 02** — first relevant candidate displayed.
+4. **First Match** — mutual interest.
+5. **First Sync** — first shared-match learning signal.
 
-**First 02:** primeiro candidato personalizado exibido ao usuário.
+Primary metrics:
 
-Meta inicial de produto: chegar ao First 02 na primeira sessão e reduzir continuamente o tempo e as ações necessárias para isso.
-
----
+- Time to First Value.
+- Search success rate.
+- Public profile return rate.
+- Public profile → Player 01 conversion.
+- Player 01 → First 02.
+- First 02 → mutual match.
+- Match → first shared game.
+- D1 / D7 / D30 return.
 
 ## Jornada alvo
 
-### Novo usuário
+### Visitante
 
-1. Landing: **Encontrar meu 02**
-2. Autenticação: **Continuar com Google**
-3. Riot ID: informar `Nome#TAG`
-4. ZeroTwo automaticamente:
-   - localiza o jogador;
-   - consulta dados Riot;
-   - procura partidas válidas;
-   - inicia/atualiza Gaming DNA;
-   - procura candidatos com os sinais disponíveis.
-5. Resultado: **Encontramos seu 02**
-6. Decisões humanas:
-   - **Tenho interesse**
-   - **Mostrar outro 02**
-   - **Por que combinamos?**
-7. Após match: 02 Sync acompanha a dupla.
+1. Opens ZeroTwo.gg.
+2. Searches Riot ID `GameName#TagLine`.
+3. Immediately receives:
+   - Riot player identity and level;
+   - official Ranked data;
+   - Champion Mastery;
+   - recent champion form;
+   - game-mode distribution;
+   - Gaming DNA by mode;
+   - recent match history;
+   - expandable match details.
+4. Can filter history by Ranked / Normal / ARAM / Arena / Other.
+5. Can share the player-profile URL.
+6. On a later visit, ZeroTwo can locally show what changed since the previous lookup.
+7. Can leave without creating an account.
 
-O usuário não deve precisar clicar separadamente em “Atualizar Riot”, “Analisar partidas” ou “Atualizar busca” durante o primeiro uso.
+### Conversão para Player 01
+
+1. Player chooses what they want to play: Ranked / Normal / ARAM / Arena / Any.
+2. Chooses **Use as Player 01**.
+3. Authentication is requested.
+4. Riot ID, server and selected mode survive the auth flow.
+5. Player 01 opens without automatically forcing Find 02.
+
+### Find Your 02
+
+1. Player can change desired mode at any time.
+2. Mode intent is persisted in discovery settings.
+3. Matching considers mode intent together with server, availability, intent and compatible gameplay signals.
+4. Player sees one candidate at a time.
+5. Human-readable reasons appear before technical details.
+6. Both players must express interest before a connection is created.
+
+### 02 Sync
+
+1. Mutual interest creates the pair.
+2. ZeroTwo asks them to play together.
+3. After shared matches, 02 Sync begins to learn.
+4. Voluntary post-play feedback can improve future recommendations.
 
 ### Usuário recorrente
 
-A Central deixa de ser checklist de configuração e passa a mostrar acontecimentos:
+ZeroTwo should answer **what changed?**
 
-- seu 02 / matches;
-- mudanças no Gaming DNA;
-- novas partidas analisadas;
-- evolução do 02 Sync;
-- novos candidatos relevantes.
-
----
+- new matches;
+- mode distribution changes;
+- recent KDA/form changes;
+- Gaming DNA changes;
+- new relevant 02 candidates;
+- 02 Sync evolution.
 
 ## Estado atual
 
@@ -98,11 +123,20 @@ A Central deixa de ser checklist de configuração e passa a mostrar acontecimen
 - [x] Cache server-side inicial para consultas Riot.
 - [x] Persistência de Riot ID, PUUID, servidor e Summoner Level.
 - [x] Match-V5 integrado para análise de partidas.
-- [x] Filtro de partidas válidas de Summoner's Rift.
-- [x] Gaming DNA com métricas observáveis.
+- [x] Public Riot ID lookup before account creation.
+- [x] Official League-V4 Ranked data on public profile.
+- [x] Champion-Mastery-V4 integration.
+- [x] Recent champion performance summaries.
+- [x] Shareable player-profile URLs.
+- [x] Local "what changed since last visit" comparison.
+- [x] Match history filters and expandable match details.
+- [x] Server-side Match-V5 cache reused by public and authenticated analysis.
+- [x] Gaming DNA multimode (Ranked / Normal / ARAM / Arena / other supported contexts).
+- [x] Context-aware metrics so SR-specific metrics do not contaminate other modes.
+- [x] Gaming DNA with observable metrics.
 - [x] Confiança do DNA baseada no tamanho da amostra.
 - [x] Explicações/evidências para a leitura do DNA.
-- [x] Find Your 02 v1 com compatibilidade explicável.
+- [x] Find Your 02 v2 with explicit desired-mode intent and explainable compatibility.
 - [x] Pool LAB com jogadores sintéticos para testes.
 - [x] Interesse e match reais preparados para usuários UUID.
 - [x] LAB Match para candidatos sintéticos.
@@ -123,11 +157,11 @@ A Central deixa de ser checklist de configuração e passa a mostrar acontecimen
 
 ## Problemas UX encontrados
 
-- [x] Primeiro valor exigia cliques demais — onboarding reduzido e Find 02 abre automaticamente após o Riot ID.
+- [x] Primeiro valor exigia cliques demais — public Riot ID search now delivers value before auth.
 - [ ] Central expõe funcionamento interno antes do resultado.
 - [ ] Excesso de informação simultânea aumenta carga cognitiva.
 - [ ] Ações operacionais como “Analisar partidas” e “Atualizar busca” exigem trabalho do usuário.
-- [x] Gaming DNA funcionava como portão — agora é iniciado em paralelo e não bloqueia Find 02.
+- [x] Gaming DNA funcionava como portão — public profile and DNA now work independently of Find 02.
 - [x] Configuração de perfil acontecia cedo demais — removida do caminho crítico; perfil mínimo é preparado automaticamente.
 - [ ] Resultado do 02 compete visualmente com módulos técnicos.
 - [x] Score heurístico `70/100` saiu da primeira camada; resultado usa faixa qualitativa e cálculo fica em detalhes.
@@ -297,8 +331,8 @@ Não assumir metas como benchmarks de mercado. Criar baseline com usuários reai
 
 Depois da instrumentação:
 
-- [ ] Landing atual vs. hero focado somente em **Encontre seu 02**.
-- [ ] Cadastro antes do Riot ID vs. Riot ID antes do cadastro, se tecnicamente/politicamente viável.
+- [ ] Search hero variants focused on faster First Value.
+- [x] Riot ID before account creation for League public lookup.
 - [ ] Score numérico vs. compatibilidade qualitativa.
 - [ ] Resultado direto vs. Central após onboarding.
 - [ ] DNA resumido vs. DNA completo.
@@ -313,17 +347,17 @@ Alterar uma hipótese relevante por experimento e medir ativação + retenção,
 
 ### Agora
 
-**P0 UX → First 02 automático → analytics → medir funil.**
+**P0 UX → First Value rápido → perfil público útil → analytics → medir retorno.**
 
 ### Depois
 
-**Progressive disclosure → Find 02 v2 → 02 Sync real.**
+**Progressive disclosure → mode-aware Find 02 → 02 Sync real.**
 
 ### Em seguida
 
 **DNA avançado → aprendizado de dupla → retenção → VALORANT.**
 
-Não aumentar a quantidade de funcionalidades visíveis antes de validar que novos usuários chegam rapidamente ao First 02.
+Não aumentar a quantidade de funcionalidades visíveis antes de validar que novos usuários chegam rapidamente ao First Value e retornam ao perfil público.
 
 ---
 
