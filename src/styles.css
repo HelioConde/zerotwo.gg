@@ -164,3 +164,41 @@ html,body,#root{max-width:100%;overflow-x:hidden}.gamingLanding{width:100%;overf
 #profile-overview,#profile-dna,#profile-champions,#profile-matches,#profile-find{scroll-margin-top:118px}.resultConfidence{margin-left:0!important;color:#7f8a99!important;border-color:#ffffff16!important;background:#ffffff03}
 .modeDnaTop>b{letter-spacing:.3px}.modeDnaStats span small{line-height:1.25}.recentMatches article strong{white-space:nowrap}.matchChampion small{max-width:380px}
 @media(max-width:800px){.publicLookup.hasResult{padding-top:28px}.publicLookup.hasResult .lookupIntro h1{font-size:clamp(38px,12vw,54px)}.profileTabs{top:57px;overflow-x:auto;justify-content:flex-start}.profileTabs a{flex:0 0 auto}.profileTabs .profileTabsCta{margin-left:0}.publicLookup.hasResult .publicPlayerResult{margin-top:24px}.matchChampion small{max-width:170px}}
+
+/* Player 01 dashboard refinement */
+.clientHero.playerReady{min-height:292px;grid-template-columns:minmax(0,1fr) 350px;margin-top:22px;margin-bottom:14px}
+.clientHero.playerReady:after{font-size:190px;left:52%;bottom:-64px}
+.clientHero.playerReady .clientHeroCopy{padding:34px 42px}
+.clientHero.playerReady .clientHeroCopy h2{font-size:clamp(38px,4.1vw,58px);line-height:.9;letter-spacing:-3px;margin:12px 0 16px}
+.clientHero.playerReady .clientHeroCopy p{font-size:12px;max-width:520px}
+.clientHero.playerReady .clientHeroCopy button{margin-top:16px}
+.clientHero.playerReady .connectedGames{width:auto;margin:22px 22px 22px 0;align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding:14px}
+.identityOverview{margin:0 clamp(24px,4vw,62px) 16px}
+.playerMoment{margin:0 clamp(24px,4vw,62px) 16px;border:1px solid #ffffff0e;background:linear-gradient(110deg,#090d14,#070a0f);padding:18px 20px}
+.playerMoment>header{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-bottom:14px;border-bottom:1px solid #ffffff0c}
+.playerMoment header small{font:800 7px ui-monospace,monospace;letter-spacing:1.2px;color:#697486}
+.playerMoment header h3{margin:4px 0 0;font-size:16px}
+.playerMomentActions{display:flex;gap:7px;align-items:center}
+.playerMomentActions button,.playerMomentActions a{padding:8px 10px;border:1px solid #ffffff12;background:#ffffff03;color:#7f8a99;text-decoration:none;font:900 7px ui-monospace,monospace;letter-spacing:.5px}
+.playerMomentActions button:hover,.playerMomentActions a:hover{border-color:#ff477e55;color:#ff719b}
+.playerMomentGrid{display:grid;grid-template-columns:repeat(4,1fr);margin-top:14px;border:1px solid #ffffff0b}
+.playerMomentGrid>span{padding:13px 15px;border-right:1px solid #ffffff0b;min-width:0}
+.playerMomentGrid>span:last-child{border-right:0}
+.playerMomentGrid small{display:block;color:#5f6b7c;font:800 6px ui-monospace,monospace;letter-spacing:1px}
+.playerMomentGrid b{display:block;margin-top:5px;color:#eef2f7;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.playerMomentGrid em{display:block;margin-top:3px;color:#5d6879;font:700 7px ui-monospace,monospace;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.playerRecentMini{display:grid;grid-template-columns:125px 1fr;gap:13px;align-items:center;margin-top:12px;padding:10px 12px;background:#05080c;border:1px solid #ffffff09}
+.playerRecentMini>small{color:#596577;font:900 6px ui-monospace,monospace;letter-spacing:1px}
+.playerRecentMini>div{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.playerRecentMini span{padding:6px 9px;border-left:1px solid #ffffff0d;min-width:0}
+.playerRecentMini b{display:block;font-size:9px}
+.playerRecentMini em{display:block;margin-top:2px;color:#657184;font:700 6px ui-monospace,monospace;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.playerMomentNote{display:flex;align-items:center;gap:8px;margin:11px 0 0;padding:9px 11px;background:#ff477e08;border-left:2px solid #ff477e55;color:#758193;font-size:8px;line-height:1.5}
+.playerMomentNote .ztIcon{width:14px}
+.clientModules{grid-template-columns:minmax(0,1.6fr) minmax(290px,.8fr)!important}
+.clientModules .dnaModule{grid-column:auto!important}
+.clientModules .syncModule{grid-column:1/-1;min-height:170px}
+.clientModules .syncModule .syncTelemetry{height:46px;margin:18px 0 14px}
+.labConnectionNotice{padding:8px 12px;border-bottom:1px solid #ffb44d2b;background:#2a1a080f;color:#d9a358;font:900 6px ui-monospace,monospace;letter-spacing:1px;text-align:center}
+@media(max-width:1050px){.clientHero.playerReady{grid-template-columns:1fr 310px}.clientHero.playerReady .clientHeroCopy{padding:30px}.playerMomentGrid{grid-template-columns:repeat(2,1fr)}.playerMomentGrid>span:nth-child(2){border-right:0}.playerMomentGrid>span:nth-child(-n+2){border-bottom:1px solid #ffffff0b}.clientModules{grid-template-columns:1fr 1fr!important}.clientModules .dnaModule{grid-column:1/-1!important}.clientModules .syncModule{grid-column:1/-1}}
+@media(max-width:760px){.clientHero.playerReady{min-height:auto;display:block;margin:14px 18px}.clientHero.playerReady .clientHeroCopy{padding:28px 22px 18px}.clientHero.playerReady .clientHeroCopy h2{font-size:42px}.clientHero.playerReady .connectedGames{margin:12px 16px 18px}.playerMoment,.identityOverview{margin:0 18px 14px}.playerMoment>header{align-items:flex-start;flex-direction:column}.playerMomentActions{width:100%}.playerMomentActions button,.playerMomentActions a{flex:1;text-align:center}.playerMomentGrid{grid-template-columns:1fr 1fr}.playerRecentMini{grid-template-columns:1fr}.playerRecentMini>div{grid-template-columns:1fr}.clientModules{grid-template-columns:1fr!important}.clientModules .dnaModule,.clientModules .syncModule{grid-column:auto!important}}
