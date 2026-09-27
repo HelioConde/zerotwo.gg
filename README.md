@@ -189,7 +189,7 @@ ZeroTwo should answer **what changed?**
 - [ ] Ações operacionais como “Analisar partidas” e “Atualizar busca” exigem trabalho do usuário.
 - [x] Gaming DNA funcionava como portão — public profile and DNA now work independently of Find 02.
 - [x] Configuração de perfil acontecia cedo demais — removida do caminho crítico; perfil mínimo é preparado automaticamente.
-- [ ] Resultado do 02 compete visualmente com módulos técnicos.
+- [x] Resultado do 02 ganhou uma superfície de decisão própria, sem competir com módulos técnicos.
 - [x] Score heurístico `70/100` saiu da primeira camada; resultado usa faixa qualitativa e cálculo fica em detalhes.
 - [ ] Estados como STANDBY, READY, 03/04 e telemetria têm peso excessivo para usuários novos.
 - [ ] Detalhes do DNA são mostrados antes de o usuário demonstrar interesse neles.
@@ -220,10 +220,10 @@ Objetivo: **entregar valor antes do cadastro e transformar o contexto real do jo
 - [ ] Criar tela única de processamento com progresso automático.
 - [x] Não bloquear Find 02 por baixa amostra de DNA.
 - [ ] Usar perfil/Riot/sinais disponíveis enquanto DNA amadurece.
-- [ ] Resultado do candidato deve substituir o dashboard como primeira recompensa.
-- [ ] CTA principal do resultado: **Tenho interesse**.
-- [ ] CTA secundário: **Mostrar outro 02**.
-- [ ] Explicação: **Por que combinamos?** recolhida por padrão.
+- [x] Resultado do candidato substitui o dashboard como primeira recompensa quando o fluxo começou em Find 02.
+- [x] CTA principal do resultado: **Tenho interesse**.
+- [x] CTA secundário: **Mostrar outro 02**.
+- [x] Explicação detalhada/evidências recolhida por padrão.
 - [ ] Remover botões operacionais do critical path.
 - [ ] Corrigir estados 03/04, READY/STANDBY e singular/plural.
 - [x] Persistir LAB Match no backend para testes consistentes.
@@ -265,7 +265,7 @@ Objetivo: manter profundidade sem sobrecarregar o primeiro uso.
 - [ ] Adicionar preferências progressivamente.
 - [x] Adicionar controle de sessão e **Encerrar busca**.
 - [x] Separar **NOW** de **RECURRING**.
-- [ ] Melhorar tratamento de candidatos esgotados/ignorados.
+- [x] Melhorar tratamento de candidatos esgotados/ignorados — skip é persistido e remove o candidato da fila.
 - [ ] LAB fallback também quando candidatos reais forem filtrados e o resultado final ficar vazio.
 
 ---
