@@ -1,6 +1,6 @@
 import { supabase } from '../supabase';
 
-const LOG_SESSION_ID=(()=>{const k='zt_log_session';let v=sessionStorage.getItem(k);if(!v){v=crypto.randomUUID();sessionStorage.setItem(k,v)}return v})();
+export const LOG_SESSION_ID=(()=>{const k='zt_log_session';let v=sessionStorage.getItem(k);if(!v){v=crypto.randomUUID();sessionStorage.setItem(k,v)}return v})();
 const LOG_BLOCKED=/token|password|authorization|secret|cookie|puuid|api.?key|refresh|access/i;
 const PRODUCT_BUFFER_KEY='zt_product_event_buffer';
 
