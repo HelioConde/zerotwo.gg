@@ -17,7 +17,7 @@ function plural(n:number,one:string,many:string){
 
 function observedContext(connection:any){
   const contexts=Array.isArray(connection?.sync?.metrics?.contexts)?connection.sync.metrics.contexts:[];
-  return contexts[0]||null;
+  return [...contexts].sort((a:any,b:any)=>Number(b?.games||0)-Number(a?.games||0))[0]||null;
 }
 
 function hypothesisCopy(connection:any){
