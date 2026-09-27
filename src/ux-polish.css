@@ -1429,3 +1429,231 @@ footer .brandButton:hover{filter:brightness(1.08)}
     padding:24px 18px;
   }
 }
+
+/* Find 02 decision surface — candidate first, explanation second */
+.candidateFocus .candidateDecisionCard{
+  width:min(900px,100%)!important;
+  padding:0!important;
+  overflow:hidden;
+  border-color:#ffffff14!important;
+  background:
+    radial-gradient(circle at 90% 0,#ff477e0d,transparent 28%),
+    linear-gradient(145deg,#090c13,#06080d)!important;
+}
+.candidateDecisionCard .candidateTop{
+  padding:22px 24px;
+  border-bottom:1px solid #ffffff0d;
+  align-items:center!important;
+}
+.candidateDecisionCard .candidateTop h3{
+  margin:4px 0 6px!important;
+  font-size:25px!important;
+}
+.candidateDecisionCard .candidateTop>strong{
+  align-self:start;
+  border:1px solid #ffffff12;
+  background:#ffffff04;
+  padding:8px 10px;
+  font:900 9px ui-monospace,monospace!important;
+  letter-spacing:.5px;
+}
+.candidateDecisionSummary{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(250px,.75fr);
+  gap:0;
+  border-bottom:1px solid #ffffff0d;
+}
+.candidateWhy{
+  padding:24px;
+  border-right:1px solid #ffffff0d;
+}
+.candidateWhy>small,
+.candidateSignalsPrimary>small{
+  color:#ff668f;
+  font:900 9px ui-monospace,monospace;
+  letter-spacing:.9px;
+}
+.candidateWhy h4{
+  margin:9px 0 10px;
+  color:#edf2f8;
+  font-size:20px;
+  line-height:1.25;
+}
+.candidateWhy p{
+  max-width:610px;
+  margin:0;
+  color:#7f8b9d;
+  font-size:11px;
+  line-height:1.65;
+}
+.candidateEssentials{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.candidateEssentials>span{
+  min-height:82px;
+  padding:16px;
+  border-right:1px solid #ffffff0a;
+  border-bottom:1px solid #ffffff0a;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.candidateEssentials>span:nth-child(even){border-right:0}
+.candidateEssentials>span:nth-last-child(-n+2){border-bottom:0}
+.candidateEssentials small,
+.candidateEvidenceMeta small{
+  color:#667386;
+  font:850 8px ui-monospace,monospace;
+  letter-spacing:.7px;
+}
+.candidateEssentials b,
+.candidateEvidenceMeta b{
+  margin-top:5px;
+  color:#e6ebf2;
+  font-size:12px;
+}
+.candidateSignalsPrimary{
+  padding:20px 24px;
+  border-bottom:1px solid #ffffff0d;
+}
+.candidateSignalsPrimary>div{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+.candidateSignalsPrimary span{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  min-height:42px;
+  padding:10px 12px;
+  border:1px solid #ffffff0d;
+  background:#ffffff025;
+  color:#98a4b4;
+  font-size:10px;
+  line-height:1.45;
+}
+.candidateSignalsPrimary span .ztIcon{
+  width:13px;
+  flex:0 0 auto;
+  margin-top:1px;
+}
+.candidateSignalsPrimary .candidateLowEvidence{
+  grid-column:1/-1;
+  color:#7b8798;
+}
+.candidateEvidenceDetails{
+  border-bottom:1px solid #ffffff0d;
+}
+.candidateEvidenceDetails summary{
+  min-height:48px;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  cursor:pointer;
+  color:#8d98a8;
+  font:900 9px ui-monospace,monospace;
+  list-style:none;
+}
+.candidateEvidenceDetails summary::-webkit-details-marker{display:none}
+.candidateEvidenceDetails summary:hover{color:#ff7ca2}
+.candidateEvidenceDetails summary b{
+  color:#ff668f;
+  font-size:8px;
+}
+.candidateEvidenceDetails[open] summary{
+  border-bottom:1px solid #ffffff0d;
+  background:#ffffff018;
+}
+.candidateEvidenceBody{
+  padding:16px 24px 20px;
+  background:#05070b;
+}
+.candidateEvidenceMeta{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border:1px solid #ffffff0d;
+  margin-bottom:12px;
+}
+.candidateEvidenceMeta>span{
+  padding:11px 12px;
+  border-right:1px solid #ffffff0d;
+}
+.candidateEvidenceMeta>span:last-child{border-right:0}
+.candidateEvidenceBody>p{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin:7px 0 0;
+  color:#8793a4;
+  font-size:10px;
+  line-height:1.55;
+}
+.candidateEvidenceBody>p .ztIcon{
+  width:12px;
+  flex:0 0 auto;
+  margin-top:2px;
+}
+.candidateDecisionFooter{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:20px;
+  align-items:center;
+  padding:18px 24px 22px;
+}
+.candidateDecisionFooter>div:first-child small{
+  color:#ff668f;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:.8px;
+}
+.candidateDecisionFooter>div:first-child p{
+  margin:5px 0 0;
+  color:#758193;
+  font-size:10px;
+}
+.candidateDecisionFooter .candidateActions{
+  min-width:440px;
+  margin:0!important;
+}
+.candidateDecisionFooter .candidateActions button{
+  min-height:46px!important;
+  font-size:10px!important;
+}
+.candidateDecisionFooter .candidateActions button:last-child{
+  border-color:#ff477e!important;
+  background:#ff477e!important;
+  color:#fff!important;
+}
+.candidateDecisionFooter .candidateActions button:last-child:disabled{
+  opacity:.55;
+}
+.candidateDecisionCard .matchSuccess{
+  margin:18px 24px 24px;
+}
+
+@media(max-width:760px){
+  .candidateDecisionSummary{grid-template-columns:1fr}
+  .candidateWhy{border-right:0;border-bottom:1px solid #ffffff0d}
+  .candidateEssentials{grid-template-columns:1fr 1fr}
+  .candidateSignalsPrimary>div{grid-template-columns:1fr}
+  .candidateEvidenceMeta{grid-template-columns:1fr 1fr}
+  .candidateEvidenceMeta>span:nth-child(2){border-right:0}
+  .candidateEvidenceMeta>span:nth-child(-n+2){border-bottom:1px solid #ffffff0d}
+  .candidateDecisionFooter{
+    grid-template-columns:1fr;
+    padding:16px;
+  }
+  .candidateDecisionFooter .candidateActions{
+    min-width:0;
+    width:100%;
+  }
+  .candidateDecisionCard .candidateTop{padding:18px 16px}
+  .candidateWhy,
+  .candidateSignalsPrimary,
+  .candidateEvidenceBody{padding-inline:16px}
+  .candidateEvidenceDetails summary{padding-inline:16px}
+}
