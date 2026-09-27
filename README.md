@@ -22,6 +22,8 @@ A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 - **Discovery intent is explicit:** **NOW** solves the next session; **RECURRING** looks for a player to build a repeatable gaming routine with.
 - **02 Sync is post-match learning:** the match creates a hypothesis; shared games and voluntary feedback test it.
 - **Multi-game identity:** ZeroTwo is the platform. League is one integration; VALORANT will require its own opt-in/RSO flow.
+- **Narrative + depth:** YearIn.LoL is the reference for storytelling and emotional presentation; Rewind.LoL is the reference for deep history, trends and exploration. ZeroTwo must combine both without copying either.
+- **Relationship layer:** historical co-players are not just a stats feature. They are the bridge into Find 02 and 02 Sync.
 
 ## North Star de UX
 
@@ -102,6 +104,16 @@ Primary metrics:
 3. After shared matches, 02 Sync begins to learn.
 4. Voluntary post-play feedback can improve future recommendations.
 
+### Minha História
+
+The authenticated Player 01 has a private, progressively loaded history layer inspired by the strengths of YearIn.LoL and Rewind.LoL:
+
+1. **Story** — large, memorable facts instead of raw tables.
+2. **History/Trends** — activity rhythm, modes, champions, streaks and period comparison.
+3. **Circle** — recurring teammates found in the player's own match history.
+4. **Relationship bridge** — Circle can later connect historical co-players to ZeroTwo accounts and 02 Sync.
+5. History grows progressively from Riot Match-V5 and reuses the server-side cache instead of pretending complete coverage.
+
 ### Usuário recorrente
 
 ZeroTwo should answer **what changed?**
@@ -150,7 +162,12 @@ ZeroTwo should answer **what changed?**
 - [x] Interesse e match reais preparados para usuários UUID.
 - [x] LAB Match para candidatos sintéticos.
 - [x] Estrutura inicial de 02 Sync.
-- [x] Player Client responsivo com Central, Find 02, DNA e Sync.
+- [x] Player Client responsivo com Central, Minha História, Find 02, DNA e Sync.
+- [x] Authenticated progressive `player-history` Edge Function.
+- [x] Incremental match-history loading that reuses `lol_match_cache`.
+- [x] My Story: time played, activity rhythm, modes, champions, streaks and highlights.
+- [x] Private recent Circle derived from recurring same-team players.
+- [x] Contextual bridge from history to recurring Find 02.
 
 ### Feito — validações reais
 
