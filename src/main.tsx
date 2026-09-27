@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import { supabase } from './supabase';
 
 const core=[
 ['01','Find Your 02','Match adaptativo por intenção, disponibilidade, preferências e gameplay.'],
@@ -11,10 +12,32 @@ const core=[
 ['06','Cross-Game DNA','Descubra padrões do seu estilo que sobrevivem entre jogos.']
 ];
 const universe=['Compatibility Explanation','02 Intent','Squad DNA','Discoveries','Players Like Me','Evolution Paths','Champion / Agent Affinity','My Gaming Universe','Player Journey','02 Challenges','Rivals','02 Experiments','02 Research','02 Wrapped','Gameplay Feed','ZeroTwo Identity','Who’s Looking for 02?','02 Reputation','02 Streak'];
+function Connect01(){
+ const [email,setEmail]=useState('');
+ const [riotId,setRiotId]=useState('AlchemyFlames#br1');
+ const [session,setSession]=useState<any>(null);
+ const [status,setStatus]=useState('');
+ const [player,setPlayer]=useState<any>(null);
+ useEffect(()=>{supabase.auth.getSession().then(({data})=>setSession(data.session)); const {data}=supabase.auth.onAuthStateChange((_e,s)=>setSession(s)); return()=>data.subscription.unsubscribe()},[]);
+ async function login(){setStatus('Enviando link seguro...'); const {error}=await supabase.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.href}}); setStatus(error?error.message:'Confira seu e-mail para entrar no ZeroTwo.');}
+ async function lookup(){
+  const [gameName,tagLine]=riotId.split('#'); if(!gameName||!tagLine){setStatus('Use o formato Nome#TAG.');return}
+  setStatus('Consultando Riot...'); setPlayer(null);
+  const {data,error}=await supabase.functions.invoke('riot-lol-player',{body:{gameName,tagLine,region:'americas',platform:'br1',includeSummoner:true}});
+  if(error){setStatus('Não foi possível consultar a Riot. Verifique a sessão e a API key.');return}
+  if(data?.error){setStatus(data.message||data.error);return}
+  setPlayer(data); setStatus('Conta Riot encontrada.');
+ }
+ return <section id="connect01" className="connect01"><div><span>LIVE RIOT DATA</span><h2>Conecte seu <em>01.</em></h2><p>Agora o ZeroTwo pode consultar seu perfil LoL pela nossa Edge Function. Sua chave Riot nunca chega ao navegador.</p></div><div className="connectCard">
+ {!session?<><label>E-mail</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="voce@email.com"/><button onClick={login}>Entrar com link seguro</button></>:<><div className="signed">● SESSÃO ATIVA <button onClick={()=>supabase.auth.signOut()}>Sair</button></div><label>Riot ID</label><input value={riotId} onChange={e=>setRiotId(e.target.value)} placeholder="Nome#TAG"/><button onClick={lookup}>Buscar meu perfil Riot →</button></>}
+ {status&&<p className="status">{status}</p>}
+ {player?.account&&<div className="riotResult"><small>RIOT ACCOUNT</small><h3>{player.account.gameName}<span>#{player.account.tagLine}</span></h3><p>PUUID conectado com sucesso.</p>{player.lol?.summoner&&<div className="summonerData"><span>Nível <b>{player.lol.summoner.summonerLevel}</b></span><span>Plataforma <b>BR1</b></span></div>}</div>}
+ </div></section>
+}
 function App(){return <main>
 <nav><a className="brand" href="#">ZERO<span>TWO</span><small>.GG</small></a><div className="navlinks"><a href="#core">Produto</a><a href="#universe">Universo 02</a><button>Entrar com Riot</button></div></nav>
-<section className="hero"><div className="eyebrow"><i/> LEAGUE OF LEGENDS + VALORANT</div><h1>YOU'RE <em>01.</em><br/>FIND YOUR <span>02.</span></h1><p>Não procure apenas alguém do mesmo elo. Encontre alguém que <strong>funciona com você</strong> — e deixe o ZeroTwo aprender com cada partida da dupla.</p><div className="actions"><button className="primary">Encontrar meu 02 →</button><a className="ghost" href="#core">Ver como funciona</a></div><div className="loop"><b>01</b><span>entender você</span><strong>→</strong><b>02</b><span>prever o match</span><strong>→</strong><b>SYNC</b><span>provar jogando</span><strong>→</strong><b>LEARN</b></div></section>
-<section id="core" className="section"><header><span>CORE SYSTEM</span><h2>O match é só o começo.</h2><p>ZeroTwo fecha o ciclo que um LFG comum abandona: prever, conectar, jogar, medir e aprender.</p></header><div className="grid">{core.map((x,i)=><article className={i<3?'hot':''} key={x[1]}><small>{x[0]}</small><h3>{x[1]}</h3><p>{x[2]}</p>{i===0&&<b className="badge">IDEIA PRINCIPAL</b>}</article>)}</div></section>
+<section className="hero"><div className="eyebrow"><i/> LEAGUE OF LEGENDS + VALORANT</div><h1>YOU'RE <em>01.</em><br/>FIND YOUR <span>02.</span></h1><p>Não procure apenas alguém do mesmo elo. Encontre alguém que <strong>funciona com você</strong> — e deixe o ZeroTwo aprender com cada partida da dupla.</p><div className="actions"><a className="primary" href="#connect01">Conectar meu 01 →</a><a className="ghost" href="#core">Ver como funciona</a></div><div className="loop"><b>01</b><span>entender você</span><strong>→</strong><b>02</b><span>prever o match</span><strong>→</strong><b>SYNC</b><span>provar jogando</span><strong>→</strong><b>LEARN</b></div></section>
+<Connect01/><section id="core" className="section"><header><span>CORE SYSTEM</span><h2>O match é só o começo.</h2><p>ZeroTwo fecha o ciclo que um LFG comum abandona: prever, conectar, jogar, medir e aprender.</p></header><div className="grid">{core.map((x,i)=><article className={i<3?'hot':''} key={x[1]}><small>{x[0]}</small><h3>{x[1]}</h3><p>{x[2]}</p>{i===0&&<b className="badge">IDEIA PRINCIPAL</b>}</article>)}</div></section>
 <section className="sync"><div className="syncCopy"><span>02 SYNC</span><h2>Compatibilidade que precisa ser <em>provada.</em></h2><p>Uma porcentagem bonita não basta. O ZeroTwo transforma compatibilidade em uma hipótese e aprende com as partidas posteriores.</p><ol><li><b>01</b> previsão inicial</li><li><b>02</b> vocês jogam</li><li><b>03</b> Sync mede mudanças</li><li><b>04</b> próximo match melhora</li></ol></div><div className="card"><div className="online">● POSSÍVEL 02</div><small>HÉLIO × PLAYER 02</small><strong>92<sup>%</sup></strong><p>Hipótese de compatibilidade</p><div className="metrics"><span>Gameplay <b>94</b></span><span>Horários <b>97</b></span><span>Playstyle <b>89</b></span><span>Objetivos <b>88</b></span></div><button>Testar em 5 partidas</button><small className="note">Ainda não validado pelo 02 Sync</small></div></section>
 <section id="universe" className="section universe"><header><span>PRODUCT UNIVERSE</span><h2>Uma identidade gamer, não outro tracker.</h2><p>Essas capacidades entram conforme o núcleo provar valor. O roadmap pode mudar com dados reais de uso.</p></header><div className="chips">{universe.map((x,i)=><span key={x}><b>{String(i+7).padStart(2,'0')}</b>{x}</span>)}</div></section>
 <footer><a className="brand" href="#">ZERO<span>TWO</span><small>.GG</small></a><p>You're 01. Find your 02.</p><small>Produto independente. Não endossado pela Riot Games.</small></footer>
