@@ -39,6 +39,8 @@ jobs:
         run: npm run typecheck
 
       - name: Vite build
+        env:
+          VITE_VALORANT_RSO_ENABLED: ${{ vars.VITE_VALORANT_RSO_ENABLED }}
         run: npm run build
 
       - name: Configure GitHub Pages
