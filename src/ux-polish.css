@@ -911,3 +911,153 @@ footer .brandButton:hover{filter:brightness(1.08)}
   cursor:pointer;
 }
 .publicBackHome:hover{color:#ff739c}
+
+/* Multi-game public entry */
+.publicGameSwitch{
+  display:flex;
+  gap:8px;
+  margin:0 0 20px;
+}
+.publicGameSwitch>button,
+.gameSourceButtons>button{
+  appearance:none;
+  border:1px solid #ffffff10;
+  background:#070a0f;
+  color:#7f8999;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  text-align:left;
+  font:inherit;
+}
+.publicGameSwitch>button{
+  min-width:180px;
+  padding:10px 12px;
+}
+.publicGameSwitch>button.active,
+.gameSourceButtons>button.active{
+  color:#fff;
+  border-color:#ff477e55;
+  background:#ff477e0d;
+}
+.publicGameSwitch .gameBadge{
+  flex:0 0 auto;
+}
+.publicGameSwitch span{
+  display:grid;
+  gap:2px;
+}
+.publicGameSwitch b{
+  font-size:10px;
+}
+.publicGameSwitch small{
+  color:#6f7a8b;
+  font:800 7px ui-monospace,monospace;
+  letter-spacing:.5px;
+}
+.publicGameSwitch>button.active small{color:#ff739c}
+
+.gameSourceButtons{
+  display:grid!important;
+  grid-template-columns:1fr 1fr;
+  gap:8px!important;
+}
+.gameSourceButtons>button{
+  width:100%;
+  padding:10px 12px;
+}
+.gameSourceButtons>button small{
+  margin-left:auto;
+}
+
+.valorantPublicGate{
+  margin-top:22px;
+  max-width:900px;
+  border:1px solid #7f58ff2e;
+  background:linear-gradient(110deg,#090b12,#100b18);
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.valorantPublicGate>div{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.valorantPublicGate .gameBadge{
+  flex:0 0 auto;
+}
+.valorantPublicGate span{
+  display:grid;
+  gap:3px;
+  min-width:0;
+}
+.valorantPublicGate small{
+  color:#9e84ff;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:.8px;
+}
+.valorantPublicGate b{
+  font-size:13px;
+  color:#fff;
+}
+.valorantPublicGate em{
+  color:#7f8a9a;
+  font-size:10px;
+  font-style:normal;
+  line-height:1.45;
+}
+.valorantPublicGate>button{
+  flex:0 0 auto;
+  min-height:44px;
+  border:1px solid #7f58ff66;
+  background:#7f58ff14;
+  color:#d7cbff;
+  padding:0 16px;
+  font:900 9px ui-monospace,monospace;
+  cursor:pointer;
+}
+.valorantPublicGate>button:hover{
+  background:#7f58ff20;
+  border-color:#9d82ff;
+  color:#fff;
+}
+.valorantPublicGate.pending>button{
+  border-color:#ffffff16;
+  background:#0a0d13;
+  color:#9aa4b2;
+}
+
+.homeLookup.game-valorant .homeHeroBackdrop{
+  filter:hue-rotate(42deg) saturate(.78);
+}
+.homeLookup.game-valorant .homeHeroCopy h1 span{
+  color:#9d82ff;
+}
+.homeLookup.game-valorant .lookupTrust span:first-child{
+  color:#9d82ff;
+}
+
+@media(max-width:760px){
+  .publicGameSwitch{
+    overflow-x:auto;
+    padding-bottom:3px;
+  }
+  .publicGameSwitch>button{
+    min-width:150px;
+  }
+  .gameSourceButtons{
+    grid-template-columns:1fr!important;
+  }
+  .valorantPublicGate{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .valorantPublicGate>button{
+    width:100%;
+  }
+}

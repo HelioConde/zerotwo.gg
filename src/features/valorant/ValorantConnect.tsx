@@ -39,6 +39,10 @@ export function ValorantConnect({onLinkedChange}:{onLinkedChange?:(linked:boolea
 
   useEffect(()=>{
     load();
+    if(sessionStorage.getItem('zt_player_focus')==='valorant'){
+      sessionStorage.removeItem('zt_player_focus');
+      setTimeout(()=>document.getElementById('valorant-connect')?.scrollIntoView({behavior:'smooth',block:'center'}),80);
+    }
     const params=new URLSearchParams(location.search);
     if(params.get('valorant')){
       params.delete('valorant');
@@ -75,7 +79,7 @@ export function ValorantConnect({onLinkedChange}:{onLinkedChange?:(linked:boolea
   }
 
   if(!RSO_ENABLED){
-    return <div className="connectedGame upcoming valorantIntegration">
+    return <div id="valorant-connect" className="connectedGame upcoming valorantIntegration">
       <GameBadge game="valorant"/>
       <div><small>VALORANT</small><b>RSO PREPARADO</b><em>AGUARDANDO ACESSO DE PRODUÇÃO DA RIOT</em></div>
       <span>EM PREPARAÇÃO</span>
@@ -83,7 +87,7 @@ export function ValorantConnect({onLinkedChange}:{onLinkedChange?:(linked:boolea
   }
 
   if(profile?.linked){
-    return <div className="connectedGame active valorantIntegration linked">
+    return <div id="valorant-connect" className="connectedGame active valorantIntegration linked">
       <GameBadge game="valorant"/>
       <div>
         <small>VALORANT // OPT-IN RSO</small>
@@ -95,7 +99,7 @@ export function ValorantConnect({onLinkedChange}:{onLinkedChange?:(linked:boolea
     </div>;
   }
 
-  return <div className="connectedGame upcoming valorantIntegration ready">
+  return <div id="valorant-connect" className="connectedGame upcoming valorantIntegration ready">
     <GameBadge game="valorant"/>
     <div><small>VALORANT // RIOT SIGN ON</small><b>CONECTAR COM OPT-IN</b><em>SUAS ESTATÍSTICAS SÓ APARECEM DEPOIS DA AUTORIZAÇÃO RIOT</em>{status&&<em className="valorantStatus">{status}</em>}</div>
     <div className="valorantInlineActions"><select aria-label="Região do VALORANT" value={shard} onChange={e=>setShard(e.target.value)}>{SHARDS.map(([value,label])=><option value={value} key={value}>{label}</option>)}</select><button onClick={connect} disabled={loading}>{loading?'ABRINDO...':'CONECTAR RIOT'}</button></div>
