@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './ux-polish.css';
 import { supabase } from './supabase';
-import { ztLog, ztLogOnce, flushProductEvents } from './lib/telemetry';
+import { LOG_SESSION_ID, ztLog, ztLogOnce, flushProductEvents } from './lib/telemetry';
 import { Icon, GameBadge, RoleBadge } from './components/ZeroTwoUI';
 import { hourLabel } from './lib/format';
 import { PlayerHistoryView } from './features/history/PlayerHistoryView';
