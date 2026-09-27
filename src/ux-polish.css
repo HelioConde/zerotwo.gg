@@ -69,6 +69,74 @@ summary:focus-visible{
   box-shadow:none!important;
 }
 
+/* RETURN VISITS ----------------------------------------------------------- */
+.recentPlayerSearches{
+  max-width:900px;
+  margin-top:16px;
+  border-top:1px solid var(--zt-line);
+  padding-top:13px;
+}
+.recentPlayerSearches>div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+.recentPlayerSearches>div>small{
+  color:#7d899a;
+  font:900 10px ui-monospace,monospace;
+  letter-spacing:.8px;
+}
+.recentPlayerSearches>div>button{
+  border:0;
+  background:transparent;
+  color:#6f7a8b;
+  font:850 9px ui-monospace,monospace;
+}
+.recentPlayerSearches>div>button:hover{color:#ff739c}
+.recentPlayerSearches>section{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:3px;
+  scrollbar-width:none;
+}
+.recentPlayerSearches>section::-webkit-scrollbar{display:none}
+.recentPlayerSearches>section>button{
+  flex:0 0 auto;
+  min-width:190px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:11px 12px;
+  border:1px solid var(--zt-line);
+  background:#080b11c7;
+  color:#dbe2eb;
+  text-align:left;
+}
+.recentPlayerSearches>section>button:hover{
+  border-color:#ff477e45;
+  background:#ff477e08;
+}
+.recentPlayerSearches>section span{min-width:0}
+.recentPlayerSearches>section b{
+  display:block;
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:11px;
+}
+.recentPlayerSearches>section small{
+  display:block;
+  margin-top:3px;
+  color:#728094;
+  font:800 9px ui-monospace,monospace;
+}
+.recentPlayerSearches>section .ztIcon{width:13px;flex:0 0 auto}
+
 /* PUBLIC PLAYER ----------------------------------------------------------- */
 .publicPlayerV4{margin-top:20px!important}
 .playerMomentIdentity small,
@@ -336,6 +404,9 @@ summary:focus-visible{
 
 /* MOBILE ------------------------------------------------------------------ */
 @media(max-width:760px){
+  .recentPlayerSearches{margin-top:14px}
+  .recentPlayerSearches>section>button{min-width:170px}
+
   .homeHero{
     min-height:auto!important;
     padding:46px 18px 38px!important;
