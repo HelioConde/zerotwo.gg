@@ -825,3 +825,89 @@ summary:focus-visible{
   }
   .authOverlayClose{position:fixed;right:14px;top:12px}
 }
+
+/* Navigation escape hatch + VALORANT RSO */
+.brandButton{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  padding:0;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  text-align:left;
+}
+.gameNav .brandButton:hover,
+footer .brandButton:hover{filter:brightness(1.08)}
+
+.valorantIntegration{
+  position:relative;
+  min-height:64px;
+}
+.valorantIntegration>div:nth-child(2){min-width:0}
+.valorantIntegration b i{
+  color:#ff477e;
+  font-style:normal;
+  margin-left:2px;
+}
+.valorantIntegration.linked{
+  border-color:#7f58ff35!important;
+  background:linear-gradient(90deg,#0a0d14,#0e0a16)!important;
+}
+.valorantInlineActions{
+  margin-left:auto;
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.valorantInlineActions button,
+.valorantInlineActions select{
+  min-height:30px;
+  border:1px solid #ffffff12;
+  background:#070a0f;
+  color:#8e99aa;
+  padding:6px 9px;
+  font:850 7px ui-monospace,monospace;
+  letter-spacing:.4px;
+}
+.valorantInlineActions button{
+  cursor:pointer;
+}
+.valorantInlineActions button:hover{
+  color:#fff;
+  border-color:#7f58ff55;
+}
+.valorantInlineActions button:disabled{opacity:.5;cursor:wait}
+.valorantInlineActions select{
+  color:#c4cbd6;
+  outline:0;
+}
+.valorantStatus{
+  color:#ff739c!important;
+  margin-top:4px;
+}
+@media(max-width:760px){
+  .valorantIntegration{
+    align-items:flex-start!important;
+    flex-wrap:wrap;
+  }
+  .valorantInlineActions{
+    width:100%;
+    margin:8px 0 0 32px;
+  }
+  .valorantInlineActions button{flex:1}
+}
+
+.publicBackHome{
+  margin:0 0 10px;
+  border:0;
+  background:transparent;
+  color:#8a95a6;
+  padding:8px 0;
+  font:900 9px ui-monospace,monospace;
+  letter-spacing:.7px;
+  cursor:pointer;
+}
+.publicBackHome:hover{color:#ff739c}

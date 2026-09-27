@@ -119,9 +119,18 @@ Potential future use:
 
 VALORANT will **not** reuse League's public Riot-ID lookup model.
 
-ZeroTwo intends to implement VALORANT only after Production access and Riot Sign On are available.
+ZeroTwo now includes an implementation-ready RSO integration scaffold:
 
-VALORANT player-specific data will require explicit player opt-in through RSO before it is displayed.
+- authenticated Player 01 can start Riot Sign On;
+- OAuth state is stored server-side with a short expiration;
+- Riot callback links only the authenticated player's own Riot account;
+- VAL-MATCH-V1 and VAL-CONTENT-V1 are consumed only after opt-in;
+- PUUID remains server-side;
+- the player can unlink VALORANT;
+- public arbitrary Riot-ID lookup is not provided for VALORANT;
+- the frontend remains feature-flagged until Riot Production/RSO credentials are approved and the Supabase functions are deployed.
+
+VALORANT player-specific data requires explicit player opt-in through RSO before it is displayed.
 
 ## Game integrity
 
@@ -263,3 +272,6 @@ Before submitting:
 - [ ] Confirm Gaming DNA does not display unofficial MMR/ELO.
 - [ ] Confirm the Developer Portal product metadata matches the current ZeroTwo flow.
 - [ ] Submit the Production API key application.
+- [ ] Request/complete Riot Sign On provisioning for VALORANT.
+- [ ] Deploy VALORANT RSO migration and Edge Functions to the ZeroTwo Supabase project.
+- [ ] Enable `VITE_VALORANT_RSO_ENABLED=true` only after the RSO callback is approved.
