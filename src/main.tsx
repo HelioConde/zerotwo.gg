@@ -72,7 +72,7 @@ function HomeExperience(){
   </section>
   <section className="homeRelationship">
    <header><small>03 // FROM DATA TO PEOPLE</small><h2>ENTENDER VOCÊ É SÓ<br/><span>O COMEÇO.</span></h2><p>O mercado para na estatística ou no match. O ZeroTwo conecta os dois lados e continua aprendendo depois que vocês realmente jogam juntos.</p></header>
-   <div className="relationshipLoop"><article><span>01</span><small>PLAYER 01</small><b>SEU CONTEXTO</b><p>Modo, rotina, histórico e Gaming DNA.</p></article><i>→</i><article><Icon name="search"/><small>FIND YOUR 02</small><b>INTENÇÃO</b><p>Agora ou recorrente. Mesmo servidor e contexto jogável.</p></article><i>→</i><article><span className="two">02</span><small>PLAYER 02</small><b>CONEXÃO</b><p>Vocês escolhem jogar juntos.</p></article><i>→</i><article className="sync"><Icon name="sync"/><small>02 SYNC</small><b>EVIDÊNCIA</b><p>As partidas reais testam a hipótese.</p></article></div>
+   <div className="relationshipLoop"><article><span>01</span><small>PLAYER 01</small><b>SEU CONTEXTO</b><p>Modo, rotina, histórico e Gaming DNA.</p></article><i>→</i><article><Icon name="search"/><small>FIND YOUR 02</small><b>INTENÇÃO</b><p>Agora ou recorrente. Mesmo servidor e contexto jogável.</p></article><i>→</i><article><span className="two">02</span><small>PLAYER 02</small><b>CONEXÃO</b><p>Vocês escolhem jogar juntos.</p></article><i>→</i><article className="relationSync"><Icon name="sync"/><small>02 SYNC</small><b>EVIDÊNCIA</b><p>As partidas reais testam a hipótese.</p></article></div>
    <div className="relationshipQuote"><small>ZEROTWO // CLOSED LOOP</small><b>OUTROS APPS PARAM NO MATCH.<br/><span>O ZEROTWO COMEÇA A APRENDER DEPOIS DELE.</span></b></div>
   </section>
  </section>
