@@ -10,6 +10,15 @@ A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 
 ---
 
+
+### Product UX rules — current
+
+- **Result first, explanation on demand:** the primary journey is connect a game → see a Player 02 → play → let 02 Sync learn. DNA and scoring explain the result; they are not prerequisites the player must understand.
+- **Evidence-aware language:** with fewer than 5 valid matches, compatibility is presented as **initial signals**, never as a strong verdict. Confidence grows with evidence.
+- **No fake precision:** matching points and heuristic weights stay internal/debug-oriented. The player sees human reasons, not +25/+20 scoring.
+- **02 Sync is post-match learning:** before shared matches, show the next mission instead of empty analytics. After shared games, surface observed duo patterns.
+- **Multi-game identity:** ZeroTwo is the platform. League DNA is one game-specific signal; future games add to the player's broader Gaming Identity.
+
 ## North Star de UX
 
 ### Resultado primeiro. Explicação depois.
