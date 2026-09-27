@@ -1,0 +1,428 @@
+/* ZeroTwo UX/UI audit corrections — 2026-09-27
+   This file is intentionally loaded after styles.css.
+   It centralizes high-priority usability/accessibility fixes without
+   continuing the old pattern of scattering overrides through the legacy sheet. */
+
+:root{
+  --zt-focus:#ff6f9b;
+  --zt-text:#dce3ec;
+  --zt-muted:#8d98a8;
+  --zt-subtle:#6f7b8c;
+  --zt-panel:#070a0f;
+  --zt-line:#ffffff14;
+}
+
+/* Accessible focus: preserve the cyber aesthetic without hiding keyboard state. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible{
+  outline:2px solid var(--zt-focus);
+  outline-offset:3px;
+}
+.lookupSearch input:focus-visible,
+.lookupSearch select:focus-visible{
+  outline:2px solid var(--zt-focus)!important;
+  outline-offset:-2px;
+}
+
+/* SEARCH-FIRST HOME ------------------------------------------------------- */
+.homeHero{
+  grid-template-columns:minmax(0,1fr)!important;
+  min-height:calc(100svh - 64px);
+  padding-inline:max(24px,calc((100vw - 1180px)/2))!important;
+}
+.homeHeroPath{display:none!important}
+.homeHeroCopy{max-width:980px!important}
+.homeHeroCopy h1{
+  max-width:930px!important;
+  font-size:clamp(58px,7.1vw,108px)!important;
+}
+.homeHeroCopy>p{
+  max-width:720px!important;
+  color:#a4adba!important;
+}
+.homeHeroCopy .lookupSearch{
+  max-width:900px!important;
+  min-height:60px;
+}
+.homeHeroCopy .lookupTrust span{font-size:9px!important}
+.homeHeroCopy .identitySources{display:none!important}
+
+/* Once a result exists the page becomes a tool, not a marketing landing. */
+.homeLookup.hasResult .homeHero{
+  min-height:0!important;
+  padding:18px max(18px,calc((100vw - 1180px)/2))!important;
+  border-bottom:1px solid var(--zt-line);
+}
+.homeLookup.hasResult .homeHeroBackdrop,
+.homeLookup.hasResult .homeHeroCopy>small,
+.homeLookup.hasResult .homeHeroCopy>h1,
+.homeLookup.hasResult .homeHeroCopy>p,
+.homeLookup.hasResult .lookupTrust,
+.homeLookup.hasResult .identitySources{display:none!important}
+.homeLookup.hasResult .homeHeroCopy{max-width:1180px!important}
+.homeLookup.hasResult .lookupSearch{
+  max-width:1180px!important;
+  margin:0!important;
+  box-shadow:none!important;
+}
+
+/* PUBLIC PLAYER ----------------------------------------------------------- */
+.publicPlayerV4{margin-top:20px!important}
+.playerMomentIdentity small,
+.playerMomentIdentity p,
+.playerMomentLead>small,
+.playerMomentLead>p,
+.momentKeyStats small,
+.momentKeyStats em,
+.playerMomentActions button,
+.playerMomentActions>b,
+.rankMini>small,
+.rankMini>span em,
+.rankMini>span small{
+  font-size:11px!important;
+  line-height:1.35;
+}
+.playerMomentLead>p{
+  color:#98a3b3!important;
+  max-width:760px!important;
+}
+.momentKeyStats b{font-size:25px!important}
+
+.profileNavigationRow{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:stretch;
+  margin:14px 0;
+}
+.profileViewNav{
+  grid-template-columns:repeat(4,1fr)!important;
+  margin:0!important;
+}
+.profileViewNav button{
+  min-height:64px;
+  padding:12px 14px!important;
+}
+.profileViewNav button>b{font-size:11px!important}
+.profileViewNav button>span{font-size:10px!important;color:#758193!important}
+.profileViewNav button>small{font-size:9px!important}
+.profileFindAction{
+  min-width:190px;
+  border:1px solid #ff477e66;
+  background:linear-gradient(135deg,#ff477e1c,#0d0b11);
+  color:#ff83a8;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  font-weight:900;
+  font-size:12px;
+}
+.profileFindAction .ztIcon{width:17px}
+
+.momentExplainToggle{
+  width:100%;
+  min-height:52px;
+  border:1px solid var(--zt-line);
+  background:#080b11;
+  color:#aab4c2;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  text-align:left;
+}
+.momentExplainToggle>span{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:12px;
+  font-weight:850;
+}
+.momentExplainToggle>span .ztIcon{width:15px}
+.momentExplainToggle>b{
+  color:#ff739d;
+  font-size:10px;
+  letter-spacing:.5px;
+}
+.momentExplanation p{font-size:12px!important;line-height:1.6!important}
+.momentExplanation small{font-size:10px!important}
+
+.viewIntro>small,
+.dnaContextCard>header small,
+.dnaContextLead small,
+.dnaContextChampions>small,
+.championFocusGrid small,
+.masteryFocusGrid small,
+.recentMatches small,
+.matchFilters button,
+.matchExpand,
+.showMoreMatches{
+  font-size:10px!important;
+}
+.viewIntro>p,
+.dnaContextCard>p,
+.championFocusGrid p,
+.masteryFocusGrid p,
+.matchDetail p{
+  font-size:11px!important;
+}
+.dnaContextLead em,
+.dnaContextChampions span{font-size:10px!important}
+
+/* FIND 02 ----------------------------------------------------------------- */
+.find02View>header small{font-size:10px!important}
+.find02View>header p{font-size:13px!important;line-height:1.6}
+.findTypeBar{margin-top:18px!important}
+.findTypeBar button{
+  min-height:58px;
+  padding:13px 16px!important;
+}
+.findTypeBar b{font-size:11px!important}
+.findTypeBar small{font-size:10px!important}
+.findModeBar{
+  margin:0 auto 12px!important;
+  gap:8px!important;
+}
+.findModeBar>small{font-size:10px!important}
+.findModeBar button{
+  min-height:40px;
+  padding:9px 13px!important;
+  font-size:10px!important;
+}
+.startFindButton{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:min(760px,100%);
+  min-height:48px;
+  margin:0 auto 14px;
+  border:1px solid #ff477e70;
+  background:#ff477e;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.25px;
+}
+.startFindButton .ztIcon{width:16px;filter:brightness(4)}
+
+.discoverySession{
+  max-width:760px!important;
+  margin:0 auto 14px!important;
+}
+.discoverySession span,
+.discoverySession button{font-size:10px!important}
+
+.findStartPanel{
+  max-width:760px;
+  min-height:210px;
+  margin:18px auto 0;
+  border:1px solid var(--zt-line);
+  background:radial-gradient(circle at 50% 0,#ff477e0c,transparent 42%),#070a0f;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:28px;
+  text-align:center;
+}
+.findStartPanel .ztIcon{width:28px}
+.findStartPanel b{font-size:15px}
+.findStartPanel p{
+  max-width:540px;
+  margin:0;
+  color:#8994a4;
+  font-size:12px;
+  line-height:1.6;
+}
+
+.findContext small,
+.candidateTop small,
+.candidateMeta small,
+.candidateReasons>small,
+.candidateSession small,
+.waitingPool>small,
+.waitingPool>em{
+  font-size:10px!important;
+}
+.findContext b,
+.candidateMeta b{font-size:11px!important}
+.candidateTop h3{font-size:22px!important}
+.candidateSession p,
+.candidateReasons p,
+.waitingPool>p{font-size:12px!important;line-height:1.55!important}
+.candidateActions button{min-height:46px;font-size:11px!important}
+.candidateMeta{grid-template-columns:repeat(4,1fr)!important}
+
+/* PLAYER 01 --------------------------------------------------------------- */
+.clientTop>div>small{font-size:10px!important}
+.clientTop h1{font-size:30px}
+.clientStatus span,
+.clientStatus small,
+.clientLogout{font-size:10px!important}
+.clientNav button span{font-size:11px!important}
+.clientNav button i{min-width:22px}
+
+.playerMoment header small,
+.playerMomentGrid small,
+.playerRecentMini>small,
+.playerRecentMini em,
+.momentToFind small,
+.momentToFind p,
+.momentToFind button,
+.activeDiscoveryBanner small,
+.activeDiscoveryBanner em,
+.activeDiscoveryBanner button{
+  font-size:10px!important;
+}
+.playerMoment header h3{font-size:19px!important}
+.playerMomentGrid b{font-size:18px!important}
+.momentToFind b{font-size:13px!important}
+
+/* HISTORY / STORY --------------------------------------------------------- */
+.historyHero>div:first-child>small,
+.historyCoverage>small,
+.historyCoverage p,
+.historyGlance small,
+.historyGlance em,
+.historyCard header small,
+.historyCard header p,
+.storyChapter small,
+.storyChapter p,
+.historyFooter small,
+.historyFooter p,
+.historyAction small,
+.historyAction p,
+.historyAction button,
+.trendLegend,
+.trendBars span>em{
+  font-size:10px!important;
+}
+.historyHero p{font-size:13px!important}
+.historyCoverage button{min-height:40px;font-size:10px!important}
+.historyCard p,
+.historyCard small{line-height:1.5}
+.historyAction p{font-size:11px!important}
+
+/* SYNC -------------------------------------------------------------------- */
+.syncView>header p,
+.syncOrigin,
+.syncStage em,
+.syncState p,
+.syncEvidence,
+.duoFeedback p,
+.syncWaiting p{
+  font-size:11px!important;
+}
+.syncRefresh,
+.copyRiotId,
+.duoFeedbackActions button{font-size:10px!important;min-height:38px}
+
+/* AUTH / ONBOARDING ------------------------------------------------------- */
+.connect01>div>p,
+.riotHelp,
+.status{font-size:12px!important;line-height:1.6}
+.connectCard label{font-size:12px!important}
+.connectCard input,
+.connectCard select{font-size:14px!important}
+.authMore summary{min-height:42px;display:flex;align-items:center}
+
+/* MOBILE ------------------------------------------------------------------ */
+@media(max-width:760px){
+  .homeHero{
+    min-height:auto!important;
+    padding:46px 18px 38px!important;
+  }
+  .homeHeroCopy h1{
+    font-size:clamp(46px,14vw,68px)!important;
+    letter-spacing:-3.5px!important;
+  }
+  .homeHeroCopy>p{font-size:14px!important}
+  .homeHeroCopy .lookupSearch{
+    grid-template-columns:minmax(0,1fr) 74px!important;
+  }
+  .homeLookup.hasResult .homeHero{
+    padding:12px 14px!important;
+  }
+
+  .profileNavigationRow{
+    display:block;
+    position:sticky;
+    top:58px;
+    z-index:30;
+    margin:10px 0 14px;
+    background:#06090ef2;
+    backdrop-filter:blur(14px);
+  }
+  .profileViewNav{
+    display:flex!important;
+    grid-template-columns:none!important;
+    overflow-x:auto;
+    margin:0!important;
+    scrollbar-width:none;
+  }
+  .profileViewNav::-webkit-scrollbar{display:none}
+  .profileViewNav button{
+    flex:0 0 auto;
+    min-width:124px;
+    min-height:54px;
+    border-right:1px solid var(--zt-line)!important;
+    border-bottom:0!important;
+  }
+  .profileViewNav button>span{display:none!important}
+  .profileFindAction{
+    width:100%;
+    min-height:48px;
+    border-width:1px 1px 0;
+  }
+
+  .momentKeyStats{gap:8px}
+  .momentKeyStats>span{padding-right:5px!important}
+  .momentKeyStats small,
+  .momentKeyStats em{font-size:9px!important}
+  .momentKeyStats b{font-size:19px!important}
+
+  .find02View{padding:24px 16px 92px!important}
+  .findTypeBar{grid-template-columns:1fr!important}
+  .findModeBar{
+    justify-content:flex-start!important;
+    overflow-x:auto;
+    flex-wrap:nowrap!important;
+    padding-bottom:3px;
+  }
+  .findModeBar>small{display:none}
+  .findModeBar button{flex:0 0 auto}
+  .candidateMeta{grid-template-columns:repeat(2,1fr)!important}
+
+  .clientSide{height:70px!important}
+  .clientNav{grid-template-columns:repeat(4,1fr)!important}
+  .clientNav button span{
+    display:block!important;
+    font-size:10px!important;
+    margin-top:4px!important;
+  }
+  .clientMain{padding-bottom:78px!important}
+  .clientTop{height:76px!important}
+  .clientTop h1{font-size:21px!important}
+  .clientTop>div>small{font-size:9px!important}
+
+  .historyView{padding:24px 16px 92px!important}
+  .historyHero{grid-template-columns:1fr!important}
+  .historyCoverage{margin-top:4px}
+}
+
+@media(max-width:430px){
+  .homeHeroCopy h1{font-size:44px!important}
+  .lookupSearch input{font-size:14px!important}
+  .profileViewNav button{min-width:112px}
+  .profileFindAction{font-size:11px}
+  .playerMomentLead h3{font-size:31px!important}
+  .candidateActions.decisionActions{grid-template-columns:1fr!important}
+}
