@@ -18,7 +18,8 @@ A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 - **Player value does not depend on network size:** ZeroTwo must remain useful even with one user.
 - **Gaming DNA is context-aware:** Ranked, Normal, ARAM and Arena are separate contexts. Never force a Summoner's Rift metric onto another mode.
 - **No fake precision:** ZeroTwo does not create unofficial MMR/ELO or expose matching weights as player-facing truth.
-- **Mode intent is explicit:** Find 02 asks what the player wants to play now instead of assuming Ranked.
+- **Mode intent is explicit:** Find 02 asks what the player wants to play instead of assuming Ranked.
+- **Discovery intent is explicit:** **NOW** solves the next session; **RECURRING** looks for a player to build a repeatable gaming routine with.
 - **02 Sync is post-match learning:** the match creates a hypothesis; shared games and voluntary feedback test it.
 - **Multi-game identity:** ZeroTwo is the platform. League is one integration; VALORANT will require its own opt-in/RSO flow.
 
@@ -83,12 +84,16 @@ Primary metrics:
 
 ### Find Your 02
 
-1. Player can change desired mode at any time.
-2. Mode intent is persisted in discovery settings.
-3. Matching considers mode intent together with server, availability, intent and compatible gameplay signals.
-4. Player sees one candidate at a time.
-5. Human-readable reasons appear before technical details.
-6. Both players must express interest before a connection is created.
+1. Player chooses a discovery intent:
+   - **NOW** — someone for the next session; active for up to 2 hours.
+   - **RECURRING** — someone they may want to play with repeatedly; active for up to 14 days.
+2. Player can change desired mode at any time.
+3. Server and search type are operational filters, not fake behavioral compatibility points.
+4. Matching then uses mode, availability, stated intent and gameplay evidence where meaningful.
+5. Player sees one candidate at a time.
+6. Human-readable reasons appear before technical details.
+7. Both players must express interest before a connection is created.
+8. After a match, Riot ID can be copied directly so the players can actually connect without ZeroTwo needing to build chat first.
 
 ### 02 Sync
 
@@ -136,7 +141,11 @@ ZeroTwo should answer **what changed?**
 - [x] Gaming DNA with observable metrics.
 - [x] Confiança do DNA baseada no tamanho da amostra.
 - [x] Explicações/evidências para a leitura do DNA.
-- [x] Find Your 02 v2 with explicit desired-mode intent and explainable compatibility.
+- [x] Find Your 02 session-first matching with explicit desired-mode intent and explainable compatibility.
+- [x] Discovery presence TTL; NOW sessions expire after 2 hours.
+- [x] NOW vs RECURRING discovery intent; recurring searches expire after 14 days.
+- [x] Match context preserves mode and search type into 02 Sync.
+- [x] One-click Riot ID handoff after match; no chat dependency in the MVP.
 - [x] Pool LAB com jogadores sintéticos para testes.
 - [x] Interesse e match reais preparados para usuários UUID.
 - [x] LAB Match para candidatos sintéticos.
@@ -174,12 +183,13 @@ ZeroTwo should answer **what changed?**
 
 # Plano de melhoria UX
 
-## P0 — Retenção e First 02
+## P0 — First Value → contextual Find
 
-Objetivo: **encurtar drasticamente o caminho até o primeiro candidato.**
+Objetivo: **entregar valor antes do cadastro e transformar o contexto real do jogador em uma próxima ação natural.**
 
-- [ ] Redesenhar primeira viewport da landing em torno de **Encontrar seu 02**.
-- [ ] Um único CTA dominante: **Encontrar meu 02**.
+- [x] Primeira viewport orientada à busca pública e First Value.
+- [x] Perfil público oferece Find 02 somente depois de entregar informação.
+- [x] CTA contextual usa o modo recente: **Encontrar agora** ou **Procurar parceria**.
 - [ ] Simplificar autenticação inicial; Google como caminho principal.
 - [x] Remover Riot como opção de login.
 - [x] Após login, pedir somente Riot ID quando ainda não existir.
@@ -229,14 +239,15 @@ Objetivo: manter profundidade sem sobrecarregar o primeiro uso.
 
 ---
 
-## P1 — Find Your 02 v2
+## P1 — Find Your 02 / relationship loop
 
-- [ ] Corrigir complementaridade de posições.
-- [ ] Usar Gaming DNA quando disponível sem torná-lo obrigatório.
-- [ ] Separar claramente sinais fortes, fracos e ausentes.
-- [ ] Não tratar mesmo servidor como evidência de sinergia comportamental; é filtro/compatibilidade operacional.
+- [x] Corrigir complementaridade de posições e usar funções só em Ranked/Normal.
+- [x] Usar Gaming DNA quando disponível sem torná-lo obrigatório.
+- [x] Separar compatibilidade operacional de sinais de estilo.
+- [x] Mesmo servidor é filtro obrigatório, não evidência comportamental.
 - [ ] Adicionar preferências progressivamente.
-- [ ] Adicionar controle **Pausar busca / Estou procurando 02**.
+- [x] Adicionar controle de sessão e **Encerrar busca**.
+- [x] Separar **NOW** de **RECURRING**.
 - [ ] Melhorar tratamento de candidatos esgotados/ignorados.
 - [ ] LAB fallback também quando candidatos reais forem filtrados e o resultado final ficar vazio.
 
@@ -246,14 +257,14 @@ Objetivo: manter profundidade sem sobrecarregar o primeiro uso.
 
 Objetivo: validar o diferencial central do ZeroTwo.
 
-- [ ] Detectar partidas contendo os PUUIDs de 01 e 02.
-- [ ] Identificar partidas realmente jogadas juntos.
-- [ ] Registrar histórico compartilhado.
-- [ ] Calcular vitórias/derrotas juntos.
-- [ ] Definir métricas de dupla.
-- [ ] Definir confiança mínima antes de interpretar sinergia.
-- [ ] Evitar conclusões com amostra insuficiente.
-- [ ] Atualizar Sync automaticamente.
+- [x] Detectar partidas contendo os PUUIDs de 01 e 02.
+- [x] Identificar partidas realmente jogadas juntos no mesmo time e após o match.
+- [x] Registrar histórico compartilhado.
+- [x] Calcular vitórias/derrotas juntos.
+- [x] Registrar modos e pares de campeões jogados juntos.
+- [x] Separar evidência de aprendizado no Sync.
+- [x] Evitar conclusões com amostra insuficiente.
+- [x] Atualizar Sync sob demanda reutilizando cache Riot.
 - [ ] Mostrar mudança da hipótese inicial após partidas reais.
 - [ ] Alimentar futuras recomendações com resultados observados.
 
