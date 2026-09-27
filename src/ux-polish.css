@@ -899,3 +899,15 @@ footer .brandButton:hover{filter:brightness(1.08)}
   }
   .valorantInlineActions button{flex:1}
 }
+
+.publicBackHome{
+  margin:0 0 10px;
+  border:0;
+  background:transparent;
+  color:#8a95a6;
+  padding:8px 0;
+  font:900 9px ui-monospace,monospace;
+  letter-spacing:.7px;
+  cursor:pointer;
+}
+.publicBackHome:hover{color:#ff739c}
