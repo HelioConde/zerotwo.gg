@@ -114,18 +114,18 @@ A Central deixa de ser checklist de configuração e passa a mostrar acontecimen
 
 ## Problemas UX encontrados
 
-- [ ] Primeiro valor exige cliques demais.
+- [x] Primeiro valor exigia cliques demais — onboarding reduzido e Find 02 abre automaticamente após o Riot ID.
 - [ ] Central expõe funcionamento interno antes do resultado.
 - [ ] Excesso de informação simultânea aumenta carga cognitiva.
 - [ ] Ações operacionais como “Analisar partidas” e “Atualizar busca” exigem trabalho do usuário.
-- [ ] Gaming DNA funciona visualmente como portão para Find 02.
-- [ ] Configuração de perfil acontece cedo demais.
+- [x] Gaming DNA funcionava como portão — agora é iniciado em paralelo e não bloqueia Find 02.
+- [x] Configuração de perfil acontecia cedo demais — removida do caminho crítico; perfil mínimo é preparado automaticamente.
 - [ ] Resultado do 02 compete visualmente com módulos técnicos.
-- [ ] Scores heurísticos como `70/100` podem aparentar precisão maior do que a evidência permite.
+- [x] Score heurístico `70/100` saiu da primeira camada; resultado usa faixa qualitativa e cálculo fica em detalhes.
 - [ ] Estados como STANDBY, READY, 03/04 e telemetria têm peso excessivo para usuários novos.
 - [ ] Detalhes do DNA são mostrados antes de o usuário demonstrar interesse neles.
 - [ ] Alguns estados do frontend ainda podem ficar inconsistentes após atualização/deploy/cache.
-- [ ] LAB Match ainda precisa ficar totalmente persistente e independente de localStorage.
+- [x] LAB Match persistido no Supabase e independente de localStorage.
 
 ---
 
@@ -138,9 +138,9 @@ Objetivo: **encurtar drasticamente o caminho até o primeiro candidato.**
 - [ ] Redesenhar primeira viewport da landing em torno de **Encontrar seu 02**.
 - [ ] Um único CTA dominante: **Encontrar meu 02**.
 - [ ] Simplificar autenticação inicial; Google como caminho principal.
-- [ ] Remover Riot como opção de login.
-- [ ] Após login, pedir somente Riot ID quando ainda não existir.
-- [ ] Remover nickname/preferências obrigatórias antes do primeiro resultado quando não forem tecnicamente necessárias.
+- [x] Remover Riot como opção de login.
+- [x] Após login, pedir somente Riot ID quando ainda não existir.
+- [x] Remover nickname/preferências obrigatórias antes do primeiro resultado quando não forem tecnicamente necessárias.
 - [ ] Criar pipeline automático após Riot ID:
   - [ ] localizar Riot ID;
   - [ ] atualizar dados do jogador;
@@ -148,7 +148,7 @@ Objetivo: **encurtar drasticamente o caminho até o primeiro candidato.**
   - [ ] atualizar DNA;
   - [ ] procurar 02.
 - [ ] Criar tela única de processamento com progresso automático.
-- [ ] Não bloquear Find 02 por baixa amostra de DNA.
+- [x] Não bloquear Find 02 por baixa amostra de DNA.
 - [ ] Usar perfil/Riot/sinais disponíveis enquanto DNA amadurece.
 - [ ] Resultado do candidato deve substituir o dashboard como primeira recompensa.
 - [ ] CTA principal do resultado: **Tenho interesse**.
@@ -156,7 +156,7 @@ Objetivo: **encurtar drasticamente o caminho até o primeiro candidato.**
 - [ ] Explicação: **Por que combinamos?** recolhida por padrão.
 - [ ] Remover botões operacionais do critical path.
 - [ ] Corrigir estados 03/04, READY/STANDBY e singular/plural.
-- [ ] Persistir LAB Match no backend para testes consistentes.
+- [x] Persistir LAB Match no backend para testes consistentes.
 
 ### Critério de conclusão P0
 
