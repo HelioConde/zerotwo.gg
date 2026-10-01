@@ -97,7 +97,7 @@ export function FrequentTeammates({data,platform}:Props){
   );
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
   const matchSignature=matchIds.join(',');
-  const cacheKey='zt_recurring_players_v5_'+playerKey+'_'+(focusContext||'all').toLowerCase();
+  const cacheKey='zt_recurring_players_v6_'+playerKey+'_'+(focusContext||'all').toLowerCase();
 
   useEffect(()=>{
     setRows([]);
