@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { ChampionCareer } from './ChampionCareer';
+import { MyRiotPatch } from './MyRiotPatch';
 import '../../riot-life.css';
 
 type RiotLifeProps={
@@ -252,9 +254,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
     </article>}
 
-    <aside className="riotPatchPreview">
-      <Icon name="spark"/>
-      <div><small>MY RIOT PATCH // PRÓXIMA FONTE</small><b>O PERFIL JÁ ESTÁ PRONTO PARA CRUZAR PATCH × SEU HISTÓRICO.</b><p>Essa seção só será ativada quando o ZeroTwo tiver uma fonte oficial de alterações por campeão/item. Até lá, não mostramos impacto inventado.</p></div>
-    </aside>
+    <ChampionCareer data={data} champions={champions} ddv={ddv}/>
+    <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
   </section>;
 }
