@@ -468,3 +468,177 @@ body{
   .riotLifeHubTitle h3{font-size:21px}
   .riotLifeTabs button{grid-template-columns:auto 1fr;column-gap:6px}
 }
+
+
+/* ---------- GLOBAL PUBLIC CHROME ---------- */
+.gameNav{
+  height:64px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:0 max(20px,calc((100vw - 1240px)/2))!important;
+  border-bottom:1px solid var(--z2-line)!important;
+  background:#05070ae8!important;
+  backdrop-filter:blur(18px)!important;
+}
+.gameNav .brand{
+  font-size:13px!important;
+  letter-spacing:-.35px;
+}
+.gameNav .brandMark{
+  width:30px!important;
+  height:30px!important;
+  border-radius:9px!important;
+}
+.navlinks{gap:4px!important}
+.navlinks .navLinkButton,
+.navlinks .navCtaButton,
+.accountNav,
+.logoutNav{
+  min-height:38px!important;
+  border-radius:9px!important;
+  padding:0 11px!important;
+  font-size:9px!important;
+  letter-spacing:.15px;
+}
+.navlinks .navLinkButton{
+  color:#7d8796!important;
+  border:1px solid transparent!important;
+}
+.navlinks .navLinkButton:hover{
+  color:#e3e8ee!important;
+  background:#ffffff04!important;
+  border-color:#ffffff09!important;
+}
+.navlinks .navCtaButton{
+  border:1px solid #ff477e38!important;
+  background:#ff477e0b!important;
+  color:#ff8caf!important;
+}
+.navlinks .navCtaButton:hover{background:#ff477e14!important}
+.accountNav{
+  border:1px solid #ffffff10!important;
+  background:#ffffff04!important;
+  color:#d8dfe7!important;
+}
+.logoutNav{color:#687486!important}
+
+.homeHeroBackdrop .heroZero{
+  opacity:.38!important;
+  filter:blur(.2px);
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop{
+  opacity:.7;
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:min(900px,80vw);
+  height:min(500px,52vw);
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,#ff477e09,transparent 66%);
+  pointer-events:none;
+}
+
+.publicGameSwitch button{
+  border-radius:10px!important;
+}
+.publicGameSwitch button.active{
+  background:#ffffff06!important;
+  box-shadow:none!important;
+}
+
+/* Technical evidence should feel quieter than Riot Life. */
+.gameDataExplorer~.momentView,
+.gameDataExplorer~.profileViewPanel{
+  border:1px solid #ffffff0d!important;
+  background:#070a0f!important;
+}
+.gameDataExplorer .profileViewNav button b{font-size:9px!important}
+.gameDataExplorer .profileViewNav button span{font-size:8px!important;color:#657184!important}
+.viewIntro{
+  padding-top:4px!important;
+}
+.viewIntro h3{
+  font-size:clamp(20px,2.4vw,30px)!important;
+  letter-spacing:-1px!important;
+}
+.viewIntro p{
+  max-width:680px!important;
+  color:#748091!important;
+}
+
+/* Footer is legal/supporting content, not another hero. */
+.gamingLanding>footer{
+  max-width:1240px!important;
+  margin:20px auto 0!important;
+  padding:28px 24px 44px!important;
+  border-top:1px solid var(--z2-line)!important;
+  display:grid!important;
+  grid-template-columns:auto 1fr!important;
+  gap:8px 28px!important;
+  align-items:center!important;
+  color:#5f6b7b!important;
+}
+.gamingLanding>footer>.brand{grid-row:1/3}
+.gamingLanding>footer>p{
+  margin:0!important;
+  color:#8a95a4!important;
+  font-size:10px!important;
+}
+.gamingLanding>footer>small{
+  max-width:900px;
+  font-size:8px!important;
+  line-height:1.55!important;
+}
+
+/* Reduce transition noise between product areas. */
+.riotLifeView .playerEras,
+.riotLifeView .frequentTeammates,
+.riotExploreOrder .championCareer,
+.riotExploreOrder .myRiotPatch,
+.riotExploreOrder .riotArcade{
+  box-shadow:none!important;
+}
+.riotLifeStory .playersTimeline,
+.riotLifeStory .featuredTeammate{
+  background:#06090d!important;
+}
+.riotLifeExplore .championCareer>header,
+.riotLifeExplore .myRiotPatch>header,
+.riotLifeExplore .riotArcade>header{
+  padding:20px 22px!important;
+}
+.riotLifeExplore .championCareer h3,
+.riotLifeExplore .myRiotPatch h3,
+.riotLifeExplore .riotArcade h3{
+  font-size:clamp(24px,3vw,36px)!important;
+}
+
+/* Cleaner mobile chrome */
+@media(max-width:760px){
+  .gameNav{
+    height:56px!important;
+    padding:0 12px!important;
+  }
+  .gameNav .brand{font-size:11px!important}
+  .gameNav .brandMark{width:27px!important;height:27px!important}
+  .navlinks .navLinkButton{display:none!important}
+  .navlinks .navCtaButton,
+  .accountNav{
+    min-height:34px!important;
+    padding:0 9px!important;
+    font-size:8px!important;
+  }
+  .logoutNav{display:none!important}
+  .homeLookup.hasResult .homeHero{top:0!important}
+  .gamingLanding>footer{
+    grid-template-columns:1fr!important;
+    padding:24px 16px 38px!important;
+  }
+  .gamingLanding>footer>.brand{grid-row:auto}
+  .gamingLanding>footer>small{font-size:7px!important}
+}
