@@ -2163,3 +2163,24 @@ summary:focus-visible{
   .riotPassport{grid-column:auto!important}
   .matchStoryV2{grid-template-columns:1fr!important}
 }
+
+
+/* Real monitor readability pass */
+.navlinks .navLinkButton,
+.navlinks .navCtaButton,
+.accountNav,
+.logoutNav{
+  font-size:10px!important;
+}
+.gameNav .brand{font-size:14px!important}
+.gamingLanding>footer>p{font-size:11px!important}
+.gamingLanding>footer>small{
+  color:#707c8c!important;
+  font-size:9px!important;
+  line-height:1.65!important;
+}
+.homeHeroBackdrop .heroZero{
+  font-size:min(36vw,520px)!important;
+  letter-spacing:-.12em!important;
+  opacity:.11!important;
+}
