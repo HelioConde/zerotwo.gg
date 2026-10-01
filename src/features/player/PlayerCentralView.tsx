@@ -9,9 +9,6 @@ type PlayerCentralViewProps={
   server:string;
   onSetup:()=>void;
   notice:string;
-  discovery:any;
-  find02:(mode?:any,type?:any)=>void;
-  setView:(view:any)=>void;
   publicProfile:any;
   analyzeDna:(force?:boolean)=>void;
   analyzing:boolean;
@@ -24,9 +21,87 @@ type PlayerCentralViewProps={
   setActiveGame:(game:'lol'|'valorant')=>void;
 };
 
-export function PlayerCentralView({riot,riotId,server,onSetup,notice,discovery,find02,setView,publicProfile,analyzeDna,analyzing,mainPublicMode,soloRank,history,openHistory,dna,activeGame,setActiveGame}:PlayerCentralViewProps){
+export function PlayerCentralView({riot,riotId,server,onSetup,notice,publicProfile,analyzeDna,analyzing,mainPublicMode,soloRank,history,openHistory,dna,activeGame,setActiveGame}:PlayerCentralViewProps){
   const [valorantLinked,setValorantLinked]=useState(false);
-  const gameSwitch=<div className="playerGameSwitch" role="tablist" aria-label="Jogo ativo"><button role="tab" aria-selected={activeGame==='lol'} className={activeGame==='lol'?'active':''} onClick={()=>setActiveGame('lol')}><GameBadge game="lol"/><span><b>LEAGUE</b><small>{riot?'CONECTADO':'CONFIGURAR'}</small></span></button><button role="tab" aria-selected={activeGame==='valorant'} className={activeGame==='valorant'?'active valorant':''} onClick={()=>setActiveGame('valorant')}><GameBadge game="valorant"/><span><b>VALORANT</b><small>{valorantLinked?'CONECTADO':'RSO'}</small></span></button></div>;
-  if(activeGame==='valorant')return <>{gameSwitch}<ValorantConnect expanded onLinkedChange={setValorantLinked} onUseLeague={()=>setActiveGame('lol')}/></>;
-  return (<>{gameSwitch}<section className="clientHero playerReady"><div className="clientHeroArt"/><div className="clientHeroCopy"><small>PLAYER 01 // LEAGUE CONECTADO</small><h2>{riot?'SEU PLAYER.':'ATIVE SEU'}<br/><span>{riot?'SEU MOMENTO.':'PLAYER 01.'}</span></h2><p>{riot?`${riotId} · ${server}. Acompanhe seu momento recente e procure um 02 somente quando quiser jogar com alguém.`:'Informe seu Riot ID para começar.'}</p>{riot?<button className="authPrimary" onClick={()=>setView('find')}>ENCONTRAR 02 →</button>:<button onClick={onSetup}>INFORMAR RIOT ID →</button>}{notice&&<small className="clientNotice">{notice}</small>}</div><div className="connectedGames"><div className="progressHeader"><span>JOGOS CONECTADOS</span><b>{riot?(valorantLinked?'2 FONTES ATIVAS':'1 FONTE ATIVA'):'COMECE AQUI'}</b></div><div className="connectedGame active"><GameBadge game="lol"/><div><small>LEAGUE OF LEGENDS</small><b>{riot?riotId:'CONECTAR JOGO'}</b><em>{riot?`${server} · NÍVEL ${riot.summoner_level??'—'}`:'USE SEU RIOT ID'}</em></div><span>{riot?'ATIVO':'+'}</span></div><ValorantConnect onLinkedChange={setValorantLinked}/></div></section>{discovery?.looking_for_02&&discovery?.looking_until&&new Date(discovery.looking_until).getTime()>Date.now()&&<section className="activeDiscoveryBanner"><div><Icon name="search"/><span><small>FIND 02 // BUSCA ATIVA</small><b>{discovery.search_type==='RECURRING'?'PARCERIA RECORRENTE':'SESSÃO AGORA'} · {discovery.desired_mode==='ANY'?'QUALQUER MODO':discovery.desired_mode}</b><em>Ativa até {new Date(discovery.looking_until).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</em></span></div><button onClick={()=>find02(discovery.desired_mode,discovery.search_type)}>ABRIR BUSCA →</button></section>}{publicProfile&&<section className="playerMoment"><header><div><small>ZEROTWO PLAYER // MOMENTO ATUAL</small><h3>SEU JOGO MUDA. SUA IDENTIDADE ACOMPANHA.</h3></div><div className="playerMomentActions"><button onClick={()=>analyzeDna(false)} disabled={analyzing}>{analyzing?'ATUALIZANDO...':'ATUALIZAR DNA'}</button><a href={'?player='+encodeURIComponent(riotId)+'&server='+(riot?.platform||'br1')}>VER PERFIL PÚBLICO</a></div></header><div className="playerMomentGrid"><span><small>MODO RECENTE</small><b>{publicProfile.summary.mainContext||'—'}</b><em>{publicProfile.summary.matches||0} partidas analisadas</em></span><span><small>{mainPublicMode?.name==='ARENA'?'TOP 4 // ARENA':'WIN RATE RECENTE'}</small><b>{mainPublicMode?.name==='ARENA'&&mainPublicMode.top4Rate!=null?mainPublicMode.top4Rate+'%':publicProfile.summary.winRate!=null?publicProfile.summary.winRate+'%':'—'}</b><em>{mainPublicMode?.name==='ARENA'&&mainPublicMode.avgPlacement!=null?'colocação média '+mainPublicMode.avgPlacement:'histórico recente'}</em></span><span><small>KDA RECENTE</small><b>{publicProfile.summary.avgKda??'—'}</b><em>{publicProfile.summary.topChampions?.[0]?.name?publicProfile.summary.topChampions[0].name+' mais frequente':'dados recentes'}</em></span><span><small>RANK OFICIAL</small><b>{soloRank?soloRank.tier+' '+soloRank.rank:'—'}</b><em>{soloRank?soloRank.lp+' LP · '+soloRank.winRate+'% WR':'sem rank recente'}</em></span></div>{publicProfile.matches?.length>0&&<div className="playerRecentMini"><small>ÚLTIMAS PARTIDAS</small><div>{publicProfile.matches.slice(0,3).map((m:any)=><span key={m.id}><b>{m.champion}</b><em>{m.context==='ARENA'&&m.placement?m.placement+'º LUGAR':m.win?'VITÓRIA':'DERROTA'} · {m.kills}/{m.deaths}/{m.assists} · {m.context}</em></span>)}</div></div>}{publicProfile.summary.mainContext&&<div className="momentToFind"><div><small>PRÓXIMO PASSO // CONTEXTUAL</small><b>Você vem jogando {publicProfile.summary.mainContext}.</b><p>Quer alguém para a próxima sessão ou uma parceria para jogar esse modo com frequência?</p></div><div><button onClick={()=>find02(publicProfile.summary.mainContext,'NOW')}>ENCONTRAR AGORA</button><button onClick={()=>find02(publicProfile.summary.mainContext,'RECURRING')}>PROCURAR PARCERIA</button></div></div>}{history?.summary&&<div className="storyPreview"><div><small>MINHA HISTÓRIA // PREVIEW</small><b>{history.summary.favoriteHour!=null?'Você costuma aparecer por volta de '+hourLabel(history.summary.favoriteHour)+'.':'Seu ritmo ainda está sendo descoberto.'}</b><p>{history.modes?.[0]?history.modes[0].name+' domina a amostra recente. ':''}{history.circle?.[0]?'Você também voltou a encontrar '+history.circle[0].riotId+' em '+history.circle[0].games+' partidas.':'Abra sua história para aprofundar padrões de rotina e pessoas recorrentes.'}</p></div><button onClick={()=>openHistory(false)}>ABRIR MINHA HISTÓRIA →</button></div>}{dna?._fallback&&<p className="playerMomentNote"><Icon name="dna"/> Mostrando imediatamente os dados já encontrados na consulta pública enquanto o snapshot do Player 01 é sincronizado.</p>}</section>}<section className="clientModules"><article className="dnaModule"><header><div><small>SE QUISER ENTENDER MELHOR</small><h3>DNA DE LEAGUE</h3></div><span>{dna?`${dna.matches_analyzed} ${dna.matches_analyzed===1?'MATCH':'MATCHES'}`:riot?'READY':'LOCKED'}</span></header>{dna?<><div className="dnaLead"><span className="dnaGameIcon"><img src="/zerotwo.gg/assets/zerotwo/icons/games/lol.svg" alt=""/></span><div><small>MOMENTO RECENTE</small><div className="dnaPrimaryRole"><GameBadge game="lol"/><b>{dna.metrics?.mainContext||'PADRÃO EM ANÁLISE'}</b></div><p>{dna.matches_analyzed===1?'Leitura inicial · 1 partida recente':`${dna.matches_analyzed} partidas recentes analisadas`}</p></div></div>{dna.metrics?.modeSummaries?.length>0&&<div className="clientModeDna">{dna.metrics.modeSummaries.map((m:any)=><span key={m.name}><small>{m.name}</small><b>{m.games} {m.games===1?'JOGO':'JOGOS'} · {m.name==='ARENA'?(m.top4Rate!=null?m.top4Rate+'% TOP 4':'ARENA'):(m.winRate!=null?m.winRate+'% WR':'—')}</b></span>)}</div>}<details className="dnaMetricDetails"><summary>VER MÉTRICAS DO JOGO</summary><div className="dnaRealGrid"><span><small>POSIÇÃO // SR</small><b>{dna.primary_position||'—'}</b></span><span><small>KDA MÉDIO</small><b>{dna.metrics?.avgKda??'—'}</b></span><span><small>CS / MIN // SR</small><b>{dna.metrics?.avgCsPerMin??'—'}</b></span><span><small>VISÃO / MIN // SR</small><b>{dna.metrics?.avgVisionPerMin??'—'}</b></span><span><small>DANO / MIN</small><b>{fmtStatNumber(dna.metrics?.avgDamagePerMin)}</b></span><span><small>PART. ABATES</small><b>{dna.metrics?.avgKillParticipation!=null?`${Math.round(dna.metrics.avgKillParticipation*100)}%`:'—'}</b></span></div><div className="dnaChampions"><small>MAIS JOGADOS</small><b>{(dna.top_champions||[]).map((x:any)=>`${x.name} · ${x.games}x`).join('   //   ')||'—'}</b></div></details><div className="dnaInterpretation"><div className="dnaInterpretHead"><small>LEITURA DO SEU JOGO</small><b>CONFIANÇA // {dna.confidence==='good'?'BOA':dna.confidence==='developing'?'EM DESENVOLVIMENTO':'INICIAL'}</b></div><div className="dnaDimensions">{Object.values(dna.dimensions||{}).map((x:any)=><span key={x.label}><small>{x.label}</small><b>{x.level==='high'?'ALTO':x.level==='low'?'BAIXO':'EQUILIBRADO'}</b></span>)}</div><details><summary>POR QUE O ZEROTWO CHEGOU NISSO?</summary>{(dna.evidence||[]).map((x:any,i:number)=><p key={x.key||i}>// {x.text}</p>)}</details></div><small className="dnaAutoNote">{analyzing?'ATUALIZANDO SEU DNA...':'Essa leitura não é um rótulo. Ela muda conforme entram novas partidas e serve como um dos sinais para encontrar pessoas que façam sentido para você.'}</small></>:<><div className="miniRadar"><i/><i/><i/><b>01</b></div><div className="lockedCopy"><b>{riot?'PRONTO PARA ANALISAR SUAS PARTIDAS.':'SEU PADRÃO DE JOGO VAI APARECER AQUI.'}</b><p>{riot?'Vamos transformar suas partidas recentes em métricas observáveis do seu estilo.':'Informe seu Riot ID para começarmos a conhecer seu jogo.'}</p>{riot&&<small className="dnaAutoNote">{analyzing?'ANALISANDO SUAS PARTIDAS...':'Seu DNA será construído automaticamente.'}</small>}</div></>}</article><article className="searchModule"><header><div><small>PRÓXIMO PASSO</small><h3>ENCONTRAR 02</h3></div><span>{dna?'DNA ATIVO':'PERFIL ATUAL'}</span></header><div className="pairPreview"><span>01</span><i><b>SYNC</b></i><span className="unknown">02</span></div><p>{dna?'Seu DNA de League já adiciona sinais às recomendações. Com mais jogos conectados, o ZeroTwo poderá comparar padrões entre eles.':'Você já pode buscar usando servidor, horário e objetivo. O DNA adiciona novos sinais quando estiver pronto.'}</p><button onClick={find02}>{dna?'PROCURAR MEU 02 →':'BUSCAR COM PERFIL ATUAL →'}</button></article><article className="syncModule"><header><div><small>DEPOIS DO MATCH</small><h3>02 SYNC</h3></div><span>0 MATCHES</span></header><div className="syncTelemetry"><i/><i/><i/><i/><i/><i/><i/></div><b>SEM TELEMETRIA DE DUPLA</b><p>Depois do primeiro match, esta área começa a medir como 01 + 02 funcionam juntos.</p></article></section></>);
+  const gameSwitch=<div className="playerGameSwitch lifeGameSwitch" role="tablist" aria-label="Jogo ativo">
+    <button role="tab" aria-selected={activeGame==='lol'} className={activeGame==='lol'?'active':''} onClick={()=>setActiveGame('lol')}><GameBadge game="lol"/><span><b>LEAGUE</b><small>{riot?'CONECTADO':'CONFIGURAR'}</small></span></button>
+    <button role="tab" aria-selected={activeGame==='valorant'} className={activeGame==='valorant'?'active valorant':''} onClick={()=>setActiveGame('valorant')}><GameBadge game="valorant"/><span><b>VALORANT</b><small>{valorantLinked?'CONECTADO':'RSO'}</small></span></button>
+  </div>;
+
+  if(activeGame==='valorant')return <div className="loggedLifeView">{gameSwitch}<ValorantConnect expanded onLinkedChange={setValorantLinked} onUseLeague={()=>setActiveGame('lol')}/></div>;
+
+  const topChampion=publicProfile?.summary?.topChampions?.[0]?.name||publicProfile?.championSummaries?.[0]?.name||'—';
+  const recent=publicProfile?.matches?.slice?.(0,4)||[];
+  const favoriteHour=history?.summary?.favoriteHour;
+  const profileUrl=riot?'?player='+encodeURIComponent(riotId)+'&server='+(riot?.platform||'br1'):null;
+
+  return <div className="loggedLifeView">
+    {gameSwitch}
+
+    <section className="loggedLifeHero">
+      <div className="loggedLifeHeroCopy">
+        <small>MINHA RIOT LIFE // {server}</small>
+        <h2>{riot?'SUA CONTA ESTÁ':'CONECTE SUA'} <span>{riot?'EM MOVIMENTO.':'RIOT LIFE.'}</span></h2>
+        <p>{riot?riotId+' · '+server+'. O ZeroTwo organiza seu momento, sua história e as mudanças que aparecem conforme você joga.':'Informe seu Riot ID para começar a construir sua história.'}</p>
+        <div className="loggedLifeHeroActions">
+          {profileUrl?<a className="loggedPrimary" href={profileUrl}><Icon name="spark"/> ABRIR MINHA RIOT LIFE PÚBLICA</a>:<button className="loggedPrimary" onClick={onSetup}>CONECTAR RIOT ID →</button>}
+          {riot&&<button onClick={()=>analyzeDna(false)} disabled={analyzing}><Icon name="sync"/> {analyzing?'ATUALIZANDO...':'ATUALIZAR LEITURA'}</button>}
+        </div>
+        {notice&&<small className="clientNotice">{notice}</small>}
+      </div>
+
+      <div className="loggedLifeIdentity">
+        <span className="loggedLifeGlyph">01</span>
+        <div><small>IDENTIDADE CONECTADA</small><b>{riot?riotId:'SEM RIOT ID'}</b><em>{riot?server+' · NÍVEL '+(riot.summoner_level??'—'):'Conecte sua conta para começar'}</em></div>
+      </div>
+    </section>
+
+    {publicProfile?<>
+      <section className="loggedNow">
+        <header>
+          <div><small>AGORA</small><h3>O QUE ESTÁ MAIS FORTE NESTA AMOSTRA.</h3></div>
+          <a href={profileUrl||'#'}>VER EXPERIÊNCIA COMPLETA →</a>
+        </header>
+        <div className="loggedNowGrid">
+          <span><small>CONTEXTO</small><b>{publicProfile.summary.mainContext||'—'}</b><em>{publicProfile.summary.matches||0} partidas</em></span>
+          <span><small>{mainPublicMode?.name==='ARENA'?'TOP 4':'RESULTADO'}</small><b>{mainPublicMode?.name==='ARENA'&&mainPublicMode.top4Rate!=null?mainPublicMode.top4Rate+'%':publicProfile.summary.winRate!=null?publicProfile.summary.winRate+'%':'—'}</b><em>{mainPublicMode?.name||'amostra recente'}</em></span>
+          <span><small>KDA</small><b>{publicProfile.summary.avgKda??'—'}</b><em>média observada</em></span>
+          <span><small>ASSINATURA</small><b>{topChampion}</b><em>mais presente</em></span>
+          <span><small>RANK</small><b>{soloRank?soloRank.tier+' '+soloRank.rank:'—'}</b><em>{soloRank?soloRank.lp+' LP':'sem rank publicado'}</em></span>
+        </div>
+      </section>
+
+      <section className="loggedLifeSplit">
+        <article className="loggedRecent">
+          <header><div><small>ÚLTIMAS PARTIDAS</small><h3>SEU RITMO RECENTE</h3></div><span>{recent.length}</span></header>
+          <div>{recent.map((m:any)=><span key={m.id} className={m.win?'win':'loss'}>
+            <i/>
+            <b>{m.champion}</b>
+            <small>{m.context} · {m.kills}/{m.deaths}/{m.assists}</small>
+            <em>{m.context==='ARENA'&&m.placement?m.placement+'º':m.win?'VITÓRIA':'DERROTA'}</em>
+          </span>)}</div>
+          {profileUrl&&<a href={profileUrl}>ABRIR HISTÓRICO COMPLETO →</a>}
+        </article>
+
+        <article className="loggedStoryPreview">
+          <small>MINHA HISTÓRIA</small>
+          <h3>{favoriteHour!=null?'VOCÊ COSTUMA APARECER '+hourLabel(favoriteHour)+'.':'SUA HISTÓRIA ESTÁ SENDO CONSTRUÍDA.'}</h3>
+          <p>{history?.modes?.[0]?history.modes[0].name+' domina a amostra ampliada. ':''}{history?.circle?.[0]?'Você voltou a encontrar '+history.circle[0].riotId+' em '+history.circle[0].games+' partidas.':'Abra sua história para aprofundar rotina, modos e mudanças observadas.'}</p>
+          <button onClick={()=>openHistory(false)}>ABRIR MINHA HISTÓRIA →</button>
+        </article>
+      </section>
+    </>:riot?<section className="loggedEmptyInsight"><Icon name="sync"/><div><small>PREPARANDO SUA RIOT LIFE</small><b>AINDA ESTAMOS LENDO SUAS PARTIDAS.</b><p>A consulta conectada existe, mas a leitura pública ainda não terminou de carregar.</p></div></section>:null}
+
+    <section className="loggedEvidence">
+      <header><div><small>EVIDÊNCIA</small><h3>DADOS QUE SUSTENTAM A LEITURA.</h3></div><span>{dna?dna.matches_analyzed+' '+(dna.matches_analyzed===1?'PARTIDA':'PARTIDAS'):'AGUARDANDO'}</span></header>
+      {dna?<div className="loggedEvidenceGrid">
+        <span><small>POSIÇÃO</small><b>{dna.primary_position||'—'}</b></span>
+        <span><small>KDA MÉDIO</small><b>{dna.metrics?.avgKda??'—'}</b></span>
+        <span><small>CS / MIN</small><b>{dna.metrics?.avgCsPerMin??'—'}</b></span>
+        <span><small>VISÃO / MIN</small><b>{dna.metrics?.avgVisionPerMin??'—'}</b></span>
+        <span><small>DANO / MIN</small><b>{fmtStatNumber(dna.metrics?.avgDamagePerMin)}</b></span>
+      </div>:<p>{riot?'A leitura é criada automaticamente a partir das partidas recentes.':'Conecte League para começar.'}</p>}
+      {dna?.top_champions?.length>0&&<div className="loggedEvidenceChampions"><small>MAIS JOGADOS</small><b>{dna.top_champions.map((x:any)=>x.name+' · '+x.games+'x').join('   //   ')}</b></div>}
+    </section>
+  </div>;
 }
