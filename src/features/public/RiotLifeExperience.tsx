@@ -4,6 +4,7 @@ import { ChampionCareer } from './ChampionCareer';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
 import { FrequentTeammates } from './FrequentTeammates';
+import { PlayerEras } from './PlayerEras';
 import {
   loadCloudRiotLifeSnapshots,
   mergeRiotLifeSnapshots,
@@ -292,6 +293,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
     </article>}
 
+    <PlayerEras data={data} champions={champions} ddv={ddv}/>
     <FrequentTeammates data={data} platform={platform}/>
     <RiotArcade data={data}/>
     <ChampionCareer data={data} champions={champions} ddv={ddv}/>
