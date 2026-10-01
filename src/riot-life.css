@@ -144,3 +144,30 @@
  .careerStory{padding:20px}
  .careerStats{grid-template-columns:1fr 1fr}
 }
+
+
+/* Returning Player ------------------------------------------------------- */
+.returningPlayer{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:10px;padding:17px 20px;border:1px solid #6f7cff2b;background:linear-gradient(110deg,#080b13,#0b0d16)}
+.returningSignal{width:68px;height:68px;display:grid;place-items:center;align-content:center;border:1px solid #6f7cff40;background:#0a0d17}
+.returningSignal span{font-size:25px;font-weight:950;line-height:1}.returningSignal small{margin-top:2px;color:#7682ff;font:900 7px ui-monospace,monospace;letter-spacing:1px}
+.returningPlayer>div:nth-child(2)>small{color:#7f8cff;font:900 8px ui-monospace,monospace;letter-spacing:1.2px}
+.returningPlayer b{display:block;margin:4px 0 3px;font-size:12px}.returningPlayer p{margin:0;color:#7f8a9b;font-size:10px;line-height:1.55}.returningPlayer p strong{color:#c8cfda}
+.returningPlayer button{border:1px solid #6f7cff45;background:#6f7cff0d;color:#aab2ff;padding:10px 12px;font-size:9px;font-weight:900}
+
+/* Riot Arcade ------------------------------------------------------------ */
+.riotArcade{margin-top:10px;border:1px solid #ffffff10;background:radial-gradient(circle at 82% 15%,#6f7cff12,transparent 28%),#070a0f}
+.riotArcade>header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:end;padding:22px 25px;border-bottom:1px solid #ffffff0d}
+.riotArcade header small{color:#7f8cff;font:900 8px ui-monospace,monospace;letter-spacing:1.2px}
+.riotArcade h3{margin:6px 0 8px;font-size:clamp(25px,2.7vw,38px);line-height:.96;letter-spacing:-1.5px}.riotArcade h3 span{color:#9aa3ff}
+.riotArcade header p{max-width:680px;margin:0;color:#7e8999;font-size:11px;line-height:1.6}
+.arcadeScore{min-width:105px;padding:10px 12px;border:1px solid #ffffff0f;background:#05080d}.arcadeScore small,.arcadeScore b,.arcadeScore em{display:block}.arcadeScore b{margin-top:4px;font-size:21px}.arcadeScore em{margin-top:2px;color:#657184;font-size:8px;font-style:normal}
+.arcadeGame{padding:25px}.arcadeProgress{display:flex;gap:6px;margin-bottom:20px}.arcadeProgress i{width:30px;height:5px;background:#ffffff0c;position:relative}.arcadeProgress i.active{background:#6f7cff66}.arcadeProgress i.correct{background:#4bd6a0}.arcadeProgress i.wrong{background:#ff5d78}.arcadeProgress i span{display:none}
+.arcadeGame>small{color:#667286;font:850 7px ui-monospace,monospace}.arcadeGame h4{margin:6px 0 17px;font-size:18px;letter-spacing:-.5px}
+.arcadeOptions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.arcadeOptions button{min-height:52px;border:1px solid #ffffff12;background:#080b12;color:#d8dde6;font-weight:850;font-size:11px}.arcadeOptions button:hover{border-color:#6f7cff55;background:#6f7cff0c}
+.arcadeResult{min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}.arcadeResult>.ztIcon{width:27px;margin-bottom:9px}.arcadeResult small{color:#7f8cff;font:900 7px ui-monospace,monospace}.arcadeResult b{margin-top:5px;font-size:16px}.arcadeResult p{max-width:700px;margin:9px 0 15px;color:#818d9d;font-size:10px;line-height:1.6}.arcadeResult button{border:1px solid #6f7cff45;background:#6f7cff0c;color:#aab2ff;padding:9px 11px;font-size:9px;font-weight:900}
+
+@media(max-width:760px){
+ .returningPlayer{grid-template-columns:auto 1fr}.returningPlayer button{grid-column:1/-1;width:100%}
+ .riotArcade>header{grid-template-columns:1fr}.arcadeScore{min-width:0}
+ .arcadeOptions{grid-template-columns:1fr}
+}
