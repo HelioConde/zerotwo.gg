@@ -266,7 +266,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </aside>}
 
       {signature&&<section id="riot-signature" className="riotChapter riotChapterSignature">
-        {signatureChampion&&<img className="riotChapterArt" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+signatureChampion.id+'.png'} alt=""/>}
+        {signatureChampion&&<img className="riotChapterArt riotChapterArtSignature" loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/'+signatureChampion.id+'_0.jpg'} alt=""/>}
         <div className="riotChapterShade"/>
         <div className="riotChapterNumber">02</div>
         <div className="riotChapterCopy">
@@ -296,7 +296,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </section>
 
       {peakMatch&&<section id="riot-peak" className="riotChapter riotChapterPeak">
-        {peakChampion&&<img className="riotChapterArt" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+peakChampion.id+'.png'} alt=""/>}
+        {peakChampion&&<img className="riotChapterArt riotChapterArtPeak" loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/'+peakChampion.id+'_0.jpg'} alt=""/>}
         <div className="riotChapterShade"/>
         <div className="riotChapterNumber">04</div>
         <div className="riotChapterCopy">
