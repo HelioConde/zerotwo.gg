@@ -642,3 +642,542 @@ body{
   .gamingLanding>footer>.brand{grid-row:auto}
   .gamingLanding>footer>small{font-size:7px!important}
 }
+
+
+/* ---------- LOGGED RIOT LIFE ---------- */
+.riotLifeClient{
+  min-height:100svh;
+  background:
+    radial-gradient(circle at 70% -10%,#22111c 0,transparent 30%),
+    #05070a!important;
+}
+.riotLifeSide{
+  width:230px!important;
+  border-right:1px solid var(--z2-line)!important;
+  background:#07090ddd!important;
+  backdrop-filter:blur(18px);
+}
+.riotLifeSide .brand{margin-bottom:26px!important}
+.riotLifeSide .clientIdentity{
+  padding:14px!important;
+  border:1px solid var(--z2-line)!important;
+  border-radius:14px!important;
+  background:#090c11!important;
+}
+.riotLifeSide .clientAvatar{
+  width:46px!important;
+  height:46px!important;
+  border-radius:13px!important;
+  background:#ff477e0c!important;
+  border:1px solid #ff477e28!important;
+  color:#ff7da5!important;
+}
+.riotLifeSide .clientIdentity small{color:#657184!important}
+.riotLifeSide .clientIdentity b{font-size:11px!important}
+.riotLifeSide .clientIdentity em{font-size:8px!important;color:#748091!important}
+
+.riotLifeSide .clientNav{
+  display:grid!important;
+  gap:5px!important;
+  margin-top:22px!important;
+}
+.riotLifeSide .clientNav button{
+  min-height:44px!important;
+  border:1px solid transparent!important;
+  border-radius:11px!important;
+  background:transparent!important;
+  color:#758091!important;
+}
+.riotLifeSide .clientNav button i{
+  width:28px!important;
+  height:28px!important;
+  border-radius:8px!important;
+  background:#ffffff03!important;
+}
+.riotLifeSide .clientNav button.active{
+  border-color:#ff477e24!important;
+  background:#ff477e08!important;
+  color:#f0f3f7!important;
+}
+.riotLifeSide .clientNav button.active i{background:#ff477e10!important}
+.riotLifeSide .clientNav button.active .ztIcon{opacity:1!important}
+.riotLifeSide .clientStatus{
+  margin-top:auto!important;
+  border-top:1px solid var(--z2-line)!important;
+  color:#637082!important;
+}
+.riotLifeSide .clientLogout{
+  border-radius:9px!important;
+  color:#697586!important;
+}
+
+.riotLifeMain{
+  margin-left:230px!important;
+  padding:0 34px 44px!important;
+}
+.riotLifeTop{
+  min-height:92px!important;
+  margin:0 -34px 24px!important;
+  padding:18px 34px!important;
+  border-bottom:1px solid var(--z2-line)!important;
+  background:#05070acc!important;
+  backdrop-filter:blur(18px);
+}
+.riotLifeTop small{color:#697586!important}
+.riotLifeTop h1{
+  margin-top:3px!important;
+  font-size:28px!important;
+  letter-spacing:-1.3px!important;
+}
+.riotLifeTop h1 span{color:var(--z2-pink)!important}
+.riotLifeTop .clientTopActions button{
+  border:1px solid var(--z2-line)!important;
+  border-radius:10px!important;
+  background:#090c11!important;
+}
+.riotLifeTop .clientTopActions>span{
+  border-radius:10px!important;
+  background:#ff477e0b!important;
+  color:#ff7da5!important;
+}
+
+/* logged cockpit */
+.loggedLifeView{
+  max-width:1180px;
+  margin:0 auto;
+}
+.lifeGameSwitch{
+  width:max-content!important;
+  margin:0 0 12px auto!important;
+  padding:4px!important;
+  border:1px solid var(--z2-line)!important;
+  border-radius:12px!important;
+  background:#070a0f!important;
+}
+.lifeGameSwitch button{border-radius:9px!important}
+
+.loggedLifeHero{
+  display:grid;
+  grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr);
+  gap:10px;
+}
+.loggedLifeHeroCopy,
+.loggedLifeIdentity{
+  min-height:250px;
+  padding:28px;
+  border:1px solid var(--z2-line);
+  border-radius:20px;
+  background:#080b10;
+}
+.loggedLifeHeroCopy{
+  background:
+    radial-gradient(circle at 80% 0,#ff477e14,transparent 34%),
+    linear-gradient(145deg,#0a0d12,#07090d);
+}
+.loggedLifeHeroCopy>small,
+.loggedNow header small,
+.loggedRecent header small,
+.loggedStoryPreview>small,
+.loggedEvidence header small,
+.loggedSimpleView>header>small{
+  color:var(--z2-pink-soft);
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1.15px;
+}
+.loggedLifeHeroCopy h2,
+.loggedSimpleView>header h2{
+  margin:8px 0 12px;
+  font-size:clamp(34px,4.3vw,58px);
+  line-height:.92;
+  letter-spacing:-2.8px;
+}
+.loggedLifeHeroCopy h2 span,
+.loggedSimpleView>header h2 span{color:var(--z2-pink)}
+.loggedLifeHeroCopy>p,
+.loggedSimpleView>header p{
+  max-width:680px;
+  margin:0;
+  color:#8994a3;
+  font-size:12px;
+  line-height:1.7;
+}
+.loggedLifeHeroActions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:22px;
+}
+.loggedLifeHeroActions a,
+.loggedLifeHeroActions button{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:42px;
+  padding:0 14px;
+  border:1px solid var(--z2-line);
+  border-radius:10px;
+  background:#090c11;
+  color:#aeb7c4;
+  text-decoration:none;
+  font-size:8px;
+  font-weight:900;
+}
+.loggedLifeHeroActions .loggedPrimary{
+  border-color:#ff477e3b;
+  background:#ff477e0c;
+  color:#ff8caf;
+}
+.loggedLifeHeroActions .ztIcon{width:14px}
+
+.loggedLifeIdentity{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  background:radial-gradient(circle at 70% 10%,#ffffff06,transparent 38%),#070a0f;
+}
+.loggedLifeGlyph{
+  display:block;
+  margin-bottom:auto;
+  color:#ffffff08;
+  font-size:90px;
+  font-weight:1000;
+  line-height:.8;
+  letter-spacing:-8px;
+}
+.loggedLifeIdentity small,
+.loggedLifeIdentity b,
+.loggedLifeIdentity em{display:block}
+.loggedLifeIdentity small{color:#657184;font:850 7px ui-monospace,monospace}
+.loggedLifeIdentity b{margin-top:6px;font-size:17px}
+.loggedLifeIdentity em{margin-top:4px;color:#768293;font-size:9px;font-style:normal}
+
+.loggedNow{
+  margin-top:10px;
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#080b10;
+  overflow:hidden;
+}
+.loggedNow>header,
+.loggedEvidence>header,
+.loggedRecent>header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--z2-line);
+}
+.loggedNow h3,
+.loggedEvidence h3,
+.loggedRecent h3{
+  margin:4px 0 0;
+  font-size:15px;
+  letter-spacing:-.45px;
+}
+.loggedNow>header a{
+  color:#ff86aa;
+  font-size:8px;
+  font-weight:900;
+  text-decoration:none;
+}
+.loggedNowGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+.loggedNowGrid>span{
+  padding:18px;
+  border-right:1px solid var(--z2-line);
+}
+.loggedNowGrid>span:last-child{border-right:0}
+.loggedNowGrid small,.loggedNowGrid b,.loggedNowGrid em{display:block}
+.loggedNowGrid small{color:#5c6879;font:850 7px ui-monospace,monospace}
+.loggedNowGrid b{margin-top:5px;font-size:18px}
+.loggedNowGrid em{margin-top:3px;color:#707c8d;font-size:8px;font-style:normal}
+
+.loggedLifeSplit{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:10px;
+  margin-top:10px;
+}
+.loggedRecent,
+.loggedStoryPreview{
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#080b10;
+  overflow:hidden;
+}
+.loggedRecent>header>span{
+  width:28px;height:28px;
+  display:grid;place-items:center;
+  border:1px solid var(--z2-line);
+  border-radius:8px;
+  color:#7e8999;
+  font:900 8px ui-monospace,monospace;
+}
+.loggedRecent>div{
+  display:grid;
+}
+.loggedRecent>div>span{
+  display:grid;
+  grid-template-columns:8px minmax(100px,.7fr) minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 16px;
+  border-top:1px solid #ffffff08;
+}
+.loggedRecent>div>span:first-child{border-top:0}
+.loggedRecent>div>span>i{width:5px;height:22px;border-radius:4px;background:#666}
+.loggedRecent>div>span.win>i{background:var(--z2-green)}
+.loggedRecent>div>span.loss>i{background:#ff667d}
+.loggedRecent>div>span b{font-size:10px}
+.loggedRecent>div>span small{color:#718092;font-size:8px}
+.loggedRecent>div>span em{color:#8490a0;font-size:8px;font-style:normal}
+.loggedRecent>a{
+  display:block;
+  padding:12px 16px;
+  border-top:1px solid var(--z2-line);
+  color:#8f9bab;
+  text-decoration:none;
+  font-size:8px;
+  font-weight:900;
+}
+
+.loggedStoryPreview{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:24px;
+  background:radial-gradient(circle at 85% 20%,#ad88ff0d,transparent 34%),#080b10;
+}
+.loggedStoryPreview h3{
+  margin:8px 0 10px;
+  max-width:460px;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-1px;
+}
+.loggedStoryPreview p{
+  margin:0;
+  color:#7f8b9b;
+  font-size:10px;
+  line-height:1.65;
+}
+.loggedStoryPreview button{
+  width:max-content;
+  margin-top:18px;
+  padding:10px 12px;
+  border:1px solid #ad88ff2d;
+  border-radius:9px;
+  background:#ad88ff08;
+  color:#c3aaff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.loggedEvidence{
+  margin-top:10px;
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#070a0f;
+  overflow:hidden;
+}
+.loggedEvidenceGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+.loggedEvidenceGrid>span{
+  padding:15px 17px;
+  border-right:1px solid var(--z2-line);
+}
+.loggedEvidenceGrid>span:last-child{border-right:0}
+.loggedEvidenceGrid small,.loggedEvidenceGrid b{display:block}
+.loggedEvidenceGrid small{color:#5e6a7b;font:850 7px ui-monospace,monospace}
+.loggedEvidenceGrid b{margin-top:5px;font-size:13px}
+.loggedEvidence>p{padding:18px;margin:0;color:#748091;font-size:10px}
+.loggedEvidenceChampions{
+  padding:12px 17px;
+  border-top:1px solid var(--z2-line);
+}
+.loggedEvidenceChampions small,.loggedEvidenceChampions b{display:block}
+.loggedEvidenceChampions small{color:#596576;font:850 7px ui-monospace,monospace}
+.loggedEvidenceChampions b{margin-top:5px;color:#939ead;font-size:9px}
+
+.loggedEmptyInsight{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:10px;
+  padding:22px;
+  border:1px solid var(--z2-line);
+  border-radius:16px;
+  background:#080b10;
+}
+.loggedEmptyInsight>.ztIcon{width:22px}
+.loggedEmptyInsight small,.loggedEmptyInsight b{display:block}
+.loggedEmptyInsight small{color:#677486;font:850 7px ui-monospace,monospace}
+.loggedEmptyInsight b{margin-top:4px;font-size:11px}
+.loggedEmptyInsight p{margin:4px 0 0;color:#748091;font-size:9px}
+
+/* Games and account */
+.loggedSimpleView{
+  max-width:1180px;
+  margin:0 auto;
+}
+.loggedSimpleView>header{
+  padding:32px 0 28px;
+}
+.loggedGamesGrid,
+.accountLifeGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.loggedGamesGrid>article,
+.accountLifeGrid>article{
+  min-height:190px;
+  padding:24px;
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#080b10;
+}
+.loggedGamesGrid>article.connected{border-color:#61daa72b}
+.loggedGamesGrid>article>.gameBadge{margin-bottom:18px}
+.loggedGamesGrid small,.loggedGamesGrid h3,.loggedGamesGrid p,
+.accountLifeGrid small,.accountLifeGrid b,.accountLifeGrid p{display:block}
+.loggedGamesGrid small,.accountLifeGrid small{color:#657184;font:850 7px ui-monospace,monospace}
+.loggedGamesGrid h3{margin:6px 0 8px;font-size:20px}
+.loggedGamesGrid p,.accountLifeGrid p{margin:0;color:#778394;font-size:10px;line-height:1.6}
+.loggedGamesGrid button,.accountLifeGrid button{
+  margin-top:18px;
+  padding:10px 12px;
+  border:1px solid var(--z2-line);
+  border-radius:9px;
+  background:#ffffff04;
+  color:#a6b0be;
+  font-size:8px;
+  font-weight:900;
+}
+.loggedValorantConnect{margin-top:10px}
+
+.accountLifeGrid>article>b{
+  margin-top:6px;
+  font-size:17px;
+}
+.accountLifeGrid>article.danger{
+  border-color:#ff667d21;
+  background:#0d080b;
+}
+.accountLifeGrid>article.danger button{
+  border-color:#ff667d2d;
+  color:#ff8c9d;
+}
+
+/* Private history restyle */
+.riotLifeMain .historyView{max-width:1180px;margin:0 auto}
+.riotLifeMain .historyHero{
+  border-radius:20px!important;
+  overflow:hidden;
+}
+.riotLifeMain .historyHero h2{
+  font-size:clamp(34px,4vw,54px)!important;
+  letter-spacing:-2.5px!important;
+}
+.riotLifeMain .historyAction{display:none!important}
+
+/* Logged footer */
+.riotLifeMain .clientFooter{
+  margin-top:34px!important;
+  padding-top:18px!important;
+  border-top:1px solid var(--z2-line)!important;
+  color:#5e6979!important;
+}
+.riotLifeMain .clientFooter b{color:#8f9aa9!important}
+
+/* Responsive logged shell */
+@media(max-width:980px){
+  .riotLifeSide{
+    width:76px!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+  .riotLifeSide .brand{
+    justify-content:center!important;
+    font-size:0!important;
+  }
+  .riotLifeSide .brandMark{margin:0!important}
+  .riotLifeSide .clientIdentity>div{display:none!important}
+  .riotLifeSide .clientIdentity{justify-content:center!important;padding:10px!important}
+  .riotLifeSide .clientNav button{justify-content:center!important}
+  .riotLifeSide .clientNav button>span{display:none!important}
+  .riotLifeSide .clientStatus small,.riotLifeSide .clientStatus span{display:none!important}
+  .riotLifeSide .clientLogout{font-size:0!important;justify-content:center!important}
+  .riotLifeMain{margin-left:76px!important;padding:0 20px 36px!important}
+  .riotLifeTop{margin:0 -20px 20px!important;padding:14px 20px!important}
+  .loggedNowGrid{grid-template-columns:repeat(3,1fr)}
+  .loggedNowGrid>span{border-bottom:1px solid var(--z2-line)}
+  .loggedLifeSplit{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .riotLifeClient{display:block!important}
+  .riotLifeSide{
+    position:fixed!important;
+    left:0!important;right:0!important;bottom:0!important;top:auto!important;
+    z-index:80!important;
+    width:auto!important;height:66px!important;
+    display:block!important;
+    padding:6px 8px!important;
+    border-right:0!important;
+    border-top:1px solid var(--z2-line)!important;
+  }
+  .riotLifeSide>.brand,
+  .riotLifeSide>.clientIdentity,
+  .riotLifeSide>.clientStatus,
+  .riotLifeSide>.clientLogout{display:none!important}
+  .riotLifeSide .clientNav{
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:4px!important;
+    margin:0!important;
+  }
+  .riotLifeSide .clientNav button{
+    min-height:52px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:3px!important;
+    justify-content:center!important;
+    padding:4px!important;
+  }
+  .riotLifeSide .clientNav button>span{
+    display:block!important;
+    font-size:7px!important;
+  }
+  .riotLifeSide .clientNav button i{width:22px!important;height:22px!important}
+  .riotLifeMain{
+    margin-left:0!important;
+    padding:0 12px 92px!important;
+  }
+  .riotLifeTop{
+    min-height:68px!important;
+    margin:0 -12px 14px!important;
+    padding:10px 12px!important;
+  }
+  .riotLifeTop h1{font-size:21px!important}
+  .riotLifeTop .clientTopActions>span{display:none!important}
+  .lifeGameSwitch{margin-left:0!important;width:100%!important}
+  .lifeGameSwitch button{flex:1!important}
+  .loggedLifeHero{grid-template-columns:1fr}
+  .loggedLifeHeroCopy,.loggedLifeIdentity{min-height:0;padding:20px}
+  .loggedLifeIdentity{display:none}
+  .loggedLifeHeroCopy h2{font-size:36px}
+  .loggedNowGrid{grid-template-columns:1fr 1fr}
+  .loggedNowGrid>span{border-right:1px solid var(--z2-line)}
+  .loggedLifeSplit{grid-template-columns:1fr}
+  .loggedRecent>div>span{grid-template-columns:6px 1fr auto}
+  .loggedRecent>div>span small{grid-column:2/4}
+  .loggedEvidenceGrid{grid-template-columns:1fr 1fr}
+  .loggedEvidenceGrid>span{border-bottom:1px solid var(--z2-line)}
+  .loggedGamesGrid,.accountLifeGrid{grid-template-columns:1fr}
+  .loggedSimpleView>header{padding:22px 0}
+  .loggedSimpleView>header h2{font-size:37px}
+}
