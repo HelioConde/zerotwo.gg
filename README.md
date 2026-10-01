@@ -1,15 +1,33 @@
 # ZeroTwo.gg
 
-> **You're 01. Find your 02.**
+> **Your Riot life, interpreted.**
 
-ZeroTwo.gg é uma plataforma de **player analytics + Looking For Group**, inicialmente integrada ao **League of Legends**. O produto entrega valor antes do cadastro: busca pública por Riot ID, histórico, dados oficiais e Gaming DNA multimodo. Find Your 02 e 02 Sync entram depois, quando o jogador quer encontrar companhia para jogar.
+ZeroTwo.gg está evoluindo de um produto centrado em LFG para uma experiência de **Riot Life**: usar dados permitidos do ecossistema Riot para transformar partidas, sessões, mudanças de estilo e histórico em histórias que o jogador realmente queira explorar.
 
-**Produto:** busca pública → Player 01 → Gaming DNA → Find Your 02 → jogar juntos → 02 Sync → algoritmo aprende.
+**Produto atual:** Riot ID / Riot Sign On → Riot Passport → Riot Life → Session Lab → Personal Meta → Time Machine → Match Story → estatísticas profundas.
+
+League of Legends é a primeira fonte pública. VALORANT permanece opt-in via Riot Sign On. Find Your 02 e 02 Sync continuam no código como experimentos sociais, mas **não são mais a definição nem a North Star do produto**.
 
 A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 
 ---
 
+## Pivot de produto — Riot Life
+
+O ZeroTwo não deve competir tentando ser apenas outro OP.GG/Tracker. A camada diferenciadora deve responder perguntas que tabelas tradicionais não respondem diretamente:
+
+- **Riot Passport:** quem é este jogador no ecossistema Riot?
+- **Session Lab:** como foi a sessão como um todo, e não só cada partida isolada?
+- **Personal Meta:** o que funcionou para este jogador nesta amostra, sem confundir isso com o meta global?
+- **Time Machine:** o que mudou entre momentos reais observados?
+- **Match Story:** como transformar uma partida em uma história legível e compartilhável?
+- **My Riot Patch:** quais mudanças oficiais afetam coisas que o jogador realmente usa?
+- **Champion / Agent Career:** qual é a história do jogador com cada personagem?
+- **Returning Player:** o que mudou desde a última vez que ele jogou?
+- **Riot Challenges Arcade:** brincar com o próprio histórico em experiências curtas.
+- **Riot Universe:** uma Home que reúne os jogos Riot conectados.
+
+Princípio central: **evidência antes de narrativa**. O ZeroTwo pode interpretar dados, mas não deve inventar histórico, causalidade, MMR ou impacto de patch sem fonte.
 
 ### Product UX rules — current
 
