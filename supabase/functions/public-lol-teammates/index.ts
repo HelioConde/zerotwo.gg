@@ -13,9 +13,11 @@ type MateRow={
   tagLine:string;
   games:number;
   wins:number;
+  firstPlayedAt:number;
   lastPlayedAt:number;
   champions:Map<string,number>;
   positions:Map<string,number>;
+  pairChampions:Map<string,number>;
 };
 
 const allowedRegions=new Set(['americas','europe','asia','sea']);
@@ -103,17 +105,23 @@ Deno.serve(async req=>{
               tagLine:mateTagLine,
               games:0,
               wins:0,
+              firstPlayedAt:0,
               lastPlayedAt:0,
               champions:new Map(),
-              positions:new Map()
+              positions:new Map(),
+              pairChampions:new Map()
             };
             mates.set(key,row);
           }
           row.games++;
           if(Boolean(target.win))row.wins++;
+          row.firstPlayedAt=row.firstPlayedAt?Math.min(row.firstPlayedAt,playedAt):playedAt;
           row.lastPlayedAt=Math.max(row.lastPlayedAt,playedAt);
           inc(row.champions,text(p.championName,40));
           inc(row.positions,text(p.teamPosition||p.individualPosition||'',20));
+          const targetChampion=text(target.championName,40);
+          const mateChampion=text(p.championName,40);
+          if(targetChampion&&mateChampion)inc(row.pairChampions,targetChampion+' + '+mateChampion);
         }
       }
     }
@@ -128,9 +136,11 @@ Deno.serve(async req=>{
         games:row.games,
         wins:row.wins,
         winRate:row.games?Math.round(row.wins/row.games*100):0,
+        firstPlayedAt:row.firstPlayedAt,
         lastPlayedAt:row.lastPlayedAt,
         champions:[...row.champions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games})),
-        positions:[...row.positions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2).map(([name,games])=>({name,games}))
+        positions:[...row.positions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2).map(([name,games])=>({name,games})),
+        pairChampions:[...row.pairChampions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games}))
       }));
 
     return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length});
