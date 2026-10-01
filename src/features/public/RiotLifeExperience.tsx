@@ -3,6 +3,12 @@ import { Icon } from '../../components/ZeroTwoUI';
 import { ChampionCareer } from './ChampionCareer';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
+import {
+  loadCloudRiotLifeSnapshots,
+  mergeRiotLifeSnapshots,
+  saveCloudRiotLifeSnapshot,
+  type RiotLifeSnapshot as Snapshot
+} from './riotLifeMemory';
 import '../../riot-life.css';
 
 type RiotLifeProps={
@@ -10,15 +16,6 @@ type RiotLifeProps={
   platform:string;
   champions:any;
   ddv:string;
-};
-
-type Snapshot={
-  at:number;
-  mainContext:string|null;
-  avgKda:number|null;
-  winRate:number|null;
-  topChampion:string|null;
-  rank:string|null;
 };
 
 const num=(v:any)=>Number.isFinite(Number(v))?Number(v):0;
@@ -71,7 +68,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const sessions=useMemo(()=>sessionize(matches),[matches]);
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
   const storageKey='zt_riot_life_'+playerKey;
-  const [snapshots,setSnapshots]=useState<Snapshot[]>(()=>{try{const raw=JSON.parse(localStorage.getItem(storageKey)||'[]');return Array.isArray(raw)?raw:[]}catch{return[]}});
+  const [snapshots,setSnapshots]=useState<Snapshot[]>([]);
+  const [memoryMode,setMemoryMode]=useState<'checking'|'local'|'cloud'>('checking');
+  const [memoryReady,setMemoryReady]=useState(false);
 
   const currentSnapshot=useMemo<Snapshot>(()=>({
     at:Date.now(),
@@ -83,22 +82,52 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   }),[data,matches]);
 
   useEffect(()=>{
-    const next=[...snapshots];
-    const last=next[next.length-1];
+    let active=true;
+    setMemoryReady(false);
+    setMemoryMode('checking');
+    let local:Snapshot[]=[];
+    try{
+      const raw=JSON.parse(localStorage.getItem(storageKey)||'[]');
+      if(Array.isArray(raw))local=raw;
+    }catch{}
+    setSnapshots(local);
+    (async()=>{
+      const remote=await loadCloudRiotLifeSnapshots(playerKey);
+      if(!active)return;
+      const merged=mergeRiotLifeSnapshots(local,remote.snapshots);
+      try{localStorage.setItem(storageKey,JSON.stringify(merged))}catch{}
+      setSnapshots(merged);
+      setMemoryMode(remote.cloud?'cloud':'local');
+      setMemoryReady(true);
+    })();
+    return()=>{active=false};
+  },[playerKey,storageKey]);
+
+  useEffect(()=>{
+    if(!memoryReady)return;
+    const last=snapshots[snapshots.length-1];
     const changed=!last||Date.now()-last.at>20*60*1000||
       last.mainContext!==currentSnapshot.mainContext||
       last.topChampion!==currentSnapshot.topChampion||
       last.rank!==currentSnapshot.rank||
       last.avgKda!==currentSnapshot.avgKda||
       last.winRate!==currentSnapshot.winRate;
-    if(changed){
-      const merged=[...next,currentSnapshot].slice(-24);
-      try{localStorage.setItem(storageKey,JSON.stringify(merged))}catch{}
-      if(merged.length!==snapshots.length)setSnapshots(merged);
+    if(!changed)return;
+    const merged=mergeRiotLifeSnapshots(snapshots,[currentSnapshot]);
+    try{localStorage.setItem(storageKey,JSON.stringify(merged))}catch{}
+    setSnapshots(merged);
+    if(memoryMode==='cloud'){
+      saveCloudRiotLifeSnapshot({
+        playerKey,
+        platform,
+        gameName:data?.player?.gameName||'Player',
+        tagLine:data?.player?.tagLine||'',
+        snapshot:currentSnapshot
+      }).then(saved=>{if(!saved)setMemoryMode('local')});
     }
-  // Persist one useful snapshot per meaningful profile state.
+  // Persist only meaningful profile-state changes after local/cloud history loads.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[playerKey,currentSnapshot.mainContext,currentSnapshot.topChampion,currentSnapshot.rank,currentSnapshot.avgKda,currentSnapshot.winRate]);
+  },[memoryReady,playerKey,currentSnapshot.mainContext,currentSnapshot.topChampion,currentSnapshot.rank,currentSnapshot.avgKda,currentSnapshot.winRate]);
 
   const latestSession=sessions[0]||[];
   const latestSessionDesc=useMemo(()=>{
@@ -181,7 +210,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <div className="riotLifeCoverage">
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
         <span><small>JANELA</small><b>{sampleDays||'—'}</b><em>{sampleDays===1?'dia':'dias'}</em></span>
-        <span><small>VISITAS</small><b>{Math.max(1,snapshots.length)}</b><em>memórias</em></span>
+        <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sincronizando':'local'}</em></span>
       </div>
     </header>
 
