@@ -1,0 +1,470 @@
+/* ZeroTwo Riot Life redesign — 2026-10-01
+   Loaded last on purpose. This is the new visual hierarchy for the public product. */
+
+:root{
+  --z2-bg:#05070a;
+  --z2-surface:#090c11;
+  --z2-surface-2:#0d1118;
+  --z2-line:#ffffff12;
+  --z2-line-strong:#ffffff1d;
+  --z2-text:#f0f3f7;
+  --z2-muted:#8994a3;
+  --z2-dim:#5e6979;
+  --z2-pink:#ff477e;
+  --z2-pink-soft:#ff7da5;
+  --z2-cyan:#75ddff;
+  --z2-violet:#ad88ff;
+  --z2-green:#61daa7;
+  --z2-radius:18px;
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% -10%,#25111d 0,transparent 28%),
+    var(--z2-bg)!important;
+}
+
+/* ---------- HOME: one job, one search ---------- */
+.homeLookup:not(.hasResult) .homeHero{
+  min-height:min(760px,calc(100svh - 64px))!important;
+  display:flex!important;
+  align-items:center!important;
+  padding-top:70px!important;
+  padding-bottom:70px!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy{
+  max-width:1040px!important;
+  margin:0 auto!important;
+  text-align:center;
+}
+.homeLookup:not(.hasResult) .publicGameSwitch{
+  width:max-content;
+  margin:0 auto 30px!important;
+  padding:4px;
+  border:1px solid var(--z2-line);
+  background:#080b10cc;
+  border-radius:14px;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy>small{
+  display:block;
+  color:var(--z2-pink-soft)!important;
+  font-size:10px!important;
+  letter-spacing:1.6px!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy h1{
+  max-width:980px!important;
+  margin:12px auto 18px!important;
+  font-size:clamp(54px,7.2vw,104px)!important;
+  line-height:.9!important;
+  letter-spacing:-5.5px!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy h1 span{color:var(--z2-pink)!important}
+.homeLookup:not(.hasResult) .homeHeroCopy>p{
+  max-width:720px!important;
+  margin:0 auto 30px!important;
+  color:#9ca6b4!important;
+  font-size:15px!important;
+  line-height:1.7!important;
+}
+.homeLookup:not(.hasResult) .lookupSearch{
+  max-width:880px!important;
+  margin:0 auto!important;
+  padding:7px!important;
+  min-height:66px!important;
+  border:1px solid #ffffff20!important;
+  background:#090c11f2!important;
+  border-radius:16px!important;
+  box-shadow:0 28px 90px #000a!important;
+}
+.homeLookup:not(.hasResult) .lookupSearch>div{
+  border-radius:11px!important;
+  background:#05070b!important;
+}
+.homeLookup:not(.hasResult) .lookupSearch button{
+  min-width:170px!important;
+  border-radius:11px!important;
+  background:var(--z2-pink)!important;
+}
+.homeLookup:not(.hasResult) .lookupTrust{
+  justify-content:center!important;
+  margin-top:17px!important;
+}
+.homeLookup:not(.hasResult) .recentPlayerSearches{
+  margin:26px auto 0!important;
+  text-align:left;
+}
+
+/* Home proof instead of old product funnel */
+.homeExperienceV2{
+  max-width:1180px;
+  margin:0 auto;
+  padding:88px 24px 110px;
+}
+.homeExperienceV2 .homeValueIntro{
+  max-width:780px;
+  padding:0!important;
+  margin:0 0 38px!important;
+}
+.homeExperienceV2 .homeValueIntro small{color:var(--z2-pink-soft)}
+.homeExperienceV2 .homeValueIntro h2{
+  margin:8px 0 14px!important;
+  font-size:clamp(42px,5.8vw,76px)!important;
+  line-height:.92!important;
+  letter-spacing:-4px!important;
+}
+.homeExperienceV2 .homeValueIntro p{max-width:690px;color:#8c97a6;line-height:1.7}
+.homeStoryStrip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.homeStoryStrip article{
+  min-height:190px;
+  padding:23px;
+  border:1px solid var(--z2-line);
+  border-radius:var(--z2-radius);
+  background:linear-gradient(145deg,#0b0f15,#07090d);
+}
+.homeStoryStrip article>.ztIcon{width:25px;margin-bottom:32px}
+.homeStoryStrip article>span{display:flex;align-items:center;gap:8px}
+.homeStoryStrip article>span small{color:var(--z2-pink);font:900 9px ui-monospace,monospace}
+.homeStoryStrip article>span b{font-size:13px}
+.homeStoryStrip article p{margin:10px 0 0;color:#788394;font-size:11px;line-height:1.55}
+.homeProof{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:45px;
+  margin-top:70px;
+  padding:44px;
+  border:1px solid var(--z2-line);
+  border-radius:24px;
+  background:radial-gradient(circle at 85% 10%,#ff477e0d,transparent 35%),#080b10;
+}
+.homeProof>div:first-child>small{color:var(--z2-pink-soft);font:900 9px ui-monospace,monospace;letter-spacing:1px}
+.homeProof h3{margin:8px 0 13px;font-size:34px;line-height:.98;letter-spacing:-1.8px}
+.homeProof h3 span{color:var(--z2-pink)}
+.homeProof p{margin:0;max-width:520px;color:#7e8999;font-size:11px;line-height:1.65}
+.homeProofCards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.homeProofCards span{padding:15px;border:1px solid var(--z2-line);border-radius:12px;background:#05080c}
+.homeProofCards b,.homeProofCards small{display:block}
+.homeProofCards b{font-size:10px}.homeProofCards small{margin-top:4px;color:#637082;font-size:8px}
+
+/* ---------- RESULT TOP BAR ---------- */
+.homeLookup.hasResult .homeHero{
+  position:sticky;
+  top:0;
+  z-index:45;
+  background:#05070aee!important;
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--z2-line)!important;
+}
+.homeLookup.hasResult .lookupSearch{
+  min-height:48px!important;
+  padding:3px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.homeLookup.hasResult .lookupSearch button{
+  min-width:126px!important;
+  border-radius:8px!important;
+}
+.publicPlayerResult{
+  max-width:1240px!important;
+  margin:0 auto!important;
+  padding:22px 24px 90px!important;
+}
+.publicBackHome{
+  margin:2px 0 12px!important;
+  border:0!important;
+  background:transparent!important;
+  color:#6c7787!important;
+  padding:8px 0!important;
+  font-size:9px!important;
+  letter-spacing:.5px;
+}
+.publicBackHome:hover{color:#c8d0da!important}
+
+.playerMomentHero{
+  display:grid!important;
+  grid-template-columns:minmax(250px,.85fr) minmax(0,1.45fr) minmax(210px,.65fr)!important;
+  gap:10px!important;
+  align-items:stretch!important;
+  margin:0 0 10px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.playerMomentIdentity,
+.playerMomentLead,
+.playerMomentSide{
+  padding:20px!important;
+  border:1px solid var(--z2-line)!important;
+  border-radius:var(--z2-radius)!important;
+  background:#080b10!important;
+}
+.playerMomentIdentity{display:flex!important;align-items:center!important;gap:14px!important}
+.publicPlayerBadge{
+  width:68px!important;height:68px!important;
+  flex:0 0 auto;
+  border-radius:16px!important;
+  overflow:hidden!important;
+}
+.playerMomentIdentity h2{font-size:24px!important;letter-spacing:-1px!important}
+.playerMomentIdentity h2 span{font-size:11px!important}
+.playerMomentLead{
+  background:radial-gradient(circle at 90% 0,#ff477e12,transparent 35%),#090c11!important;
+}
+.playerMomentLead h3{
+  max-width:670px;
+  margin:5px 0 7px!important;
+  font-size:clamp(22px,2.6vw,34px)!important;
+  line-height:1!important;
+  letter-spacing:-1.4px!important;
+}
+.playerMomentLead>p{margin-bottom:14px!important}
+.momentKeyStats{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}
+.momentKeyStats>span{
+  padding:9px 10px!important;
+  border:1px solid #ffffff0d!important;
+  background:#05080c!important;
+}
+.playerMomentSide{display:flex!important;flex-direction:column!important;justify-content:space-between!important}
+.playerMomentActions{margin-bottom:10px!important}
+.rankMini{margin-top:0!important}
+
+/* ---------- RIOT LIFE HUB ---------- */
+.riotLifeV2{margin:10px 0 0!important}
+.riotLifeHub{
+  position:sticky;
+  top:61px;
+  z-index:35;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"title meta" "tabs tabs";
+  gap:16px 22px;
+  padding:18px 20px 0;
+  border:1px solid var(--z2-line);
+  border-radius:20px 20px 0 0;
+  background:#070a0ff2;
+  backdrop-filter:blur(18px);
+}
+.riotLifeHubTitle{grid-area:title}
+.riotLifeHubTitle>small{color:var(--z2-pink-soft);font:900 8px ui-monospace,monospace;letter-spacing:1.2px}
+.riotLifeHubTitle h3{margin:4px 0 5px;font-size:26px;letter-spacing:-1.1px}
+.riotLifeHubTitle h3 span{color:var(--z2-pink)}
+.riotLifeHubTitle p{margin:0;color:#768293;font-size:10px}
+.riotLifeHubMeta{grid-area:meta;display:flex;gap:6px}
+.riotLifeHubMeta>span{min-width:78px;padding:8px 10px;border:1px solid var(--z2-line);border-radius:10px;background:#05080c}
+.riotLifeHubMeta small,.riotLifeHubMeta b,.riotLifeHubMeta em{display:block}
+.riotLifeHubMeta small{color:#596577;font:800 6px ui-monospace,monospace}
+.riotLifeHubMeta b{margin-top:3px;font-size:14px}.riotLifeHubMeta em{color:#667284;font-size:7px;font-style:normal}
+.riotLifeTabs{
+  grid-area:tabs;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  margin:0 -20px;
+  border-top:1px solid var(--z2-line);
+}
+.riotLifeTabs button{
+  min-height:58px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  grid-template-rows:auto auto;
+  column-gap:9px;
+  align-items:center;
+  padding:9px 18px;
+  border:0;
+  border-right:1px solid var(--z2-line);
+  background:transparent;
+  color:#7d8998;
+  text-align:left;
+}
+.riotLifeTabs button:last-child{border-right:0}
+.riotLifeTabs button>span{grid-row:1/3;color:#3d4653;font:950 18px ui-monospace,monospace}
+.riotLifeTabs button>b{align-self:end;font-size:10px}
+.riotLifeTabs button>small{align-self:start;color:#5d6879;font-size:8px}
+.riotLifeTabs button.active{background:#ff477e0a;color:#fff}
+.riotLifeTabs button.active>span{color:var(--z2-pink)}
+.riotLifeTabs button.active>small{color:#8994a4}
+.riotLifeView{
+  padding:10px;
+  border:1px solid var(--z2-line);
+  border-top:0;
+  border-radius:0 0 20px 20px;
+  background:#05080c;
+}
+.riotLifeView>*:first-child{margin-top:0!important}
+
+/* Wrapped becomes the hero, not five equal tiles */
+.riotLifeV2 .riotWrapped{
+  margin:0!important;
+  border-radius:16px;
+  overflow:hidden;
+}
+.riotLifeV2 .wrappedCards{
+  grid-template-columns:1.25fr .75fr .75fr!important;
+  grid-template-rows:repeat(2,minmax(150px,auto));
+}
+.riotLifeV2 .wrappedCard{min-height:150px!important}
+.riotLifeV2 .wrappedCard:first-child{grid-row:1/3;min-height:300px!important}
+.riotLifeV2 .wrappedCard:nth-child(4),
+.riotLifeV2 .wrappedCard:nth-child(5){min-height:150px!important}
+.riotLifeV2 .wrappedCardCopy>b{font-size:24px!important}
+
+/* Summary is intentionally compact */
+.riotLifeSummaryGrid{
+  display:grid;
+  grid-template-columns:1.25fr .9fr .9fr;
+  gap:10px;
+  margin-top:10px;
+}
+.riotLifeSummaryGrid .riotLifeCard{
+  min-height:230px!important;
+  border-radius:16px;
+}
+.riotLifeSummaryGrid .riotLifeCard:after{opacity:.45}
+.matchStoryV2{
+  margin-top:10px!important;
+  border-radius:16px;
+  overflow:hidden;
+}
+.riotLifeContinue{
+  width:100%;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:10px;
+  padding:14px 18px;
+  border:1px solid #ff477e2f;
+  border-radius:14px;
+  background:linear-gradient(90deg,#ff477e0a,#080b10);
+  color:#dce3eb;
+  text-align:left;
+}
+.riotLifeContinue span small,.riotLifeContinue span b{display:block}
+.riotLifeContinue span small{color:var(--z2-pink);font:850 7px ui-monospace,monospace;letter-spacing:.7px}
+.riotLifeContinue span b{margin-top:4px;font-size:11px}
+.riotLifeContinue>.ztIcon{width:16px}
+
+/* Story / Explore */
+.riotSectionIntro{
+  padding:34px 26px;
+  border:1px solid var(--z2-line);
+  border-radius:16px;
+  background:radial-gradient(circle at 85% 20%,#ad88ff0d,transparent 34%),#080b10;
+}
+.riotSectionIntro small{color:var(--z2-violet);font:900 8px ui-monospace,monospace;letter-spacing:1px}
+.riotSectionIntro h3{margin:7px 0 10px;font-size:clamp(28px,3.8vw,48px);line-height:.95;letter-spacing:-2px}
+.riotSectionIntro h3 span{color:#c2a6ff}
+.riotSectionIntro p{max-width:760px;margin:0;color:#7c8798;font-size:11px;line-height:1.65}
+.timeMachineWide{margin-top:10px!important;min-height:0!important;border-radius:16px}
+.riotLifeStory>.playerEras,
+.riotLifeStory>.frequentTeammates,
+.riotExploreOrder>*{border-radius:16px;overflow:hidden}
+.riotExploreOrder{display:grid;gap:10px}
+
+/* Traditional tracker data is now clearly secondary */
+.gameDataExplorer{
+  margin-top:26px;
+  padding-top:26px;
+  border-top:1px solid var(--z2-line);
+}
+.gameDataExplorer>header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:10px;
+  padding:0 4px;
+}
+.gameDataExplorer>header>div>small{color:#687486;font:850 8px ui-monospace,monospace;letter-spacing:1px}
+.gameDataExplorer>header h3{margin:4px 0 3px;font-size:17px;letter-spacing:-.5px}
+.gameDataExplorer>header p{margin:0;color:#657184;font-size:9px}
+.gameDataExplorer>header>.ztIcon{width:20px;opacity:.35}
+.gameDataExplorer .profileViewNav{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:6px;
+  margin:0!important;
+  padding:6px;
+  border:1px solid var(--z2-line);
+  border-radius:14px;
+  background:#070a0f;
+}
+.gameDataExplorer .profileViewNav button{
+  min-height:54px!important;
+  border:1px solid transparent!important;
+  border-radius:10px!important;
+  background:transparent!important;
+}
+.gameDataExplorer .profileViewNav button.active{
+  border-color:#ffffff12!important;
+  background:#ffffff05!important;
+}
+.gameDataExplorer .profileViewNav button>small{color:#4f5a69!important}
+.gameDataExplorer .profileViewNav button.active>small{color:var(--z2-pink)!important}
+.momentView,.profileViewPanel{margin-top:8px!important;border-radius:16px!important;overflow:hidden}
+
+/* Remove the visual weight of leftover legacy social/funnel areas. */
+.profileFindAction{display:none!important}
+.find02View{margin-top:18px}
+.homeClosedLoop,.homeValueGrid{display:none!important}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:900px){
+  .playerMomentHero{grid-template-columns:1fr 1fr!important}
+  .playerMomentLead{grid-column:1/-1;grid-row:2}
+  .riotLifeHub{top:56px;grid-template-columns:1fr;grid-template-areas:"title" "meta" "tabs"}
+  .riotLifeHubMeta{width:100%}.riotLifeHubMeta>span{flex:1}
+  .riotLifeSummaryGrid{grid-template-columns:1fr 1fr}.riotPassport{grid-column:1/-1}
+  .riotLifeV2 .wrappedCards{grid-template-columns:1fr 1fr!important;grid-template-rows:auto!important}
+  .riotLifeV2 .wrappedCard:first-child{grid-row:auto;grid-column:1/-1;min-height:230px!important}
+  .homeProof{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .homeLookup:not(.hasResult) .homeHero{padding:40px 16px!important}
+  .homeLookup:not(.hasResult) .homeHeroCopy h1{font-size:clamp(44px,14vw,65px)!important;letter-spacing:-3.6px!important}
+  .homeLookup:not(.hasResult) .lookupSearch{grid-template-columns:minmax(0,1fr) 68px!important}
+  .homeLookup:not(.hasResult) .lookupSearch button{grid-column:1/-1;width:100%;min-height:46px}
+  .homeStoryStrip{grid-template-columns:1fr}
+  .homeProof{padding:28px 20px}.homeProofCards{grid-template-columns:1fr 1fr}
+  .publicPlayerResult{padding:14px 12px 70px!important}
+  .playerMomentHero{grid-template-columns:1fr!important}
+  .playerMomentLead{grid-column:auto;grid-row:auto}
+  .playerMomentIdentity,.playerMomentLead,.playerMomentSide{padding:16px!important}
+  .playerMomentSide{display:none!important}
+  .riotLifeHub{top:54px;padding:14px 14px 0;border-radius:15px 15px 0 0}
+  .riotLifeHubTitle p{display:none}
+  .riotLifeHubMeta{gap:4px}
+  .riotLifeHubMeta>span{min-width:0;padding:6px 7px}
+  .riotLifeTabs{margin:0 -14px}
+  .riotLifeTabs button{min-height:52px;padding:8px 10px}
+  .riotLifeTabs button>span{font-size:14px}.riotLifeTabs button>small{display:none}
+  .riotLifeView{padding:6px;border-radius:0 0 15px 15px}
+  .riotLifeV2 .wrappedCards{grid-template-columns:1fr!important}
+  .riotLifeV2 .wrappedCard:first-child{grid-column:auto;min-height:210px!important}
+  .riotLifeV2 .wrappedCard{min-height:175px!important}
+  .riotLifeSummaryGrid{grid-template-columns:1fr}
+  .riotPassport{grid-column:auto}
+  .matchStoryV2{grid-template-columns:1fr!important}
+  .matchStoryV2 .matchStoryVisual{max-height:180px!important}
+  .riotSectionIntro{padding:25px 18px}
+  .gameDataExplorer .profileViewNav{
+    display:flex!important;
+    overflow-x:auto;
+    padding:5px;
+    scrollbar-width:none;
+  }
+  .gameDataExplorer .profileViewNav button{flex:0 0 128px!important}
+  .gameDataExplorer .profileViewNav button>span{display:none!important}
+  .gameDataExplorer>header p{display:none}
+}
+@media(max-width:480px){
+  .homeProofCards{grid-template-columns:1fr}
+  .momentKeyStats b{font-size:18px!important}
+  .riotLifeHubTitle h3{font-size:21px}
+  .riotLifeTabs button{grid-template-columns:auto 1fr;column-gap:6px}
+}
