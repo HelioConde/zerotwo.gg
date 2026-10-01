@@ -18,6 +18,8 @@ type MateRow={
   champions:Map<string,number>;
   positions:Map<string,number>;
   pairChampions:Map<string,number>;
+  recentGames:number;
+  olderGames:number;
 };
 
 const allowedRegions=new Set(['americas','europe','asia','sea']);
@@ -73,17 +75,19 @@ Deno.serve(async req=>{
     // Process in small batches to avoid creating unnecessary bursts against Match-V5.
     for(let i=0;i<matchIds.length;i+=4){
       const batch=matchIds.slice(i,i+4);
-      const results=await Promise.all(batch.map(async matchId=>{
+      const results=await Promise.all(batch.map(async (matchId,batchIndex)=>{
         try{
           const match=await riotGet('https://'+region+'.api.riotgames.com/lol/match/v5/matches/'+encodeURIComponent(matchId),riotApiKey);
-          return match;
+          return {match,sampleIndex:i+batchIndex};
         }catch(error){
           console.warn('public-lol-teammates match skipped',matchId,error);
           return null;
         }
       }));
 
-      for(const match of results){
+      for(const result of results){
+        if(!result)continue;
+        const {match,sampleIndex}=result;
         const participants=Array.isArray(match?.info?.participants)?match.info.participants:[];
         const target=participants.find((p:any)=>p?.puuid===targetPuuid);
         if(!target)continue;
@@ -109,11 +113,15 @@ Deno.serve(async req=>{
               lastPlayedAt:0,
               champions:new Map(),
               positions:new Map(),
-              pairChampions:new Map()
+              pairChampions:new Map(),
+              recentGames:0,
+              olderGames:0
             };
             mates.set(key,row);
           }
           row.games++;
+          if(sampleIndex<4)row.recentGames++;
+          else row.olderGames++;
           if(Boolean(target.win))row.wins++;
           row.firstPlayedAt=row.firstPlayedAt?Math.min(row.firstPlayedAt,playedAt):playedAt;
           row.lastPlayedAt=Math.max(row.lastPlayedAt,playedAt);
@@ -140,7 +148,10 @@ Deno.serve(async req=>{
         lastPlayedAt:row.lastPlayedAt,
         champions:[...row.champions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games})),
         positions:[...row.positions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,2).map(([name,games])=>({name,games})),
-        pairChampions:[...row.pairChampions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games}))
+        pairChampions:[...row.pairChampions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games})),
+        recentGames:row.recentGames,
+        olderGames:row.olderGames,
+        phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>0?'now':row.olderGames>=2?'before':'single'
       }));
 
     return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length});
