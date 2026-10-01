@@ -3477,3 +3477,55 @@ summary:focus-visible{
   from{transform:scale(1)}
   to{transform:scale(1.018)}
 }
+
+
+/* Lazy chapter art: preserve the visual pass without eager CSS downloads. */
+.homeJourneyDiscover,
+.homeJourneyRemember,
+.homeJourneyPeople{
+  background-image:none!important;
+}
+.homeJourneyEnd{
+  background:#080b10!important;
+}
+.homeJourneyArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  opacity:.42;
+  pointer-events:none;
+  user-select:none;
+}
+.homeJourneyDiscover .homeJourneyArt{opacity:.36}
+.homeJourneyRemember .homeJourneyArt{opacity:.38;object-position:center 46%}
+.homeJourneyPeople .homeJourneyArt{opacity:.35}
+.homeJourneyEndArt{opacity:.38;object-position:center 54%}
+.homeJourneyEnd{position:relative;overflow:hidden}
+.homeJourneyEnd:before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:linear-gradient(90deg,#06080ded 0%,#06080ddc 48%,#06080d8c 78%,#06080dad 100%),linear-gradient(0deg,#06080d,transparent 65%);
+  pointer-events:none;
+}
+.homeJourneyEnd>div,
+.homeJourneyEnd>button{position:relative;z-index:2}
+.homeJourneyChapter>div,
+.homeJourneyChapter>aside,
+.homeJourneyChapter>.homeJourneyNo{z-index:2}
+@media(max-width:760px){
+  .homeJourneyArt{opacity:.30!important}
+  .homeJourneyEndArt{opacity:.32!important}
+  .homeJourneyChapter:before{
+    z-index:1;
+    background:linear-gradient(0deg,#06090df7 0%,#06090de8 52%,#06090d5e 100%)!important;
+  }
+  .homeJourneyEnd:before{
+    background:linear-gradient(0deg,#06080df8 0%,#06080dcf 62%,#06080d78 100%);
+  }
+}
