@@ -16,6 +16,9 @@ type Teammate={
   champions:Array<{name:string;games:number}>;
   positions:Array<{name:string;games:number}>;
   pairChampions:Array<{name:string;games:number}>;
+  recentGames:number;
+  olderGames:number;
+  phase:'persistent'|'now'|'before'|'single';
 };
 
 function regionFor(platform:string){
@@ -58,7 +61,7 @@ export function FrequentTeammates({data,platform}:Props){
   );
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
   const matchSignature=matchIds.join(',');
-  const cacheKey='zt_recurring_players_'+playerKey;
+  const cacheKey='zt_recurring_players_v2_'+playerKey;
 
   useEffect(()=>{
     setRows([]);
@@ -121,6 +124,12 @@ export function FrequentTeammates({data,platform}:Props){
     ?Math.max(0,Math.ceil((featured.lastPlayedAt-featured.firstPlayedAt)/86400000))
     :0;
   const repeated=rows.filter(row=>row.games>=2);
+  const timeline=useMemo(()=>({
+    now:rows.filter(row=>row.phase==='now').sort((a,b)=>b.recentGames-a.recentGames),
+    persistent:rows.filter(row=>row.phase==='persistent').sort((a,b)=>b.recentGames-a.recentGames||b.games-a.games),
+    before:rows.filter(row=>row.phase==='before').sort((a,b)=>b.olderGames-a.olderGames)
+  }),[rows]);
+  const hasTimeline=analyzed>=5&&(timeline.now.length+timeline.persistent.length+timeline.before.length)>0;
 
   if(attempted&&!loading&&!rows.length)return null;
 
@@ -155,6 +164,39 @@ export function FrequentTeammates({data,platform}:Props){
           {featured.positions?.[0]&&<span>Posição mais vista do parceiro · <strong>{featured.positions[0].name}</strong></span>}
         </div>
       </article>}
+
+      {hasTimeline&&<section className="playersTimeline">
+        <header>
+          <div><small>PLAYERS TIMELINE</small><h4>QUEM ESTÁ <span>ENTRANDO, FICANDO OU SUMINDO</span> DA SUA JANELA RECENTE.</h4></div>
+          <p>Comparamos as <strong>4 partidas mais recentes</strong> com o restante desta mesma amostra. É uma leitura de frequência, não de relacionamento.</p>
+        </header>
+        <div className="playersTimelineLanes">
+          {timeline.now.length>0&&<article className="timelineLane now">
+            <div className="timelineLaneTitle"><i/><span><small>AGORA</small><b>COMEÇARAM A SE REPETIR</b></span></div>
+            <div>{timeline.now.slice(0,3).map(row=><button key={row.riotId} onClick={()=>openPlayer(row.riotId)}>
+              <span><b>{row.gameName}</b><small>#{row.tagLine}</small></span>
+              <em>{row.recentGames}x nas últimas 4</em>
+              <Icon name="arrow"/>
+            </button>)}</div>
+          </article>}
+          {timeline.persistent.length>0&&<article className="timelineLane persistent">
+            <div className="timelineLaneTitle"><i/><span><small>CONTINUA</small><b>ATRAVESSARAM A JANELA</b></span></div>
+            <div>{timeline.persistent.slice(0,3).map(row=><button key={row.riotId} onClick={()=>openPlayer(row.riotId)}>
+              <span><b>{row.gameName}</b><small>#{row.tagLine}</small></span>
+              <em>{row.olderGames} antes · {row.recentGames} agora</em>
+              <Icon name="arrow"/>
+            </button>)}</div>
+          </article>}
+          {timeline.before.length>0&&<article className="timelineLane before">
+            <div className="timelineLaneTitle"><i/><span><small>ANTES</small><b>NÃO APARECEM NAS ÚLTIMAS 4</b></span></div>
+            <div>{timeline.before.slice(0,3).map(row=><button key={row.riotId} onClick={()=>openPlayer(row.riotId)}>
+              <span><b>{row.gameName}</b><small>#{row.tagLine}</small></span>
+              <em>{row.olderGames}x na parte anterior</em>
+              <Icon name="arrow"/>
+            </button>)}</div>
+          </article>}
+        </div>
+      </section>}
 
       <div className="teammateSectionLabel">
         <span><small>{repeated.length?'JOGADORES QUE SE REPETIRAM':'JOGADORES MAIS ENCONTRADOS'}</small><b>{rows.length} jogadores identificados</b></span>
