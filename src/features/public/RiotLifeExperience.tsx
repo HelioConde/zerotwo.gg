@@ -260,7 +260,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
         <article className="riotLifeCard personalMeta">
           <div className="riotCardTop"><span>PERSONAL META</span><b>03</b></div>
-          {personalMeta?<><small>O QUE FUNCIONOU NESTA AMOSTRA</small><h4>{personalMeta.name}</h4>
+          {personalMeta?<><small>MELHOR RESULTADO ENTRE RECORRENTES</small><h4>{personalMeta.name}</h4>
             <div className="personalMetaBar"><span style={{width:Math.max(8,personalMeta.winRate)+'%'}}/></div>
             <div className="personalMetaStats"><span><b>{personalMeta.games}</b><small>JOGOS</small></span><span><b>{personalMeta.winRate}%</b><small>RESULTADO</small></span><span><b>{personalMeta.avgKda.toFixed(2)}</b><small>KDA</small></span></div>
           </>:<p>Precisamos de pelo menos duas partidas com o mesmo campeão.</p>}
