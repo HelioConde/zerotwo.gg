@@ -80,3 +80,67 @@
  .timeCompare{grid-template-columns:1fr}.timeCompare>.ztIcon{transform:rotate(90deg);margin:auto}
  .riotPatchPreview{align-items:flex-start}
 }
+
+
+/* Champion Career -------------------------------------------------------- */
+.championCareer{margin-top:10px;border:1px solid #ffffff10;background:linear-gradient(135deg,#080b11,#0a0c12);overflow:hidden}
+.championCareer>header{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);gap:24px;padding:24px 26px;border-bottom:1px solid #ffffff0d}
+.championCareer header small,.myRiotPatch header small{color:#ff6f9b;font:900 8px ui-monospace,monospace;letter-spacing:1.25px}
+.championCareer h3,.myRiotPatch h3{margin:7px 0 9px;font-size:clamp(26px,3vw,40px);letter-spacing:-1.7px;line-height:.96}
+.championCareer h3 span,.myRiotPatch h3 span{color:#ff477e}
+.championCareer header p,.myRiotPatch header p{max-width:720px;margin:0;color:#8290a1;font-size:11px;line-height:1.65}
+.careerRoster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-self:center}
+.careerRoster button{display:flex;align-items:center;gap:9px;min-width:0;padding:7px;border:1px solid #ffffff0d;background:#06090e;color:#9ba5b4;text-align:left}
+.careerRoster button.active{border-color:#ff477e55;background:#ff477e0c;color:#fff}
+.careerRoster img{width:36px;height:36px;object-fit:cover}
+.careerRoster span{min-width:0}.careerRoster b,.careerRoster small{display:block}
+.careerRoster b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.careerRoster small{margin-top:2px;color:#647184;font-size:8px}
+.careerBody{display:grid;grid-template-columns:330px minmax(0,1fr)}
+.careerPortrait{position:relative;min-height:300px;overflow:hidden;background:#070a0f}
+.careerPortrait:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#070a0ff2 5%,transparent 68%),linear-gradient(90deg,transparent,#080b11)}
+.careerPortrait>img{width:100%;height:100%;object-fit:cover}
+.careerPortrait>div{position:absolute;z-index:2;left:22px;right:22px;bottom:20px}
+.careerPortrait small,.careerPortrait b,.careerPortrait span{display:block}
+.careerPortrait small{color:#ff779f;font:900 7px ui-monospace,monospace;letter-spacing:1px}
+.careerPortrait b{margin-top:4px;font-size:25px}.careerPortrait span{margin-top:3px;color:#8b96a6;font-size:9px}
+.careerStory{padding:25px 28px}
+.careerStats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.careerStats span{padding:12px;border:1px solid #ffffff0d;background:#06090e}
+.careerStats small,.careerStats b{display:block}.careerStats small{color:#5e6a7c;font:850 7px ui-monospace,monospace}.careerStats b{margin-top:5px;font-size:17px}
+.careerTimeline{display:grid;grid-template-columns:1fr 25px 1fr 25px 1fr;align-items:center;margin:22px 0}
+.careerTimeline>span{padding:11px 12px;border-left:2px solid #ff477e55;background:#ffffff025}
+.careerTimeline small,.careerTimeline b,.careerTimeline em{display:block}
+.careerTimeline small{color:#596678;font:850 7px ui-monospace,monospace}.careerTimeline b{margin-top:4px;font-size:11px}.careerTimeline em{margin-top:3px;color:#687486;font-size:8px;font-style:normal}
+.careerTimeline>i{height:1px;background:#ffffff12}
+.careerStory>p{color:#7f8b9c;font-size:11px;line-height:1.65}.careerStory>p strong{color:#fff}
+
+/* My Riot Patch ---------------------------------------------------------- */
+.myRiotPatch{margin-top:10px;border:1px solid #ff477e1f;background:radial-gradient(circle at 90% 10%,#ff477e10,transparent 28%),#070a0f}
+.myRiotPatch>header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;padding:24px 26px;border-bottom:1px solid #ffffff0d}
+.patchVersion{min-width:180px;padding:12px 14px;border:1px solid #ffffff0f;background:#05080d}
+.patchVersion small,.patchVersion b,.patchVersion em{display:block}.patchVersion b{margin-top:5px;font-size:12px}.patchVersion em{margin-top:3px;color:#657184;font-size:8px;font-style:normal}
+.patchChanges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#ffffff0a}
+.patchChanges article{display:flex;align-items:center;gap:12px;min-height:82px;padding:13px 15px;background:#070a0f}
+.patchChanges article>img,.patchChanges article>.ztIcon{width:44px;height:44px;object-fit:cover;flex:0 0 auto}
+.patchChanges article>.ztIcon{padding:9px;border:1px solid #ffffff0f}
+.patchChanges small,.patchChanges b,.patchChanges p{display:block}.patchChanges small{color:#687486;font:850 7px ui-monospace,monospace}.patchChanges b{margin-top:3px;font-size:11px}.patchChanges p{margin:4px 0 0;color:#8d98a8;font-size:9px;line-height:1.45}
+.patchLoading,.patchEmpty{min-height:120px;display:flex;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center}
+.patchLoading .ztIcon{width:20px}.patchLoading b,.patchEmpty b{font-size:10px;letter-spacing:.5px}.patchEmpty{flex-direction:column}.patchEmpty p{max-width:650px;margin:0;color:#758194;font-size:10px;line-height:1.6}
+.myRiotPatch>footer{display:flex;align-items:center;gap:10px;padding:13px 18px;border-top:1px solid #ffffff0c;color:#707d8e;font-size:9px;line-height:1.45}
+.myRiotPatch>footer .ztIcon{width:14px}.myRiotPatch>footer b{color:#aeb7c4}
+
+@media(max-width:860px){
+ .championCareer>header,.myRiotPatch>header{grid-template-columns:1fr}
+ .careerBody{grid-template-columns:1fr}.careerPortrait{min-height:220px;max-height:270px}
+ .careerStats{grid-template-columns:repeat(2,1fr)}
+ .careerTimeline{grid-template-columns:1fr}.careerTimeline>i{width:1px;height:16px;margin:auto}
+ .patchChanges{grid-template-columns:1fr}
+ .patchVersion{min-width:0}
+}
+@media(max-width:520px){
+ .careerRoster{grid-template-columns:1fr 1fr}
+ .championCareer>header,.myRiotPatch>header{padding:20px}
+ .careerStory{padding:20px}
+ .careerStats{grid-template-columns:1fr 1fr}
+}
