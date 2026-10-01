@@ -96,7 +96,7 @@ export function MyRiotPatch({data,champions,ddv}:Props){
     return()=>{alive=false};
   },[data,champions,ddv,championUses,itemUses]);
 
-  return <section className="myRiotPatch">
+  return <section className="myRiotPatch" id="my-riot-patch">
     <header><div><small>MY RIOT PATCH</small><h3>O PATCH, MAS SÓ A PARTE QUE <span>ENCOSTA EM VOCÊ.</span></h3><p>Comparamos o Data Dragon atual com o patch anterior e cruzamos as diferenças com campeões e itens vistos nas suas partidas recentes.</p></div><div className="patchVersion"><small>COMPARAÇÃO</small><b>{state.previous||'—'} → {ddv}</b><em>Data Dragon oficial</em></div></header>
     {state.loading?<div className="patchLoading"><Icon name="sync"/><b>COMPARANDO SEU HISTÓRICO COM O PATCH...</b></div>:
      state.error?<div className="patchEmpty"><b>NÃO FOI POSSÍVEL COMPARAR AGORA.</b><p>{state.error}</p></div>:
