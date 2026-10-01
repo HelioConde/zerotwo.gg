@@ -22,6 +22,15 @@ type RiotLifeProps={
 const num=(v:any)=>Number.isFinite(Number(v))?Number(v):0;
 const avg=(rows:any[],key:string)=>rows.length?rows.reduce((s,x)=>s+num(x?.[key]),0)/rows.length:0;
 const pct=(wins:number,total:number)=>total?Math.round((wins/total)*100):0;
+const RIOT_CHAPTERS=[
+  ['riot-now','AGORA'],
+  ['riot-signature','ASSINATURA'],
+  ['riot-session','SESSÃO'],
+  ['riot-peak','PONTO ALTO'],
+  ['riot-change','MUDANÇA'],
+  ['riot-people','PESSOAS'],
+  ['riot-next','AGORA VAI']
+] as const;
 
 function playedAt(match:any){
   const raw=match?.playedAt;
@@ -73,6 +82,18 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const [memoryMode,setMemoryMode]=useState<'checking'|'local'|'cloud'>('checking');
   const [memoryReady,setMemoryReady]=useState(false);
   const [lifeView,setLifeView]=useState<'overview'|'story'|'explore'>('overview');
+  const [activeChapter,setActiveChapter]=useState<string>('riot-now');
+
+  useEffect(()=>{
+    const sections=RIOT_CHAPTERS.map(([id])=>document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if(!sections.length)return;
+    const observer=new IntersectionObserver(entries=>{
+      const visible=entries.filter(x=>x.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+      if(visible?.target?.id)setActiveChapter(visible.target.id);
+    },{rootMargin:'-22% 0px -58% 0px',threshold:[.1,.25,.5]});
+    sections.forEach(section=>observer.observe(section));
+    return()=>observer.disconnect();
+  },[matches.length]);
 
   const currentSnapshot=useMemo<Snapshot>(()=>({
     at:Date.now(),
@@ -221,6 +242,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const recentKdaDelta=recentVsOld?recentVsOld.recentKda-recentVsOld.oldKda:null;
   const recentResultDelta=recentVsOld?recentVsOld.recentWr-recentVsOld.oldWr:null;
   const sampleQuality=matches.length>=150?'HISTÓRIA FORTE':matches.length>=75?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
+  const chapterIndex=Math.max(0,RIOT_CHAPTERS.findIndex(([id])=>id===activeChapter));
+  const readingProgress=Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
+  const sampleWarning=matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
 
   return <section className="riotStory" aria-label="Riot Life em capítulos">
     <header className="riotStoryIntro">
@@ -235,16 +259,13 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sync':'local'}</em></span>
         <span><small>QUALIDADE</small><b className="sampleQualityValue">{sampleQuality}</b><em>{matches.length}/200 analisadas</em></span>
       </div>
+      <div className="riotSampleNote" data-tone={matches.length<30?'low':matches.length<75?'mid':'good'}><Icon name="status"/><span><b>{sampleQuality}</b><small>{sampleWarning}</small></span></div>
     </header>
 
     <nav className="riotStoryNav" aria-label="Capítulos da Riot Life">
-      <a href="#riot-now"><span>01</span><b>AGORA</b></a>
-      <a href="#riot-signature"><span>02</span><b>ASSINATURA</b></a>
-      <a href="#riot-session"><span>03</span><b>SESSÃO</b></a>
-      <a href="#riot-peak"><span>04</span><b>PONTO ALTO</b></a>
-      <a href="#riot-change"><span>05</span><b>MUDANÇA</b></a>
-      <a href="#riot-people"><span>06</span><b>PESSOAS</b></a>
-      <a href="#riot-next"><span>07</span><b>AGORA VAI</b></a>
+      {RIOT_CHAPTERS.map(([id,label],index)=><a key={id} href={'#'+id} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>)}
+      <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
+      <small className="riotStoryReadout">{readingProgress}% · ~2 min de leitura</small>
     </nav>
 
     <div className="riotStoryFlow">
@@ -253,7 +274,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <div className="riotChapterCopy">
           <small>AGORA // O PALCO DESTA FASE</small>
           <h3>{data?.summary?.mainContext||'SEU CONTEXTO'} <span>É ONDE SUA HISTÓRIA ESTÁ ACONTECENDO.</span></h3>
-          <p>{currentModeGames>0?currentModeGames+' de '+matches.length+' partidas desta janela vieram desse contexto.':'Este é o contexto mais presente entre as partidas disponíveis.'} O número ao lado pertence só a este capítulo.</p>
+          <p>{currentModeGames>0?currentModeGames+' de '+matches.length+' partidas desta janela vieram desse contexto.':'Este é o contexto mais presente entre as partidas disponíveis.'} O número ao lado pertence só a este capítulo.</p><small className="chapterSource">FONTE // RIOT MATCH-V5 · {matches.length} partidas observadas</small>
         </div>
         <div className="riotChapterHeroMetric">
           <b>{currentMetric.value}</b>
@@ -274,7 +295,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <div className="riotChapterCopy">
           <small>ASSINATURA // QUEM MAIS APARECEU</small>
           <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
-          <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p>
+          <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p><small className="chapterSource">FATO // frequência observada na amostra, não avaliação de habilidade</small>
         </div>
         <div className="riotChapterHeroMetric">
           <b>{signatureShare}%</b>
@@ -288,7 +309,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <div className="riotChapterCopy">
           <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
           <h3>{latestSessionDesc?latestSessionDesc.games+' '+(latestSessionDesc.games===1?'PARTIDA':'PARTIDAS')+' NA ÚLTIMA SESSÃO.':'AINDA NÃO HÁ UMA SESSÃO CLARA.'}</h3>
-          <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p>
+          <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p><small className="chapterSource">MÉTODO // partidas separadas por até 2 horas entram na mesma sessão</small>
         </div>
         {latestSessionDesc&&<div className="riotSessionFacts">
           <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
@@ -304,7 +325,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <div className="riotChapterCopy">
           <small>PONTO ALTO // UMA PARTIDA</small>
           <h3>{peakMatch.champion||'UMA PARTIDA'} <span>FOI SEU MAIOR KDA DESTA JANELA.</span></h3>
-          <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p>
+          <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p><small className="chapterSource">CRITÉRIO // maior KDA dentro da janela atual, não “melhor partida” absoluta</small>
         </div>
         <div className="riotChapterHeroMetric">
           <b>{peakMatch.kda??'—'}</b>
@@ -330,7 +351,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <section id="riot-people" className="riotChapterGroup riotChapterPeople">
         <div className="riotChapterGroupIntro">
           <span className="riotChapterNumber">06</span>
-          <div><small>PESSOAS // QUEM SE REPETE</small><h3>ALGUNS NOMES VOLTAM A APARECER.</h3><p>Aqui não tentamos medir amizade ou “sinergia”. Só mostramos quem realmente se repetiu nas partidas analisadas.</p></div>
+          <div><small>PESSOAS // QUEM SE REPETE</small><h3>ALGUNS NOMES VOLTAM A APARECER.</h3><p>Aqui não tentamos medir amizade ou “sinergia”. Só mostramos quem realmente se repetiu nas partidas analisadas.</p><small className="chapterSource">FONTE // participantes do Match-V5; recorrência não significa amizade ou causalidade</small></div>
         </div>
         <FrequentTeammates data={data} platform={platform}/>
       </section>
