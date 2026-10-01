@@ -151,7 +151,7 @@ Deno.serve(async req=>{
         pairChampions:[...row.pairChampions.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(([name,games])=>({name,games})),
         recentGames:row.recentGames,
         olderGames:row.olderGames,
-        phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>0?'now':row.olderGames>=2?'before':'single'
+        phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>=2?'now':row.olderGames>=2?'before':'single'
       }));
 
     return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length});
