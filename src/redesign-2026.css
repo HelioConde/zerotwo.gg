@@ -4108,3 +4108,26 @@ select{cursor:pointer}
   .riotStoryProgress span{transition:none!important}
   .homeLookup:not(.hasResult) .homeHeroBackdrop{animation:none!important}
 }
+
+
+/* Keyboard skip link */
+.skipToContent{
+  position:fixed;
+  z-index:9999;
+  top:8px;
+  left:8px;
+  transform:translateY(-150%);
+  padding:10px 12px;
+  border:1px solid var(--z2-focus);
+  border-radius:9px;
+  background:#05070a;
+  color:#fff;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.4px;
+  text-decoration:none;
+  box-shadow:var(--z2-shadow-1);
+}
+.skipToContent:focus{
+  transform:translateY(0);
+}
