@@ -21,7 +21,7 @@ function HomeExperience(){
   </section>
   <section className="homeJourneyChapter homeJourneyPeople">
    <span className="homeJourneyNo">03</span>
-   <div><small>RECONHEÇA</small><h2>ALGUNS NOMES <span>VOLTA A APARECER.</span></h2><p>Jogadores recorrentes entram como parte da história social da sua amostra — sem chamar isso de amizade, química ou compatibilidade.</p></div>
+   <div><small>RECONHEÇA</small><h2>ALGUNS NOMES <span>VOLTAM A APARECER.</span></h2><p>Jogadores recorrentes entram como parte da história social da sua amostra — sem chamar isso de amizade, química ou compatibilidade.</p></div>
    <aside><Icon name="user"/><b>PLAYERS TIMELINE</b><small>quem entrou, ficou ou deixou de aparecer</small></aside>
   </section>
   <section className="homeJourneyEnd">
