@@ -166,6 +166,7 @@ export function RiotWrapped({data,platform,champions,ddv}:Props){
   },[data]);
 
   if(!wrapped)return null;
+  const shareText=wrapped.text;
 
   async function share(){
     const url=location.href;
@@ -173,11 +174,11 @@ export function RiotWrapped({data,platform,champions,ddv}:Props){
       if(navigator.share){
         await navigator.share({
           title:'Minha Riot Life no ZeroTwo',
-          text:wrapped.text,
+          text:shareText,
           url
         });
       }else if(navigator.clipboard){
-        await navigator.clipboard.writeText(wrapped.text+'\n'+url);
+        await navigator.clipboard.writeText(shareText+'\n'+url);
       }else return;
       setShared('done');
       window.setTimeout(()=>setShared('idle'),1800);
