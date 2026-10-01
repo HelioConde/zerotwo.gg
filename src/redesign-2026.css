@@ -3867,3 +3867,244 @@ summary:focus-visible{
     min-width:0!important;
   }
 }
+
+
+/* ==========================================================================
+   UX FOUNDATION PASS — semantic tokens, search clarity, story navigation
+   ========================================================================== */
+:root{
+  --z2-action:var(--z2-pink);
+  --z2-info:var(--z2-cyan);
+  --z2-success:var(--z2-green);
+  --z2-warning:#f3bd66;
+  --z2-danger:#ff6b7f;
+  --z2-focus:#ff8caf;
+  --z2-space-1:4px;
+  --z2-space-2:8px;
+  --z2-space-3:12px;
+  --z2-space-4:16px;
+  --z2-space-5:24px;
+  --z2-radius-sm:10px;
+  --z2-radius-md:16px;
+  --z2-radius-lg:24px;
+  --z2-shadow-1:0 8px 28px #0003;
+  --z2-shadow-2:0 18px 56px #0006;
+}
+
+/* Search: clearer affordances, format hint, retry, and a true clear action. */
+.lookupSearch>div{position:relative}
+.lookupClear{
+  position:absolute!important;
+  right:8px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:30px!important;
+  min-width:30px!important;
+  height:30px!important;
+  min-height:30px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  color:#7e8998!important;
+  box-shadow:none!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+.lookupClear:hover{
+  background:#ffffff08!important;
+  color:#fff!important;
+}
+.lookupSearch input{padding-right:42px!important}
+.lookupHelp{
+  max-width:900px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin:8px auto 0;
+  color:#778394;
+  font-size:8px;
+  line-height:1.45;
+  text-align:left;
+}
+.lookupHelp b{color:#bcc5d1}
+.lookupError{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:3px 12px!important;
+  align-items:center;
+}
+.lookupError>b,.lookupError>span{display:block}
+.lookupError>b{
+  color:#ff9baa;
+  font-size:8px;
+  letter-spacing:.35px;
+}
+.lookupError>span{color:#c1848e}
+.lookupError>button{
+  grid-row:1/3;
+  grid-column:2;
+  min-height:34px;
+  padding:0 11px;
+  border:1px solid #ff657a35;
+  border-radius:8px;
+  background:#ff657a0c;
+  color:#ff9baa;
+  font-size:7px;
+  font-weight:900;
+}
+.homeLookup.hasResult .lookupHelp{display:none}
+
+/* Sample quality is visible and explicit rather than implied by color only. */
+.riotStoryIntro{
+  position:relative;
+}
+.riotSampleNote{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:13px;
+  padding:10px 12px;
+  border:1px solid #ffffff10;
+  border-radius:10px;
+  background:#05080c99;
+}
+.riotSampleNote>.ztIcon{width:16px;opacity:.8}
+.riotSampleNote span b,.riotSampleNote span small{display:block}
+.riotSampleNote span b{
+  font-size:8px;
+  letter-spacing:.35px;
+}
+.riotSampleNote span small{
+  margin-top:2px;
+  color:#8793a3;
+  font-size:8px;
+}
+.riotSampleNote[data-tone="low"]{border-color:#f3bd6630}
+.riotSampleNote[data-tone="low"] b{color:var(--z2-warning)}
+.riotSampleNote[data-tone="mid"]{border-color:#75ddff25}
+.riotSampleNote[data-tone="mid"] b{color:var(--z2-info)}
+.riotSampleNote[data-tone="good"]{border-color:#61daa72a}
+.riotSampleNote[data-tone="good"] b{color:var(--z2-success)}
+
+/* Sticky story navigation with current chapter and progress. */
+.riotStoryNav{
+  position:sticky!important;
+  top:61px!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  padding-bottom:16px;
+  overflow:visible;
+}
+.riotStoryNav a{
+  position:relative;
+  transition:background .18s ease,color .18s ease,box-shadow .18s ease!important;
+}
+.riotStoryNav a.active,
+.riotStoryNav a[aria-current="step"]{
+  color:#fff!important;
+  background:linear-gradient(180deg,#ff477e12,#ff477e05)!important;
+  box-shadow:inset 0 -2px 0 var(--z2-pink)!important;
+}
+.riotStoryNav a.active span{color:#fff}
+.riotStoryProgress{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:7px;
+  height:2px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#ffffff0b;
+}
+.riotStoryProgress span{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--z2-pink),var(--z2-violet),var(--z2-cyan));
+  transition:width .24s ease;
+}
+.riotStoryReadout{
+  position:absolute;
+  right:10px;
+  bottom:-15px;
+  color:#657184;
+  font:800 7px ui-monospace,monospace;
+  letter-spacing:.3px;
+}
+
+/* Make fact vs interpretation/source explicit inside chapters. */
+.chapterSource{
+  display:block!important;
+  margin-top:10px!important;
+  padding-top:9px;
+  border-top:1px solid #ffffff0b;
+  color:#718092!important;
+  font:800 7px/1.45 ui-monospace,monospace!important;
+  letter-spacing:.45px!important;
+}
+.riotChapterGroupIntro .chapterSource{
+  max-width:700px;
+}
+
+/* Performance: below-the-fold story blocks can skip paint until needed. */
+.riotChapter,
+.riotChapterGroup,
+.gameDataVault{
+  content-visibility:auto;
+  contain-intrinsic-size:380px;
+}
+
+/* Keyboard and accessibility states. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible{
+  outline:2px solid var(--z2-focus)!important;
+  outline-offset:3px!important;
+}
+.riotStoryNav a:focus-visible{z-index:2}
+[aria-busy="true"]{cursor:progress!important}
+
+/* Keep pointer types consistent with action semantics. */
+input{cursor:text}
+select{cursor:pointer}
+
+@media(max-width:980px){
+  .riotStoryNav{
+    top:56px!important;
+    display:flex!important;
+    overflow-x:auto!important;
+    padding-bottom:16px;
+    scrollbar-width:none;
+  }
+  .riotStoryNav::-webkit-scrollbar{display:none}
+  .riotStoryNav a{
+    flex:0 0 110px!important;
+  }
+  .riotStoryReadout{display:none}
+}
+@media(max-width:700px){
+  .lookupHelp{
+    flex-direction:column;
+    gap:3px;
+    padding:0 4px;
+  }
+  .lookupError{
+    grid-template-columns:1fr;
+  }
+  .lookupError>button{
+    grid-row:auto;
+    grid-column:auto;
+    width:max-content;
+    margin-top:6px;
+  }
+  .riotSampleNote{align-items:flex-start}
+  .riotStoryNav{top:54px!important}
+  .chapterSource{font-size:6.5px!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .riotStoryProgress span{transition:none!important}
+  .homeLookup:not(.hasResult) .homeHeroBackdrop{animation:none!important}
+}
