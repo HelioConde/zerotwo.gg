@@ -4,6 +4,9 @@ import { Icon } from '../../components/ZeroTwoUI';
 
 type Props={data:any;platform:string};
 
+const TEAMMATE_HISTORY_LIMIT=200;
+const TEAMMATE_BATCH_SIZE=25;
+
 type Teammate={
   riotId:string;
   gameName:string;
@@ -39,6 +42,33 @@ function relationshipStatus(ts:number){
   if(days<=14)return {label:'RECENTE',tone:'recent'};
   return {label:'EM PAUSA',tone:'paused'};
 }
+function mergeCountList(a:Array<{name:string;games:number}>=[],b:Array<{name:string;games:number}>=[]){
+  const map=new Map<string,number>();
+  [...a,...b].forEach(x=>{if(x?.name)map.set(x.name,(map.get(x.name)||0)+Number(x.games||0))});
+  return [...map.entries()].sort((x,y)=>y[1]-x[1]).map(([name,games])=>({name,games}));
+}
+function mergeTeammateRows(groups:Teammate[][]){
+  const map=new Map<string,Teammate>();
+  groups.flat().forEach(row=>{
+    const key=row.riotId.toLowerCase();
+    const prev=map.get(key);
+    if(!prev){map.set(key,{...row,champions:[...(row.champions||[])],positions:[...(row.positions||[])],pairChampions:[...(row.pairChampions||[])]});return}
+    const games=prev.games+row.games,wins=prev.wins+row.wins;
+    const recentGames=prev.recentGames+row.recentGames,olderGames=prev.olderGames+row.olderGames;
+    map.set(key,{
+      ...prev,
+      games,wins,winRate:games?Math.round(wins/games*100):0,
+      firstPlayedAt:prev.firstPlayedAt&&row.firstPlayedAt?Math.min(prev.firstPlayedAt,row.firstPlayedAt):(prev.firstPlayedAt||row.firstPlayedAt),
+      lastPlayedAt:Math.max(prev.lastPlayedAt||0,row.lastPlayedAt||0),
+      champions:mergeCountList(prev.champions,row.champions).slice(0,3),
+      positions:mergeCountList(prev.positions,row.positions).slice(0,2),
+      pairChampions:mergeCountList(prev.pairChampions,row.pairChampions).slice(0,3),
+      recentGames,olderGames,
+      phase:recentGames>0&&olderGames>0?'persistent':recentGames>=2?'now':olderGames>=2?'before':'single'
+    });
+  });
+  return [...map.values()].sort((a,b)=>b.games-a.games||b.wins-a.wins||b.lastPlayedAt-a.lastPlayedAt).slice(0,30);
+}
 function safeCacheRead(key:string,signature:string){
   try{
     const raw=JSON.parse(localStorage.getItem(key)||'null');
@@ -62,12 +92,12 @@ export function FrequentTeammates({data,platform}:Props){
     return focused.length>=2?focused:ordered;
   },[data,focusContext]);
   const matchIds=useMemo(
-    ()=>[...new Set(contextMatches.map((m:any)=>String(m?.id||'')).filter(Boolean))].slice(0,12),
+    ()=>[...new Set(contextMatches.map((m:any)=>String(m?.id||'')).filter(Boolean))].slice(0,TEAMMATE_HISTORY_LIMIT),
     [contextMatches]
   );
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
   const matchSignature=matchIds.join(',');
-  const cacheKey='zt_recurring_players_v3_'+playerKey+'_'+(focusContext||'all').toLowerCase();
+  const cacheKey='zt_recurring_players_v4_'+playerKey+'_'+(focusContext||'all').toLowerCase();
 
   useEffect(()=>{
     setRows([]);
@@ -92,32 +122,43 @@ export function FrequentTeammates({data,platform}:Props){
       }
 
       setLoading(true);
-      supabase.functions.invoke('public-lol-teammates',{
-        body:{
-          gameName:data?.player?.gameName,
-          tagLine:data?.player?.tagLine,
-          region:regionFor(platform),
-          matchIds,
-          context:focusContext||null
-        }
-      }).then(({data:result,error})=>{
-        if(!error&&Array.isArray(result?.teammates)){
-          const next=result.teammates as Teammate[];
-          const nextAnalyzed=Number(result.matchesAnalyzed||0);
-          setRows(next);
+      (async()=>{
+        const chunks:Array<{ids:string[];offset:number}>=[];
+        for(let i=0;i<matchIds.length;i+=TEAMMATE_BATCH_SIZE)chunks.push({ids:matchIds.slice(i,i+TEAMMATE_BATCH_SIZE),offset:i});
+        const collected:Teammate[][]=[];
+        let nextAnalyzed=0;
+        for(const chunk of chunks){
+          const {data:result,error}=await supabase.functions.invoke('public-lol-teammates',{
+            body:{
+              gameName:data?.player?.gameName,
+              tagLine:data?.player?.tagLine,
+              region:regionFor(platform),
+              matchIds:chunk.ids,
+              context:focusContext||null,
+              sampleOffset:chunk.offset
+            }
+          });
+          if(error)continue;
+          if(Array.isArray(result?.teammates))collected.push(result.teammates as Teammate[]);
+          nextAnalyzed+=Number(result?.matchesAnalyzed||0);
+          const partial=mergeTeammateRows(collected);
+          setRows(partial);
           setAnalyzed(nextAnalyzed);
-          try{localStorage.setItem(cacheKey,JSON.stringify({
-            signature:matchSignature,
-            savedAt:Date.now(),
-            rows:next,
-            analyzed:nextAnalyzed
-          }))}catch{}
         }
-      }).finally(()=>setLoading(false));
+        const next=mergeTeammateRows(collected);
+        setRows(next);
+        setAnalyzed(nextAnalyzed);
+        try{localStorage.setItem(cacheKey,JSON.stringify({
+          signature:matchSignature,
+          savedAt:Date.now(),
+          rows:next,
+          analyzed:nextAnalyzed
+        }))}catch{}
+      })().finally(()=>setLoading(false));
     },{rootMargin:'240px'});
     observer.observe(el);
     return()=>observer.disconnect();
-  },[attempted,cacheKey,data,matchIds,matchSignature,platform]);
+  },[attempted,cacheKey,data,focusContext,matchIds,matchSignature,platform]);
 
   function openPlayer(riotId:string){
     const url=location.pathname+'?player='+encodeURIComponent(riotId)+'&server='+encodeURIComponent(platform);
@@ -180,7 +221,7 @@ export function FrequentTeammates({data,platform}:Props){
       {hasTimeline&&<section className="playersTimeline">
         <header>
           <div><small>PLAYERS TIMELINE</small><h4>QUEM ESTÁ <span>ENTRANDO, FICANDO OU SUMINDO</span> DA SUA JANELA RECENTE.</h4></div>
-          <p>Comparamos as <strong>4 partidas mais recentes</strong> com o restante desta mesma amostra. É uma leitura de frequência, não de relacionamento.</p>
+          <p>Comparamos as <strong>4 partidas mais recentes</strong> com o restante de uma janela de até <strong>{TEAMMATE_HISTORY_LIMIT}</strong> partidas. É uma leitura de frequência, não de relacionamento.</p>
         </header>
         <div className="playersTimelineLanes">
           {timeline.now.length>0&&<article className="timelineLane now">
