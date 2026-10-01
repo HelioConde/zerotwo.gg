@@ -220,18 +220,20 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       :'AINDA É CEDO PARA MEDIR UMA MUDANÇA.';
   const recentKdaDelta=recentVsOld?recentVsOld.recentKda-recentVsOld.oldKda:null;
   const recentResultDelta=recentVsOld?recentVsOld.recentWr-recentVsOld.oldWr:null;
+  const sampleQuality=matches.length>=150?'HISTÓRIA FORTE':matches.length>=75?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
 
   return <section className="riotStory" aria-label="Riot Life em capítulos">
     <header className="riotStoryIntro">
       <div>
         <small>ZEROTWO // RIOT LIFE</small>
         <h2>ISTO NÃO É UM DASHBOARD.<br/><span>É A SUA HISTÓRIA RECENTE.</span></h2>
-        <p>{matches.length} partidas disponíveis organizadas em capítulos. Cada seção responde uma pergunta diferente e evita repetir o mesmo número.</p>
+        <p>{matches.length} partidas disponíveis organizadas em capítulos. O ZeroTwo pode aprofundar esta Riot Life até 200 partidas para encontrar padrões mais confiáveis sem despejar tudo na tela.</p>
       </div>
       <div className="riotStoryCoverage">
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
         <span><small>JANELA</small><b>{sampleDays||'—'}</b><em>{sampleDays===1?'dia':'dias'}</em></span>
         <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sync':'local'}</em></span>
+        <span><small>QUALIDADE</small><b className="sampleQualityValue">{sampleQuality}</b><em>{matches.length}/200 analisadas</em></span>
       </div>
     </header>
 
