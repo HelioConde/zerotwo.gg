@@ -3,6 +3,7 @@ import { Icon } from '../../components/ZeroTwoUI';
 import { ChampionCareer } from './ChampionCareer';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
+import { FrequentTeammates } from './FrequentTeammates';
 import {
   loadCloudRiotLifeSnapshots,
   mergeRiotLifeSnapshots,
@@ -291,6 +292,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
     </article>}
 
+    <FrequentTeammates data={data} platform={platform}/>
     <RiotArcade data={data}/>
     <ChampionCareer data={data} champions={champions} ddv={ddv}/>
     <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
