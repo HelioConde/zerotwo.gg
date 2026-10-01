@@ -203,3 +203,37 @@
  .teammateGrid>button{grid-template-columns:36px minmax(0,1fr) auto}.mateChampions{grid-column:2/4}.teammateGrid>button>.ztIcon{display:none}
  .frequentTeammates>footer{flex-direction:column}
 }
+
+
+/* Recurring player story ------------------------------------------------- */
+.featuredTeammate{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr) minmax(240px,.7fr);gap:1px;background:#ffffff0a;border-bottom:1px solid #ffffff0c}
+.featuredTeammate>div{padding:22px;background:#070a0f}
+.featuredMateLead{background:radial-gradient(circle at 88% 15%,#62d7ff10,transparent 30%),#070a0f!important}
+.featuredMateLead>small,.featuredMatePair>small,.teammateSectionLabel small{color:#62d7ff;font:900 7px ui-monospace,monospace;letter-spacing:1px}
+.featuredMateLead h4{margin:6px 0 8px;font-size:28px;letter-spacing:-1px;line-height:1}
+.featuredMateLead h4 span{margin-left:4px;color:#6d7a8c;font-size:12px}
+.mateStatus{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;padding:5px 7px;border:1px solid #ffffff10;color:#8e9aaa;font:900 7px ui-monospace,monospace;letter-spacing:.6px}
+.mateStatus i,.mateMiniStatus{width:6px;height:6px;border-radius:50%;display:inline-block;background:#778294}
+.mateStatus.active,.mateMiniStatus.active{color:#58d6a2}.mateStatus.active i,.mateMiniStatus.active{background:#58d6a2;box-shadow:0 0 10px #58d6a255}
+.mateStatus.recent,.mateMiniStatus.recent{color:#7fdcff}.mateStatus.recent i,.mateMiniStatus.recent{background:#7fdcff}
+.mateStatus.paused,.mateMiniStatus.paused{color:#818b99}.mateStatus.paused i,.mateMiniStatus.paused{background:#697485}
+.featuredMateLead p{max-width:600px;margin:0;color:#8490a1;font-size:10px;line-height:1.65}.featuredMateLead p strong{color:#d8dfe8}
+.featuredMateLead button{margin-top:14px;border:1px solid #62d7ff3d;background:#62d7ff0a;color:#8ce4ff;padding:10px 12px;font-size:8px;font-weight:900}
+.featuredMateMetrics{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.featuredMateMetrics>span{padding:11px;border:1px solid #ffffff0d;background:#05080d}
+.featuredMateMetrics small,.featuredMateMetrics b,.featuredMateMetrics em{display:block}.featuredMateMetrics small{color:#596678;font:850 7px ui-monospace,monospace}.featuredMateMetrics b{margin-top:5px;font-size:17px}.featuredMateMetrics em{margin-top:2px;color:#687486;font-size:8px;font-style:normal}
+.featuredMatePair{display:flex;flex-direction:column;justify-content:center}
+.featuredMatePair>b{margin-top:7px;font-size:15px;line-height:1.2}.featuredMatePair p{margin:6px 0 10px;color:#7e8999;font-size:9px;line-height:1.5}.featuredMatePair>span{padding-top:10px;border-top:1px solid #ffffff0d;color:#667284;font-size:8px}.featuredMatePair>span strong{color:#aab3bf}
+.teammateSectionLabel{display:flex;align-items:end;justify-content:space-between;gap:16px;padding:12px 16px;border-bottom:1px solid #ffffff0b;background:#06090e}
+.teammateSectionLabel span small,.teammateSectionLabel span b{display:block}.teammateSectionLabel span b{margin-top:3px;color:#9aa5b4;font-size:9px}.teammateSectionLabel em{color:#697587;font-size:8px;font-style:normal}
+.mateIdentity span{display:flex;align-items:center;gap:5px}
+.mateMiniStatus{width:5px;height:5px;flex:0 0 auto}
+.mateChampions em{display:block;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5f6a7b;font-size:8px;font-style:normal}
+@media(max-width:1050px){
+ .featuredTeammate{grid-template-columns:1fr 1fr}.featuredMatePair{grid-column:1/-1}
+}
+@media(max-width:700px){
+ .featuredTeammate{grid-template-columns:1fr}.featuredMatePair{grid-column:auto}
+ .featuredMateMetrics{grid-template-columns:1fr 1fr}
+ .teammateSectionLabel{align-items:flex-start;flex-direction:column}
+}
