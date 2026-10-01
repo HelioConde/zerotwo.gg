@@ -74,6 +74,7 @@ Deno.serve(async req=>{
 
     const mates=new Map<string,MateRow>();
     let analyzed=0;
+    const detection={subteam:0,placement:0,teamId:0,unresolvedArena:0};
 
     // Process in small batches to avoid creating unnecessary bursts against Match-V5.
     for(let i=0;i<matchIds.length;i+=4){
@@ -96,15 +97,35 @@ Deno.serve(async req=>{
         if(!target)continue;
         analyzed++;
         const playedAt=Number(match?.info?.gameEndTimestamp||match?.info?.gameCreation||0);
-        const targetTeamId=target.teamId;
+        const targetTeamId=Number(target.teamId||0);
         const targetSubteamId=Number(target.playerSubteamId||0);
-        const isArena=String(match?.info?.gameMode||'').toUpperCase()==='CHERRY'||targetSubteamId>0;
+        const targetPlacement=Number(target.subteamPlacement||target.placement||0);
+        const queueId=Number(match?.info?.queueId||0);
+        const isArena=String(match?.info?.gameMode||'').toUpperCase()==='CHERRY'||[1700,1710,1750].includes(queueId)||targetSubteamId>0||targetPlacement>0;
+        const sameTeamIdPeers=isArena&&targetTeamId>0
+          ?participants.filter((x:any)=>x?.puuid!==targetPuuid&&Number(x?.teamId||0)===targetTeamId)
+          :[];
+        const useArenaTeamIdFallback=isArena&&targetSubteamId<=0&&targetPlacement<=0&&sameTeamIdPeers.length>0&&sameTeamIdPeers.length<=2;
 
         for(const p of participants){
           if(!p||p.puuid===targetPuuid)continue;
-          const sameSide=isArena
-            ?(targetSubteamId>0&&Number(p.playerSubteamId||0)===targetSubteamId)
-            :p.teamId===targetTeamId;
+          let sameSide=false;
+          if(isArena){
+            const mateSubteamId=Number(p.playerSubteamId||0);
+            const matePlacement=Number(p.subteamPlacement||p.placement||0);
+            if(targetSubteamId>0&&mateSubteamId===targetSubteamId){
+              sameSide=true;
+              detection.subteam++;
+            }else if(targetSubteamId<=0&&targetPlacement>0&&matePlacement===targetPlacement){
+              sameSide=true;
+              detection.placement++;
+            }else if(useArenaTeamIdFallback&&Number(p.teamId||0)===targetTeamId){
+              sameSide=true;
+              detection.teamId++;
+            }
+          }else{
+            sameSide=Number(p.teamId||0)===targetTeamId;
+          }
           if(!sameSide)continue;
           const mateGameName=text(p.riotIdGameName||'',32);
           const mateTagLine=text(p.riotIdTagline||'',12);
@@ -131,7 +152,6 @@ Deno.serve(async req=>{
           row.games++;
           if(sampleOffset+sampleIndex<4)row.recentGames++;
           else row.olderGames++;
-          const targetPlacement=Number(target.subteamPlacement||target.placement||0);
           const arenaWin=isArena&&targetPlacement>0?targetPlacement<=4:Boolean(target.win);
           if(arenaWin)row.wins++;
           row.firstPlayedAt=row.firstPlayedAt?Math.min(row.firstPlayedAt,playedAt):playedAt;
@@ -142,6 +162,7 @@ Deno.serve(async req=>{
           const mateChampion=text(p.championName,40);
           if(targetChampion&&mateChampion)inc(row.pairChampions,targetChampion+' + '+mateChampion);
         }
+        if(isArena&&targetSubteamId<=0&&targetPlacement<=0&&!useArenaTeamIdFallback)detection.unresolvedArena++;
       }
     }
 
@@ -165,7 +186,7 @@ Deno.serve(async req=>{
         phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>=2?'now':row.olderGames>=2?'before':'single'
       }));
 
-    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length});
+    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length,detection});
   }catch(error){
     console.error('public-lol-teammates failed',error);
     const message=error instanceof Error?error.message:'unknown_error';
