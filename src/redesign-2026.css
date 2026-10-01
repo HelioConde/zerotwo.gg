@@ -3837,3 +3837,33 @@ summary:focus-visible{
     border-radius:0!important;
   }
 }
+
+
+/* 200-match history depth */
+.riotStoryCoverage .sampleQualityValue{
+  max-width:112px;
+  font-size:10px!important;
+  line-height:1.05!important;
+  letter-spacing:-.2px!important;
+  white-space:normal;
+}
+.riotStoryCoverage{
+  flex-wrap:wrap;
+}
+.riotStoryCoverage>span{
+  flex:1 1 92px;
+}
+.historyCoverage b em{
+  opacity:.42;
+  font-size:.55em;
+}
+@media(max-width:700px){
+  .riotStoryCoverage{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+  }
+  .riotStoryCoverage>span{
+    min-width:0!important;
+  }
+}
