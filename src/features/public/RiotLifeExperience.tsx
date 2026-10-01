@@ -222,6 +222,18 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const oldestMatch=matches[matches.length-1];
   const sampleDays=oldestMatch&&latest?Math.max(0,Math.ceil((playedAt(latest)-playedAt(oldestMatch))/86400000)):0;
   const daysSinceLatest=latest?Math.max(0,Math.floor((Date.now()-playedAt(latest))/86400000)):0;
+  const windowStart=oldestMatch?formatDate(playedAt(oldestMatch)):'—';
+  const windowEnd=latest?formatDate(playedAt(latest)):'—';
+  const modeDistribution=useMemo(()=>{
+    const rows=(data?.modeSummaries||[]).map((m:any)=>({name:m.name||'OUTRO',games:Number(m.games||0)})).filter((m:any)=>m.games>0);
+    const total=rows.reduce((sum:number,row:any)=>sum+row.games,0)||matches.length||1;
+    return rows.sort((a:any,b:any)=>b.games-a.games).slice(0,4).map((row:any)=>({...row,share:Math.round(row.games/total*100)}));
+  },[data,matches.length]);
+  const signatureTop=(data?.championSummaries||[]).slice(0,5);
+  const recentCompare=recentVsOld?[
+    {label:'KDA',recent:recentVsOld.recentKda,old:recentVsOld.oldKda,format:(v:number)=>v.toFixed(2)},
+    {label:'RESULTADO',recent:recentVsOld.recentWr,old:recentVsOld.oldWr,format:(v:number)=>Math.round(v)+'%'}
+  ]:[];
 
   const currentMode=data?.modeSummaries?.find((m:any)=>m.name===data?.summary?.mainContext)||null;
   const currentMetric=currentMode?.name==='ARENA'
@@ -275,6 +287,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>AGORA // O PALCO DESTA FASE</small>
           <h3>{data?.summary?.mainContext||'SEU CONTEXTO'} <span>É ONDE SUA HISTÓRIA ESTÁ ACONTECENDO.</span></h3>
           <p>{currentModeGames>0?currentModeGames+' de '+matches.length+' partidas desta janela vieram desse contexto.':'Este é o contexto mais presente entre as partidas disponíveis.'} O número ao lado pertence só a este capítulo.</p><small className="chapterSource">FONTE // RIOT MATCH-V5 · {matches.length} partidas observadas</small>
+          <div className="riotNowMeta"><span><small>PERÍODO</small><b>{windowStart} → {windowEnd}</b></span><span><small>ÚLTIMA PARTIDA</small><b>{daysSinceLatest===0?'hoje':daysSinceLatest+'d atrás'}</b></span></div>
+          {modeDistribution.length>0&&<div className="riotModeDistribution" aria-label="Distribuição dos modos jogados">{modeDistribution.map((mode:any)=><span key={mode.name}><i style={{width:mode.share+'%'}}/><b>{mode.name}</b><em>{mode.games} · {mode.share}%</em></span>)}</div>
         </div>
         <div className="riotChapterHeroMetric">
           <b>{currentMetric.value}</b>
@@ -296,6 +310,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>ASSINATURA // QUEM MAIS APARECEU</small>
           <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
           <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p><small className="chapterSource">FATO // frequência observada na amostra, não avaliação de habilidade</small>
+          {signatureTop.length>1&&<div className="signatureTopList" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.winRate!=null?' · '+champ.winRate+'%':''}</em></span>)}</div>}
         </div>
         <div className="riotChapterHeroMetric">
           <b>{signatureShare}%</b>
@@ -310,6 +325,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
           <h3>{latestSessionDesc?latestSessionDesc.games+' '+(latestSessionDesc.games===1?'PARTIDA':'PARTIDAS')+' NA ÚLTIMA SESSÃO.':'AINDA NÃO HÁ UMA SESSÃO CLARA.'}</h3>
           <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p><small className="chapterSource">MÉTODO // partidas separadas por até 2 horas entram na mesma sessão</small>
+          {latestSession.length>0&&<div className="sessionTimeline" aria-label="Linha do tempo da última sessão">{[...latestSession].sort((a:any,b:any)=>playedAt(a)-playedAt(b)).map((match:any,index:number)=><span key={match.id||index} data-win={match.context==='ARENA'?(num(match.placement)>0&&num(match.placement)<=4):!!match.win}><i/><b>{match.champion||match.context||'Jogo'}</b><em>{match.context==='ARENA'&&match.placement?match.placement+'º':match.win?'V':'D'}</em></span>)}</div>}
         </div>
         {latestSessionDesc&&<div className="riotSessionFacts">
           <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
@@ -337,7 +353,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <section id="riot-change" className="riotChapterGroup riotChapterChange">
         <div className="riotChapterGroupIntro">
           <span className="riotChapterNumber">05</span>
-          <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p></div>
+          <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p>{recentCompare.length>0&&<div className="riotBeforeAfter">{recentCompare.map((row:any)=><span key={row.label}><small>{row.label}</small><i><em style={{width:Math.min(100,Math.max(8,(row.old/(Math.max(row.old,row.recent)||1))*100))+'%'}}/></i><b>{row.format(row.old)} → {row.format(row.recent)}</b></span>)}</div>}</div>
           <div className="riotChangeFacts">
             {snapshotDelta?.kda!=null&&Math.abs(snapshotDelta.kda)>=.1&&<span><small>KDA DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.kda>0?'+':''}{snapshotDelta.kda.toFixed(2)}</b></span>}
             {snapshotDelta?.winRate!=null&&Math.abs(snapshotDelta.winRate)>=1&&<span><small>RESULTADO DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.winRate>0?'+':''}{snapshotDelta.winRate.toFixed(0)} p.p.</b></span>}
@@ -370,7 +386,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
     <footer className="riotStoryEnd">
       <Icon name="dna"/>
-      <div><small>FIM DA HISTÓRIA PRINCIPAL</small><b>OS DADOS BRUTOS CONTINUAM DISPONÍVEIS ABAIXO.</b><p>Partidas, campeões, maestria e DNA ficam separados da narrativa para não competir com ela.</p></div>
+      <div><small>FIM DA HISTÓRIA PRINCIPAL</small><b>AS EVIDÊNCIAS CONTINUAM DISPONÍVEIS ABAIXO.</b><p>Partidas, campeões, maestria e contexto ficam separados da narrativa para não competir com ela.</p></div>
+      <button className="riotBackTop" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>VOLTAR AO TOPO ↑</button>
     </footer>
   </section>;
 }
