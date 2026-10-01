@@ -49,6 +49,7 @@ jobs:
           deno check supabase/functions/valorant-rso-callback/index.ts
           deno check supabase/functions/valorant-profile/index.ts
           deno check supabase/functions/valorant-unlink/index.ts
+          deno check supabase/functions/public-lol-teammates/index.ts
 
       - name: Vite build
         env:
