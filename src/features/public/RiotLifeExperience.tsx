@@ -5,6 +5,7 @@ import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
 import { FrequentTeammates } from './FrequentTeammates';
 import { PlayerEras } from './PlayerEras';
+import { RiotWrapped } from './RiotWrapped';
 import {
   loadCloudRiotLifeSnapshots,
   mergeRiotLifeSnapshots,
@@ -215,6 +216,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sincronizando':'local'}</em></span>
       </div>
     </header>
+
+    <RiotWrapped data={data} platform={platform} champions={champions} ddv={ddv}/>
 
     {latest&&daysSinceLatest>=14&&<aside className="returningPlayer">
       <div className="returningSignal"><span>{daysSinceLatest}</span><small>DIAS</small></div>
