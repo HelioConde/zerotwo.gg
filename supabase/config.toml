@@ -1,0 +1,4 @@
+project_id = "bieihhaobdztjyoweewa"
+
+[functions.public-lol-teammates]
+verify_jwt = false
