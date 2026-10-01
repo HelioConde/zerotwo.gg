@@ -2216,3 +2216,205 @@ summary:focus-visible{
     line-height:1.75!important;
   }
 }
+
+
+/* ---------- RESULT SEARCH BAR + SUMMARY CARD PRESENCE ---------- */
+.homeLookup.hasResult .homeHero{
+  min-height:0!important;
+  padding:0!important;
+  display:block!important;
+}
+.homeLookup.hasResult .homeHeroBackdrop,
+.homeLookup.hasResult .lookupIntro>small,
+.homeLookup.hasResult .lookupIntro>h1,
+.homeLookup.hasResult .lookupIntro>p,
+.homeLookup.hasResult .lookupTrust,
+.homeLookup.hasResult .identitySources{
+  display:none!important;
+}
+.homeLookup.hasResult .lookupIntro{
+  width:min(1240px,100%)!important;
+  max-width:1240px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:10px!important;
+  margin:0 auto!important;
+  padding:8px 24px!important;
+}
+.homeLookup.hasResult .publicGameSwitch{
+  width:auto!important;
+  margin:0!important;
+  padding:3px!important;
+  border-radius:10px!important;
+}
+.homeLookup.hasResult .publicGameSwitch button{
+  min-height:40px!important;
+  padding:5px 10px!important;
+}
+.homeLookup.hasResult .publicGameSwitch .gameBadge{
+  width:20px!important;
+  height:20px!important;
+}
+.homeLookup.hasResult .publicGameSwitch button span b{
+  font-size:8px!important;
+}
+.homeLookup.hasResult .publicGameSwitch button span small{
+  display:none!important;
+}
+.homeLookup.hasResult .lookupSearch{
+  width:100%!important;
+  max-width:none!important;
+  min-height:44px!important;
+  margin:0!important;
+  padding:3px!important;
+  border:1px solid #ffffff10!important;
+  border-radius:11px!important;
+  background:#080b10!important;
+  box-shadow:none!important;
+}
+.homeLookup.hasResult .lookupSearch>div{
+  min-height:36px!important;
+  border-radius:8px!important;
+}
+.homeLookup.hasResult .lookupSearch input{
+  font-size:10px!important;
+}
+.homeLookup.hasResult .lookupSearch select{
+  min-height:36px!important;
+  font-size:9px!important;
+}
+.homeLookup.hasResult .lookupSearch button{
+  min-width:120px!important;
+  min-height:36px!important;
+  font-size:8px!important;
+}
+.publicPlayerResult{
+  padding-top:12px!important;
+}
+.publicBackHome{
+  margin-bottom:8px!important;
+}
+
+/* Riot Life hub labels should read on a normal monitor, not only a calibrated display. */
+.riotLifeHubMeta small{
+  color:#97a2b1!important;
+  font-size:7px!important;
+}
+.riotLifeHubMeta b{
+  color:#fff!important;
+  font-size:15px!important;
+}
+.riotLifeHubMeta em{
+  color:#8793a3!important;
+  font-size:7px!important;
+}
+.riotLifeTabs button>b{
+  color:#cdd4dd!important;
+}
+.riotLifeTabs button>small{
+  color:#8692a2!important;
+}
+.riotLifeTabs button.active{
+  background:linear-gradient(90deg,#ff477e12,#ff477e05)!important;
+  box-shadow:inset 0 -2px 0 #ff477e!important;
+}
+
+/* Summary cards need visible surfaces; the previous version looked like floating text. */
+.riotLifeSummaryGrid .riotLifeCard{
+  border:1px solid #ffffff18!important;
+  background:
+    radial-gradient(circle at 90% 8%,#ffffff05,transparent 34%),
+    linear-gradient(155deg,#0b0f15,#070a0f)!important;
+  box-shadow:
+    inset 0 1px 0 #ffffff07,
+    0 8px 28px #0002!important;
+}
+.riotLifeSummaryGrid .riotPassport{
+  border-color:#ff477e28!important;
+  background:
+    radial-gradient(circle at 84% 14%,#ff477e14,transparent 34%),
+    linear-gradient(155deg,#0d0d14,#080a0f)!important;
+}
+.riotLifeSummaryGrid .sessionLab{
+  border-color:#ffffff1c!important;
+}
+.riotLifeSummaryGrid .personalMeta{
+  border-color:#ff477e1f!important;
+}
+.riotLifeSummaryGrid .riotCardTop{
+  padding-bottom:10px!important;
+  border-bottom:1px solid #ffffff0b!important;
+}
+.riotLifeSummaryGrid .riotCardTop span{
+  font-size:8px!important;
+  letter-spacing:1px!important;
+}
+.riotLifeSummaryGrid .riotCardTop b{
+  color:#5a6473!important;
+}
+.riotPassportIdentity small{
+  color:#8793a3!important;
+}
+.riotPassportIdentity h4{
+  color:#fff!important;
+}
+.riotPassportIdentity h4 span{
+  color:#ff789f!important;
+}
+.riotPassportIdentity p{
+  color:#9aa5b4!important;
+}
+.riotPassportSignals span,
+.sessionNumbers span,
+.personalMetaStats span{
+  border:1px solid #ffffff10!important;
+  background:#05080da8!important;
+}
+.riotPassportSignals b,
+.personalMetaStats b,
+.sessionNumbers b{
+  color:#f1f4f7!important;
+}
+.personalMetaBar{
+  height:6px!important;
+  border-radius:999px!important;
+}
+.personalMetaBar span{
+  border-radius:999px!important;
+}
+
+/* Match story should read as one deliberate card, not image + text floating separately. */
+.matchStoryV2{
+  border:1px solid #ff477e2f!important;
+  background:linear-gradient(120deg,#100b11,#080b10)!important;
+  box-shadow:inset 0 1px 0 #ffffff06!important;
+}
+.matchStoryCopy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+.matchStory button{
+  width:max-content!important;
+  border-radius:9px!important;
+}
+
+/* Keep mobile compact after the result-header collapse. */
+@media(max-width:700px){
+  .homeLookup.hasResult .lookupIntro{
+    grid-template-columns:1fr!important;
+    padding:6px 10px!important;
+  }
+  .homeLookup.hasResult .publicGameSwitch{
+    display:none!important;
+  }
+  .homeLookup.hasResult .lookupSearch{
+    grid-template-columns:minmax(0,1fr) 58px 104px!important;
+  }
+  .homeLookup.hasResult .lookupSearch button{
+    grid-column:auto!important;
+    width:auto!important;
+    min-width:104px!important;
+  }
+}
