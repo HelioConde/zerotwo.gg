@@ -236,7 +236,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <article className="riotPassport riotLifeCard">
           <div className="riotCardTop"><span>RIOT PASSPORT</span><b>01</b></div>
           <div className="riotPassportIdentity">
-            <div className="riotPassportIcon">{data?.player?.profileIconId?<img src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/profileicon/'+data.player.profileIconId+'.png'} alt=""/>:'01'}</div>
+            <div className="riotPassportIcon">{data?.player?.profileIconId?<img src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/profileicon/'+data.player.profileIconId+'.png'} alt=""/>:'ZT'}</div>
             <div><small>{String(platform).toUpperCase()}</small><h4>{data?.player?.gameName}<span>#{data?.player?.tagLine}</span></h4><p>Nível {data?.player?.level??'—'} · {data?.summary?.mainContext||'contexto em leitura'}</p></div>
           </div>
           <div className="riotPassportSignals">
