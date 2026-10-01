@@ -1,0 +1,254 @@
+{
+  "image": "Imagem do ChatGPT 1 de out. de 2026, 17_09_51-9.png",
+  "regions": 35,
+  "strategy": "strong-component-fallback",
+  "finalBoxes": [
+    {
+      "x": 27,
+      "y": 59,
+      "width": 92,
+      "height": 100
+    },
+    {
+      "x": 859,
+      "y": 11,
+      "width": 375,
+      "height": 214
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "width": 466,
+      "height": 289
+    },
+    {
+      "x": 437,
+      "y": 37,
+      "width": 374,
+      "height": 271
+    },
+    {
+      "x": 760,
+      "y": 5,
+      "width": 285,
+      "height": 273
+    },
+    {
+      "x": 1106,
+      "y": 150,
+      "width": 96,
+      "height": 172
+    },
+    {
+      "x": 883,
+      "y": 260,
+      "width": 174,
+      "height": 136
+    },
+    {
+      "x": 984,
+      "y": 211,
+      "width": 123,
+      "height": 155
+    },
+    {
+      "x": 30,
+      "y": 294,
+      "width": 247,
+      "height": 241
+    },
+    {
+      "x": 430,
+      "y": 317,
+      "width": 130,
+      "height": 96
+    },
+    {
+      "x": 792,
+      "y": 317,
+      "width": 237,
+      "height": 237
+    },
+    {
+      "x": 225,
+      "y": 406,
+      "width": 280,
+      "height": 175
+    },
+    {
+      "x": 512,
+      "y": 407,
+      "width": 108,
+      "height": 140
+    },
+    {
+      "x": 591,
+      "y": 341,
+      "width": 215,
+      "height": 252
+    },
+    {
+      "x": 1055,
+      "y": 437,
+      "width": 186,
+      "height": 178
+    },
+    {
+      "x": 15,
+      "y": 516,
+      "width": 236,
+      "height": 216
+    },
+    {
+      "x": 275,
+      "y": 569,
+      "width": 311,
+      "height": 158
+    },
+    {
+      "x": 844,
+      "y": 551,
+      "width": 160,
+      "height": 108
+    },
+    {
+      "x": 65,
+      "y": 735,
+      "width": 164,
+      "height": 163
+    },
+    {
+      "x": 231,
+      "y": 746,
+      "width": 167,
+      "height": 57
+    },
+    {
+      "x": 371,
+      "y": 731,
+      "width": 239,
+      "height": 135
+    },
+    {
+      "x": 587,
+      "y": 671,
+      "width": 219,
+      "height": 193
+    },
+    {
+      "x": 742,
+      "y": 599,
+      "width": 321,
+      "height": 356
+    },
+    {
+      "x": 1079,
+      "y": 632,
+      "width": 162,
+      "height": 297
+    },
+    {
+      "x": 60,
+      "y": 908,
+      "width": 159,
+      "height": 111
+    },
+    {
+      "x": 212,
+      "y": 844,
+      "width": 190,
+      "height": 164
+    },
+    {
+      "x": 500,
+      "y": 857,
+      "width": 221,
+      "height": 134
+    },
+    {
+      "x": 12,
+      "y": 950,
+      "width": 138,
+      "height": 107
+    },
+    {
+      "x": 13,
+      "y": 1048,
+      "width": 134,
+      "height": 47
+    },
+    {
+      "x": 358,
+      "y": 958,
+      "width": 170,
+      "height": 129
+    },
+    {
+      "x": 558,
+      "y": 946,
+      "width": 291,
+      "height": 144
+    },
+    {
+      "x": 794,
+      "y": 984,
+      "width": 211,
+      "height": 97
+    },
+    {
+      "x": 8,
+      "y": 1053,
+      "width": 447,
+      "height": 182
+    },
+    {
+      "x": 789,
+      "y": 937,
+      "width": 460,
+      "height": 308
+    },
+    {
+      "x": 421,
+      "y": 1093,
+      "width": 369,
+      "height": 151
+    }
+  ],
+  "exported": [
+    "element_001.png",
+    "element_002.png",
+    "element_003.png",
+    "element_004.png",
+    "element_005.png",
+    "element_006.png",
+    "element_007.png",
+    "element_008.png",
+    "element_009.png",
+    "element_010.png",
+    "element_011.png",
+    "element_012.png",
+    "element_013.png",
+    "element_014.png",
+    "element_015.png",
+    "element_016.png",
+    "element_017.png",
+    "element_018.png",
+    "element_019.png",
+    "element_020.png",
+    "element_021.png",
+    "element_022.png",
+    "element_023.png",
+    "element_024.png",
+    "element_025.png",
+    "element_026.png",
+    "element_027.png",
+    "element_028.png",
+    "element_029.png",
+    "element_030.png",
+    "element_031.png",
+    "element_032.png",
+    "element_033.png",
+    "element_034.png",
+    "element_035.png"
+  ]
+}

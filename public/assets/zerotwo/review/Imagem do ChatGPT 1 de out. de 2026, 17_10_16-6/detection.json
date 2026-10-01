@@ -1,0 +1,121 @@
+{
+  "image": "Imagem do ChatGPT 1 de out. de 2026, 17_10_16-6.png",
+  "regions": 16,
+  "strategy": "strong-component-fallback",
+  "finalBoxes": [
+    {
+      "x": 1,
+      "y": 58,
+      "width": 299,
+      "height": 246
+    },
+    {
+      "x": 328,
+      "y": 28,
+      "width": 276,
+      "height": 280
+    },
+    {
+      "x": 634,
+      "y": 19,
+      "width": 299,
+      "height": 295
+    },
+    {
+      "x": 947,
+      "y": 9,
+      "width": 307,
+      "height": 305
+    },
+    {
+      "x": 0,
+      "y": 303,
+      "width": 306,
+      "height": 301
+    },
+    {
+      "x": 303,
+      "y": 303,
+      "width": 333,
+      "height": 306
+    },
+    {
+      "x": 616,
+      "y": 310,
+      "width": 339,
+      "height": 297
+    },
+    {
+      "x": 969,
+      "y": 303,
+      "width": 269,
+      "height": 311
+    },
+    {
+      "x": 0,
+      "y": 593,
+      "width": 307,
+      "height": 319
+    },
+    {
+      "x": 305,
+      "y": 604,
+      "width": 325,
+      "height": 302
+    },
+    {
+      "x": 939,
+      "y": 597,
+      "width": 315,
+      "height": 308
+    },
+    {
+      "x": 615,
+      "y": 618,
+      "width": 339,
+      "height": 296
+    },
+    {
+      "x": 2,
+      "y": 892,
+      "width": 301,
+      "height": 321
+    },
+    {
+      "x": 299,
+      "y": 893,
+      "width": 334,
+      "height": 330
+    },
+    {
+      "x": 627,
+      "y": 905,
+      "width": 313,
+      "height": 324
+    },
+    {
+      "x": 940,
+      "y": 896,
+      "width": 314,
+      "height": 331
+    }
+  ],
+  "exported": [
+    "element_001.png",
+    "element_002.png",
+    "element_003.png",
+    "element_004.png",
+    "element_005.png",
+    "element_006.png",
+    "element_007.png",
+    "element_008.png",
+    "element_009.png",
+    "element_010.png",
+    "element_011.png",
+    "element_012.png",
+    "element_013.png",
+    "element_014.png",
+    "element_015.png",
+    "element_016.png"
+  ]
+}
