@@ -51,7 +51,7 @@ export function PlayerCentralView({riot,riotId,server,onSetup,notice,publicProfi
       </div>
 
       <div className="loggedLifeIdentity">
-        <span className="loggedLifeGlyph">01</span>
+        <span className="loggedLifeGlyph">ZT</span>
         <div><small>IDENTIDADE CONECTADA</small><b>{riot?riotId:'SEM RIOT ID'}</b><em>{riot?server+' · NÍVEL '+(riot.summoner_level??'—'):'Conecte sua conta para começar'}</em></div>
       </div>
     </section>
