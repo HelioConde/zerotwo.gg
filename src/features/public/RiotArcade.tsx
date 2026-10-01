@@ -26,12 +26,12 @@ export function RiotArcade({data}:Props){
       const options=modes.slice(0,3).map(x=>x[0]);
       qs.push({id:'mode',prompt:'QUAL CONTEXTO DOMINOU SUAS PARTIDAS?',options,answer:modes[0][0],note:modes[0][0]+' foi o contexto mais frequente: '+modes[0][1]+' partidas.'});
     }
-    const kdas=uniq(matches.map((m:any)=>Number(m.kda)).filter((x:number)=>Number.isFinite(x))).sort((a,b)=>b-a);
+    const kdas=uniq<number>(matches.map((m:any)=>Number(m.kda)).filter((x:number)=>Number.isFinite(x))).sort((a:number,b:number)=>b-a);
     if(kdas.length>=2){
       const options=kdas.slice(0,3).map(x=>String(x));
       qs.push({id:'kda',prompt:'QUAL FOI O MAIOR KDA OBSERVADO EM UMA PARTIDA?',options,answer:String(kdas[0]),note:'O maior KDA da amostra foi '+kdas[0]+'.'});
     }
-    const damages=uniq(matches.map((m:any)=>Math.round(Number(m.damage||0)/100)/10).filter((x:number)=>x>0)).sort((a,b)=>b-a);
+    const damages=uniq<number>(matches.map((m:any)=>Math.round(Number(m.damage||0)/100)/10).filter((x:number)=>x>0)).sort((a:number,b:number)=>b-a);
     if(damages.length>=2&&qs.length<3){
       const options=damages.slice(0,3).map(x=>x+'k');
       qs.push({id:'damage',prompt:'QUAL FOI O MAIOR DANO OBSERVADO?',options,answer:String(damages[0])+'k',note:'O pico observado foi '+damages[0]+'k de dano.'});
