@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
 import { ChampionCareer } from './ChampionCareer';
 import { MyRiotPatch } from './MyRiotPatch';
+import { RiotArcade } from './RiotArcade';
 import '../../riot-life.css';
 
 type RiotLifeProps={
@@ -168,6 +169,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const masteryChampion=masteryTop?champions?.[String(masteryTop.championId)]:null;
   const oldestMatch=matches[matches.length-1];
   const sampleDays=oldestMatch&&latest?Math.max(0,Math.ceil((playedAt(latest)-playedAt(oldestMatch))/86400000)):0;
+  const daysSinceLatest=latest?Math.max(0,Math.floor((Date.now()-playedAt(latest))/86400000)):0;
 
   return <section className="riotLife" aria-label="Riot Life">
     <header className="riotLifeHeader">
@@ -182,6 +184,12 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <span><small>VISITAS</small><b>{Math.max(1,snapshots.length)}</b><em>memórias</em></span>
       </div>
     </header>
+
+    {latest&&daysSinceLatest>=14&&<aside className="returningPlayer">
+      <div className="returningSignal"><span>{daysSinceLatest}</span><small>DIAS</small></div>
+      <div><small>RETURNING PLAYER</small><b>{daysSinceLatest>=60?'VOCÊ ESTÁ VOLTANDO DEPOIS DE UMA LONGA PAUSA.':'VOCÊ DEU UMA PAUSA NO LEAGUE.'}</b><p>A última partida observada nesta consulta foi em <strong>{formatDate(playedAt(latest))}</strong>. O ZeroTwo pode usar o My Riot Patch abaixo para mostrar mudanças estruturadas que tocaram campeões e itens do seu histórico recente.</p></div>
+      <button onClick={()=>document.getElementById('my-riot-patch')?.scrollIntoView({behavior:'smooth',block:'start'})}>VER O QUE MUDOU ↓</button>
+    </aside>}
 
     <div className="riotLifeGrid">
       <article className="riotPassport riotLifeCard">
@@ -254,6 +262,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
     </article>}
 
+    <RiotArcade data={data}/>
     <ChampionCareer data={data} champions={champions} ddv={ddv}/>
     <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
   </section>;
