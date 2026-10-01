@@ -1,57 +1,61 @@
 # ZeroTwo.gg — Product Vision
 
 ## Tese
-**You're 01. Find your 02.**
+**Your Riot life, interpreted.**
 
-ZeroTwo fecha o ciclo: **prever → conectar → jogar → medir → aprender → melhorar o próximo match**.
+ZeroTwo transforma dados permitidos da Riot em uma experiência narrativa e pessoal. O produto deve fazer o jogador descobrir algo interessante sobre si mesmo antes de pedir cadastro, assinatura ou interação social.
+
+## North Star
+
+**Riot ID / RSO → descoberta pessoal → exploração → retorno para ver o que mudou.**
+
+A primeira recompensa não é um match com outra pessoa. É uma informação pessoal que gere curiosidade: uma sessão incomum, uma mudança de foco, um personagem que voltou, uma evolução observável ou uma partida que merece ser lembrada.
 
 ## Roadmap vivo
-1. Find Your 02 — Adaptive Player Matching
-2. 02 Sync — sinergia real da dupla
-3. Gaming DNA — identidade comportamental
-4. 02 Lab — experimentos pessoais
-5. 02 AI — pergunte aos seus dados
-6. Compatibility Explanation
-7. 02 Intent — duo / amizade / squad / relacionamento opcional
-8. Squad DNA
-9. Discoveries
-10. Cross-Game DNA
-11. Players Like Me
-12. Evolution Paths
-13. Champion / Agent Affinity
-14. My Gaming Universe
-15. Player Journey
-16. 02 Challenges
-17. Rivals
-18. 02 Experiments
-19. 02 Research
-20. 02 Wrapped
-21. Gameplay Feed
-22. ZeroTwo Identity
-23. Who's Looking for 02?
-24. 02 Reputation
-25. 02 Streak
 
-Esta lista é direção, não prisão. Features podem ser removidas, fundidas ou substituídas conforme pesquisa, API, UX e dados reais.
+1. **Riot Passport** — identidade Riot resumida sem reduzir o jogador a rank.
+2. **Session Lab** — reconstruir sessões e comparar começo/fim usando evidência observável.
+3. **Personal Meta** — destacar o que funcionou para o próprio jogador dentro da amostra.
+4. **Match Story** — transformar uma partida em narrativa baseada somente em dados presentes.
+5. **Time Machine** — snapshots entre visitas + comparação de períodos reais.
+6. **My Riot Patch** — cruzar patch oficial com campeões, agentes e itens realmente usados.
+7. **Champion / Agent Career** — linha do tempo por personagem.
+8. **Returning Player** — mostrar o que mudou desde a última atividade observada.
+9. **Riot Challenges Arcade** — miniexperiências e quizzes gerados pelo próprio histórico.
+10. **Riot Universe Dashboard** — uma Home para múltiplos jogos Riot conectados.
+11. **Riot Wrapped permanente** — retrospectivas que não dependem do fim do ano.
+12. **Share Cards** — histórias e descobertas exportáveis/compartilháveis.
 
-## MVP 0.1
-- identidade e landing
-- onboarding Riot seguro
-- perfil ZeroTwo
-- LoL / VALORANT
-- Gaming DNA inicial
-- Find Your 02
-- explicação da compatibilidade
-- convite compartilhável
-- feedback pós-jogo
-- 02 Sync inicial
+## O que não é mais a definição do produto
 
-## Princípios
+Find Your 02, 02 Sync, matching e relacionamento podem permanecer como experimentos opcionais. Eles não devem determinar a Home, a marca ou a arquitetura principal.
+
+## Regras de evidência
+
 - Evidência antes de afirmação.
 - Correlação não é causalidade.
-- IA interpreta; métricas determinísticas calculam.
-- Sem MMR alternativo inventado.
+- Comparações devem mostrar tamanho da amostra.
+- Não criar MMR/ELO alternativo.
+- Não chamar uma tendência curta de verdade permanente.
+- Não inventar timeline que a API não forneceu.
+- Impacto de patch só aparece quando houver fonte oficial estruturada.
+- VALORANT continua opt-in e limitado aos dados aprovados.
 - Sem scouting proibido ou vantagem injusta em tempo real.
-- Privacidade e opt-in por padrão.
-- Romance é intenção opcional, não a definição do produto.
-- Segurança e moderação fazem parte da arquitetura.
+- IA pode resumir e explicar; métricas determinísticas calculam.
+
+## Estado da implementação — Riot Life v0
+
+Implementado no perfil público de League:
+- Riot Passport;
+- Session Lab;
+- Personal Meta;
+- Time Machine da amostra;
+- snapshots locais para Time Machine entre visitas;
+- Match Story da última partida;
+- espaço preparado para My Riot Patch, sem dados inventados.
+
+Próximas fontes:
+1. patch data oficial/estruturado;
+2. snapshots persistentes no backend para usuários autenticados;
+3. Champion Career;
+4. Riot Universe com outras integrações autorizadas.
