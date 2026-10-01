@@ -6,6 +6,7 @@ type Input={
   region?:string;
   matchIds?:string[];
   context?:string|null;
+  sampleOffset?:number;
 };
 
 type MateRow={
@@ -59,7 +60,8 @@ Deno.serve(async req=>{
   const gameName=text(input.gameName,32);
   const tagLine=text(input.tagLine,12);
   const region=allowedRegions.has(String(input.region))?String(input.region):'americas';
-  const matchIds=[...new Set((input.matchIds||[]).map(x=>text(x,64)).filter(Boolean))].slice(0,12);
+  const matchIds=[...new Set((input.matchIds||[]).map(x=>text(x,64)).filter(Boolean))].slice(0,25);
+  const sampleOffset=Math.max(0,Math.floor(Number(input.sampleOffset||0)));
 
   if(!gameName||!tagLine)return json({error:'riot_id_required'},400);
   if(!matchIds.length)return json({teammates:[],matchesAnalyzed:0});
@@ -127,7 +129,7 @@ Deno.serve(async req=>{
             mates.set(key,row);
           }
           row.games++;
-          if(sampleIndex<4)row.recentGames++;
+          if(sampleOffset+sampleIndex<4)row.recentGames++;
           else row.olderGames++;
           const targetPlacement=Number(target.subteamPlacement||target.placement||0);
           const arenaWin=isArena&&targetPlacement>0?targetPlacement<=4:Boolean(target.win);
