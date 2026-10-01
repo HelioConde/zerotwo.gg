@@ -25,22 +25,17 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check deployment credentials
-        id: credentials
         shell: bash
         run: |
-          if [ -n "$SUPABASE_ACCESS_TOKEN" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::SUPABASE_ACCESS_TOKEN is not configured; function deploy skipped."
+          if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN is not configured. The Edge Function was NOT deployed."
+            exit 1
           fi
 
       - name: Setup Supabase CLI
-        if: steps.credentials.outputs.available == 'true'
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
       - name: Deploy recurring teammates function
-        if: steps.credentials.outputs.available == 'true'
         run: supabase functions deploy public-lol-teammates --project-ref "$SUPABASE_PROJECT_ID"
