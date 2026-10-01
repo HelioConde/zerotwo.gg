@@ -5,6 +5,7 @@ type Input={
   tagLine?:string;
   region?:string;
   matchIds?:string[];
+  context?:string|null;
 };
 
 type MateRow={
@@ -94,9 +95,15 @@ Deno.serve(async req=>{
         analyzed++;
         const playedAt=Number(match?.info?.gameEndTimestamp||match?.info?.gameCreation||0);
         const targetTeamId=target.teamId;
+        const targetSubteamId=Number(target.playerSubteamId||0);
+        const isArena=String(match?.info?.gameMode||'').toUpperCase()==='CHERRY'||targetSubteamId>0;
 
         for(const p of participants){
-          if(!p||p.puuid===targetPuuid||p.teamId!==targetTeamId)continue;
+          if(!p||p.puuid===targetPuuid)continue;
+          const sameSide=isArena
+            ?(targetSubteamId>0&&Number(p.playerSubteamId||0)===targetSubteamId)
+            :p.teamId===targetTeamId;
+          if(!sameSide)continue;
           const mateGameName=text(p.riotIdGameName||'',32);
           const mateTagLine=text(p.riotIdTagline||'',12);
           if(!mateGameName||!mateTagLine)continue;
@@ -122,7 +129,9 @@ Deno.serve(async req=>{
           row.games++;
           if(sampleIndex<4)row.recentGames++;
           else row.olderGames++;
-          if(Boolean(target.win))row.wins++;
+          const targetPlacement=Number(target.subteamPlacement||target.placement||0);
+          const arenaWin=isArena&&targetPlacement>0?targetPlacement<=4:Boolean(target.win);
+          if(arenaWin)row.wins++;
           row.firstPlayedAt=row.firstPlayedAt?Math.min(row.firstPlayedAt,playedAt):playedAt;
           row.lastPlayedAt=Math.max(row.lastPlayedAt,playedAt);
           inc(row.champions,text(p.championName,40));
