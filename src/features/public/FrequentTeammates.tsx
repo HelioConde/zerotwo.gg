@@ -84,6 +84,7 @@ export function FrequentTeammates({data,platform}:Props){
   const [analyzed,setAnalyzed]=useState(0);
   const [loading,setLoading]=useState(false);
   const [attempted,setAttempted]=useState(false);
+  const [lookupError,setLookupError]=useState('');
 
   const focusContext=String(data?.summary?.mainContext||'').toUpperCase();
   const contextMatches=useMemo(()=>{
@@ -104,6 +105,7 @@ export function FrequentTeammates({data,platform}:Props){
     setAnalyzed(0);
     setLoading(false);
     setAttempted(false);
+    setLookupError('');
   },[playerKey,matchSignature]);
 
   useEffect(()=>{
@@ -138,7 +140,8 @@ export function FrequentTeammates({data,platform}:Props){
               sampleOffset:chunk.offset
             }
           });
-          if(error)continue;
+          if(error){setLookupError(error.message||'Falha ao analisar parceiros.');continue;}
+          if(result?.error){setLookupError(result.message||result.error);continue}
           if(Array.isArray(result?.teammates))collected.push(result.teammates as Teammate[]);
           nextAnalyzed+=Number(result?.matchesAnalyzed||0);
           const partial=mergeTeammateRows(collected);
@@ -178,6 +181,13 @@ export function FrequentTeammates({data,platform}:Props){
     before:rows.filter(row=>row.phase==='before').sort((a,b)=>b.olderGames-a.olderGames)
   }),[rows]);
   const hasTimeline=analyzed>=5&&(timeline.now.length+timeline.persistent.length+timeline.before.length)>0;
+
+  if(attempted&&!loading&&!rows.length&&lookupError)return <section className="frequentTeammates teammateEmpty" ref={root}>
+    <div className="teammateEmptyState">
+      <Icon name="status"/>
+      <div><small>PARCEIROS // FALHA DE LEITURA</small><b>NÃO FOI POSSÍVEL ANALISAR OS PARCEIROS DESTA AMOSTRA.</b><p>{lookupError}</p></div>
+    </div>
+  </section>;
 
   if(attempted&&!loading&&!rows.length)return <section className="frequentTeammates teammateEmpty" ref={root}>
     <div className="teammateEmptyState">
