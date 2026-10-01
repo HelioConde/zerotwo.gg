@@ -1794,3 +1794,372 @@ summary:focus-visible{
   .recentPlayerSearches>section{grid-template-columns:1fr!important}
   .lookupLoading{margin:20px 12px 50px!important;min-height:190px!important}
 }
+
+
+/* ---------- SCREENSHOT POLISH 2026-10-01 ---------- */
+/* Compress vertical rhythm and use available width more deliberately. */
+.homeLookup:not(.hasResult) .homeHero{
+  min-height:min(680px,calc(100svh - 64px))!important;
+  padding-top:46px!important;
+  padding-bottom:46px!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy h1{
+  max-width:930px!important;
+  font-size:clamp(50px,6.4vw,88px)!important;
+  letter-spacing:-4.4px!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy>p{
+  max-width:760px!important;
+  color:#a0a9b6!important;
+  font-size:14px!important;
+}
+.homeLookup:not(.hasResult) .lookupSearch{
+  max-width:900px!important;
+  box-shadow:0 22px 70px #0008!important;
+}
+.homeExperienceV2{
+  padding:62px 24px 78px!important;
+}
+.homeExperienceV2 .homeValueIntro{
+  max-width:860px!important;
+  margin-bottom:26px!important;
+}
+.homeExperienceV2 .homeValueIntro h2{
+  font-size:clamp(38px,5vw,64px)!important;
+  letter-spacing:-3px!important;
+}
+.homeExperienceV2 .homeValueIntro p{
+  max-width:760px!important;
+  color:#98a3b2!important;
+  font-size:12px!important;
+}
+.homeStoryStrip{gap:8px!important}
+.homeStoryStrip article{
+  min-height:145px!important;
+  padding:19px 20px!important;
+  background:linear-gradient(145deg,#0a0e14,#07090d)!important;
+}
+.homeStoryStrip article>.ztIcon{
+  width:22px!important;
+  margin-bottom:20px!important;
+  opacity:.9!important;
+}
+.homeStoryStrip article>span small{font-size:8px!important}
+.homeStoryStrip article>span b{font-size:12px!important}
+.homeStoryStrip article p{
+  margin-top:7px!important;
+  color:#919cab!important;
+  font-size:10px!important;
+}
+.homeProof{
+  align-items:center!important;
+  gap:30px!important;
+  margin-top:34px!important;
+  padding:30px!important;
+  border-radius:20px!important;
+}
+.homeProof h3{
+  font-size:31px!important;
+  letter-spacing:-1.5px!important;
+}
+.homeProof p{
+  color:#919cab!important;
+  font-size:10px!important;
+}
+.homeProofCards{gap:6px!important}
+.homeProofCards span{
+  min-height:68px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:13px 14px!important;
+  border-radius:10px!important;
+}
+.homeProofCards b{font-size:9px!important}
+.homeProofCards small{color:#7a8696!important;font-size:7px!important}
+.homeBackToSearch{
+  margin:22px auto 0!important;
+}
+
+/* Public player top: eliminate the large dead zone visible in desktop screenshots. */
+.playerMomentHero{
+  grid-template-columns:minmax(0,1.35fr) minmax(310px,.65fr)!important;
+  grid-template-areas:
+    "identity side"
+    "lead side"!important;
+  gap:8px!important;
+}
+.playerMomentIdentity{grid-area:identity!important;min-height:104px!important}
+.playerMomentLead{grid-area:lead!important;min-height:220px!important}
+.playerMomentSide{grid-area:side!important;min-height:332px!important}
+.playerMomentIdentity,
+.playerMomentLead,
+.playerMomentSide{
+  padding:18px!important;
+  border-radius:15px!important;
+}
+.publicPlayerBadge{
+  width:62px!important;
+  height:62px!important;
+  border-radius:14px!important;
+}
+.playerMomentIdentity h2{
+  font-size:27px!important;
+  line-height:1!important;
+}
+.playerMomentIdentity p{
+  margin-top:5px!important;
+  color:#8994a3!important;
+}
+.playerMomentLead{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+.playerMomentLead>small{font-size:8px!important}
+.playerMomentLead h3{
+  max-width:760px!important;
+  font-size:clamp(28px,3.1vw,42px)!important;
+  letter-spacing:-1.8px!important;
+}
+.playerMomentLead>p{
+  max-width:700px!important;
+  color:#9aa5b4!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+}
+.momentKeyStats>span{
+  padding:11px 12px!important;
+  border-radius:10px!important;
+}
+.momentKeyStats b{font-size:21px!important}
+.playerMomentSide{
+  justify-content:flex-start!important;
+  gap:14px!important;
+  background:linear-gradient(155deg,#090c12,#06090d)!important;
+}
+.playerMomentActions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0!important;
+  padding-bottom:14px!important;
+  border-bottom:1px solid #ffffff0d!important;
+}
+.playerMomentActions button{
+  min-height:36px!important;
+  padding:0 10px!important;
+  border-radius:8px!important;
+}
+.playerMomentActions>b{
+  color:#7f8a9a!important;
+  font-size:7px!important;
+  white-space:nowrap!important;
+}
+.rankMini{
+  width:100%!important;
+  padding-top:2px!important;
+}
+.rankMini>small{color:#738094!important}
+.rankMini>span{
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  gap:3px 10px!important;
+  align-items:end!important;
+  padding:11px 0!important;
+  border-top:1px solid #ffffff09!important;
+}
+.rankMini>span:first-of-type{margin-top:7px!important}
+.rankMini>span em{grid-column:1/-1!important}
+.rankMini>span b{font-size:14px!important}
+.rankMini>span small{
+  align-self:center!important;
+  color:#8e99a8!important;
+}
+
+/* Riot Life hub: raise contrast and trim empty vertical space. */
+.riotLifeHub{
+  gap:12px 18px!important;
+  padding:16px 18px 0!important;
+  border-radius:16px 16px 0 0!important;
+}
+.riotLifeHubTitle h3{font-size:24px!important}
+.riotLifeHubTitle p{
+  color:#929dac!important;
+  font-size:9px!important;
+}
+.riotLifeHubMeta>span{
+  min-width:72px!important;
+  padding:7px 9px!important;
+}
+.riotLifeHubMeta small{color:#778394!important}
+.riotLifeHubMeta em{color:#7d8898!important}
+.riotLifeTabs{margin:0 -18px!important}
+.riotLifeTabs button{min-height:52px!important}
+.riotLifeTabs button>small{color:#778293!important}
+.riotLifeView{padding:8px!important}
+
+/* Wrapped keeps the visual punch, but no longer overwhelms the rest of the profile. */
+.riotWrapped>header{
+  padding:20px 22px!important;
+  gap:18px!important;
+}
+.riotWrapped h3{
+  max-width:850px!important;
+  font-size:clamp(30px,3.2vw,44px)!important;
+}
+.riotWrapped header p{
+  color:#96a1b0!important;
+  font-size:10px!important;
+}
+.wrappedMeta{min-width:240px!important}
+.riotLifeV2 .wrappedCards{
+  grid-template-columns:1.15fr .85fr .85fr!important;
+  grid-template-rows:repeat(2,minmax(132px,auto))!important;
+}
+.riotLifeV2 .wrappedCard{
+  min-height:132px!important;
+}
+.riotLifeV2 .wrappedCard:first-child{
+  min-height:264px!important;
+}
+.wrappedCardCopy{
+  left:14px!important;
+  right:14px!important;
+  bottom:13px!important;
+}
+.wrappedCardCopy h4{font-size:16px!important}
+.riotLifeV2 .wrappedCardCopy>b{font-size:22px!important}
+.wrappedCardCopy p{
+  color:#b0bac7!important;
+  font-size:8px!important;
+}
+.riotWrapped>footer{
+  padding:12px 14px!important;
+}
+
+/* Summary cards: denser, brighter, more useful above the fold. */
+.riotLifeSummaryGrid{
+  grid-template-columns:1.15fr .92fr .92fr!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+.riotLifeSummaryGrid .riotLifeCard{
+  min-height:205px!important;
+  padding:18px!important;
+  border-radius:14px!important;
+}
+.riotCardTop span{
+  color:#ff789f!important;
+}
+.riotPassportIdentity{
+  margin:14px 0 13px!important;
+}
+.riotPassportIcon{
+  width:56px!important;
+  height:56px!important;
+}
+.riotPassportIdentity h4{font-size:18px!important}
+.riotPassportIdentity p{color:#8e99a8!important}
+.riotPassportSignals{gap:5px!important}
+.riotPassportSignals span,
+.personalMetaStats span{
+  padding:8px!important;
+  border-radius:8px!important;
+}
+.riotPassportSignals small,
+.personalMetaStats small,
+.sessionNumbers small{color:#738093!important}
+.sessionNumbers{
+  gap:5px!important;
+  margin:13px 0 10px!important;
+}
+.sessionNumbers span{
+  padding:10px!important;
+  border-radius:8px!important;
+}
+.sessionNumbers b{font-size:17px!important}
+.personalMeta>small{margin-top:13px!important}
+.personalMeta h4{
+  margin:11px 0 8px!important;
+  font-size:26px!important;
+}
+.riotLifeCard>p{
+  color:#929dac!important;
+  font-size:10px!important;
+}
+
+.matchStoryV2{
+  grid-template-columns:210px minmax(0,1fr)!important;
+  min-height:210px!important;
+  margin-top:8px!important;
+  border-radius:14px!important;
+}
+.matchStoryV2 .matchStoryVisual{
+  min-height:210px!important;
+}
+.matchStoryCopy{
+  padding:18px 22px!important;
+}
+.matchStoryCopy>small{margin-top:12px!important}
+.matchStory h4{
+  margin:13px 0 8px!important;
+  font-size:24px!important;
+}
+.matchStory p{
+  color:#98a3b2!important;
+  font-size:10px!important;
+}
+.riotLifeContinue{
+  min-height:60px!important;
+  margin-top:8px!important;
+  border-radius:12px!important;
+}
+
+/* Make dim supporting copy readable on the real-world monitor shown in the screenshots. */
+.homeValueIntro p,
+.riotLifeCard p,
+.riotSectionIntro p,
+.viewIntro p,
+.playerMomentLead p,
+.matchStory p,
+.homeProof p{
+  text-shadow:0 1px 0 #000!important;
+}
+.homeStoryStrip article,
+.homeProof,
+.playerMomentIdentity,
+.playerMomentLead,
+.playerMomentSide,
+.riotLifeCard,
+.matchStory,
+.riotLifeHub{
+  box-shadow:inset 0 1px 0 #ffffff05!important;
+}
+
+@media(max-width:900px){
+  .playerMomentHero{
+    grid-template-columns:1fr 1fr!important;
+    grid-template-areas:
+      "identity side"
+      "lead lead"!important;
+  }
+  .playerMomentSide{min-height:auto!important}
+  .riotLifeSummaryGrid{grid-template-columns:1fr 1fr!important}
+  .riotPassport{grid-column:1/-1!important}
+}
+@media(max-width:700px){
+  .homeLookup:not(.hasResult) .homeHero{min-height:auto!important}
+  .homeExperienceV2{padding:46px 14px 60px!important}
+  .homeProof{margin-top:24px!important}
+  .playerMomentHero{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"identity" "lead"!important;
+  }
+  .playerMomentSide{display:none!important}
+  .playerMomentIdentity,.playerMomentLead{min-height:auto!important}
+  .riotLifeSummaryGrid{grid-template-columns:1fr!important}
+  .riotPassport{grid-column:auto!important}
+  .matchStoryV2{grid-template-columns:1fr!important}
+}
