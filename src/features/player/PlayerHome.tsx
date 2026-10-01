@@ -25,7 +25,7 @@ export function PlayerHome({session,nickname,onSetup,onLogout}:{session:any,nick
   <aside className="clientSide riotLifeSide">
     <a className="brand" href="#"><b className="brandMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></b> ZERO<span>TWO</span><small>.GG</small></a>
     <div className="clientIdentity">
-      <span className="clientAvatar">01<i/></span>
+      <span className="clientAvatar">ZT<i/></span>
       <div><small>RIOT LIFE ATIVA</small><b>{gamerName}</b><em>{riot?riotId:'IDENTIDADE EM FORMAÇÃO'}</em>{activeGame==='valorant'?<GameBadge game="valorant" label="VALORANT"/>:riot&&<GameBadge game="lol" label="LEAGUE OF LEGENDS"/>}</div>
     </div>
     <nav className="clientNav">
@@ -41,7 +41,7 @@ export function PlayerHome({session,nickname,onSetup,onLogout}:{session:any,nick
   <main className="clientMain riotLifeMain">
     <header className="clientTop riotLifeTop">
       <div><small>ZEROTWO // MINHA RIOT LIFE</small><h1>OLÁ, <span>{gamerName}.</span></h1></div>
-      <div className="clientTopActions"><button onClick={()=>setView('games')}><GameBadge game={activeGame}/>{activeGame==='valorant'?' VALORANT':' LEAGUE'}</button><span>01</span></div>
+      <div className="clientTopActions"><button onClick={()=>setView('games')}><GameBadge game={activeGame}/>{activeGame==='valorant'?' VALORANT':' LEAGUE'}</button><span>ZT</span></div>
     </header>
 
     {loading?<div className="clientLoading">CARREGANDO SUA RIOT LIFE<span>...</span></div>
