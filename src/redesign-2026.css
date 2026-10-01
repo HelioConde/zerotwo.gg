@@ -3195,3 +3195,285 @@ summary:focus-visible{
   }
   .gameDataVault>summary{min-height:68px}
 }
+
+
+/* ==========================================================================
+   ZEROTWO VISUAL ASSET PASS — 2026-10-01
+   Integrates the new img2 artwork without turning the product into a poster.
+   ========================================================================== */
+
+/* HERO — Jett x Ahri art becomes the atmosphere, content stays readable. */
+.homeLookup:not(.hasResult) .homeHero{
+  isolation:isolate;
+  min-height:min(820px,calc(100svh - 64px))!important;
+  padding-top:82px!important;
+  padding-bottom:82px!important;
+  background:#05070a!important;
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop{
+  opacity:1!important;
+  filter:none!important;
+  background:
+    linear-gradient(180deg,rgba(5,7,10,.18) 0%,rgba(5,7,10,.08) 48%,#05070ad9 100%),
+    linear-gradient(90deg,rgba(5,7,10,.18) 0%,rgba(5,7,10,.60) 27%,rgba(5,7,10,.82) 50%,rgba(5,7,10,.60) 73%,rgba(5,7,10,.18) 100%),
+    url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.png') center center/cover no-repeat!important;
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,transparent 0 8%,#75ddff16 8.08%,transparent 8.16% 91.84%,#ff477e18 91.92%,transparent 92%),
+    repeating-linear-gradient(90deg,transparent 0 119px,#ffffff05 120px);
+  mix-blend-mode:screen;
+  opacity:.45;
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop:after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:34%;
+  transform:none;
+  width:auto;
+  border-radius:0;
+  background:linear-gradient(180deg,transparent,#05070a 88%);
+  pointer-events:none;
+}
+.homeLookup:not(.hasResult) .homeHeroBackdrop .heroZero,
+.homeLookup:not(.hasResult) .homeHeroBackdrop>i{
+  display:none!important;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy{
+  position:relative;
+  z-index:3;
+  max-width:980px!important;
+  padding:34px 26px!important;
+  border-radius:28px;
+  background:linear-gradient(180deg,#06090b26,#06090b08);
+}
+.homeLookup:not(.hasResult) .homeHeroCopy h1{
+  text-shadow:0 8px 40px #000,0 2px 14px #000d;
+}
+.homeLookup:not(.hasResult) .homeHeroCopy>p{
+  color:#bcc5d1!important;
+  text-shadow:0 2px 14px #000;
+}
+.homeLookup:not(.hasResult) .publicGameSwitch{
+  border-color:#ffffff25!important;
+  background:#05080bba!important;
+  box-shadow:0 12px 40px #0007;
+  backdrop-filter:blur(18px);
+}
+.homeLookup:not(.hasResult) .publicGameSwitch button.active{
+  border-color:#ff7da534!important;
+  background:linear-gradient(135deg,#ff477e16,#75ddff0d)!important;
+}
+.homeLookup:not(.hasResult) .lookupSearch{
+  border-color:#ffffff2b!important;
+  background:#05080bd9!important;
+  box-shadow:0 28px 100px #000d,0 0 0 1px #ff477e0b!important;
+  backdrop-filter:blur(20px);
+}
+.homeLookup:not(.hasResult) .lookupSearch:focus-within{
+  border-color:#ff739c66!important;
+  box-shadow:0 30px 110px #000e,0 0 34px #ff477e16!important;
+}
+.homeLookup:not(.hasResult) .lookupTrust span{
+  padding:7px 10px;
+  border:1px solid #ffffff12;
+  border-radius:999px;
+  background:#05080b8f;
+  backdrop-filter:blur(12px);
+}
+.homeLookup:not(.hasResult) .recentPlayerSearches{
+  padding:13px;
+  border:1px solid #ffffff13;
+  border-radius:14px;
+  background:#05080ba8;
+  backdrop-filter:blur(16px);
+}
+
+/* STORY CHAPTERS — each chapter uses a different new artwork. */
+.homeJourney{
+  position:relative;
+  z-index:2;
+  padding-top:78px!important;
+}
+.homeJourneyChapter{
+  min-height:360px;
+  border-color:#ffffff18!important;
+  box-shadow:0 26px 80px #0007;
+  background-color:#080b10!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+}
+.homeJourneyDiscover{
+  background-image:
+    linear-gradient(90deg,#070a0ff5 0%,#070a0fe8 42%,#070a0f8f 72%,#070a0fa6 100%),
+    linear-gradient(0deg,#070a0f 0%,transparent 55%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.png')!important;
+  background-position:center!important;
+}
+.homeJourneyRemember{
+  background-image:
+    linear-gradient(90deg,#080a10f2 0%,#080a10e5 45%,#080a108c 74%,#080a10b8 100%),
+    linear-gradient(0deg,#080a10 0%,transparent 58%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_13-2.png')!important;
+  background-position:center 46%!important;
+}
+.homeJourneyPeople{
+  background-image:
+    linear-gradient(90deg,#061016f3 0%,#061016e8 44%,#0610168f 72%,#061016ad 100%),
+    linear-gradient(0deg,#061016 0%,transparent 58%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_15-4.png')!important;
+  background-position:center!important;
+}
+.homeJourneyChapter:before{
+  z-index:1;
+  background:
+    linear-gradient(90deg,transparent 0 72%,#ffffff04 72.1%,transparent 72.2%),
+    radial-gradient(circle at 82% 24%,#ff477e17,transparent 30%)!important;
+}
+.homeJourneyRemember:before{
+  background:
+    linear-gradient(90deg,transparent 0 72%,#ffffff04 72.1%,transparent 72.2%),
+    radial-gradient(circle at 82% 24%,#ad88ff1b,transparent 30%)!important;
+}
+.homeJourneyPeople:before{
+  background:
+    linear-gradient(90deg,transparent 0 72%,#ffffff04 72.1%,transparent 72.2%),
+    radial-gradient(circle at 82% 24%,#75ddff19,transparent 30%)!important;
+}
+.homeJourneyChapter>aside{
+  border-color:#ffffff1b!important;
+  background:#04070abf!important;
+  box-shadow:inset 0 1px #ffffff08,0 12px 40px #0005;
+  backdrop-filter:blur(14px);
+}
+.homeJourneyChapter>aside .ztIcon{
+  filter:drop-shadow(0 0 18px currentColor);
+}
+.homeJourneyNo{
+  color:#ffffff24!important;
+  text-shadow:0 4px 24px #000;
+}
+.homeJourneyChapter h2,
+.homeJourneyChapter p,
+.homeJourneyChapter>div>small{
+  text-shadow:0 2px 16px #000;
+}
+
+/* Final CTA uses the neon canyon as a closing scene. */
+.homeJourneyEnd{
+  min-height:240px!important;
+  border-color:#ff477e30!important;
+  background:
+    linear-gradient(90deg,#06080ded 0%,#06080ddc 48%,#06080d8c 78%,#06080dad 100%),
+    linear-gradient(0deg,#06080d,transparent 65%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center 54%/cover no-repeat!important;
+  box-shadow:0 26px 80px #0007;
+}
+.homeJourneyEnd h2,
+.homeJourneyEnd small{
+  text-shadow:0 2px 18px #000;
+}
+.homeJourneyEnd button{
+  border-color:#ff8caf75!important;
+  box-shadow:0 12px 36px #ff477e24;
+}
+
+/* Result pages keep the same visual language without competing with data. */
+.riotStoryIntro{
+  background:
+    linear-gradient(90deg,#080b10f4 0%,#080b10e7 60%,#080b10a8 100%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.png') center/cover no-repeat!important;
+  box-shadow:0 18px 55px #0004;
+}
+.loggedLifeHeroCopy{
+  background:
+    linear-gradient(90deg,#080b10f4 0%,#080b10dd 64%,#080b1099 100%),
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center/cover no-repeat!important;
+}
+.playerIdentityStrip{
+  filter:drop-shadow(0 16px 36px #0003);
+}
+
+/* Mobile: the art stays visible, but reading/searching wins. */
+@media(max-width:760px){
+  .homeLookup:not(.hasResult) .homeHero{
+    min-height:auto!important;
+    padding:56px 14px 62px!important;
+  }
+  .homeLookup:not(.hasResult) .homeHeroBackdrop{
+    background:
+      linear-gradient(180deg,#05070a82 0%,#05070aa8 44%,#05070af5 100%),
+      linear-gradient(90deg,#05070a66 0%,#05070a8f 50%,#05070a66 100%),
+      url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.png') center top/auto 68% no-repeat!important;
+    opacity:.82!important;
+  }
+  .homeLookup:not(.hasResult) .homeHeroCopy{
+    padding:24px 0!important;
+    background:transparent;
+  }
+  .homeLookup:not(.hasResult) .homeHeroCopy h1{
+    font-size:clamp(44px,14vw,68px)!important;
+    letter-spacing:-3.6px!important;
+  }
+  .homeLookup:not(.hasResult) .homeHeroCopy>p{
+    font-size:13px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupTrust{
+    gap:6px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupTrust span{
+    padding:6px 8px;
+    font-size:7px!important;
+  }
+  .homeJourney{
+    padding:42px 12px 68px!important;
+  }
+  .homeJourneyChapter{
+    min-height:420px!important;
+    grid-template-columns:1fr!important;
+    align-content:end;
+    gap:14px!important;
+    padding:24px!important;
+    background-position:center!important;
+  }
+  .homeJourneyChapter:before{
+    background:linear-gradient(0deg,#06090df7 0%,#06090de8 52%,#06090d5e 100%)!important;
+  }
+  .homeJourneyNo{
+    position:absolute;
+    top:20px;
+    left:22px;
+    font-size:42px!important;
+  }
+  .homeJourneyChapter>div{
+    padding-top:120px;
+  }
+  .homeJourneyChapter>aside{
+    min-height:128px;
+  }
+  .homeJourneyChapter h2{
+    font-size:clamp(32px,10vw,46px)!important;
+    letter-spacing:-2.2px!important;
+  }
+  .homeJourneyEnd{
+    min-height:300px!important;
+    align-items:flex-end!important;
+    background:
+      linear-gradient(0deg,#06080df8 0%,#06080dcf 62%,#06080d78 100%),
+      url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center/cover no-repeat!important;
+  }
+}
+
+@media(prefers-reduced-motion:no-preference){
+  .homeLookup:not(.hasResult) .homeHeroBackdrop{
+    animation:z2HeroBreath 16s ease-in-out infinite alternate;
+  }
+}
+@keyframes z2HeroBreath{
+  from{transform:scale(1)}
+  to{transform:scale(1.018)}
+}
