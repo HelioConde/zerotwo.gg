@@ -105,7 +105,7 @@ Deno.serve(async req=>{
         const sameTeamIdPeers=isArena&&targetTeamId>0
           ?participants.filter((x:any)=>x?.puuid!==targetPuuid&&Number(x?.teamId||0)===targetTeamId)
           :[];
-        const useArenaTeamIdFallback=isArena&&targetSubteamId<=0&&targetPlacement<=0&&sameTeamIdPeers.length>0&&sameTeamIdPeers.length<=2;
+        const useArenaTeamIdFallback=isArena&&sameTeamIdPeers.length>0&&sameTeamIdPeers.length<=2;
 
         for(const p of participants){
           if(!p||p.puuid===targetPuuid)continue;
@@ -113,10 +113,10 @@ Deno.serve(async req=>{
           if(isArena){
             const mateSubteamId=Number(p.playerSubteamId||0);
             const matePlacement=Number(p.subteamPlacement||p.placement||0);
-            if(targetSubteamId>0&&mateSubteamId===targetSubteamId){
+            if(targetSubteamId>0&&mateSubteamId>0&&mateSubteamId===targetSubteamId){
               sameSide=true;
               detection.subteam++;
-            }else if(targetSubteamId<=0&&targetPlacement>0&&matePlacement===targetPlacement){
+            }else if(targetPlacement>0&&matePlacement>0&&matePlacement===targetPlacement){
               sameSide=true;
               detection.placement++;
             }else if(useArenaTeamIdFallback&&Number(p.teamId||0)===targetTeamId){
@@ -162,7 +162,11 @@ Deno.serve(async req=>{
           const mateChampion=text(p.championName,40);
           if(targetChampion&&mateChampion)inc(row.pairChampions,targetChampion+' + '+mateChampion);
         }
-        if(isArena&&targetSubteamId<=0&&targetPlacement<=0&&!useArenaTeamIdFallback)detection.unresolvedArena++;
+        if(isArena&&!participants.some((p:any)=>p?.puuid!==targetPuuid&&(
+          (targetSubteamId>0&&Number(p.playerSubteamId||0)===targetSubteamId)||
+          (targetPlacement>0&&Number(p.subteamPlacement||p.placement||0)===targetPlacement)||
+          (useArenaTeamIdFallback&&Number(p.teamId||0)===targetTeamId)
+        )))detection.unresolvedArena++;
       }
     }
 
