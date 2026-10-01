@@ -305,3 +305,54 @@
  .erasTrack>article{grid-template-columns:64px minmax(0,1fr);gap:13px}.eraVisual{width:58px;height:58px}.eraConnector{grid-column:1/-1;flex-direction:row;justify-content:center;min-width:0}
  .eraStats{display:grid;grid-template-columns:repeat(3,1fr)}.eraStats span{min-width:0}
 }
+
+
+/* Permanent Riot Wrapped ------------------------------------------------- */
+.riotWrapped{margin-top:10px;border:1px solid #ffffff10;background:radial-gradient(circle at 78% 0,#ff477e12,transparent 30%),linear-gradient(135deg,#080b11,#090c13);overflow:hidden}
+.riotWrapped>header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding:23px 25px;border-bottom:1px solid #ffffff0d}
+.riotWrapped header small{color:#ff79a3;font:900 8px ui-monospace,monospace;letter-spacing:1.2px}
+.riotWrapped h3{margin:6px 0 8px;font-size:clamp(27px,3vw,42px);line-height:.95;letter-spacing:-1.8px}
+.riotWrapped h3 span{color:#ff5e91}
+.riotWrapped header p{max-width:760px;margin:0;color:#7d899a;font-size:11px;line-height:1.6}
+.wrappedMeta{display:grid;grid-template-columns:1fr 1fr;gap:7px;min-width:260px}
+.wrappedMeta>span{padding:10px 12px;border:1px solid #ffffff10;background:#05080d}
+.wrappedMeta small,.wrappedMeta b,.wrappedMeta em{display:block}
+.wrappedMeta small{color:#5d687a!important;font-size:7px!important;letter-spacing:.8px!important}
+.wrappedMeta b{margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+.wrappedMeta b em{display:inline;color:#6f7a8b;font-size:8px;font-style:normal}
+.wrappedMeta>span>em{margin-top:2px;color:#657184;font-size:8px;font-style:normal}
+.wrappedCards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:#ffffff0a}
+.wrappedCard{position:relative;min-height:250px;overflow:hidden;background:#070a0f}
+.wrappedCard>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.05);transform:scale(1.035)}
+.wrappedCardShade{position:absolute;inset:0;background:linear-gradient(0deg,#05080df5 12%,#070a0f88 62%,#070a0f33)}
+.wrappedCard.pink .wrappedCardShade{background:linear-gradient(0deg,#11080df7 15%,#ff477e33 100%)}
+.wrappedCard.violet .wrappedCardShade{background:linear-gradient(0deg,#0a0712f7 15%,#8c6bff30 100%)}
+.wrappedCard.cyan .wrappedCardShade{background:linear-gradient(0deg,#061014f7 15%,#62d7ff28 100%)}
+.wrappedCard.green .wrappedCardShade{background:linear-gradient(0deg,#06100cf7 15%,#55d7a02b 100%)}
+.wrappedNumber{position:absolute;z-index:2;right:12px;top:10px;color:#ffffff42;font:950 20px ui-monospace,monospace}
+.wrappedCardCopy{position:absolute;z-index:2;left:15px;right:15px;bottom:15px}
+.wrappedCardCopy small{display:block;color:#c5ced9;font:900 7px ui-monospace,monospace;letter-spacing:.8px}
+.wrappedCardCopy h4{margin:5px 0 3px;font-size:18px;line-height:1;letter-spacing:-.6px}
+.wrappedCardCopy>b{display:block;color:#fff;font-size:28px;line-height:1}
+.wrappedCardCopy p{margin:7px 0 0;color:#99a4b3;font-size:9px;line-height:1.5}
+.riotWrapped>footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 17px;border-top:1px solid #ffffff0d}
+.riotWrapped>footer>div{display:flex;align-items:center;gap:9px;color:#6d798a;font-size:8px;line-height:1.5}
+.riotWrapped>footer>div .ztIcon{width:15px}.riotWrapped>footer>div b{color:#9ba6b5}
+.riotWrapped>footer>button{display:flex;align-items:center;gap:8px;border:1px solid #ff477e45;background:#ff477e0d;color:#ff8cad;padding:10px 12px;font-size:8px;font-weight:900;white-space:nowrap}
+.riotWrapped>footer>button .ztIcon{width:13px}
+@media(max-width:1100px){
+ .wrappedCards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .wrappedCard:nth-child(4),.wrappedCard:nth-child(5){min-height:210px}
+}
+@media(max-width:760px){
+ .riotWrapped>header{grid-template-columns:1fr}
+ .wrappedMeta{min-width:0}
+ .wrappedCards{grid-template-columns:1fr 1fr}
+ .wrappedCard{min-height:215px}
+ .riotWrapped>footer{align-items:flex-start;flex-direction:column}
+ .riotWrapped>footer>button{width:100%;justify-content:center}
+}
+@media(max-width:480px){
+ .wrappedCards{grid-template-columns:1fr}
+ .wrappedCard{min-height:190px}
+}
