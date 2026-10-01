@@ -3529,3 +3529,135 @@ summary:focus-visible{
     background:linear-gradient(0deg,#06080df8 0%,#06080dcf 62%,#06080d78 100%);
   }
 }
+
+/* ==========================================================================
+   2026-10-01 FIX PASS — hero side mapping, champion scale, Arena partners
+   ========================================================================== */
+
+/* Home artwork mapping:
+   League tab/side = Ahri (left), Valorant tab/side = Jett (right).
+   The uploaded art has them reversed, so mirror ONLY the decorative backdrop. */
+.homeLookup:not(.hasResult) .homeHeroBackdrop{
+  transform:scaleX(-1);
+  transform-origin:center center;
+}
+@media(prefers-reduced-motion:no-preference){
+  .homeLookup:not(.hasResult) .homeHeroBackdrop{
+    animation:z2HeroBreath 16s ease-in-out infinite alternate;
+  }
+}
+@keyframes z2HeroBreath{
+  from{transform:scaleX(-1) scale(1)}
+  to{transform:scaleX(-1) scale(1.018)}
+}
+
+/* Champion chapters: use full splash art as a restrained side accent instead
+   of blowing up the small square Data Dragon icon across half the card. */
+.riotChapterSignature,
+.riotChapterPeak{
+  min-height:350px;
+}
+.riotChapterArt{
+  top:10%;
+  right:3%;
+  bottom:auto;
+  left:auto;
+  width:min(34%,420px);
+  height:80%;
+  border-radius:22px;
+  object-fit:cover;
+  object-position:center 28%;
+  opacity:.36;
+  filter:saturate(.72) contrast(1.05) brightness(.72);
+  box-shadow:0 22px 70px #0009;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.62) 18%,#000 42%,#000 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.62) 18%,#000 42%,#000 100%);
+}
+.riotChapterArtSignature{object-position:center 24%}
+.riotChapterArtPeak{object-position:center 30%}
+.riotChapterShade{
+  background:
+    linear-gradient(90deg,#08090ffd 0%,#08090ff0 43%,#08090fc7 61%,#08090f66 78%,#08090fb8 100%);
+}
+.riotChapterSignature .riotChapterCopy,
+.riotChapterPeak .riotChapterCopy{
+  max-width:760px;
+}
+.riotChapterSignature .riotChapterHeroMetric,
+.riotChapterPeak .riotChapterHeroMetric{
+  background:#05080cd6;
+  backdrop-filter:blur(14px);
+}
+
+/* People/Arena state should never collapse to an unexplained empty gap. */
+.teammateEmpty{
+  min-height:150px;
+  display:flex;
+  align-items:center;
+  padding:24px!important;
+  background:#06090e!important;
+}
+.teammateEmptyState{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px;
+  border:1px dashed #75ddff24;
+  border-radius:16px;
+  background:linear-gradient(135deg,#75ddff08,#05080c);
+}
+.teammateEmptyState>.ztIcon{
+  width:26px;
+  flex:0 0 auto;
+  color:#75ddff;
+  opacity:.8;
+}
+.teammateEmptyState small,
+.teammateEmptyState b{display:block}
+.teammateEmptyState small{
+  color:#75ddff;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.teammateEmptyState b{
+  margin-top:5px;
+  font-size:11px;
+}
+.teammateEmptyState p{
+  max-width:720px;
+  margin:6px 0 0;
+  color:#7e8999;
+  font-size:9px;
+  line-height:1.55;
+}
+
+@media(max-width:980px){
+  .riotChapterArt{
+    width:42%;
+    height:60%;
+    top:5%;
+    right:2%;
+    opacity:.25;
+  }
+}
+@media(max-width:700px){
+  .riotChapterSignature,
+  .riotChapterPeak{min-height:0}
+  .riotChapterArt{
+    width:100%;
+    height:100%;
+    top:0;
+    right:0;
+    border-radius:0;
+    opacity:.12;
+    filter:saturate(.65) brightness(.58);
+    -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 35%,#000 100%);
+    mask-image:linear-gradient(0deg,transparent 0%,#000 35%,#000 100%);
+  }
+  .riotChapterShade{
+    background:linear-gradient(0deg,#08090ffd 0%,#08090fe8 56%,#08090fa8 100%);
+  }
+  .teammateEmpty{padding:14px!important}
+  .teammateEmptyState{align-items:flex-start;padding:16px}
+}
