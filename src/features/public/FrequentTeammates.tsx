@@ -56,7 +56,10 @@ export function FrequentTeammates({data,platform}:Props){
   const [attempted,setAttempted]=useState(false);
 
   const matchIds=useMemo(
-    ()=>[...new Set((data?.matches||[]).map((m:any)=>String(m?.id||'')).filter(Boolean))].slice(0,12),
+    ()=>[...new Set([...(data?.matches||[])]
+      .sort((a:any,b:any)=>Number(b?.playedAt||0)-Number(a?.playedAt||0))
+      .map((m:any)=>String(m?.id||''))
+      .filter(Boolean))].slice(0,12),
     [data]
   );
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
