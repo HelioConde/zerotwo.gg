@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
-import { ChampionCareer } from './ChampionCareer';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
 import { FrequentTeammates } from './FrequentTeammates';
 import { PlayerEras } from './PlayerEras';
-import { RiotWrapped } from './RiotWrapped';
 import {
   loadCloudRiotLifeSnapshots,
   mergeRiotLifeSnapshots,
@@ -204,123 +202,152 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const sampleDays=oldestMatch&&latest?Math.max(0,Math.ceil((playedAt(latest)-playedAt(oldestMatch))/86400000)):0;
   const daysSinceLatest=latest?Math.max(0,Math.floor((Date.now()-playedAt(latest))/86400000)):0;
 
-  return <section className="riotLife riotLifeV2" aria-label="Riot Life">
-    <header className="riotLifeHub">
-      <div className="riotLifeHubTitle">
+  const currentMode=data?.modeSummaries?.find((m:any)=>m.name===data?.summary?.mainContext)||null;
+  const currentMetric=currentMode?.name==='ARENA'
+    ?{label:'TOP 4',value:currentMode?.top4Rate!=null?currentMode.top4Rate+'%':'—'}
+    :{label:'RESULTADO',value:currentMode?.winRate!=null?currentMode.winRate+'%':data?.summary?.winRate!=null?data.summary.winRate+'%':'—'};
+  const currentModeGames=Number(currentMode?.games||matches.filter((m:any)=>m.context===data?.summary?.mainContext).length||0);
+  const signature=data?.championSummaries?.[0]||null;
+  const signatureChampion=signature?champions?.[signature.name]:null;
+  const signatureShare=signature&&matches.length?Math.round(Number(signature.games||0)/matches.length*100):0;
+  const peakMatch=useMemo(()=>[...matches].sort((a:any,b:any)=>num(b?.kda)-num(a?.kda))[0]||null,[matches]);
+  const peakChampion=peakMatch?champions?.[peakMatch.champion]:null;
+  const sampleLabel=sampleDays>0?sampleDays+' '+(sampleDays===1?'dia':'dias'):'janela recente';
+  const changeTitle=snapshotDelta
+    ?(snapshotDelta.modeChanged||snapshotDelta.championChanged?'SUA HISTÓRIA MUDOU ENTRE AS VISITAS.':'SUA MEMÓRIA JÁ COMEÇOU A CRESCER.')
+    :recentVsOld
+      ?(recentVsOld.recentChampion!==recentVsOld.oldChampion?'SEU FOCO MUDOU DENTRO DESTA JANELA.':'A FASE RECENTE NÃO É IGUAL À ANTERIOR.')
+      :'AINDA É CEDO PARA MEDIR UMA MUDANÇA.';
+  const recentKdaDelta=recentVsOld?recentVsOld.recentKda-recentVsOld.oldKda:null;
+  const recentResultDelta=recentVsOld?recentVsOld.recentWr-recentVsOld.oldWr:null;
+
+  return <section className="riotStory" aria-label="Riot Life em capítulos">
+    <header className="riotStoryIntro">
+      <div>
         <small>ZEROTWO // RIOT LIFE</small>
-        <h3>UMA CONTA. <span>UMA HISTÓRIA.</span></h3>
-        <p>Comece pelo resumo. Abra a história ou explore os detalhes só quando quiser aprofundar.</p>
+        <h2>ISTO NÃO É UM DASHBOARD.<br/><span>É A SUA HISTÓRIA RECENTE.</span></h2>
+        <p>{matches.length} partidas disponíveis organizadas em capítulos. Cada seção responde uma pergunta diferente e evita repetir o mesmo número.</p>
       </div>
-      <div className="riotLifeHubMeta">
+      <div className="riotStoryCoverage">
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
         <span><small>JANELA</small><b>{sampleDays||'—'}</b><em>{sampleDays===1?'dia':'dias'}</em></span>
         <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sync':'local'}</em></span>
       </div>
-      <nav className="riotLifeTabs" aria-label="Navegar pela Riot Life">
-        <button className={lifeView==='overview'?'active':''} onClick={()=>setLifeView('overview')}><span>01</span><b>RESUMO</b><small>O que importa agora</small></button>
-        <button className={lifeView==='story'?'active':''} onClick={()=>setLifeView('story')}><span>02</span><b>HISTÓRIA</b><small>Mudanças e pessoas</small></button>
-        <button className={lifeView==='explore'?'active':''} onClick={()=>setLifeView('explore')}><span>03</span><b>EXPLORAR</b><small>Campeões, patch e arcade</small></button>
-      </nav>
     </header>
 
-    {lifeView==='overview'&&<div className="riotLifeView riotLifeOverview">
-      <RiotWrapped data={data} platform={platform} champions={champions} ddv={ddv}/>
+    <nav className="riotStoryNav" aria-label="Capítulos da Riot Life">
+      <a href="#riot-now"><span>01</span><b>AGORA</b></a>
+      <a href="#riot-signature"><span>02</span><b>ASSINATURA</b></a>
+      <a href="#riot-session"><span>03</span><b>SESSÃO</b></a>
+      <a href="#riot-peak"><span>04</span><b>PONTO ALTO</b></a>
+      <a href="#riot-change"><span>05</span><b>MUDANÇA</b></a>
+      <a href="#riot-people"><span>06</span><b>PESSOAS</b></a>
+      <a href="#riot-next"><span>07</span><b>AGORA VAI</b></a>
+    </nav>
 
-      {latest&&daysSinceLatest>=14&&<aside className="returningPlayer">
+    <div className="riotStoryFlow">
+      <section id="riot-now" className="riotChapter riotChapterNow">
+        <div className="riotChapterNumber">01</div>
+        <div className="riotChapterCopy">
+          <small>AGORA // O PALCO DESTA FASE</small>
+          <h3>{data?.summary?.mainContext||'SEU CONTEXTO'} <span>É ONDE SUA HISTÓRIA ESTÁ ACONTECENDO.</span></h3>
+          <p>{currentModeGames>0?currentModeGames+' de '+matches.length+' partidas desta janela vieram desse contexto.':'Este é o contexto mais presente entre as partidas disponíveis.'} O número ao lado pertence só a este capítulo.</p>
+        </div>
+        <div className="riotChapterHeroMetric">
+          <b>{currentMetric.value}</b>
+          <span>{currentMetric.label}</span>
+          <em>{sampleLabel}</em>
+        </div>
+      </section>
+
+      {latest&&daysSinceLatest>=14&&<aside className="riotStoryInterlude returningPlayer">
         <div className="returningSignal"><span>{daysSinceLatest}</span><small>DIAS</small></div>
-        <div><small>RETURNING PLAYER</small><b>{daysSinceLatest>=60?'VOCÊ ESTÁ VOLTANDO DEPOIS DE UMA LONGA PAUSA.':'VOCÊ DEU UMA PAUSA NO LEAGUE.'}</b><p>A última partida observada nesta consulta foi em <strong>{formatDate(playedAt(latest))}</strong>. Abra Explorar para ver mudanças de patch ligadas ao seu histórico recente.</p></div>
-        <button onClick={()=>setLifeView('explore')}>VER O QUE MUDOU →</button>
+        <div><small>INTERLÚDIO // RETORNO</small><b>{daysSinceLatest>=60?'VOCÊ VOLTOU DEPOIS DE UMA PAUSA LONGA.':'HOUVE UMA PAUSA ENTRE VOCÊ E O LEAGUE.'}</b><p>A última partida observada foi em <strong>{formatDate(playedAt(latest))}</strong>. Isso muda a forma de ler os capítulos seguintes.</p></div>
       </aside>}
 
-      <div className="riotLifeSummaryGrid">
-        <article className="riotPassport riotLifeCard">
-          <div className="riotCardTop"><span>RIOT PASSPORT</span><b>01</b></div>
-          <div className="riotPassportIdentity">
-            <div className="riotPassportIcon">{data?.player?.profileIconId?<img src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/profileicon/'+data.player.profileIconId+'.png'} alt=""/>:'ZT'}</div>
-            <div><small>{String(platform).toUpperCase()}</small><h4>{data?.player?.gameName}<span>#{data?.player?.tagLine}</span></h4><p>Nível {data?.player?.level??'—'} · {data?.summary?.mainContext||'contexto em leitura'}</p></div>
-          </div>
-          <div className="riotPassportSignals">
-            <span><small>RANK</small><b>{passportRank||'Sem rank publicado'}</b></span>
-            <span><small>ASSINATURA</small><b>{data?.championSummaries?.[0]?.name||latest?.champion||'Em análise'}</b></span>
-            <span><small>MAESTRIA</small><b>{masteryChampion?.name||'Em análise'}</b></span>
-          </div>
-        </article>
-
-        <article className="riotLifeCard sessionLab">
-          <div className="riotCardTop"><span>ÚLTIMA SESSÃO</span><b>02</b></div>
-          {latestSessionDesc?<><h4>{latestSessionDesc.games} {latestSessionDesc.games===1?'PARTIDA':'PARTIDAS'} JUNTAS.</h4>
-            <div className="sessionNumbers">
-              <span><b>{latestSessionDesc.winRate}%</b><small>{latestSession.some((m:any)=>m.context==='ARENA')?'TOP 4 / W':'VITÓRIAS'}</small></span>
-              <span><b>{latestSessionDesc.avgKda.toFixed(2)}</b><small>KDA</small></span>
-              <span><b>{latestSessionDesc.duration}</b><small>DURAÇÃO</small></span>
-            </div>
-            <p>{latestSessionDesc.trend?<>Seu KDA <strong>{latestSessionDesc.trend}</strong> entre o começo e o fim da sessão.</>:<>Ainda precisamos de mais jogos na mesma sessão para medir uma mudança interna.</>}</p>
-          </>:<p>Ainda não há horários suficientes para reconstruir uma sessão.</p>}
-        </article>
-
-        <article className="riotLifeCard personalMeta">
-          <div className="riotCardTop"><span>PERSONAL META</span><b>03</b></div>
-          {personalMeta?<><small>MELHOR RESULTADO ENTRE RECORRENTES</small><h4>{personalMeta.name}</h4>
-            <div className="personalMetaBar"><span style={{width:Math.max(8,personalMeta.winRate)+'%'}}/></div>
-            <div className="personalMetaStats"><span><b>{personalMeta.games}</b><small>JOGOS</small></span><span><b>{personalMeta.winRate}%</b><small>RESULTADO</small></span><span><b>{personalMeta.avgKda.toFixed(2)}</b><small>KDA</small></span></div>
-          </>:<p>Precisamos de pelo menos duas partidas com o mesmo campeão.</p>}
-        </article>
-      </div>
-
-      {latest&&<article className="matchStory matchStoryV2">
-        <div className="matchStoryVisual">
-          {latestChampion&&<img src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+latestChampion.id+'.png'} alt=""/>}
-          <span>{latest.context}</span>
+      {signature&&<section id="riot-signature" className="riotChapter riotChapterSignature">
+        {signatureChampion&&<img className="riotChapterArt" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+signatureChampion.id+'.png'} alt=""/>}
+        <div className="riotChapterShade"/>
+        <div className="riotChapterNumber">02</div>
+        <div className="riotChapterCopy">
+          <small>ASSINATURA // QUEM MAIS APARECEU</small>
+          <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
+          <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p>
         </div>
-        <div className="matchStoryCopy">
-          <div className="riotCardTop"><span>ÚLTIMA PARTIDA</span><b>04</b></div>
-          <small>{formatDate(playedAt(latest))} · {latest.duration??'—'} MIN</small>
-          <h4>{latest.context==='ARENA'?(num(latest.placement)<=4?'TOP 4 COM '+latest.champion:latest.champion+' TERMINOU EM '+latest.placement+'º'):(latest.win?'VITÓRIA DE '+latest.champion:'DERROTA DE '+latest.champion)}.</h4>
-          <p>Você terminou com <strong>{latest.kills} / {latest.deaths} / {latest.assists}</strong> e KDA <strong>{latest.kda}</strong>.{latest.killParticipation!=null&&<> Participou de <strong>{latest.killParticipation}%</strong> das eliminações.</>}</p>
-          <button onClick={()=>document.querySelector<HTMLButtonElement>('.profileViewNav button[data-view="matches"]')?.click()}>ABRIR HISTÓRICO →</button>
+        <div className="riotChapterHeroMetric">
+          <b>{signatureShare}%</b>
+          <span>DA AMOSTRA</span>
+          <em>{signature.contexts?.join(' · ')||data?.summary?.mainContext||'recente'}</em>
         </div>
-      </article>}
+      </section>}
 
-      <button className="riotLifeContinue" onClick={()=>setLifeView('story')}><span><small>CONTINUAR A RIOT LIFE</small><b>VER COMO ESSA HISTÓRIA MUDOU</b></span><Icon name="arrow"/></button>
-    </div>}
-
-    {lifeView==='story'&&<div className="riotLifeView riotLifeStory">
-      <section className="riotSectionIntro">
-        <small>02 // HISTÓRIA</small>
-        <h3>O QUE MUDOU <span>ENTRE UM MOMENTO E OUTRO.</span></h3>
-        <p>Aqui entram apenas comparações temporais, eras observadas e jogadores que realmente se repetiram na amostra.</p>
+      <section id="riot-session" className="riotChapter riotChapterSession">
+        <div className="riotChapterNumber">03</div>
+        <div className="riotChapterCopy">
+          <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
+          <h3>{latestSessionDesc?latestSessionDesc.games+' '+(latestSessionDesc.games===1?'PARTIDA':'PARTIDAS')+' NA ÚLTIMA SESSÃO.':'AINDA NÃO HÁ UMA SESSÃO CLARA.'}</h3>
+          <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p>
+        </div>
+        {latestSessionDesc&&<div className="riotSessionFacts">
+          <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
+          <span><small>RESULTADO</small><b>{latestSessionDesc.winRate}%</b></span>
+          <span><small>JOGOS</small><b>{latestSessionDesc.games}</b></span>
+        </div>}
       </section>
 
-      <article className="riotLifeCard timeMachine timeMachineWide">
-        <div className="riotCardTop"><span>TIME MACHINE</span><b>01</b></div>
-        {snapshotDelta?<><small>DESDE {formatDate(snapshotDelta.since)}</small><h4>{snapshotDelta.modeChanged||snapshotDelta.championChanged?'SEU PERFIL MUDOU ENTRE AS VISITAS.':'SUA MEMÓRIA ESTÁ CRESCENDO.'}</h4>
-          <ul>
-            {snapshotDelta.modeChanged&&<li>Contexto principal: <b>{firstSnapshot?.mainContext}</b> → <strong>{currentSnapshot.mainContext}</strong></li>}
-            {snapshotDelta.championChanged&&<li>Campeão mais presente: <b>{firstSnapshot?.topChampion}</b> → <strong>{currentSnapshot.topChampion}</strong></li>}
-            {snapshotDelta.kda!=null&&Math.abs(snapshotDelta.kda)>=.1&&<li>KDA da amostra: <strong>{snapshotDelta.kda>0?'+':''}{snapshotDelta.kda.toFixed(2)}</strong></li>}
-            {snapshotDelta.winRate!=null&&Math.abs(snapshotDelta.winRate)>=1&&<li>Resultado da amostra: <strong>{snapshotDelta.winRate>0?'+':''}{snapshotDelta.winRate.toFixed(0)} p.p.</strong></li>}
-          </ul>
-        </>:recentVsOld?<><small>AMOSTRA ATUAL</small><h4>{recentVsOld.recentChampion!==recentVsOld.oldChampion?'SEU FOCO JÁ MUDOU DENTRO DESTA JANELA.':'COMPARE O COMEÇO COM O AGORA.'}</h4>
-          <div className="timeCompare"><span><small>ANTES</small><b>{recentVsOld.oldChampion||'—'}</b><em>{recentVsOld.oldMode||'—'} · {recentVsOld.oldWr}%</em></span><Icon name="arrow"/><span><small>AGORA</small><b>{recentVsOld.recentChampion||'—'}</b><em>{recentVsOld.recentMode||'—'} · {recentVsOld.recentWr}%</em></span></div>
-        </>:<p>Precisamos de mais histórico para construir uma comparação útil.</p>}
-      </article>
+      {peakMatch&&<section id="riot-peak" className="riotChapter riotChapterPeak">
+        {peakChampion&&<img className="riotChapterArt" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+peakChampion.id+'.png'} alt=""/>}
+        <div className="riotChapterShade"/>
+        <div className="riotChapterNumber">04</div>
+        <div className="riotChapterCopy">
+          <small>PONTO ALTO // UMA PARTIDA</small>
+          <h3>{peakMatch.champion||'UMA PARTIDA'} <span>FOI SEU MAIOR KDA DESTA JANELA.</span></h3>
+          <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p>
+        </div>
+        <div className="riotChapterHeroMetric">
+          <b>{peakMatch.kda??'—'}</b>
+          <span>KDA</span>
+          <em>{peakMatch.duration??'—'} min</em>
+        </div>
+      </section>}
 
-      <PlayerEras data={data} champions={champions} ddv={ddv}/>
-      <FrequentTeammates data={data} platform={platform}/>
-      <button className="riotLifeContinue" onClick={()=>setLifeView('explore')}><span><small>QUER APROFUNDAR?</small><b>EXPLORAR CAMPEÕES, PATCH E ARCADE</b></span><Icon name="arrow"/></button>
-    </div>}
-
-    {lifeView==='explore'&&<div className="riotLifeView riotLifeExplore">
-      <section className="riotSectionIntro">
-        <small>03 // EXPLORAR</small>
-        <h3>APROFUNDE SÓ NO QUE <span>TE INTERESSA.</span></h3>
-        <p>Campeões, mudanças de patch e experiências geradas pelo seu próprio histórico ficam aqui — fora do caminho principal.</p>
+      <section id="riot-change" className="riotChapterGroup riotChapterChange">
+        <div className="riotChapterGroupIntro">
+          <span className="riotChapterNumber">05</span>
+          <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p></div>
+          <div className="riotChangeFacts">
+            {snapshotDelta?.kda!=null&&Math.abs(snapshotDelta.kda)>=.1&&<span><small>KDA DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.kda>0?'+':''}{snapshotDelta.kda.toFixed(2)}</b></span>}
+            {snapshotDelta?.winRate!=null&&Math.abs(snapshotDelta.winRate)>=1&&<span><small>RESULTADO DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.winRate>0?'+':''}{snapshotDelta.winRate.toFixed(0)} p.p.</b></span>}
+            {!snapshotDelta&&recentKdaDelta!=null&&<span><small>KDA RECENTE VS. ANTERIOR</small><b>{recentKdaDelta>=0?'+':''}{recentKdaDelta.toFixed(2)}</b></span>}
+            {!snapshotDelta&&recentResultDelta!=null&&<span><small>RESULTADO RECENTE VS. ANTERIOR</small><b>{recentResultDelta>=0?'+':''}{recentResultDelta} p.p.</b></span>}
+          </div>
+        </div>
+        <PlayerEras data={data} champions={champions} ddv={ddv}/>
       </section>
-      <div className="riotExploreOrder">
-        <ChampionCareer data={data} champions={champions} ddv={ddv}/>
-        <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
-        <RiotArcade data={data}/>
-      </div>
-    </div>}
+
+      <section id="riot-people" className="riotChapterGroup riotChapterPeople">
+        <div className="riotChapterGroupIntro">
+          <span className="riotChapterNumber">06</span>
+          <div><small>PESSOAS // QUEM SE REPETE</small><h3>ALGUNS NOMES VOLTAM A APARECER.</h3><p>Aqui não tentamos medir amizade ou “sinergia”. Só mostramos quem realmente se repetiu nas partidas analisadas.</p></div>
+        </div>
+        <FrequentTeammates data={data} platform={platform}/>
+      </section>
+
+      <section id="riot-next" className="riotChapterGroup riotChapterNext">
+        <div className="riotChapterGroupIntro">
+          <span className="riotChapterNumber">07</span>
+          <div><small>AGORA VAI // O QUE VALE OLHAR</small><h3>O RESTO SÓ ENTRA SE TROUXER ALGO NOVO.</h3><p>Patch e experiências interativas ficam no fim porque adicionam contexto novo; não repetem o resumo da sua conta.</p></div>
+        </div>
+        <div className="riotStoryExtras">
+          <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
+          <RiotArcade data={data}/>
+        </div>
+      </section>
+    </div>
+
+    <footer className="riotStoryEnd">
+      <Icon name="dna"/>
+      <div><small>FIM DA HISTÓRIA PRINCIPAL</small><b>OS DADOS BRUTOS CONTINUAM DISPONÍVEIS ABAIXO.</b><p>Partidas, campeões, maestria e DNA ficam separados da narrativa para não competir com ela.</p></div>
+    </footer>
   </section>;
 }
