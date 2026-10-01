@@ -1,0 +1,82 @@
+/* Riot Life — narrative layer over the existing public player profile. */
+.riotLife{margin:18px 0 20px;padding:0}
+.riotLifeHeader{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;padding:24px 26px;border:1px solid #ffffff10;background:radial-gradient(circle at 82% 0,#ff477e14,transparent 31%),linear-gradient(130deg,#090d14,#06090e)}
+.riotLifeHeader>div:first-child>small,.riotCardTop span,.riotPatchPreview small{font:900 9px ui-monospace,monospace;letter-spacing:1.45px;color:#ff6f9b}
+.riotLifeHeader h3{margin:7px 0 9px;font-size:clamp(26px,3.2vw,43px);line-height:.95;letter-spacing:-2px}
+.riotLifeHeader h3 span{color:#ff477e}
+.riotLifeHeader p{max-width:720px;margin:0;color:#8995a6;font-size:12px;line-height:1.6}
+.riotLifeCoverage{display:flex;gap:7px}
+.riotLifeCoverage>span{min-width:94px;padding:11px 12px;border:1px solid #ffffff10;background:#090c12}
+.riotLifeCoverage small,.riotLifeCoverage b,.riotLifeCoverage em{display:block}
+.riotLifeCoverage small{color:#596678;font:850 7px ui-monospace,monospace;letter-spacing:.7px}
+.riotLifeCoverage b{margin-top:5px;font-size:19px}
+.riotLifeCoverage em{margin-top:1px;color:#6d7888;font-size:9px;font-style:normal}
+.riotLifeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.riotLifeCard{position:relative;min-height:245px;padding:22px;border:1px solid #ffffff0f;background:#080b11;overflow:hidden}
+.riotLifeCard:after{content:'';position:absolute;right:-55px;bottom:-85px;width:190px;height:190px;border-radius:50%;border:1px solid #ff477e10;box-shadow:0 0 0 30px #ff477e05,0 0 0 60px #ff477e025;pointer-events:none}
+.riotCardTop{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.riotCardTop b{color:#303846;font:950 18px ui-monospace,monospace}
+.riotLifeCard h4,.matchStory h4{position:relative;z-index:1;margin:18px 0 10px;font-size:22px;line-height:1.05;letter-spacing:-.8px}
+.riotLifeCard>p,.matchStory p,.riotPatchPreview p{position:relative;z-index:1;color:#7d899a;font-size:11px;line-height:1.65}
+.riotLifeCard strong,.matchStory strong{color:#fff}
+.riotPassport{background:radial-gradient(circle at 85% 20%,#ff477e13,transparent 32%),#080b11}
+.riotPassportIdentity{position:relative;z-index:1;display:flex;align-items:center;gap:14px;margin:19px 0 16px}
+.riotPassportIcon{width:64px;height:64px;display:grid;place-items:center;border:1px solid #ff477e55;background:#151019;color:#ff6f9b;font-size:18px;font-weight:950;overflow:hidden;clip-path:polygon(50% 0,94% 24%,87% 80%,50% 100%,13% 80%,6% 24%)}
+.riotPassportIcon img{width:100%;height:100%;object-fit:cover}
+.riotPassportIdentity small{color:#687487;font:900 7px ui-monospace,monospace}
+.riotPassportIdentity h4{margin:4px 0 2px;font-size:21px}
+.riotPassportIdentity h4 span{color:#ff6f9b;font-size:11px;margin-left:3px}
+.riotPassportIdentity p{margin:0;color:#7c8798;font-size:10px}
+.riotPassportSignals{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.riotPassportSignals span,.personalMetaStats span{padding:10px;border:1px solid #ffffff0d;background:#05080d}
+.riotPassportSignals small,.personalMetaStats small,.sessionNumbers small,.timeCompare small{display:block;color:#596678;font:850 7px ui-monospace,monospace}
+.riotPassportSignals b{display:block;margin-top:4px;color:#c9d0da;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sessionNumbers{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:17px 0 12px}
+.sessionNumbers span{padding:12px;border-top:1px solid #ff477e25;background:#ffffff025}
+.sessionNumbers b{display:block;font-size:19px}
+.sessionNumbers small{margin-top:3px}
+.personalMeta>small,.timeMachine>small{display:block;margin-top:18px;color:#657184;font:800 7px ui-monospace,monospace;letter-spacing:.6px}
+.personalMeta h4{font-size:31px;color:#fff}
+.personalMetaBar{height:5px;background:#ffffff09;overflow:hidden;margin:0 0 13px}
+.personalMetaBar span{display:block;height:100%;background:linear-gradient(90deg,#ff477e,#ff8bad)}
+.personalMetaStats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.personalMetaStats b{display:block;font-size:15px}
+.timeMachine{background:linear-gradient(145deg,#070a0f,#0d0b12)}
+.timeMachine ul{position:relative;z-index:1;display:grid;gap:7px;margin:15px 0;padding:0;list-style:none}
+.timeMachine li{padding:9px 10px;border-left:2px solid #ff477e55;background:#ffffff025;color:#7f8a9b;font-size:10px}
+.timeMachine li b{color:#737f90;font-weight:750}.timeMachine li strong{color:#f1f3f6}
+.timeCompare{position:relative;z-index:1;display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:10px;margin:17px 0}
+.timeCompare>span{padding:12px;border:1px solid #ffffff0d;background:#05080d}
+.timeCompare b,.timeCompare em{display:block}.timeCompare b{margin-top:5px;font-size:12px}.timeCompare em{margin-top:3px;color:#6d788a;font-size:9px;font-style:normal}
+.timeCompare .ztIcon{width:14px;opacity:.6}
+.matchStory{display:grid;grid-template-columns:240px minmax(0,1fr);margin-top:10px;border:1px solid #ff477e22;background:linear-gradient(120deg,#100b11,#070a0f);overflow:hidden}
+.matchStoryVisual{position:relative;min-height:245px;background:#0a0d13;overflow:hidden}
+.matchStoryVisual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 35%,#100b11),linear-gradient(0deg,#070a0faa,transparent 55%)}
+.matchStoryVisual img{width:100%;height:100%;object-fit:cover;transform:scale(1.06)}
+.matchStoryVisual>span{position:absolute;z-index:2;left:16px;bottom:15px;padding:6px 8px;background:#06090ed9;border:1px solid #ffffff14;color:#ff769f;font:900 8px ui-monospace,monospace}
+.matchStoryCopy{padding:23px 26px}
+.matchStoryCopy>small{display:block;margin-top:19px;color:#657184;font:850 8px ui-monospace,monospace}
+.matchStory h4{font-size:27px}
+.matchStory p{max-width:800px;font-size:12px}
+.matchStory button{margin-top:9px;border:1px solid #ff477e55;background:#ff477e0d;color:#ff82a7;padding:11px 13px;font-size:9px;font-weight:900}
+.riotPatchPreview{display:flex;align-items:center;gap:16px;margin-top:10px;padding:17px 20px;border:1px dashed #ffffff18;background:#06090e}
+.riotPatchPreview>.ztIcon{width:24px;opacity:.8}
+.riotPatchPreview b{display:block;margin:4px 0;color:#aeb7c4;font-size:10px}
+.riotPatchPreview p{margin:0;font-size:9px}
+@media(max-width:860px){
+ .riotLifeHeader{grid-template-columns:1fr;align-items:start;padding:20px}
+ .riotLifeCoverage{width:100%;overflow-x:auto}.riotLifeCoverage>span{flex:1;min-width:82px}
+ .riotLifeGrid{grid-template-columns:1fr}
+ .riotLifeCard{min-height:auto;padding:19px}
+ .matchStory{grid-template-columns:1fr}.matchStoryVisual{min-height:185px;max-height:240px}
+ .matchStoryCopy{padding:20px}
+}
+@media(max-width:520px){
+ .riotLifeHeader h3{font-size:30px}
+ .riotLifeCoverage>span{padding:9px}
+ .riotPassportSignals{grid-template-columns:1fr}
+ .sessionNumbers,.personalMetaStats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .sessionNumbers b{font-size:16px}
+ .timeCompare{grid-template-columns:1fr}.timeCompare>.ztIcon{transform:rotate(90deg);margin:auto}
+ .riotPatchPreview{align-items:flex-start}
+}
