@@ -34,7 +34,7 @@ export function RiotArcade({data}:Props){
     const damages=uniq(matches.map((m:any)=>Math.round(Number(m.damage||0)/100)/10).filter((x:number)=>x>0)).sort((a,b)=>b-a);
     if(damages.length>=2&&qs.length<3){
       const options=damages.slice(0,3).map(x=>x+'k');
-      qs.push({id:'damage',prompt:'QUAL FOI O MAIOR DANO OBSERVADO?',options,answer=String(damages[0])+'k',note:'O pico observado foi '+damages[0]+'k de dano.'} as any);
+      qs.push({id:'damage',prompt:'QUAL FOI O MAIOR DANO OBSERVADO?',options,answer:String(damages[0])+'k',note:'O pico observado foi '+damages[0]+'k de dano.'});
     }
     return qs.slice(0,3);
   },[data]);
