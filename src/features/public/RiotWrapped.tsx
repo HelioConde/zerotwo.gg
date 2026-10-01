@@ -216,7 +216,7 @@ export function RiotWrapped({data,platform,champions,ddv}:Props){
 
     <footer>
       <div><Icon name="spark"/><span><b>WRAPPED PERMANENTE.</b> Não precisa esperar dezembro: sempre que sua amostra mudar, este resumo pode mudar junto.</span></div>
-      <button onClick={share}><Icon name={shared==='done'?'check':'share'}/>{shared==='done'?'COPIADO / COMPARTILHADO':'COMPARTILHAR MINHA RIOT LIFE'}</button>
+      <button onClick={share}><Icon name={shared==='done'?'check':'arrow'}/>{shared==='done'?'COPIADO / COMPARTILHADO':'COMPARTILHAR MINHA RIOT LIFE'}</button>
     </footer>
   </section>;
 }
