@@ -105,14 +105,15 @@ export function RiotWrapped({data,platform,champions,ddv}:Props){
     }
 
     if(matches.length>=6&&(Math.abs(kdaDelta)>=.25||Math.abs(resultDelta)>=10)){
-      const improving=kdaDelta>0||resultDelta>0;
+      const bothUp=kdaDelta>0&&resultDelta>0;
+      const bothDown=kdaDelta<0&&resultDelta<0;
       highlights.push({
         id:'shift',
         eyebrow:'MUDANÇA RECENTE',
-        title:improving?'A AMOSTRA RECENTE SUBIU':'A AMOSTRA RECENTE CAIU',
+        title:bothUp?'A AMOSTRA RECENTE SUBIU':bothDown?'A AMOSTRA RECENTE CAIU':'OS SINAIS RECENTES SE DIVIDIRAM',
         value:(kdaDelta>=0?'+':'')+kdaDelta.toFixed(2),
         detail:'KDA recente vs. parte anterior · '+(resultDelta>=0?'+':'')+resultDelta+' p.p. de resultado.',
-        tone:improving?'green':'neutral'
+        tone:bothUp?'green':bothDown?'neutral':'violet'
       });
     }
 
