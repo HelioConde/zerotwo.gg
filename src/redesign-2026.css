@@ -2418,3 +2418,780 @@ summary:focus-visible{
     min-width:104px!important;
   }
 }
+
+
+/* ==========================================================================
+   RIOT LIFE STORY — chapter-based layout inspired by editorial recaps
+   ========================================================================== */
+
+/* HOME JOURNEY */
+.homeJourney{
+  max-width:1180px;
+  margin:0 auto;
+  padding:64px 24px 90px;
+  display:grid;
+  gap:12px;
+}
+.homeJourneyChapter{
+  position:relative;
+  min-height:310px;
+  display:grid;
+  grid-template-columns:72px minmax(0,1.35fr) minmax(260px,.65fr);
+  gap:28px;
+  align-items:center;
+  padding:42px;
+  border:1px solid var(--z2-line);
+  border-radius:26px;
+  overflow:hidden;
+}
+.homeJourneyChapter:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.85;
+}
+.homeJourneyDiscover{
+  background:linear-gradient(135deg,#0b0f15,#0a0c12);
+}
+.homeJourneyDiscover:before{
+  background:radial-gradient(circle at 78% 22%,#ff477e18,transparent 34%);
+}
+.homeJourneyRemember{
+  background:linear-gradient(135deg,#0b0d16,#090b10);
+}
+.homeJourneyRemember:before{
+  background:radial-gradient(circle at 18% 82%,#ad88ff18,transparent 34%);
+}
+.homeJourneyPeople{
+  background:linear-gradient(135deg,#081014,#080b10);
+}
+.homeJourneyPeople:before{
+  background:radial-gradient(circle at 82% 18%,#75ddff14,transparent 34%);
+}
+.homeJourneyNo{
+  position:relative;
+  z-index:2;
+  align-self:start;
+  color:#ffffff18;
+  font:1000 56px/.9 ui-monospace,monospace;
+  letter-spacing:-4px;
+}
+.homeJourneyChapter>div,
+.homeJourneyChapter>aside{position:relative;z-index:2}
+.homeJourneyChapter>div>small{
+  color:var(--z2-pink-soft);
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1.1px;
+}
+.homeJourneyChapter h2{
+  max-width:720px;
+  margin:8px 0 14px;
+  font-size:clamp(34px,4.5vw,58px);
+  line-height:.92;
+  letter-spacing:-3px;
+}
+.homeJourneyChapter h2 span{color:var(--z2-pink)}
+.homeJourneyRemember h2 span{color:#c1a9ff}
+.homeJourneyPeople h2 span{color:#8ce3ff}
+.homeJourneyChapter p{
+  max-width:690px;
+  margin:0;
+  color:#98a3b2;
+  font-size:11px;
+  line-height:1.7;
+}
+.homeJourneyChapter>aside{
+  align-self:stretch;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:22px;
+  border:1px solid #ffffff10;
+  border-radius:18px;
+  background:#05080c88;
+}
+.homeJourneyChapter>aside .ztIcon{width:24px;margin-bottom:auto}
+.homeJourneyChapter>aside b,
+.homeJourneyChapter>aside small{display:block}
+.homeJourneyChapter>aside b{font-size:11px}
+.homeJourneyChapter>aside small{
+  margin-top:5px;
+  color:#7c8797;
+  font-size:8px;
+  line-height:1.45;
+}
+.homeJourneyEnd{
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30px;
+  padding:34px 38px;
+  border:1px solid #ff477e24;
+  border-radius:22px;
+  background:linear-gradient(90deg,#ff477e0b,#080b10 62%);
+}
+.homeJourneyEnd small{
+  color:#ff7da5;
+  font:900 8px ui-monospace,monospace;
+}
+.homeJourneyEnd h2{
+  margin:6px 0 0;
+  font-size:32px;
+  line-height:.95;
+  letter-spacing:-1.7px;
+}
+.homeJourneyEnd h2 span{color:var(--z2-pink)}
+.homeJourneyEnd button{
+  min-height:46px;
+  padding:0 18px;
+  border:1px solid #ff477e40;
+  border-radius:11px;
+  background:#ff477e;
+  color:#fff;
+  font-size:8px;
+  font-weight:950;
+}
+
+/* PLAYER IDENTITY — only identity/rank/share, no repeated analysis */
+.playerIdentityStrip{
+  display:grid;
+  grid-template-columns:minmax(300px,1fr) auto auto;
+  gap:10px;
+  align-items:stretch;
+  margin-bottom:10px;
+}
+.playerIdentityMain,
+.playerIdentityRanks,
+.playerShare{
+  border:1px solid var(--z2-line);
+  border-radius:16px;
+  background:#080b10;
+}
+.playerIdentityMain{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 18px;
+}
+.playerIdentityMain .publicPlayerBadge{
+  width:60px!important;
+  height:60px!important;
+  flex:0 0 auto;
+  border-radius:14px!important;
+}
+.playerIdentityMain small{
+  color:#7a8697;
+  font:850 7px ui-monospace,monospace;
+}
+.playerIdentityMain h2{
+  margin:3px 0 2px;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-1px;
+}
+.playerIdentityMain h2 span{
+  margin-left:3px;
+  color:#ff759e;
+  font-size:10px;
+}
+.playerIdentityMain p{
+  margin:0;
+  color:#8490a0;
+  font-size:8px;
+}
+.playerIdentityRanks{
+  display:flex;
+  gap:1px;
+  padding:0;
+  overflow:hidden;
+  background:#ffffff08;
+}
+.playerIdentityRanks>span{
+  min-width:128px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:11px 14px;
+  background:#080b10;
+}
+.playerIdentityRanks small,
+.playerIdentityRanks b,
+.playerIdentityRanks em{display:block}
+.playerIdentityRanks small{
+  color:#687486;
+  font:850 6px ui-monospace,monospace;
+}
+.playerIdentityRanks b{
+  margin-top:4px;
+  font-size:11px;
+}
+.playerIdentityRanks em{
+  margin-top:2px;
+  color:#7d8999;
+  font-size:7px;
+  font-style:normal;
+}
+.playerShare{
+  min-width:132px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 14px;
+  color:#ff86aa;
+  font-size:8px;
+  font-weight:900;
+}
+.playerShare .ztIcon{width:13px}
+
+/* STORY FRAME */
+.riotStory{
+  margin-top:10px;
+}
+.riotStoryIntro{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) auto;
+  gap:26px;
+  align-items:end;
+  padding:34px 38px;
+  border:1px solid var(--z2-line);
+  border-radius:24px 24px 0 0;
+  background:
+    radial-gradient(circle at 82% 14%,#ff477e10,transparent 32%),
+    #080b10;
+}
+.riotStoryIntro small{
+  color:#ff7da5;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1.2px;
+}
+.riotStoryIntro h2{
+  margin:7px 0 10px;
+  font-size:clamp(34px,4.4vw,58px);
+  line-height:.91;
+  letter-spacing:-3px;
+}
+.riotStoryIntro h2 span{color:var(--z2-pink)}
+.riotStoryIntro p{
+  max-width:720px;
+  margin:0;
+  color:#98a3b2;
+  font-size:10px;
+  line-height:1.65;
+}
+.riotStoryCoverage{
+  display:flex;
+  gap:6px;
+}
+.riotStoryCoverage>span{
+  min-width:82px;
+  padding:10px 11px;
+  border:1px solid #ffffff11;
+  border-radius:11px;
+  background:#05080c;
+}
+.riotStoryCoverage small,
+.riotStoryCoverage b,
+.riotStoryCoverage em{display:block}
+.riotStoryCoverage small{
+  color:#6d798a;
+  font:850 6px ui-monospace,monospace;
+}
+.riotStoryCoverage b{
+  margin-top:4px;
+  font-size:17px;
+}
+.riotStoryCoverage em{
+  margin-top:2px;
+  color:#758193;
+  font-size:7px;
+  font-style:normal;
+}
+.riotStoryNav{
+  position:sticky;
+  top:61px;
+  z-index:33;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  border:1px solid var(--z2-line);
+  border-top:0;
+  background:#06090deb;
+  backdrop-filter:blur(16px);
+}
+.riotStoryNav a{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-right:1px solid #ffffff0b;
+  color:#7d8999;
+  text-decoration:none;
+}
+.riotStoryNav a:last-child{border-right:0}
+.riotStoryNav a span{
+  color:#ff658f;
+  font:900 7px ui-monospace,monospace;
+}
+.riotStoryNav a b{font-size:7px}
+.riotStoryNav a:hover{
+  color:#fff;
+  background:#ff477e08;
+}
+.riotStoryFlow{
+  display:grid;
+  gap:12px;
+  padding-top:12px;
+}
+
+/* INDIVIDUAL CHAPTERS */
+.riotChapter{
+  position:relative;
+  min-height:390px;
+  display:grid;
+  grid-template-columns:84px minmax(0,1.25fr) minmax(220px,.55fr);
+  gap:24px;
+  align-items:center;
+  padding:44px;
+  border:1px solid var(--z2-line);
+  border-radius:24px;
+  overflow:hidden;
+  isolation:isolate;
+}
+.riotChapterNow{
+  background:
+    radial-gradient(circle at 82% 20%,#ff477e18,transparent 34%),
+    linear-gradient(145deg,#0b0d13,#07090e);
+}
+.riotChapterSignature{
+  background:#0b0910;
+}
+.riotChapterSession{
+  background:
+    radial-gradient(circle at 20% 82%,#75ddff13,transparent 36%),
+    linear-gradient(145deg,#071016,#070a0e);
+}
+.riotChapterPeak{
+  background:#0b0a10;
+}
+.riotChapterNumber{
+  position:relative;
+  z-index:4;
+  align-self:start;
+  color:#ffffff18;
+  font:1000 66px/.86 ui-monospace,monospace;
+  letter-spacing:-5px;
+}
+.riotChapterCopy{
+  position:relative;
+  z-index:4;
+}
+.riotChapterCopy>small,
+.riotChapterGroupIntro>div>small{
+  color:#ff769e;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1.1px;
+}
+.riotChapterCopy h3,
+.riotChapterGroupIntro h3{
+  max-width:760px;
+  margin:8px 0 12px;
+  font-size:clamp(34px,4vw,54px);
+  line-height:.92;
+  letter-spacing:-2.8px;
+}
+.riotChapterCopy h3 span{color:#ff6c96}
+.riotChapterCopy p,
+.riotChapterGroupIntro p{
+  max-width:690px;
+  margin:0;
+  color:#9ba6b5;
+  font-size:10px;
+  line-height:1.65;
+}
+.riotChapterCopy p strong{color:#e1e6ec}
+.riotChapterHeroMetric{
+  position:relative;
+  z-index:4;
+  align-self:stretch;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:22px;
+  border:1px solid #ffffff11;
+  border-radius:18px;
+  background:#05080c99;
+}
+.riotChapterHeroMetric b{
+  font-size:clamp(52px,6vw,78px);
+  line-height:.82;
+  letter-spacing:-4px;
+}
+.riotChapterHeroMetric span{
+  margin-top:10px;
+  color:#ff729b;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.riotChapterHeroMetric em{
+  margin-top:5px;
+  color:#778394;
+  font-size:8px;
+  font-style:normal;
+}
+.riotChapterArt{
+  position:absolute;
+  z-index:0;
+  inset:0 0 0 auto;
+  width:58%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 22%;
+  filter:saturate(.85) contrast(1.06);
+  opacity:.72;
+}
+.riotChapterShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:linear-gradient(90deg,#08090ff8 0%,#08090fd8 42%,#08090f68 72%,#08090f85 100%);
+}
+.riotChapterSignature .riotChapterHeroMetric,
+.riotChapterPeak .riotChapterHeroMetric{
+  backdrop-filter:blur(8px);
+}
+.riotSessionFacts{
+  display:grid;
+  gap:6px;
+  position:relative;
+  z-index:4;
+}
+.riotSessionFacts>span{
+  padding:15px 17px;
+  border:1px solid #ffffff10;
+  border-radius:12px;
+  background:#05080c;
+}
+.riotSessionFacts small,
+.riotSessionFacts b{display:block}
+.riotSessionFacts small{
+  color:#6e7a8b;
+  font:850 7px ui-monospace,monospace;
+}
+.riotSessionFacts b{
+  margin-top:5px;
+  font-size:20px;
+}
+
+/* GROUP CHAPTERS */
+.riotChapterGroup{
+  border:1px solid var(--z2-line);
+  border-radius:24px;
+  overflow:hidden;
+  background:#070a0f;
+}
+.riotChapterGroupIntro{
+  display:grid;
+  grid-template-columns:84px minmax(0,1fr) auto;
+  gap:24px;
+  align-items:center;
+  padding:40px 44px;
+  border-bottom:1px solid #ffffff0c;
+}
+.riotChapterGroupIntro .riotChapterNumber{align-self:start}
+.riotChapterChange .riotChapterGroupIntro{
+  background:radial-gradient(circle at 84% 18%,#ad88ff12,transparent 32%),#090a11;
+}
+.riotChapterPeople .riotChapterGroupIntro{
+  background:radial-gradient(circle at 82% 18%,#75ddff0f,transparent 32%),#071015;
+}
+.riotChapterNext .riotChapterGroupIntro{
+  background:radial-gradient(circle at 84% 18%,#61daa70d,transparent 32%),#07100d;
+}
+.riotChangeFacts{
+  min-width:250px;
+  display:grid;
+  gap:6px;
+}
+.riotChangeFacts>span{
+  padding:12px 14px;
+  border:1px solid #ffffff0f;
+  border-radius:11px;
+  background:#05080c;
+}
+.riotChangeFacts small,
+.riotChangeFacts b{display:block}
+.riotChangeFacts small{
+  color:#6e7989;
+  font:850 6px ui-monospace,monospace;
+}
+.riotChangeFacts b{
+  margin-top:5px;
+  font-size:17px;
+}
+.riotChapterGroup>.playerEras,
+.riotChapterGroup>.frequentTeammates{
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+}
+.riotChapterGroup>.playerEras>header,
+.riotChapterGroup>.frequentTeammates>header{
+  display:none!important;
+}
+.riotChapterGroup>.playerEras{
+  border-top:0!important;
+}
+.riotChapterGroup>.frequentTeammates{
+  background:#06090e!important;
+}
+.riotStoryExtras{
+  display:grid;
+  gap:1px;
+  background:#ffffff08;
+}
+.riotStoryExtras>*{
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+}
+.riotStoryEnd{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:12px;
+  padding:20px 24px;
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#070a0f;
+}
+.riotStoryEnd>.ztIcon{width:20px}
+.riotStoryEnd small,
+.riotStoryEnd b{display:block}
+.riotStoryEnd small{
+  color:#687486;
+  font:850 7px ui-monospace,monospace;
+}
+.riotStoryEnd b{
+  margin-top:3px;
+  font-size:10px;
+}
+.riotStoryEnd p{
+  margin:4px 0 0;
+  color:#748091;
+  font-size:8px;
+}
+
+/* Interlude uses less visual weight than a chapter. */
+.riotStoryInterlude{
+  margin:0!important;
+  border-radius:18px!important;
+}
+
+/* TECHNICAL VAULT */
+.gameDataVault{
+  margin-top:14px;
+  border:1px solid var(--z2-line);
+  border-radius:18px;
+  background:#070a0f;
+  overflow:hidden;
+}
+.gameDataVault>summary{
+  min-height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:14px 18px;
+  list-style:none;
+  color:#a4aebb;
+}
+.gameDataVault>summary::-webkit-details-marker{display:none}
+.gameDataVault>summary span small,
+.gameDataVault>summary span b,
+.gameDataVault>summary span em{display:block}
+.gameDataVault>summary span small{
+  color:#687486;
+  font:850 7px ui-monospace,monospace;
+}
+.gameDataVault>summary span b{
+  margin-top:4px;
+  font-size:11px;
+}
+.gameDataVault>summary span em{
+  margin-top:2px;
+  color:#657184;
+  font-size:8px;
+  font-style:normal;
+}
+.gameDataVault>summary>.ztIcon{
+  width:15px;
+  transition:transform .2s ease;
+}
+.gameDataVault[open]>summary{
+  border-bottom:1px solid var(--z2-line);
+}
+.gameDataVault[open]>summary>.ztIcon{transform:rotate(90deg)}
+.gameDataVaultBody{
+  padding:0 10px 10px;
+}
+.gameDataVault .gameDataExplorer{
+  margin-top:0!important;
+  padding-top:18px!important;
+  border-top:0!important;
+}
+
+/* Smaller screens */
+@media(max-width:980px){
+  .homeJourneyChapter{
+    grid-template-columns:58px minmax(0,1fr);
+  }
+  .homeJourneyChapter>aside{
+    grid-column:2;
+    min-height:120px;
+  }
+  .playerIdentityStrip{
+    grid-template-columns:minmax(0,1fr) auto;
+  }
+  .playerIdentityRanks{
+    grid-column:1/-1;
+    grid-row:2;
+  }
+  .playerShare{
+    grid-column:2;
+    grid-row:1;
+  }
+  .riotStoryIntro{
+    grid-template-columns:1fr;
+  }
+  .riotStoryCoverage{justify-content:flex-start}
+  .riotStoryNav{grid-template-columns:repeat(4,1fr);position:static}
+  .riotChapter{
+    grid-template-columns:64px minmax(0,1fr);
+  }
+  .riotChapterHeroMetric,
+  .riotSessionFacts{
+    grid-column:2;
+    min-height:150px;
+  }
+  .riotChapterGroupIntro{
+    grid-template-columns:64px minmax(0,1fr);
+  }
+  .riotChangeFacts{grid-column:2}
+}
+@media(max-width:700px){
+  .homeJourney{
+    padding:42px 12px 70px;
+  }
+  .homeJourneyChapter{
+    min-height:0;
+    grid-template-columns:1fr;
+    gap:16px;
+    padding:26px 20px;
+    border-radius:20px;
+  }
+  .homeJourneyNo{
+    font-size:36px;
+  }
+  .homeJourneyChapter>aside{
+    grid-column:auto;
+    min-height:115px;
+  }
+  .homeJourneyEnd{
+    flex-direction:column;
+    align-items:flex-start;
+    padding:26px 20px;
+  }
+  .homeJourneyEnd button{width:100%}
+  .playerIdentityStrip{
+    grid-template-columns:1fr;
+  }
+  .playerShare{
+    grid-column:auto;
+    grid-row:auto;
+    min-height:44px;
+  }
+  .playerIdentityRanks{
+    grid-column:auto;
+    grid-row:auto;
+    overflow-x:auto;
+  }
+  .playerIdentityRanks>span{min-width:140px}
+  .riotStoryIntro{
+    padding:28px 20px;
+    border-radius:18px 18px 0 0;
+  }
+  .riotStoryIntro h2{
+    font-size:38px;
+    letter-spacing:-2.4px;
+  }
+  .riotStoryCoverage{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+  }
+  .riotStoryCoverage>span{min-width:0}
+  .riotStoryNav{
+    display:flex;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .riotStoryNav::-webkit-scrollbar{display:none}
+  .riotStoryNav a{
+    flex:0 0 105px;
+    min-height:45px;
+  }
+  .riotStoryFlow{gap:8px;padding-top:8px}
+  .riotChapter{
+    min-height:430px;
+    grid-template-columns:1fr;
+    align-content:end;
+    gap:16px;
+    padding:24px 20px;
+    border-radius:20px;
+  }
+  .riotChapterNumber{
+    position:absolute;
+    top:18px;
+    left:20px;
+    font-size:42px;
+  }
+  .riotChapterCopy h3{
+    font-size:36px;
+    letter-spacing:-2px;
+  }
+  .riotChapterHeroMetric,
+  .riotSessionFacts{
+    grid-column:auto;
+    min-height:0;
+  }
+  .riotChapterArt{
+    width:100%;
+    opacity:.52;
+  }
+  .riotChapterShade{
+    background:linear-gradient(0deg,#08090ffb 0%,#08090fdf 52%,#08090f66 100%);
+  }
+  .riotSessionFacts{
+    grid-template-columns:repeat(3,1fr);
+  }
+  .riotSessionFacts>span{padding:11px}
+  .riotSessionFacts b{font-size:15px}
+  .riotChapterGroup{border-radius:20px}
+  .riotChapterGroupIntro{
+    grid-template-columns:1fr;
+    gap:15px;
+    padding:26px 20px;
+  }
+  .riotChapterGroupIntro .riotChapterNumber{
+    position:static;
+    font-size:38px;
+  }
+  .riotChapterGroupIntro h3{font-size:34px}
+  .riotChangeFacts{
+    grid-column:auto;
+    min-width:0;
+  }
+  .gameDataVault>summary{min-height:68px}
+}
