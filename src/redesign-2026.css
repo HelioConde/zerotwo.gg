@@ -5854,3 +5854,373 @@ select{cursor:pointer}
     background:linear-gradient(0deg,#07090ffc 0%,#07090fe6 62%,#07090f7a 100%);
   }
 }
+
+
+/* ==========================================================================
+   VALORANT RIOT LIFE — 20 CHAPTER FOUNDATION
+   ========================================================================== */
+.valorantLifeStory{
+  margin-top:12px;
+  overflow:hidden;
+  border:1px solid #ffffff10;
+  border-radius:22px;
+  background:#07090d;
+}
+.valorantStoryIntro{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,.72fr);
+  gap:26px;
+  align-items:end;
+  padding:34px;
+  border-bottom:1px solid #ffffff0d;
+  background:
+    radial-gradient(circle at 88% 20%,#ff46551a,transparent 34%),
+    linear-gradient(135deg,#0d0c11,#080a0f 58%,#09070b);
+}
+.valorantStoryIntro>.valorantStoryCoverage{
+  align-self:stretch;
+}
+.valorantStoryIntro .gameBadge{
+  margin-bottom:10px;
+}
+.valorantStoryIntro>div:first-of-type>small{
+  color:#ff6d78;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.valorantStoryIntro h2{
+  margin:7px 0 0;
+  color:#f5f6f8;
+  font-size:clamp(36px,4.8vw,64px);
+  line-height:.94;
+  letter-spacing:-3px;
+}
+.valorantStoryIntro h2 span{color:#ff4655}
+.valorantStoryIntro p{
+  max-width:760px;
+  margin:13px 0 0;
+  color:#97a1ae;
+  font-size:10px;
+  line-height:1.6;
+}
+.valorantStoryCoverage{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.valorantStoryCoverage>span{
+  min-height:88px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:13px 14px;
+  border:1px solid #ffffff0d;
+  border-radius:12px;
+  background:#05070bbd;
+}
+.valorantStoryCoverage small,
+.valorantStoryCoverage b,
+.valorantStoryCoverage em{display:block}
+.valorantStoryCoverage small{
+  color:#798494;
+  font:850 6px ui-monospace,monospace;
+  letter-spacing:.6px;
+}
+.valorantStoryCoverage b{
+  margin-top:5px;
+  color:#f3f5f7;
+  font-size:24px;
+  line-height:1;
+}
+.valorantStoryCoverage em{
+  margin-top:4px;
+  color:#697586;
+  font-size:7px;
+  font-style:normal;
+}
+
+.valorantStoryNav{
+  position:sticky;
+  top:0;
+  z-index:12;
+  display:flex;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border-bottom:1px solid #ffffff0d;
+  background:#07090df2;
+  backdrop-filter:blur(14px);
+  scrollbar-width:thin;
+}
+.valorantStoryNav a{
+  flex:0 0 102px;
+  min-width:102px;
+  padding:10px 11px;
+  border-right:1px solid #ffffff09;
+  text-decoration:none;
+}
+.valorantStoryNav span,
+.valorantStoryNav b{display:block}
+.valorantStoryNav span{
+  color:#ff5966;
+  font:900 6px ui-monospace,monospace;
+}
+.valorantStoryNav b{
+  margin-top:3px;
+  color:#929ba8;
+  font-size:7px;
+  letter-spacing:.25px;
+}
+.valorantStoryNav a:hover b{color:#fff}
+
+.valorantStoryFlow{
+  display:grid;
+  gap:8px;
+  padding:8px;
+}
+.valorantChapter{
+  position:relative;
+  display:grid;
+  grid-template-columns:70px minmax(260px,.92fr) minmax(420px,1.15fr);
+  gap:22px;
+  align-items:center;
+  min-height:230px;
+  padding:28px 32px;
+  overflow:hidden;
+  border:1px solid #ffffff0d;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 88% 18%,#ff46550c,transparent 30%),
+    linear-gradient(135deg,#0a0d12,#07090d 58%,#0d080c);
+}
+.valorantChapter:nth-child(3n+2){
+  background:
+    radial-gradient(circle at 88% 18%,#75ddff08,transparent 30%),
+    linear-gradient(135deg,#080d12,#07090d 58%,#0a0a10);
+}
+.valorantChapter:nth-child(3n){
+  background:
+    radial-gradient(circle at 88% 18%,#ad88ff08,transparent 30%),
+    linear-gradient(135deg,#0c0911,#07090d 58%,#090c10);
+}
+.valorantChapterNumber{
+  align-self:start;
+  color:#ffffff12;
+  font:950 52px/1 ui-monospace,monospace;
+  letter-spacing:-4px;
+}
+.valorantChapterCopy>small{
+  color:#ff6571;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:.9px;
+}
+.valorantChapterCopy h3{
+  max-width:650px;
+  margin:7px 0 0;
+  color:#f4f6f8;
+  font-size:clamp(24px,3vw,38px);
+  line-height:.98;
+  letter-spacing:-1.5px;
+}
+.valorantChapterCopy p{
+  max-width:650px;
+  margin:10px 0 0;
+  color:#8d98a6;
+  font-size:9px;
+  line-height:1.6;
+}
+.valorantChapterMetrics{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.valorantChapterMetrics>span{
+  min-width:0;
+  min-height:78px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:12px 13px;
+  border:1px solid #ffffff0d;
+  border-radius:11px;
+  background:#04070bb4;
+}
+.valorantChapterMetrics small,
+.valorantChapterMetrics b,
+.valorantChapterMetrics em{display:block}
+.valorantChapterMetrics small{
+  color:#707d8e;
+  font:800 6px ui-monospace,monospace;
+  letter-spacing:.55px;
+}
+.valorantChapterMetrics b{
+  margin-top:5px;
+  overflow-wrap:anywhere;
+  color:#eef2f5;
+  font-size:clamp(17px,2vw,26px);
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.valorantChapterMetrics em{
+  margin-top:5px;
+  color:#6a7788;
+  font-size:7px;
+  font-style:normal;
+}
+.valorantChapter>.valorantEvidenceMatches{
+  grid-column:2/-1;
+}
+
+.valorantEvidenceMatches{
+  display:grid;
+  gap:6px;
+}
+.valorantEvidenceMatches article{
+  display:grid;
+  grid-template-columns:minmax(170px,1fr) repeat(4,70px) 70px;
+  gap:9px;
+  align-items:center;
+  min-height:58px;
+  padding:8px 10px;
+  border:1px solid #ffffff0c;
+  border-radius:10px;
+  background:#05080cb0;
+}
+.valorantEvidenceMatches article.win{border-left:2px solid #63d7ba}
+.valorantEvidenceMatches article.loss{border-left:2px solid #ff5b69}
+.valorantEvidenceMatches article>div small,
+.valorantEvidenceMatches article>div b,
+.valorantEvidenceMatches article>span small,
+.valorantEvidenceMatches article>span b{display:block}
+.valorantEvidenceMatches article>div small{
+  color:#6e7988;
+  font-size:6px;
+}
+.valorantEvidenceMatches article>div b{
+  margin-top:3px;
+  color:#e8edf2;
+  font-size:10px;
+}
+.valorantEvidenceMatches article>span b{
+  color:#dde3e9;
+  font-size:9px;
+  text-align:right;
+}
+.valorantEvidenceMatches article>span small{
+  margin-top:2px;
+  color:#687485;
+  font-size:5.5px;
+  text-align:right;
+}
+.valorantEvidenceMatches article>em{
+  color:#7f8998;
+  font-size:7px;
+  font-style:normal;
+  font-weight:850;
+  text-align:right;
+}
+.valorantEvidenceMatches article.win>em{color:#63d7ba}
+.valorantEvidenceMatches article.loss>em{color:#ff7b86}
+
+.valorantLifeStoryEmpty{
+  padding:28px;
+  text-align:center;
+}
+.valorantLifeStoryEmpty>small{
+  display:block;
+  margin-top:10px;
+  color:#ff6571;
+  font:900 7px ui-monospace,monospace;
+}
+.valorantLifeStoryEmpty h3{
+  margin:7px 0 0;
+  color:#f3f5f7;
+  font-size:28px;
+}
+.valorantLifeStoryEmpty p{
+  max-width:620px;
+  margin:9px auto 0;
+  color:#8995a4;
+  font-size:10px;
+  line-height:1.55;
+}
+
+/* Linked VALORANT summary can now carry one extra metric cleanly. */
+.valorantLifeLinked .valorantLifeStats{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+
+@media(max-width:1050px){
+  .valorantChapter{
+    grid-template-columns:56px minmax(0,1fr);
+  }
+  .valorantChapterMetrics,
+  .valorantChapter>.valorantEvidenceMatches{
+    grid-column:2;
+  }
+  .valorantEvidenceMatches article{
+    grid-template-columns:minmax(150px,1fr) repeat(3,64px) 64px;
+  }
+  .valorantEvidenceMatches article>span:nth-of-type(4){display:none}
+}
+@media(max-width:850px){
+  .valorantStoryIntro{
+    grid-template-columns:1fr;
+  }
+  .valorantLifeLinked .valorantLifeStats{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:700px){
+  .valorantStoryIntro{
+    padding:25px 20px;
+  }
+  .valorantStoryIntro h2{
+    font-size:clamp(38px,11vw,56px);
+    letter-spacing:-2.5px;
+  }
+  .valorantStoryCoverage{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .valorantStoryNav a{
+    flex-basis:92px;
+    min-width:92px;
+  }
+  .valorantStoryFlow{
+    padding:6px;
+  }
+  .valorantChapter{
+    grid-template-columns:1fr;
+    gap:13px;
+    min-height:0;
+    padding:24px 18px;
+    border-radius:16px;
+  }
+  .valorantChapterNumber{
+    position:absolute;
+    top:16px;
+    left:18px;
+    font-size:48px;
+  }
+  .valorantChapterCopy{
+    padding-top:60px;
+  }
+  .valorantChapterCopy h3{
+    font-size:clamp(28px,9vw,42px);
+  }
+  .valorantChapterCopy p{
+    font-size:11px;
+    line-height:1.55;
+  }
+  .valorantChapterMetrics{
+    grid-column:auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .valorantChapter>.valorantEvidenceMatches{
+    grid-column:auto;
+  }
+  .valorantEvidenceMatches article{
+    grid-template-columns:minmax(0,1fr) 56px 56px;
+  }
+  .valorantEvidenceMatches article>span:nth-of-type(n+3),
+  .valorantEvidenceMatches article>em{display:none}
+}
