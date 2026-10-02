@@ -6224,3 +6224,94 @@ select{cursor:pointer}
   .valorantEvidenceMatches article>span:nth-of-type(n+3),
   .valorantEvidenceMatches article>em{display:none}
 }
+
+
+/* ==========================================================================
+   VALORANT CONNECT FLOW
+   ========================================================================== */
+.valorantLoginPath,
+.valorantFlowSteps{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.valorantLoginPath{
+  max-width:900px;
+  margin:18px 0 12px;
+}
+.valorantLoginPath>span,
+.valorantFlowSteps>span{
+  min-width:0;
+  padding:12px 13px;
+  border:1px solid #ffffff0d;
+  border-radius:12px;
+  background:#080a0fba;
+}
+.valorantLoginPath i,
+.valorantFlowSteps i{
+  display:block;
+  color:#ff5966;
+  font:900 7px ui-monospace,monospace;
+  font-style:normal;
+  letter-spacing:.8px;
+}
+.valorantLoginPath b,
+.valorantFlowSteps b{
+  display:block;
+  margin-top:5px;
+  color:#edf1f5;
+  font-size:9px;
+}
+.valorantLoginPath small,
+.valorantFlowSteps small{
+  display:block;
+  margin-top:4px;
+  color:#778393;
+  font-size:7px;
+  line-height:1.45;
+}
+.valorantPublicGate{
+  max-width:900px;
+}
+.valorantOnboarding .connectIntro h2 em{
+  color:#ff4655!important;
+}
+.valorantConnectCard{
+  align-self:stretch;
+}
+.valorantFlowSteps{
+  margin:14px 0;
+}
+.valorantConnectCard .connectedGame{
+  margin-top:12px;
+  border:1px solid #ff46551f!important;
+  background:linear-gradient(135deg,#0c0a0e,#07090d 58%,#0a0d12)!important;
+}
+.valorantConnectCard .valorantInlineActions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.valorantConnectCard .valorantInlineActions select{
+  min-width:92px;
+}
+.valorantConnectCard .valorantInlineActions button{
+  min-height:38px;
+}
+@media(max-width:700px){
+  .valorantLoginPath,
+  .valorantFlowSteps{
+    grid-template-columns:1fr;
+  }
+  .valorantLoginPath{
+    margin-top:14px;
+  }
+  .valorantConnectCard .valorantInlineActions{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .valorantConnectCard .valorantInlineActions select,
+  .valorantConnectCard .valorantInlineActions button{
+    width:100%;
+  }
+}
