@@ -6182,3 +6182,18 @@ select{cursor:pointer}
     min-height:82px!important;
   }
 }
+
+
+/* Mobile safe-area polish */
+@media(max-width:700px){
+  .riotLifeSide{
+    height:calc(66px + env(safe-area-inset-bottom))!important;
+    padding-bottom:calc(6px + env(safe-area-inset-bottom))!important;
+  }
+  .riotLifeMain{
+    padding-bottom:calc(98px + env(safe-area-inset-bottom))!important;
+  }
+  .ztLanguageSwitcher{
+    bottom:calc(82px + env(safe-area-inset-bottom))!important;
+  }
+}
