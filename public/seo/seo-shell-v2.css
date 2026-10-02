@@ -379,3 +379,21 @@ main>.wrap.grid{
     width:calc(100% - 28px);
   }
 }
+
+
+/* Brand mark weight pass — match the bold ZeroTwo wordmark. */
+.seoHeader .brandMark img,
+.seoFooterIdentity .brand img{
+  filter:drop-shadow(0 0 8px #ff376f55) saturate(1.16) contrast(1.14);
+}
+.seoHeader .brandMark img{
+  width:25px;
+  height:25px;
+  transform:scale(1.08);
+}
+@media(max-width:760px){
+  .seoHeader .brandMark img{
+    width:23px;
+    height:23px;
+  }
+}
