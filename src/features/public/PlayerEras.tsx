@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { getLocale } from '../../i18n';
 
 type Props={data:any;champions:any;ddv:string};
 
@@ -39,7 +40,7 @@ function median(values:number[]){
 }
 function fmtDate(value:number){
   if(!value)return '—';
-  return new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short'}).format(new Date(value));
+  return new Intl.DateTimeFormat(getLocale(),{day:'2-digit',month:'short'}).format(new Date(value));
 }
 function resultWon(match:any){
   return match?.context==='ARENA'
