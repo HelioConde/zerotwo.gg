@@ -30,3 +30,13 @@ h1 span,h2 span{color:var(--pink)}
 .related{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.related a{padding:18px;border:1px solid var(--line);border-radius:13px;background:#090c11;text-decoration:none}.related b{display:block}.related small{display:block;margin-top:5px;color:#8793a2}
 footer{padding:28px 0 44px;border-top:1px solid var(--line);color:#778393;font-size:13px}
 @media(max-width:800px){.grid,.related{grid-template-columns:1fr}.top nav>a:not(.cta){display:none}h1{letter-spacing:-2.7px}.lead{font-size:17px}}
+
+.footerInner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.footerInner nav{display:flex;gap:16px;flex-wrap:wrap}
+.footerInner nav a{color:#9aa6b5;text-decoration:none}
+.footerInner nav a:hover{color:#fff}
+.termGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.termGrid article{padding:20px;border:1px solid var(--line);border-radius:14px;background:#090c11}
+.termGrid h3{margin:0 0 8px!important;font-size:20px!important}
+.termGrid p{margin:0}
+@media(max-width:800px){.footerInner{display:grid}.termGrid{grid-template-columns:1fr}}
