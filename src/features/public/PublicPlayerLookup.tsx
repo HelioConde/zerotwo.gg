@@ -36,6 +36,12 @@ function HomeExperience(){
     <article><Icon name="game"/><h3>Rank e histórico de partidas</h3><p>Veja rank publicado, LP, resultados recentes, KDA, dano, ouro e contextos como Ranked, Normal, ARAM e Arena.</p></article>
     <article><Icon name="spark"/><h3>Maestria de campeões</h3><p>Compare os campeões com maior maestria da conta com os que realmente aparecem na fase recente do jogador.</p></article>
     <article><Icon name="dna"/><h3>Tendências e Riot Life</h3><p>O ZeroTwo organiza até 100 partidas em capítulos para destacar mudanças, sequências, horários, impacto e padrões sem inventar um MMR paralelo.</p></article>
+    <nav className="homeSeoGuides" aria-label="Guias de League of Legends">
+     <a href="/zerotwo.gg/estatisticas-lol/"><b>Estatísticas LoL</b><small>Rank, histórico, campeões e tendências →</small></a>
+     <a href="/zerotwo.gg/riot-id/"><b>Buscar por Riot ID</b><small>Como usar Nome#TAG e servidor →</small></a>
+     <a href="/zerotwo.gg/maestria-lol/"><b>Maestria LoL</b><small>Pontos, nível e fase recente →</small></a>
+     <a href="/zerotwo.gg/historico-lol/"><b>Histórico LoL</b><small>Como interpretar partidas recentes →</small></a>
+    </nav>
    </div>
   </section>
   <section className="homeTransparency">
