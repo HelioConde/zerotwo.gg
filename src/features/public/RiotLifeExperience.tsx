@@ -45,6 +45,21 @@ const RIOT_CHAPTERS=[
   ['riot-next','AGORA VAI']
 ] as const;
 
+const z2Art=(name:string)=>import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(name);
+function contextArtwork(context:any){
+  const value=String(context||'').toUpperCase();
+  if(value.includes('ARENA'))return z2Art('arena.png');
+  if(value.includes('ARAM'))return z2Art('aram.png');
+  if(value.includes('RANKED'))return z2Art('ranqueado.png');
+  if(value.includes('NORMAL')||value.includes('SUMMONER'))return z2Art('Summoners rift.png');
+  return null;
+}
+const STORY_ART={
+  session:z2Art('PARTIDA NA ÚLTIMA SESSÃO.png'),
+  change:z2Art('SEU FOCO MUDOU DENTRO DESTA JANELA.png'),
+  people:z2Art('ALGUNS NOMES VOLTAM A APARECER.png')
+} as const;
+
 function playedAt(match:any){
   const raw=match?.playedAt;
   if(typeof raw==='number') return raw<1e12?raw*1000:raw;
@@ -402,6 +417,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   ]:[];
 
   const currentMode=data?.modeSummaries?.find((m:any)=>m.name===data?.summary?.mainContext)||null;
+  const currentContextArt=contextArtwork(data?.summary?.mainContext||currentMode?.name);
   const currentMetric=currentMode?.name==='ARENA'
     ?{label:'TOP 4',value:currentMode?.top4Rate!=null?currentMode.top4Rate+'%':'—'}
     :{label:'RESULTADO',value:currentMode?.winRate!=null?currentMode.winRate+'%':data?.summary?.winRate!=null?data.summary.winRate+'%':'—'};
@@ -459,6 +475,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
     <div className="riotStoryFlow">
       <section id="riot-now" className="riotChapter riotChapterNow">
+        {currentContextArt&&<img className="riotNarrativeArt riotNarrativeArtMode" loading="eager" decoding="async" src={currentContextArt} alt="" aria-hidden="true"/>}
+        {currentContextArt&&<div className="riotNarrativeShade"/>}
         <div className="riotChapterNumber">01</div>
         <div className="riotChapterCopy">
           <small>AGORA // O PALCO DESTA FASE</small>
@@ -497,6 +515,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </section>}
 
       <section id="riot-session" className="riotChapter riotChapterSession">
+        <img className="riotNarrativeArt riotNarrativeArtSession" loading="lazy" decoding="async" src={STORY_ART.session} alt="" aria-hidden="true"/>
+        <div className="riotNarrativeShade"/>
         <div className="riotChapterNumber">03</div>
         <div className="riotChapterCopy">
           <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
@@ -530,7 +550,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </section>}
 
       <section id="riot-change" className="riotChapterGroup riotChapterChange">
-        <div className="riotChapterGroupIntro">
+        <div className="riotChapterGroupIntro riotGroupIntroArt">
+          <img className="riotGroupArtwork" loading="lazy" decoding="async" src={STORY_ART.change} alt="" aria-hidden="true"/>
+          <div className="riotGroupArtworkShade"/>
           <span className="riotChapterNumber">05</span>
           <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p>{recentCompare.length>0&&<div className="riotBeforeAfter">{recentCompare.map((row:any)=>{const max=Math.max(Math.abs(row.old),Math.abs(row.recent),.01);return <span key={row.label}><small>{row.label}</small><div className="compareBars"><i><label>ANTES</label><em style={{width:Math.max(6,Math.abs(row.old)/max*100)+'%'}}/></i><i className="recent"><label>AGORA</label><em style={{width:Math.max(6,Math.abs(row.recent)/max*100)+'%'}}/></i></div><b>{row.format(row.old)} → {row.format(row.recent)}</b></span>})}</div>}</div>
           <div className="riotChangeFacts">
@@ -567,7 +589,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </section>
 
       <section id="riot-people" className="riotChapterGroup riotChapterPeople">
-        <div className="riotChapterGroupIntro">
+        <div className="riotChapterGroupIntro riotGroupIntroArt">
+          <img className="riotGroupArtwork" loading="lazy" decoding="async" src={STORY_ART.people} alt="" aria-hidden="true"/>
+          <div className="riotGroupArtworkShade"/>
           <span className="riotChapterNumber">06</span>
           <div><small>PESSOAS // QUEM SE REPETE</small><h3>ALGUNS NOMES VOLTAM A APARECER.</h3><p>Aqui não tentamos medir amizade ou “sinergia”. Só mostramos quem realmente se repetiu nas partidas analisadas.</p><small className="chapterSource">FONTE // participantes do Match-V5; recorrência não significa amizade ou causalidade</small></div>
         </div>
