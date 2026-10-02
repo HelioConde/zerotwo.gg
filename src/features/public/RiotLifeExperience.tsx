@@ -253,10 +253,10 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       :'AINDA É CEDO PARA MEDIR UMA MUDANÇA.';
   const recentKdaDelta=recentVsOld?recentVsOld.recentKda-recentVsOld.oldKda:null;
   const recentResultDelta=recentVsOld?recentVsOld.recentWr-recentVsOld.oldWr:null;
-  const sampleQuality=matches.length>=150?'HISTÓRIA FORTE':matches.length>=75?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
+  const sampleQuality=matches.length>=90?'HISTÓRIA FORTE':matches.length>=60?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
   const chapterIndex=Math.max(0,RIOT_CHAPTERS.findIndex(([id])=>id===activeChapter));
   const readingProgress=Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
-  const requestedDepth=Number(data?.cache?.requested||200);
+  const requestedDepth=Number(data?.cache?.requested||100);
   const availableDepth=Number(data?.cache?.availableIds||matches.length);
   const pendingDepth=Math.max(0,Number(data?.cache?.pending||0));
   const sampleWarning=pendingDepth>0
@@ -268,7 +268,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <div>
         <small>ZEROTWO // RIOT LIFE</small>
         <h2>ISTO NÃO É UM DASHBOARD.<br/><span>É A SUA HISTÓRIA RECENTE.</span></h2>
-        <p>{matches.length} partidas disponíveis organizadas em capítulos. O ZeroTwo pode aprofundar esta Riot Life até 200 partidas para encontrar padrões mais confiáveis sem despejar tudo na tela.</p>
+        <p>{matches.length} partidas disponíveis organizadas em capítulos. O ZeroTwo pode aprofundar esta Riot Life até 100 partidas para encontrar padrões mais confiáveis sem despejar tudo na tela.</p>
       </div>
       <div className="riotStoryCoverage">
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
