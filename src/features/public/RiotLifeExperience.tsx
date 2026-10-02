@@ -29,6 +29,19 @@ const RIOT_CHAPTERS=[
   ['riot-peak','PONTO ALTO'],
   ['riot-change','MUDANÇA'],
   ['riot-people','PESSOAS'],
+  ['riot-rhythm','RITMO'],
+  ['riot-consistency','CONSISTÊNCIA'],
+  ['riot-damage','DANO'],
+  ['riot-economy','ECONOMIA'],
+  ['riot-survival','SOBREVIVÊNCIA'],
+  ['riot-pool','POOL'],
+  ['riot-arena','ARENA'],
+  ['riot-streaks','SEQUÊNCIAS'],
+  ['riot-hours','HORÁRIOS'],
+  ['riot-days','DIAS'],
+  ['riot-duration','DURAÇÃO'],
+  ['riot-impact','IMPACTO'],
+  ['riot-trend','TENDÊNCIA'],
   ['riot-next','AGORA VAI']
 ] as const;
 
@@ -71,6 +84,52 @@ function formatDuration(matches:any[]){
   if(mins<60)return mins+' min';
   const h=Math.floor(mins/60),m=mins%60;
   return m?h+'h '+m+'min':h+'h';
+}
+const positiveResult=(m:any)=>m?.context==='ARENA'?(num(m?.placement)>0&&num(m?.placement)<=4):!!m?.win;
+function meanValues(values:number[]){
+  return values.length?values.reduce((a,b)=>a+b,0)/values.length:0;
+}
+function median(values:number[]){
+  if(!values.length)return 0;
+  const rows=[...values].sort((a,b)=>a-b),mid=Math.floor(rows.length/2);
+  return rows.length%2?rows[mid]:(rows[mid-1]+rows[mid])/2;
+}
+function deviation(values:number[]){
+  if(values.length<2)return 0;
+  const mean=meanValues(values);
+  return Math.sqrt(meanValues(values.map(v=>(v-mean)**2)));
+}
+function resultRate(rows:any[]){return pct(rows.filter(positiveResult).length,rows.length)}
+function longestResultStreak(rows:any[],wanted:boolean){
+  let best=0,current=0;
+  [...rows].sort((a,b)=>playedAt(a)-playedAt(b)).forEach(row=>{
+    if(positiveResult(row)===wanted){current++;best=Math.max(best,current)}else current=0;
+  });
+  return best;
+}
+function currentResultStreak(rows:any[]){
+  if(!rows.length)return {positive:true,games:0};
+  const ordered=[...rows].sort((a,b)=>playedAt(b)-playedAt(a));
+  const positive=positiveResult(ordered[0]);
+  let games=0;
+  for(const row of ordered){if(positiveResult(row)!==positive)break;games++}
+  return {positive,games};
+}
+function periodOf(ts:number){
+  const hour=new Date(ts).getHours();
+  if(hour<6)return 'MADRUGADA';
+  if(hour<12)return 'MANHÃ';
+  if(hour<18)return 'TARDE';
+  return 'NOITE';
+}
+const WEEKDAYS=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+function DeepDiveChapter({id,number,kicker,title,copy,metrics,children}:{id:string;number:string;kicker:string;title:string;copy:string;metrics:Array<{label:string;value:any;note?:string}>;children?:any}){
+  return <section id={id} className="riotDeepChapter">
+    <span className="riotChapterNumber">{number}</span>
+    <div className="riotDeepCopy"><small>{kicker}</small><h3>{title}</h3><p>{copy}</p></div>
+    <div className="riotDeepMetrics">{metrics.map(metric=><span key={metric.label}><small>{metric.label}</small><b>{metric.value}</b>{metric.note&&<em>{metric.note}</em>}</span>)}</div>
+    {children}
+  </section>
 }
 
 export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
@@ -233,6 +292,69 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     };
   },[matches]);
 
+  const deepDive=useMemo(()=>{
+    const context=String(data?.summary?.mainContext||'');
+    const focus=context?matches.filter((m:any)=>String(m?.context||'')===context):matches;
+    const safe=focus.length?focus:matches;
+    const days=Math.max(1,Math.ceil(((playedAt(safe[0]||{})||Date.now())-(playedAt(safe[safe.length-1]||{})||Date.now()))/86400000)||1);
+    const kdas=safe.map((m:any)=>num(m.kda)).filter((v:number)=>Number.isFinite(v));
+    const avgKda=meanValues(kdas);
+    const kdaDev=deviation(kdas);
+    const consistent=kdas.length?pct(kdas.filter((v:number)=>Math.abs(v-avgKda)<=Math.max(.5,avgKda*.25)).length,kdas.length):0;
+    const goldPerMin=safe.map((m:any)=>num(m.duration)>0?num(m.gold)/num(m.duration):0).filter((v:number)=>v>0);
+    const damages=safe.map((m:any)=>num(m.damagePerMin)).filter((v:number)=>v>0);
+    const durations=safe.map((m:any)=>num(m.duration)).filter((v:number)=>v>0);
+    const deathValues=safe.map((m:any)=>num(m.deaths));
+    const uniqueChampions=new Set(safe.map((m:any)=>m.champion).filter(Boolean));
+    const champCounts=new Map<string,number>();
+    safe.forEach((m:any)=>{if(m.champion)champCounts.set(m.champion,(champCounts.get(m.champion)||0)+1)});
+    const orderedChamps=[...champCounts.entries()].sort((a,b)=>b[1]-a[1]);
+    const top5Share=safe.length?pct(orderedChamps.slice(0,5).reduce((sum,row)=>sum+row[1],0),safe.length):0;
+    const repeatedChamps=orderedChamps.filter(row=>row[1]>=2).length;
+    const currentStreak=currentResultStreak(safe);
+
+    const periodMap=new Map<string,any[]>();
+    const dayMap=new Map<string,any[]>();
+    safe.forEach((m:any)=>{
+      const ts=playedAt(m);if(!ts)return;
+      const period=periodOf(ts),day=WEEKDAYS[new Date(ts).getDay()];
+      periodMap.set(period,[...(periodMap.get(period)||[]),m]);
+      dayMap.set(day,[...(dayMap.get(day)||[]),m]);
+    });
+    const periodRows=[...periodMap.entries()].map(([name,rows])=>({name,games:rows.length,result:resultRate(rows),kda:avg(rows,'kda')})).sort((a,b)=>b.games-a.games);
+    const dayRows=[...dayMap.entries()].map(([name,rows])=>({name,games:rows.length,result:resultRate(rows),kda:avg(rows,'kda')})).sort((a,b)=>b.games-a.games);
+    const bestPeriod=[...periodRows].filter(x=>x.games>=3).sort((a,b)=>b.result-a.result||b.kda-a.kda)[0]||periodRows[0]||null;
+    const bestDay=[...dayRows].filter(x=>x.games>=3).sort((a,b)=>b.result-a.result||b.kda-a.kda)[0]||dayRows[0]||null;
+
+    const medDuration=median(durations);
+    const short=safe.filter((m:any)=>num(m.duration)<=medDuration);
+    const long=safe.filter((m:any)=>num(m.duration)>medDuration);
+    const kp=safe.map((m:any)=>num(m.killParticipation)).filter((v:number)=>v>0);
+    const recent10=safe.slice(0,10),previous10=safe.slice(10,20);
+    const recentTrend=previous10.length>=5?{
+      kdaNow:avg(recent10,'kda'),kdaOld:avg(previous10,'kda'),
+      resultNow:resultRate(recent10),resultOld:resultRate(previous10),
+      damageNow:avg(recent10,'damagePerMin'),damageOld:avg(previous10,'damagePerMin'),
+      champNow:topBy(recent10,(m:any)=>m.champion||''),champOld:topBy(previous10,(m:any)=>m.champion||'')
+    }:null;
+
+    return {
+      context,games:safe.length,days,
+      rhythm:{gamesPerDay:safe.length/days,sessions:sessions.length,gamesPerSession:sessions.length?safe.length/sessions.length:0,activeDays:new Set(safe.map((m:any)=>new Date(playedAt(m)).toDateString())).size},
+      consistency:{kdaDev,consistent,avgKda,result:resultRate(safe)},
+      damage:{avg:meanValues(damages),peak:damages.length?Math.max(...damages):0,total:meanValues(safe.map((m:any)=>num(m.damage)).filter((v:number)=>v>0))},
+      economy:{goldPerMin:meanValues(goldPerMin),gold:avg(safe,'gold'),csPerMin:avg(safe.filter((m:any)=>num(m.csPerMin)>0),'csPerMin')},
+      survival:{deaths:meanValues(deathValues),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing')},
+      pool:{unique:uniqueChampions.size,top5Share,repeated:repeatedChamps,most:orderedChamps[0]?.[0]||'—'},
+      streaks:{best:longestResultStreak(safe,true),worst:longestResultStreak(safe,false),current:currentStreak},
+      periods:{most:periodRows[0]||null,best:bestPeriod,rows:periodRows},
+      daysOfWeek:{most:dayRows[0]||null,best:bestDay,rows:dayRows},
+      duration:{median:medDuration,shortRate:resultRate(short),longRate:resultRate(long),shortGames:short.length,longGames:long.length},
+      impact:{kp:meanValues(kp),turret:avg(safe,'turretDamage'),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing')},
+      trend:recentTrend
+    };
+  },[data?.summary?.mainContext,matches,sessions]);
+
   const personalMeta=useMemo(()=>{
     const map=new Map<string,{name:string;games:number;wins:number;kda:number;contexts:Set<string>}>();
     matches.forEach((m:any)=>{
@@ -332,7 +454,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     <nav className="riotStoryNav" aria-label="Capítulos da Riot Life">
       {RIOT_CHAPTERS.map(([id,label],index)=><a key={id} href={'#'+id} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>)}
       <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
-      <small className="riotStoryReadout">{readingProgress}% · ~2 min de leitura</small>
+      <small className="riotStoryReadout">{readingProgress}% · ~5 min de leitura</small>
     </nav>
 
     <div className="riotStoryFlow">
@@ -439,14 +561,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
             <span><small>MAIS JOGADO</small><b>{focusedComparison.previous.topChampion||'—'} → {focusedComparison.recent.topChampion||'—'}</b></span>
             {focusedComparison.context==='ARENA'&&focusedComparison.previous.avgPlacement!=null&&focusedComparison.recent.avgPlacement!=null&&<span><small>COLOCAÇÃO MÉDIA</small><b>{focusedComparison.previous.avgPlacement.toFixed(2)} → {focusedComparison.recent.avgPlacement.toFixed(2)}</b></span>}
           </div>
-          {arenaPlacement&&focusedComparison.context==='ARENA'&&<div className="arenaPlacementPanel">
-            <div><small>DISTRIBUIÇÃO // ARENA</small><b>COMO SUAS {arenaPlacement.games} ARENAS TERMINARAM</b><p>Colocação média <strong>{arenaPlacement.avg}</strong>. A distribuição abaixo usa toda a amostra Arena atual.</p></div>
-            <div className="placementBars">
-              <span><label>1º LUGAR</label><i><em style={{width:arenaPlacement.first+'%'}}/></i><b>{arenaPlacement.first}%</b></span>
-              <span><label>2º–4º</label><i><em style={{width:arenaPlacement.mid+'%'}}/></i><b>{arenaPlacement.mid}%</b></span>
-              <span><label>FORA DO TOP 4</label><i><em style={{width:arenaPlacement.outside+'%'}}/></i><b>{arenaPlacement.outside}%</b></span>
-            </div>
-          </div>}
+
         </section>}
         <PlayerEras data={data} champions={champions} ddv={ddv}/>
       </section>
@@ -459,10 +574,100 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <FrequentTeammates data={data} platform={platform}/>
       </section>
 
+      <DeepDiveChapter id="riot-rhythm" number="07" kicker="RITMO // FREQUÊNCIA" title="COM QUE RITMO VOCÊ ESTÁ JOGANDO?" copy="A frequência ajuda a separar uma fase intensa de uma janela espalhada no tempo. Não mede qualidade; mede presença." metrics={[
+        {label:'JOGOS / DIA',value:deepDive.rhythm.gamesPerDay.toFixed(1),note:deepDive.days+' dias de janela'},
+        {label:'SESSÕES',value:deepDive.rhythm.sessions,note:'intervalo de até 2h'},
+        {label:'JOGOS / SESSÃO',value:deepDive.rhythm.gamesPerSession.toFixed(1)},
+        {label:'DIAS ATIVOS',value:deepDive.rhythm.activeDays}
+      ]}/>
+
+      <DeepDiveChapter id="riot-consistency" number="08" kicker="CONSISTÊNCIA // VARIAÇÃO" title="SEUS RESULTADOS OSCILAM OU SE REPETEM?" copy="Comparamos a dispersão do seu KDA e a frequência de partidas próximas da sua própria média. Isso mede regularidade, não habilidade." metrics={[
+        {label:'KDA MÉDIO',value:deepDive.consistency.avgKda.toFixed(2)},
+        {label:'DESVIO DE KDA',value:deepDive.consistency.kdaDev.toFixed(2),note:'quanto menor, mais estável'},
+        {label:'PERTO DA MÉDIA',value:deepDive.consistency.consistent+'%',note:'dentro de ±25% ou 0,5'},
+        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.consistency.result+'%'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-damage" number="09" kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Dano por minuto reduz parte da diferença causada pela duração das partidas e permite comparar janelas de forma mais justa." metrics={[
+        {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString('pt-BR')},
+        {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString('pt-BR')},
+        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString('pt-BR')}
+      ]}/>
+
+      <DeepDiveChapter id="riot-economy" number="10" kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto funciona em todos os contextos carregados. CS/min só aparece quando a amostra contém partidas em que essa métrica faz sentido." metrics={[
+        {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString('pt-BR')},
+        {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString('pt-BR')},
+        ...(deepDive.economy.csPerMin>0?[{label:'CS / MIN',value:deepDive.economy.csPerMin.toFixed(1),note:'Summoner’s Rift'}]:[])
+      ]}/>
+
+      <DeepDiveChapter id="riot-survival" number="11" kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, dano recebido e cura ajudam a contextualizar o KDA. Eles não dizem sozinhos se uma jogada foi boa ou ruim." metrics={[
+        {label:'MORTES / JOGO',value:deepDive.survival.deaths.toFixed(1)},
+        {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString('pt-BR')},
+        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString('pt-BR')}
+      ]}/>
+
+      <DeepDiveChapter id="riot-pool" number="12" kicker="POOL // ESCOLHAS" title="VOCÊ ESTÁ REPETINDO OU EXPLORANDO CAMPEÕES?" copy="Aqui olhamos diversidade e concentração. Um pool amplo e um pool focado são estilos diferentes; não há julgamento de qual é melhor." metrics={[
+        {label:'CAMPEÕES ÚNICOS',value:deepDive.pool.unique},
+        {label:'TOP 5 CONCENTRA',value:deepDive.pool.top5Share+'%'},
+        {label:'USADOS 2+ VEZES',value:deepDive.pool.repeated},
+        {label:'MAIS PRESENTE',value:deepDive.pool.most}
+      ]}/>
+
+      {arenaPlacement&&<DeepDiveChapter id="riot-arena" number="13" kicker="ARENA // COLOCAÇÕES" title="ONDE SUAS ARENAS ESTÃO TERMINANDO?" copy="Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado." metrics={[
+        {label:'ARENAS',value:arenaPlacement.games},
+        {label:'COLOCAÇÃO MÉDIA',value:arenaPlacement.avg},
+        {label:'1º LUGAR',value:arenaPlacement.first+'%'},
+        {label:'TOP 4',value:(arenaPlacement.first+arenaPlacement.mid)+'%'}
+      ]}>
+        <div className="placementBars deepPlacement">
+          <span><label>1º LUGAR</label><i><em style={{width:arenaPlacement.first+'%'}}/></i><b>{arenaPlacement.first}%</b></span>
+          <span><label>2º–4º</label><i><em style={{width:arenaPlacement.mid+'%'}}/></i><b>{arenaPlacement.mid}%</b></span>
+          <span><label>FORA DO TOP 4</label><i><em style={{width:arenaPlacement.outside+'%'}}/></i><b>{arenaPlacement.outside}%</b></span>
+        </div>
+      </DeepDiveChapter>}
+
+      <DeepDiveChapter id="riot-streaks" number="14" kicker="SEQUÊNCIAS // EMBALO" title="QUAL FOI SUA MAIOR SEQUÊNCIA?" copy="Contamos resultados positivos consecutivos dentro do contexto principal da amostra. Em Arena, resultado positivo significa Top 4." metrics={[
+        {label:'MELHOR SEQUÊNCIA',value:deepDive.streaks.best+' jogos'},
+        {label:'MAIOR SEQUÊNCIA FORA',value:deepDive.streaks.worst+' jogos'},
+        {label:'SEQUÊNCIA ATUAL',value:deepDive.streaks.current.games+' jogos',note:deepDive.streaks.current.positive?'positiva':'fora do resultado'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-hours" number="15" kicker="HORÁRIOS // QUANDO" title="EM QUE PARTE DO DIA VOCÊ MAIS APARECE?" copy="Horários são calculados no fuso local do dispositivo. Só tratamos uma faixa como comparável quando há partidas suficientes nela." metrics={[
+        {label:'MAIS JOGADO',value:deepDive.periods.most?.name||'—',note:deepDive.periods.most?deepDive.periods.most.games+' jogos':''},
+        {label:'MELHOR AMOSTRA',value:deepDive.periods.best?.name||'—',note:deepDive.periods.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.periods.best.result+'%':''},
+        {label:'KDA NESSE HORÁRIO',value:deepDive.periods.best?deepDive.periods.best.kda.toFixed(2):'—'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-days" number="16" kicker="DIAS // CALENDÁRIO" title="QUAL DIA DA SEMANA MAIS APARECE NESSA JANELA?" copy="Este capítulo observa distribuição e resultado por dia da semana. Ele descreve a amostra; não afirma que o dia causa um desempenho melhor." metrics={[
+        {label:'MAIS ATIVO',value:deepDive.daysOfWeek.most?.name||'—',note:deepDive.daysOfWeek.most?deepDive.daysOfWeek.most.games+' jogos':''},
+        {label:'MELHOR AMOSTRA',value:deepDive.daysOfWeek.best?.name||'—',note:deepDive.daysOfWeek.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.daysOfWeek.best.result+'%':''},
+        {label:'KDA',value:deepDive.daysOfWeek.best?deepDive.daysOfWeek.best.kda.toFixed(2):'—'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-duration" number="17" kicker="DURAÇÃO // CURTA OU LONGA" title="O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA?" copy="Dividimos a própria amostra pela duração mediana. Isso evita escolher um corte arbitrário igual para todos os modos." metrics={[
+        {label:'MEDIANA',value:Math.round(deepDive.duration.median)+' min'},
+        {label:'PARTIDAS CURTAS',value:deepDive.duration.shortRate+'%',note:deepDive.duration.shortGames+' jogos'},
+        {label:'PARTIDAS LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-impact" number="18" kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Participação em abates, dano recebido, cura e pressão em estruturas adicionam contexto ao placar individual." metrics={[
+        {label:'PARTICIPAÇÃO',value:deepDive.impact.kp?Math.round(deepDive.impact.kp)+'%':'—'},
+        {label:'DANO RECEBIDO',value:Math.round(deepDive.impact.taken).toLocaleString('pt-BR')},
+        {label:'CURA',value:Math.round(deepDive.impact.healing).toLocaleString('pt-BR')},
+        ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString('pt-BR')}]:[])
+      ]}/>
+
+      {deepDive.trend&&<DeepDiveChapter id="riot-trend" number="19" kicker="TENDÊNCIA // ÚLTIMAS 10" title="AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?" copy="Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela." metrics={[
+        {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
+        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
+        {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString('pt-BR'),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString('pt-BR')},
+        {label:'MAIS JOGADO',value:deepDive.trend.champNow||'—',note:'antes '+(deepDive.trend.champOld||'—')}
+      ]}/>}
+
       <section id="riot-next" className="riotChapterGroup riotChapterNext">
         <div className="riotChapterGroupIntro">
-          <span className="riotChapterNumber">07</span>
-          <div><small>AGORA VAI // O QUE VALE OLHAR</small><h3>O RESTO SÓ ENTRA SE TROUXER ALGO NOVO.</h3><p>Patch e experiências interativas ficam no fim porque adicionam contexto novo; não repetem o resumo da sua conta.</p></div>
+          <span className="riotChapterNumber">20</span>
+          <div><small>AGORA VAI // O QUE VALE OLHAR</small><h3>O RESTO SÓ ENTRA SE TROUXER ALGO NOVO.</h3><p>Patch e experiências interativas fecham a Riot Life porque adicionam contexto novo; não repetem o resumo da sua conta.</p></div>
         </div>
         <div className="riotStoryExtras">
           <MyRiotPatch data={data} champions={champions} ddv={ddv}/>
