@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '../../supabase';
 import { Icon } from '../../components/ZeroTwoUI';
+import { getLocale } from '../../i18n';
 
 type Props={data:any;platform:string};
 
@@ -31,7 +32,7 @@ function regionFor(platform:string){
 }
 function when(ts:number){
   if(!ts)return '—';
-  return new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short'}).format(new Date(ts));
+  return new Intl.DateTimeFormat(getLocale(),{day:'2-digit',month:'short'}).format(new Date(ts));
 }
 function daysSince(ts:number){
   return ts?Math.max(0,Math.floor((Date.now()-ts)/86400000)):0;
