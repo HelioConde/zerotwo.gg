@@ -4789,3 +4789,221 @@ select{cursor:pointer}
     grid-template-columns:74px minmax(0,1fr) 34px;
   }
 }
+
+
+/* ==========================================================================
+   RIOT LIFE 20 CHAPTERS — compact deep-dive chapters 07–19
+   ========================================================================== */
+
+/* Twenty chapters need a scroll rail, not twenty crushed columns. */
+.riotStoryNav{
+  display:flex!important;
+  grid-template-columns:none!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x proximity;
+  scrollbar-width:thin;
+  scrollbar-color:#ff477e35 transparent;
+}
+.riotStoryNav a{
+  flex:0 0 96px!important;
+  min-width:96px!important;
+  scroll-snap-align:start;
+}
+.riotStoryNav::-webkit-scrollbar{height:3px}
+.riotStoryNav::-webkit-scrollbar-thumb{
+  background:#ff477e35;
+  border-radius:99px;
+}
+
+.riotDeepChapter{
+  position:relative;
+  display:grid;
+  grid-template-columns:74px minmax(260px,.9fr) minmax(420px,1.25fr);
+  gap:24px;
+  align-items:center;
+  min-height:250px;
+  padding:30px 34px;
+  overflow:hidden;
+  border:1px solid #ffffff0d;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 88% 20%,#75ddff08,transparent 31%),
+    linear-gradient(135deg,#081016,#070a0f 58%,#0a0810);
+  content-visibility:auto;
+  contain-intrinsic-size:280px;
+}
+.riotDeepChapter:nth-of-type(3n+1){
+  background:
+    radial-gradient(circle at 88% 18%,#ff477e0a,transparent 30%),
+    linear-gradient(135deg,#100a10,#070a0f 58%,#080b10);
+}
+.riotDeepChapter:nth-of-type(3n+2){
+  background:
+    radial-gradient(circle at 88% 18%,#ad88ff0b,transparent 31%),
+    linear-gradient(135deg,#0b0912,#070a0f 58%,#071015);
+}
+.riotDeepChapter>.riotChapterNumber{
+  position:static!important;
+  align-self:start;
+  color:#ffffff12!important;
+  font-size:54px!important;
+  line-height:1!important;
+}
+.riotDeepCopy>small{
+  color:#ff779f;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.riotDeepCopy h3{
+  max-width:620px;
+  margin:7px 0 0;
+  color:#f4f6f8;
+  font-size:clamp(24px,3vw,38px);
+  line-height:.98;
+  letter-spacing:-1.4px;
+}
+.riotDeepCopy p{
+  max-width:620px;
+  margin:11px 0 0;
+  color:#8c97a5;
+  font-size:9px;
+  line-height:1.6;
+}
+.riotDeepMetrics{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.riotDeepMetrics>span{
+  min-width:0;
+  min-height:82px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:13px 14px;
+  border:1px solid #ffffff0d;
+  border-radius:13px;
+  background:#04070bb8;
+  box-shadow:inset 0 1px #ffffff04;
+}
+.riotDeepMetrics small{
+  color:#6f7b8c;
+  font:800 6px ui-monospace,monospace;
+  letter-spacing:.65px;
+}
+.riotDeepMetrics b{
+  margin-top:5px;
+  overflow-wrap:anywhere;
+  color:#f2f5f8;
+  font-size:clamp(18px,2vw,28px);
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.riotDeepMetrics em{
+  margin-top:5px;
+  color:#718092;
+  font-size:7px;
+  font-style:normal;
+  line-height:1.35;
+}
+.riotDeepChapter>.deepPlacement{
+  grid-column:2/-1;
+  margin-top:-4px;
+  padding:15px 16px;
+  border:1px solid #75ddff15;
+  border-radius:13px;
+  background:#05080c8f;
+}
+
+/* Give the long sequence subtle grouping without adding more headings. */
+#riot-rhythm,#riot-consistency,#riot-damage{border-color:#75ddff15}
+#riot-economy,#riot-survival,#riot-pool{border-color:#ad88ff16}
+#riot-arena,#riot-streaks{border-color:#ff477e18}
+#riot-hours,#riot-days,#riot-duration{border-color:#75ddff13}
+#riot-impact,#riot-trend{border-color:#ff477e16}
+
+/* Current chapter remains easy to locate when there are twenty navigation items. */
+.riotStoryNav a.active b{
+  color:#fff!important;
+}
+.riotStoryNav a.active span{
+  color:#ff8caf!important;
+}
+
+/* Performance for the much longer narrative. */
+.riotDeepChapter img{
+  content-visibility:auto;
+}
+
+@media(max-width:1000px){
+  .riotDeepChapter{
+    grid-template-columns:58px minmax(0,1fr);
+  }
+  .riotDeepMetrics{
+    grid-column:2;
+  }
+  .riotDeepChapter>.deepPlacement{
+    grid-column:2;
+  }
+}
+
+@media(max-width:700px){
+  .riotStoryNav a{
+    flex-basis:92px!important;
+    min-width:92px!important;
+  }
+  .riotDeepChapter{
+    grid-template-columns:1fr;
+    gap:14px;
+    min-height:0;
+    padding:25px 20px;
+    border-radius:22px;
+  }
+  .riotDeepChapter>.riotChapterNumber{
+    position:absolute!important;
+    top:18px;
+    left:20px;
+    font-size:56px!important;
+  }
+  .riotDeepCopy{
+    position:relative;
+    z-index:1;
+    padding-top:65px;
+  }
+  .riotDeepCopy h3{
+    font-size:clamp(30px,9vw,44px);
+    letter-spacing:-1.8px;
+  }
+  .riotDeepCopy p{
+    font-size:12px;
+    line-height:1.55;
+  }
+  .riotDeepMetrics{
+    grid-column:auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .riotDeepMetrics>span{
+    min-height:94px;
+    padding:13px;
+  }
+  .riotDeepMetrics b{
+    font-size:22px;
+  }
+  .riotDeepMetrics em{
+    font-size:8px;
+  }
+  .riotDeepChapter>.deepPlacement{
+    grid-column:auto;
+    padding:13px;
+  }
+}
+
+@media(max-width:430px){
+  .riotDeepMetrics{
+    grid-template-columns:1fr 1fr;
+  }
+  .riotDeepMetrics b{
+    font-size:20px;
+  }
+}
