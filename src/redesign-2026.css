@@ -6197,3 +6197,7 @@ select{cursor:pointer}
     bottom:calc(82px + env(safe-area-inset-bottom))!important;
   }
 }
+
+.homeLookup.hasResult .homeHeroFacts{
+  display:none!important;
+}
