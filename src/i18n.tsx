@@ -619,7 +619,6 @@ const EN:Record<string,string>={
   'RIOT LIFE ATIVA':'RIOT LIFE ACTIVE',
   'RIOT LIFE ONLINE':'RIOT LIFE ONLINE',
   'IDENTIDADE CONECTADA':'CONNECTED IDENTITY',
-  'DADOS TÉCNICOS DO JOGADOR':'PLAYER TECHNICAL DATA',
   'CONTEXTOS COMPARÁVEIS':'COMPARABLE CONTEXTS',
   'AGUARDANDO DADOS':'WAITING FOR DATA',
   'Riot ID não encontrado. Confira Nome#TAG.':'Riot ID not found. Check Name#TAG.',
@@ -632,7 +631,6 @@ const EN:Record<string,string>={
   'Quando houver histórico disponível, o ZeroTwo separa padrões por modo.':'When history is available, ZeroTwo separates patterns by mode.',
   'ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.':'ARAM, Arena, Normal, and Ranked can contribute to the reading.',
   'Métricas específicas só são comparadas quando fazem sentido naquele modo.':'Mode-specific metrics are only compared when they make sense for that mode.',
-  'SEM AMOSTRA':'NO SAMPLE',
   'INICIAL':'INITIAL',
   'BOA':'GOOD'
 };
