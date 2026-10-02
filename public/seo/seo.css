@@ -40,3 +40,142 @@ footer{padding:28px 0 44px;border-top:1px solid var(--line);color:#778393;font-s
 .termGrid h3{margin:0 0 8px!important;font-size:20px!important}
 .termGrid p{margin:0}
 @media(max-width:800px){.footerInner{display:grid}.termGrid{grid-template-columns:1fr}}
+
+
+/* 2026-10-02 consistency pass — align static SEO pages with the main product. */
+.seoHeader{
+  position:sticky;
+  top:0;
+  z-index:30;
+  border-bottom:1px solid #ffffff0d;
+  background:#05070ae8;
+  backdrop-filter:blur(18px);
+}
+.seoHeader .top{
+  min-height:66px;
+  border-bottom:0;
+}
+.seoHeader .brand{
+  font-size:15px;
+  letter-spacing:-.6px;
+}
+.seoHeader .brand img{width:32px;height:32px}
+.seoHeader nav{display:flex;align-items:center;gap:18px}
+.seoHeader nav a{
+  color:#9ba6b5;
+  font-size:13px;
+  font-weight:700;
+}
+.seoHeader nav a:hover{color:#fff}
+.seoHeader nav .cta{
+  min-height:40px;
+  padding:0 16px;
+  border-color:#ff477e50;
+  color:#ff8aad!important;
+}
+
+.hero{
+  padding:58px 0 34px;
+}
+.hero h1{
+  max-width:980px;
+  font-size:clamp(42px,6.2vw,72px);
+  line-height:.95;
+  letter-spacing:-3.2px;
+}
+.lead{
+  max-width:800px;
+  font-size:18px;
+  line-height:1.65;
+}
+.grid{
+  margin-top:18px;
+  margin-bottom:46px;
+}
+.content{
+  padding-bottom:54px;
+}
+
+.seoFooter{
+  margin-top:24px;
+  border-top:1px solid #ffffff10;
+  background:#05070a;
+}
+.seoFooterGrid{
+  display:grid;
+  grid-template-columns:minmax(240px,.82fr) minmax(0,1.18fr);
+  gap:28px 56px;
+  padding:34px 0 30px;
+}
+.seoFooterIdentity .brand{
+  width:max-content;
+  margin-bottom:14px;
+}
+.seoFooterIdentity>b{
+  display:block;
+  margin-bottom:7px;
+  color:#dce2e9;
+  font-size:12px;
+}
+.seoFooterIdentity>p{
+  max-width:320px;
+  margin:0;
+  color:#758191;
+  font-size:10px;
+  line-height:1.6;
+}
+.seoFooterNav{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
+}
+.seoFooterNav section{
+  display:grid;
+  align-content:start;
+  gap:8px;
+}
+.seoFooterNav small{
+  margin-bottom:2px;
+  color:#596576;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.seoFooterNav a{
+  width:max-content;
+  max-width:100%;
+  color:#9aa5b4;
+  font-size:10px;
+  font-weight:760;
+  line-height:1.4;
+  text-decoration:none;
+}
+.seoFooterNav a:hover{color:#fff}
+.seoFooterLegal{
+  grid-column:1/-1;
+  padding-top:17px;
+  border-top:1px solid #ffffff0b;
+  color:#5f6a79;
+  font-size:8.5px;
+  line-height:1.65;
+}
+
+@media(max-width:900px){
+  .seoHeader nav a:not(.cta){display:none}
+  .hero{padding-top:44px}
+  .hero h1{font-size:clamp(40px,9vw,64px)}
+  .seoFooterGrid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .seoHeader .top{min-height:58px}
+  .seoHeader nav{margin-left:auto}
+  .hero{padding:36px 0 26px}
+  .hero h1{
+    font-size:clamp(36px,12vw,52px);
+    letter-spacing:-2.3px;
+  }
+  .lead{font-size:16px}
+  .seoFooterGrid{padding:28px 0 30px}
+  .seoFooterNav{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 18px}
+  .seoFooterNav section:last-child{grid-column:1/-1}
+  .seoFooterNav a{font-size:11px}
+}
