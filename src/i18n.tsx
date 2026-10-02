@@ -558,10 +558,84 @@ const EN:Record<string,string>={
   'ONTEM':'YESTERDAY',
   'ÚLTIMAS 10':'LAST 10',
   'ANTERIORES':'PREVIOUS',
-  'MAIS JOGADO AGORA':'MOST PLAYED NOW'
+  'MAIS JOGADO AGORA':'MOST PLAYED NOW',
+  '← NOVA BUSCA':'← NEW SEARCH',
+  'ABRIR PARTIDAS →':'OPEN MATCHES →',
+  'EXPLORAR CAMPEÕES':'EXPLORE CHAMPIONS',
+  'Dados técnicos do jogador':'Player technical data',
+  'Como lemos o momento':'How we read the moment',
+  'VITÓRIA':'WIN',
+  'DERROTA':'LOSS',
+  'DANO DO TIME':'TEAM DAMAGE',
+  'MITIGADO':'MITIGATED',
+  'SEM COMPARAÇÃO':'NO COMPARISON',
+  'janela recente':'recent window',
+  'EM FORMAÇÃO':'IN PROGRESS',
+  'AMOSTRA INICIAL':'INITIAL SAMPLE',
+  'recente':'recent',
+  'Entre o começo e o fim, seu ritmo de KDA':'From the beginning to the end, your KDA rhythm',
+  'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.':'Sessions are grouped when matches happen close together in time. We need a longer sequence to describe internal rhythm.',
+  'Linha do tempo da última sessão':'Last session timeline',
+  'Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.':'This chapter does not repeat your current numbers; it only shows differences between comparable moments.',
+  'KDA RECENTE VS. ANTERIOR':'RECENT VS. PREVIOUS KDA',
+  'FONTE // participantes do Match-V5; recorrência não significa amizade ou causalidade':'SOURCE // Match-V5 participants; recurrence does not mean friendship or causality',
+  'dias de janela':'days in window',
+  'intervalo de até 2h':'up to a 2h gap',
+  'SEUS RESULTADOS OSCILAM OU SE REPETEM?':'DO YOUR RESULTS SWING OR REPEAT?',
+  'MELHOR AMOSTRA':'BEST SAMPLE',
+  '% da amostra':'% of sample',
+  'KDA RECENTE':'RECENT KDA',
+  'ATIVA AGORA':'ACTIVE NOW',
+  'RECENTE':'RECENT',
+  'apenas uma vez e não entra':'only once and excluded',
+  'nas partidas de':'in matches from',
+  'nas partidas recentes':'in recent matches',
+  'Ainda sem padrão forte':'No strong pattern yet',
+  'JUNTOS':'TOGETHER',
+  'Passiva teve dados/texto atualizados no Data Dragon.':'Passive data/text was updated in Data Dragon.',
+  'Preço:':'Price:',
+  'ASSINATURA DA AMOSTRA':'SAMPLE SIGNATURE',
+  'partidas observadas.':'observed matches.',
+  'Melhor partida':'Best match',
+  'Maior KDA da amostra ·':'Highest KDA in sample ·',
+  'A AMOSTRA RECENTE SUBIU':'THE RECENT SAMPLE WENT UP',
+  'A AMOSTRA RECENTE CAIU':'THE RECENT SAMPLE WENT DOWN',
+  'KDA recente vs. parte anterior ·':'Recent KDA vs. previous segment ·',
+  'partidas vieram deste contexto.':'matches came from this context.',
+  'Número de campeões diferentes encontrados nesta janela.':'Number of different champions found in this window.',
+  'Sequência máxima encontrada somente dentro da amostra atual.':'Maximum streak found only within the current sample.',
+  'partidas analisadas ·':'matches analyzed ·',
+  'O maior KDA da amostra foi':'The highest KDA in the sample was',
+  'EM MOVIMENTO.':'IN MOTION.',
+  'Conecte sua conta para começar':'Connect your account to begin',
+  'ATUALIZANDO...':'UPDATING...',
+  'amostra recente':'recent sample',
+  'ABRIR MINHA HISTÓRIA →':'OPEN MY HISTORY →',
+  'AGUARDANDO':'WAITING',
+  'ATIVO.':'ACTIVE.',
+  'Use seu Riot ID para ativar a leitura pública e conectada.':'Use your Riot ID to activate the public and connected reading.',
+  'amostra atual':'current sample',
+  'MODOS':'MODES',
+  'RIOT LIFE ATIVA':'RIOT LIFE ACTIVE',
+  'RIOT LIFE ONLINE':'RIOT LIFE ONLINE',
+  'IDENTIDADE CONECTADA':'CONNECTED IDENTITY',
+  'DADOS TÉCNICOS DO JOGADOR':'PLAYER TECHNICAL DATA',
+  'CONTEXTOS COMPARÁVEIS':'COMPARABLE CONTEXTS',
+  'AGUARDANDO DADOS':'WAITING FOR DATA'
 };
 
 const RULES:Array<[RegExp,string]>=[
+  [/VOCÊ COSTUMA APARECER (.+?)\./g,'YOU USUALLY APPEAR $1.'],
+  [/SEU RELÓGIO MARCA (.+?)\./g,'YOUR CLOCK POINTS TO $1.'],
+  [/(.+?) domina a amostra ampliada\./g,'$1 dominates the expanded sample.'],
+  [/Você voltou a encontrar (.+?) em (\d+) partidas\./g,'You encountered $1 again in $2 matches.'],
+  [/(.+?) É O NOME QUE MAIS SE REPETE\./g,'$1 IS THE NAME THAT REPEATS MOST.'],
+  [/(.+?) DOMINA O PERÍODO\./g,'$1 DOMINATES THE PERIOD.'],
+  [/teve dados\/texto atualizados no Data Dragon\./g,'had data/text updated in Data Dragon.'],
+  [/O número ao lado pertence só a este capítulo\./g,'The number beside it belongs only to this chapter.'],
+  [/([0-9]+) encontro(s)? único(s)? oculto(s)?/g,'$1 hidden one-time encounter'],
+  [/média ([0-9]+(?:[.,][0-9]+)?)/g,'avg $1'],
+
   [/Gaming DNA atualizado com (\d+) partida\./g,'Gaming DNA updated with $1 match.'],
   [/Gaming DNA atualizado com (\d+) partidas\./g,'Gaming DNA updated with $1 matches.'],
   [/Seu dia mais ativo na amostra é (.+?)\. Esse padrão ajuda a entender seu ritmo ao longo do tempo\./g,'Your most active day in the sample is $1. This pattern helps explain your rhythm over time.'],
@@ -643,8 +717,10 @@ function translateString(value:string){
 }
 
 const originals=new WeakMap<Text,string>();
+const lastAppliedText=new WeakMap<Text,string>();
 const knownTextNodes=new Set<Text>();
 const attrOriginals=new WeakMap<Element,Map<string,string>>();
+const lastAppliedAttrs=new WeakMap<Element,Map<string,string>>();
 const knownAttrElements=new Set<Element>();
 const ATTRS=['placeholder','title','aria-label'] as const;
 
@@ -652,22 +728,30 @@ function shouldSkip(node:Node){
   const parent=node.parentElement;
   return !parent||!!parent.closest('[data-i18n-skip],script,style,code,pre');
 }
-function processTextNode(node:Text,language:ZtLanguage){
+function processTextNode(node:Text,language:ZtLanguage,refreshOriginal=false){
   if(shouldSkip(node))return;
-  if(!originals.has(node)){originals.set(node,node.nodeValue||'');knownTextNodes.add(node)}
+  const current=node.nodeValue||'';
+  if(!originals.has(node)){originals.set(node,current);knownTextNodes.add(node)}
+  else if(refreshOriginal&&lastAppliedText.get(node)!==current)originals.set(node,current);
   const original=originals.get(node)||'';
   const target=language==='en'?translateString(original):original;
-  if(node.nodeValue!==target)node.nodeValue=target;
+  lastAppliedText.set(node,target);
+  if(current!==target)node.nodeValue=target;
 }
-function processElement(element:Element,language:ZtLanguage){
+function processElement(element:Element,language:ZtLanguage,refreshOriginal=false){
   let saved=attrOriginals.get(element);
+  let applied=lastAppliedAttrs.get(element);
   for(const attr of ATTRS){
     if(!element.hasAttribute(attr))continue;
     if(!saved){saved=new Map();attrOriginals.set(element,saved);knownAttrElements.add(element)}
-    if(!saved.has(attr))saved.set(attr,element.getAttribute(attr)||'');
+    if(!applied){applied=new Map();lastAppliedAttrs.set(element,applied)}
+    const current=element.getAttribute(attr)||'';
+    if(!saved.has(attr))saved.set(attr,current);
+    else if(refreshOriginal&&applied.get(attr)!==current)saved.set(attr,current);
     const original=saved.get(attr)||'';
     const target=language==='en'?translateString(original):original;
-    if(element.getAttribute(attr)!==target)element.setAttribute(attr,target);
+    applied.set(attr,target);
+    if(current!==target)element.setAttribute(attr,target);
   }
 }
 function processTree(root:Node,language:ZtLanguage){
@@ -714,12 +798,13 @@ export function I18nProvider({children}:{children:React.ReactNode}){
     processTree(document.body,language);
     const observer=new MutationObserver(records=>{
       for(const record of records){
-        if(record.type==='characterData')processTextNode(record.target as Text,language);
+        if(record.type==='characterData')processTextNode(record.target as Text,language,true);
+        if(record.type==='attributes')processElement(record.target as Element,language,true);
         for(const node of record.addedNodes)processTree(node,language);
       }
       cleanup();
     });
-    observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+    observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:[...ATTRS]});
     window.dispatchEvent(new CustomEvent('zt:language-change',{detail:{language}}));
     return()=>observer.disconnect();
   },[language]);
