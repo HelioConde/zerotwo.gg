@@ -5862,8 +5862,9 @@ select{cursor:pointer}
 .ztLanguageSwitcher{
   position:fixed;
   z-index:120;
-  top:12px;
-  right:12px;
+  top:auto;
+  right:18px;
+  bottom:18px;
   display:flex;
   gap:3px;
   padding:4px;
@@ -5896,7 +5897,6 @@ select{cursor:pointer}
 }
 @media(max-width:900px){
   .ztLanguageSwitcher{
-    top:auto;
     right:14px;
     bottom:74px;
   }
