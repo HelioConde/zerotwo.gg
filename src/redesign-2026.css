@@ -5592,3 +5592,217 @@ select{cursor:pointer}
     grid-template-columns:1fr 1fr;
   }
 }
+
+
+/* ==========================================================================
+   RIOT LIFE ART PACK — 02/10 v2
+   One dedicated image per story chapter, tuned as supporting art.
+   ========================================================================== */
+.riotDeepChapter.hasArt{
+  isolation:isolate;
+  background:#070a0f!important;
+}
+.riotDeepArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  opacity:.30;
+  filter:saturate(.90) contrast(1.06) brightness(.80);
+  pointer-events:none;
+  user-select:none;
+}
+.riotDeepArtSecondary{
+  position:absolute;
+  z-index:1;
+  top:8%;
+  right:1.5%;
+  width:34%;
+  height:84%;
+  object-fit:cover;
+  object-position:center;
+  border-radius:18px;
+  opacity:.16;
+  filter:saturate(.88) contrast(1.08);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%,#000 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 38%,#000 100%);
+  pointer-events:none;
+}
+.riotDeepArtShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    linear-gradient(90deg,#06090ff8 0%,#06090fea 30%,#06090fc1 57%,#06090f82 100%),
+    linear-gradient(0deg,#06090fa8,#06090f16 52%,#06090f78);
+  pointer-events:none;
+}
+.riotDeepChapter.hasArt > *:not(.riotDeepArt):not(.riotDeepArtSecondary):not(.riotDeepArtShade){
+  position:relative;
+  z-index:2;
+}
+.riotDeepChapter.hasArt .riotDeepMetrics>span,
+.riotDeepChapter.hasArt .damageTypeBars,
+.riotDeepChapter.hasArt .commonItems,
+.riotDeepChapter.hasArt .arenaAugmentPanel,
+.riotDeepChapter.hasArt .deepPlacement{
+  backdrop-filter:blur(8px);
+  background:#04070bc5!important;
+}
+
+/* Per-chapter framing so the artwork does not all feel identical. */
+#riot-rhythm .riotDeepArt{object-position:center 44%}
+#riot-consistency .riotDeepArt{object-position:center 48%}
+#riot-damage .riotDeepArt{object-position:center 45%}
+#riot-economy .riotDeepArt{object-position:center 48%}
+#riot-survival .riotDeepArt{object-position:center 46%}
+#riot-arena .riotDeepArt{object-position:center 48%}
+#riot-streaks .riotDeepArt{object-position:center 46%}
+#riot-hours .riotDeepArt{object-position:center 50%}
+#riot-days .riotDeepArt{object-position:center 48%}
+#riot-duration .riotDeepArt{object-position:center 48%}
+#riot-impact .riotDeepArt{object-position:center 46%}
+#riot-trend .riotDeepArt{object-position:center 48%}
+
+/* Mastery gets its own hero + a separate pool illustration. */
+.riotMasteryChapter.hasArt{
+  isolation:isolate;
+  background:#080a10!important;
+}
+.riotMasteryArtwork{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 45%;
+  opacity:.28;
+  filter:saturate(.88) contrast(1.07) brightness(.78);
+  pointer-events:none;
+}
+.riotMasteryArtShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:linear-gradient(90deg,#080a10f8 0%,#080a10e9 31%,#080a10bc 61%,#080a1088 100%);
+  pointer-events:none;
+}
+.riotMasteryChapter.hasArt > *:not(.riotMasteryArtwork):not(.riotMasteryArtShade){
+  position:relative;
+  z-index:2;
+}
+.riotMasteryPool.hasArt{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:104px;
+}
+.riotMasteryPoolArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 50%;
+  opacity:.14;
+  filter:saturate(.85) contrast(1.08);
+  pointer-events:none;
+}
+.riotMasteryPool.hasArt>span{
+  position:relative;
+  z-index:1;
+  backdrop-filter:blur(8px);
+  background:#05080cbf!important;
+}
+
+/* Final patch experience uses the dedicated patch art. */
+.myRiotPatchWithArt{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.myRiotPatchArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 45%;
+  opacity:.22;
+  filter:saturate(.86) contrast(1.06) brightness(.76);
+  pointer-events:none;
+}
+.myRiotPatchArtShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    linear-gradient(90deg,#07090ff4 0%,#07090fe0 43%,#07090fa2 100%),
+    linear-gradient(0deg,#07090fd5,#07090f20 58%,#07090f85);
+  pointer-events:none;
+}
+.myRiotPatchWithArt>header,
+.myRiotPatchWithArt>.patchLoading,
+.myRiotPatchWithArt>.patchEmpty,
+.myRiotPatchWithArt>.patchChanges,
+.myRiotPatchWithArt>footer{
+  position:relative;
+  z-index:2;
+}
+.myRiotPatchWithArt .patchVersion,
+.myRiotPatchWithArt .patchChanges article{
+  backdrop-filter:blur(8px);
+}
+
+/* Chapter 20 gets its own intro art while Patch uses the second final image. */
+.riotChapterNext .riotGroupArtwork{
+  object-position:center 47%;
+  opacity:.34;
+}
+
+@media(max-width:980px){
+  .riotDeepArt{opacity:.24}
+  .riotDeepArtSecondary{opacity:.11;width:42%}
+  .riotMasteryArtwork{opacity:.22}
+  .myRiotPatchArt{opacity:.17}
+}
+@media(max-width:700px){
+  .riotDeepArt{
+    opacity:.19;
+    object-position:center center!important;
+  }
+  .riotDeepArtSecondary{
+    top:0;
+    right:0;
+    width:100%;
+    height:100%;
+    border-radius:0;
+    opacity:.07;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+  .riotDeepArtShade{
+    background:linear-gradient(0deg,#06090fff 0%,#06090fe7 58%,#06090f75 100%);
+  }
+  .riotMasteryArtwork{
+    opacity:.16;
+    object-position:center center;
+  }
+  .riotMasteryArtShade{
+    background:linear-gradient(0deg,#080a10fc 0%,#080a10e4 62%,#080a1080 100%);
+  }
+  .riotMasteryPoolArt{opacity:.10}
+  .myRiotPatchArt{
+    opacity:.13;
+    object-position:center center;
+  }
+  .myRiotPatchArtShade{
+    background:linear-gradient(0deg,#07090ffc 0%,#07090fe5 62%,#07090f82 100%);
+  }
+}
