@@ -216,6 +216,12 @@ function App(){
         ZERO<span>TWO</span><small>.GG</small>
       </button>
       <p>Sua história Riot, viva.</p>
+      <nav className="siteTrustLinks" aria-label="Informações do ZeroTwo">
+        <a href="/zerotwo.gg/sobre/">Sobre</a>
+        <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
+        <a href="/zerotwo.gg/glossario-lol/">Glossário LoL</a>
+        <a href="/zerotwo.gg/sitemap.xml">Sitemap</a>
+      </nav>
       <small>
         ZeroTwo.gg is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone
         officially involved in producing or managing Riot Games properties. Riot Games and all associated properties
