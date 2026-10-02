@@ -4428,3 +4428,83 @@ select{cursor:pointer}
     font-size:16px!important;
   }
 }
+
+
+/* Recurring-player progress */
+.teammatesLoading{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.teammatesLoading>div{
+  flex:1;
+  min-width:0;
+}
+.teammatesLoading b,
+.teammatesLoading span{
+  display:block;
+}
+.teammatesLoading span{
+  margin-top:5px;
+  color:#748092;
+  font-size:8px;
+}
+.teammatesLoading i{
+  display:block;
+  height:4px;
+  margin-top:10px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#ffffff0b;
+}
+.teammatesLoading i em{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#ff477e,#ad88ff,#75ddff);
+  transition:width .2s ease;
+}
+
+/* Honest before/after comparison: show both values, not one full bar. */
+.riotBeforeAfter>span{
+  grid-template-columns:72px minmax(140px,1fr) auto!important;
+}
+.compareBars{
+  display:grid;
+  gap:5px;
+}
+.compareBars i{
+  position:relative;
+  height:12px;
+  overflow:hidden;
+  border-radius:7px;
+  background:#ffffff09;
+}
+.compareBars i em{
+  position:absolute;
+  inset:0 auto 0 0;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#7d63bd,#ad88ff);
+}
+.compareBars i.recent em{
+  background:linear-gradient(90deg,#5fa8d9,#75ddff);
+}
+.compareBars label{
+  position:absolute;
+  z-index:2;
+  left:7px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#d9dfe7;
+  font:900 5.5px ui-monospace,monospace;
+  letter-spacing:.6px;
+  pointer-events:none;
+}
+@media(max-width:700px){
+  .riotBeforeAfter>span{
+    grid-template-columns:58px minmax(120px,1fr)!important;
+  }
+  .riotBeforeAfter>span>b{
+    grid-column:2!important;
+  }
+}
