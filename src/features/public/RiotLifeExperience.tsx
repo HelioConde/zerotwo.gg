@@ -541,7 +541,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     :matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
 
   return <section className="riotStory" aria-label="Riot Life em capítulos">
-    <header className="riotStoryIntro">
+    <header className="riotStoryIntro riotStoryIntroWithArt">
+      <img className="riotLifeIntroArtwork" loading="eager" decoding="async" src={z2Art('Duelo Celestial entre Luz e Sombra.png')} alt="" aria-hidden="true"/>
+      <div className="riotLifeIntroArtShade"/>
       <div>
         <small>ZEROTWO // RIOT LIFE</small>
         <h2>ISTO NÃO É UM DASHBOARD.<br/><span>É A SUA HISTÓRIA RECENTE.</span></h2>
