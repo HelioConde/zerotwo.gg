@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../supabase';
 import { GameBadge, Icon } from '../../components/ZeroTwoUI';
+import { ValorantLifeExperience } from './ValorantLifeExperience';
 
 const RSO_ENABLED=import.meta.env.VITE_VALORANT_RSO_ENABLED==='true';
 const SHARDS=[
@@ -96,15 +97,13 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
      <em>{String(profile.account?.shard||shard).toUpperCase()} // OPT-IN</em>
     </header>
     <div className="valorantLifeStats">
-     <span><small>PARTIDAS</small><b>{profile.summary?.matches??0}</b><em>amostra recente</em></span>
+     <span><small>PARTIDAS</small><b>{profile.summary?.matches??0}</b><em>história acumulada</em></span>
      <span><small>RESULTADO</small><b>{profile.summary?.winRate!=null?profile.summary.winRate+'%':'—'}</b><em>win rate</em></span>
-     <span><small>KDA</small><b>{profile.summary?.avgKda??'—'}</b><em>média recente</em></span>
-     <span><small>SCORE / ROUND</small><b>{profile.summary?.avgScorePerRound??'—'}</b><em>média recente</em></span>
+     <span><small>ACS</small><b>{profile.summary?.avgScorePerRound??'—'}</b><em>score / round</em></span>
+     <span><small>ADR</small><b>{profile.summary?.avgDamagePerRound??'—'}</b><em>dano / round</em></span>
+     <span><small>HEADSHOT</small><b>{profile.summary?.avgHeadshotRate!=null?profile.summary.avgHeadshotRate+'%':'—'}</b><em>impactos</em></span>
     </div>
-    <div className="valorantLifeColumns">
-     <article><header><small>AGENTES</small><b>MAIS PRESENTES</b></header>{profile.summary?.topAgents?.length?profile.summary.topAgents.map((x:any)=><span key={x.name}><b>{x.name}</b><em>{x.games} {x.games===1?'partida':'partidas'}</em></span>):<p>Ainda não há amostra suficiente.</p>}</article>
-     <article><header><small>PARTIDAS</small><b>ÚLTIMOS RESULTADOS</b></header>{profile.matches?.length?profile.matches.slice(0,5).map((m:any)=><span key={m.id}><b>{m.agent||'Agente'}</b><em>{m.won===true?'VITÓRIA':m.won===false?'DERROTA':'RESULTADO —'} · {m.kills}/{m.deaths}/{m.assists} · {String(m.queue||'fila').toUpperCase()}</em></span>):<p>Nenhuma partida recente retornada pela API.</p>}</article>
-    </div>
+    <ValorantLifeExperience profile={profile}/>
     <footer className="valorantLifeFooter"><div><button onClick={load} disabled={loading}>{loading?'ATUALIZANDO...':'ATUALIZAR DADOS'}</button><button className="secondary" onClick={unlink} disabled={loading}>DESCONECTAR</button></div><span>FONTE AUTORIZADA PELO PRÓPRIO JOGADOR</span></footer>
    </section>;
   }
