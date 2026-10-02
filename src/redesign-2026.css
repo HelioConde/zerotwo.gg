@@ -6567,3 +6567,34 @@ select{cursor:pointer}
 .siteFooterLegal{
   border:0!important;
 }
+
+
+.homeSeoGuides,
+.siteFooterNav{
+  height:auto!important;
+  min-height:0!important;
+  max-width:none!important;
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-bottom:0!important;
+  align-items:stretch!important;
+  justify-content:stretch!important;
+}
+.homeSeoGuides{
+  margin-top:6px!important;
+  grid-auto-rows:minmax(58px,auto);
+  align-content:start!important;
+}
+.homeSeoIntent{
+  align-items:start;
+  overflow:hidden;
+}
+.homeSeoIntent>div{
+  min-height:0;
+  align-content:start;
+}
+.siteFooterNav{
+  align-content:start!important;
+}
