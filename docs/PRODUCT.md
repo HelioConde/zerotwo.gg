@@ -39,7 +39,7 @@ Find Your 02, 02 Sync, matching e relacionamento podem permanecer como experimen
 - Não chamar uma tendência curta de verdade permanente.
 - Não inventar timeline que a API não forneceu.
 - Impacto de patch só aparece quando houver fonte oficial estruturada.
-- VALORANT continua opt-in e limitado aos dados aprovados.
+- A versão pública atual é League of Legends only; integrações de VALORANT permanecem experimentais e desativadas.
 - Sem scouting proibido ou vantagem injusta em tempo real.
 - IA pode resumir e explicar; métricas determinísticas calculam.
 
