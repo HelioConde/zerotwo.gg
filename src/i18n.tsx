@@ -233,7 +233,7 @@ const EN:Record<string,string>={
   'FÍSICO':'PHYSICAL',
   'MÁGICO':'MAGIC',
   'VERDADEIRO':'TRUE',
-  'QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?':'HOW MUCH RESOURCE DO YOU TURN OVER PER MINUTE?',
+  'QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?':'HOW MUCH GOLD DO YOU GENERATE PER MINUTE?',
   'Ouro por minuto agora usa o valor oficial do Match-V5 quando disponível. Também mostramos os itens que mais se repetem na janela.':'Gold per minute now uses the official Match-V5 value when available. We also show the items that repeat most in the window.',
   'OURO':'GOLD',
   'OURO / MIN':'GOLD / MIN',
@@ -246,7 +246,7 @@ const EN:Record<string,string>={
   'DANO RECEBIDO':'DAMAGE TAKEN',
   'DANO MITIGADO':'DAMAGE MITIGATED',
   'CURA':'HEALING',
-  'CARREGA SUA MAIOR MAESTRIA.':'CARRIES YOUR HIGHEST MASTERY.',
+  'CARREGA SUA MAIOR MAESTRIA.':'YOUR HIGHEST MASTERY CARRIES OVER.',
   'AINDA NÃO HÁ MAESTRIA DISPONÍVEL.':'THERE IS NO MASTERY DATA AVAILABLE YET.',
   'Maestria conta a experiência acumulada ao longo da conta. A Riot Life cruza isso com as':'Mastery tracks accumulated experience across the account. Riot Life crosses that with the',
   'partidas recentes para mostrar se seu legado ainda aparece na fase atual.':'recent matches to show whether your legacy still appears in your current phase.',
@@ -621,10 +621,29 @@ const EN:Record<string,string>={
   'IDENTIDADE CONECTADA':'CONNECTED IDENTITY',
   'DADOS TÉCNICOS DO JOGADOR':'PLAYER TECHNICAL DATA',
   'CONTEXTOS COMPARÁVEIS':'COMPARABLE CONTEXTS',
-  'AGUARDANDO DADOS':'WAITING FOR DATA'
+  'AGUARDANDO DADOS':'WAITING FOR DATA',
+  'Riot ID não encontrado. Confira Nome#TAG.':'Riot ID not found. Check Name#TAG.',
+  'Limite temporário da Riot atingido. Tente novamente em instantes.':'Riot temporary rate limit reached. Try again in a moment.',
+  'Não foi possível consultar este jogador agora.':'We could not look up this player right now.',
+  'Jogador encontrado, mas as partidas não puderam ser carregadas.':'Player found, but the matches could not be loaded.',
+  'AINDA ESTAMOS CONHECENDO ESTE JOGO':'WE ARE STILL LEARNING THIS PLAYER',
+  'PADRÃO RECENTE':'RECENT PATTERN',
+  'AINDA SEM PARTIDAS RECENTES PARA ANALISAR':'NO RECENT MATCHES TO ANALYZE YET',
+  'Quando houver histórico disponível, o ZeroTwo separa padrões por modo.':'When history is available, ZeroTwo separates patterns by mode.',
+  'ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.':'ARAM, Arena, Normal, and Ranked can contribute to the reading.',
+  'Métricas específicas só são comparadas quando fazem sentido naquele modo.':'Mode-specific metrics are only compared when they make sense for that mode.',
+  'SEM AMOSTRA':'NO SAMPLE',
+  'INICIAL':'INITIAL',
+  'BOA':'GOOD'
 };
 
 const RULES:Array<[RegExp,string]>=[
+  [/MOMENTO RECENTE: (.+)/g,'RECENT MOMENT: $1'],
+  [/KDA médio de ([0-9.,]+) no histórico recente\./g,'Average KDA of $1 in recent history.'],
+  [/(.+?) foi o modo mais frequente nesta amostra\./g,'$1 was the most frequent mode in this sample.'],
+  [/Na Arena, sua colocação média foi ([0-9.,]+) e você ficou no Top 4 em ([0-9.,]+)% da amostra\./g,'In Arena, your average placement was $1 and you finished Top 4 in $2% of the sample.'],
+  [/([0-9]+) vitórias em ([0-9]+) partidas recentes analisadas\./g,'$1 wins in $2 recent matches analyzed.'],
+
   [/VOCÊ COSTUMA APARECER (.+?)\./g,'YOU USUALLY APPEAR $1.'],
   [/SEU RELÓGIO MARCA (.+?)\./g,'YOUR CLOCK POINTS TO $1.'],
   [/(.+?) domina a amostra ampliada\./g,'$1 dominates the expanded sample.'],
