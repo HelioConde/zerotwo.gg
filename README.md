@@ -4,9 +4,9 @@
 
 ZeroTwo.gg está evoluindo de um produto centrado em LFG para uma experiência de **Riot Life**: usar dados permitidos do ecossistema Riot para transformar partidas, sessões, mudanças de estilo e histórico em histórias que o jogador realmente queira explorar.
 
-**Produto atual:** Riot ID / Riot Sign On → Riot Passport → Riot Life → Session Lab → Personal Meta → Time Machine → Match Story → estatísticas profundas.
+**Produto atual:** Riot ID de League of Legends → Riot Passport → Riot Life → Session Lab → Personal Meta → Time Machine → Match Story → estatísticas profundas.
 
-League of Legends é a primeira fonte pública. VALORANT permanece opt-in via Riot Sign On. Find Your 02 e 02 Sync continuam no código como experimentos sociais, mas **não são mais a definição nem a North Star do produto**.
+A versão pública atual é **League of Legends only**. O trabalho experimental de VALORANT permanece no repositório para possível retomada futura, mas está desativado na experiência publicada e fora do escopo atual de submissão à Riot. Find Your 02 e 02 Sync continuam no código como experimentos sociais, mas **não são mais a definição nem a North Star do produto**.
 
 A visão expandida está em [docs/PRODUCT.md](docs/PRODUCT.md).
 
@@ -39,7 +39,7 @@ Princípio central: **evidência antes de narrativa**. O ZeroTwo pode interpreta
 - **Mode intent is explicit:** Find 02 asks what the player wants to play instead of assuming Ranked.
 - **Discovery intent is explicit:** **NOW** solves the next session; **RECURRING** looks for a player to build a repeatable gaming routine with.
 - **02 Sync is post-match learning:** the match creates a hypothesis; shared games and voluntary feedback test it.
-- **Multi-game identity:** ZeroTwo is the platform. League is one integration; VALORANT will require its own opt-in/RSO flow.
+- **Current scope:** the published ZeroTwo experience is focused on League of Legends.
 - **Narrative + depth:** YearIn.LoL is the reference for storytelling and emotional presentation; Rewind.LoL is the reference for deep history, trends and exploration. ZeroTwo must combine both without copying either.
 - **Relationship layer:** historical co-players are not just a stats feature. They are the bridge into Find 02 and 02 Sync.
 
@@ -401,7 +401,7 @@ Alterar uma hipótese relevante por experimento e medir ativação + retenção,
 
 ### Em seguida
 
-**DNA avançado → aprendizado de dupla → retenção → VALORANT.**
+**DNA avançado → aprendizado de dupla → retenção → avaliar futuras integrações somente após aprovação e validação do produto League.**
 
 Não aumentar a quantidade de funcionalidades visíveis antes de validar que novos usuários chegam rapidamente ao First Value e retornam ao perfil público.
 
