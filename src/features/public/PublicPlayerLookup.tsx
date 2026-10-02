@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { supabase } from '../../supabase';
 import { ztProductEvent } from '../../lib/telemetry';
 import { Icon, GameBadge } from '../../components/ZeroTwoUI';
 import { fmtStatNumber } from '../../lib/format';
-import { RiotLifeExperience } from './RiotLifeExperience';
 import { getLocale, useLanguage } from '../../i18n';
+
+const RiotLifeExperience=lazy(()=>import('./RiotLifeExperience').then(module=>({default:module.RiotLifeExperience})));
 
 function HomeExperience(){
  return <section className="homeJourney" id="experience">
@@ -75,7 +76,34 @@ export function PublicPlayerLookup(){
  const initialParams=new URLSearchParams(location.search);const [q,setQ]=useState(()=>initialParams.get('player')||''),[platform,setPlatform]=useState(()=>initialParams.get('server')||'br1'),[loading,setLoading]=useState(false),[error,setError]=useState(''),[data,setData]=useState<any>(null),[champions,setChampions]=useState<any>({}),[ddv,setDdv]=useState('16.17.1'),[matchFilter,setMatchFilter]=useState('ALL'),[openMatch,setOpenMatch]=useState<string|null>(null),[changes,setChanges]=useState<any>(null),[shareStatus,setShareStatus]=useState(''),[recentPlayers,setRecentPlayers]=useState<Array<{riotId:string,platform:string,searchedAt:number}>>(()=>{try{const v=JSON.parse(localStorage.getItem('zt_recent_players')||'[]');return Array.isArray(v)?v.slice(0,5):[]}catch{return[]}}),[showMomentExplanation,setShowMomentExplanation]=useState(false),[profileView,setProfileView]=useState<'moment'|'dna'|'champions'|'matches'>('moment'),[championView,setChampionView]=useState<'recent'|'mastery'>('recent'),[matchLimit,setMatchLimit]=useState(5);
  const publicSearchStarted=useRef(false);
  useEffect(()=>{ztProductEvent('landing_view',{area:'product_funnel',context:{has_shared_player:initialParams.has('player')}})},[]);
- useEffect(()=>{fetch('https://ddragon.leagueoflegends.com/api/versions.json').then(r=>r.json()).then(async(v:any[])=>{const ver=v?.[0]||'16.17.1';setDdv(ver);const j=await fetch('https://ddragon.leagueoflegends.com/cdn/'+ver+'/data/'+ddragonLocale+'/champion.json').then(r=>r.json());const x:any={};Object.values(j.data||{}).forEach((c:any)=>{const v={name:c.name,id:c.id};x[String(c.key)]=v;x[String(c.name)]=v;x[String(c.id)]=v});setChampions(x)}).catch(()=>{})},[ddragonLocale]);
+ useEffect(()=>{
+  let cancelled=false;
+  let idleId:number|undefined;
+  let timeoutId:number|undefined;
+  const load=()=>fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+   .then(r=>r.json())
+   .then(async(v:any[])=>{
+    const ver=v?.[0]||'16.17.1';
+    if(cancelled)return;
+    setDdv(ver);
+    const j=await fetch('https://ddragon.leagueoflegends.com/cdn/'+ver+'/data/'+ddragonLocale+'/champion.json').then(r=>r.json());
+    if(cancelled)return;
+    const x:any={};
+    Object.values(j.data||{}).forEach((c:any)=>{
+     const value={name:c.name,id:c.id};
+     x[String(c.key)]=value;x[String(c.name)]=value;x[String(c.id)]=value;
+    });
+    setChampions(x);
+   }).catch(()=>{});
+  const w=window as any;
+  if(typeof w.requestIdleCallback==='function')idleId=w.requestIdleCallback(load,{timeout:1800});
+  else timeoutId=window.setTimeout(load,900);
+  return()=>{
+   cancelled=true;
+   if(idleId!==undefined&&typeof w.cancelIdleCallback==='function')w.cancelIdleCallback(idleId);
+   if(timeoutId!==undefined)window.clearTimeout(timeoutId);
+  };
+ },[ddragonLocale]);
  const regionFor=(p:string)=>['br1','na1','la1','la2'].includes(p)?'americas':['kr','jp1'].includes(p)?'asia':['ph2','sg2','th2','tw2','vn2'].includes(p)?'sea':'europe';
  useEffect(()=>{const p=initialParams.get('player');if(p)search(p,initialParams.get('server')||platform,true)},[]); async function shareProfile(){const url=location.href;try{if(navigator.share)await navigator.share({title:(data?.player?.gameName||'Player')+' // ZeroTwo.gg',url});else await navigator.clipboard.writeText(url);setShareStatus('LINK COPIADO');setTimeout(()=>setShareStatus(''),1800)}catch{}}
  async function search(queryOverride?:any,platformOverride?:string,silentUrl=false){const query=normalizeRiotId(typeof queryOverride==='string'?queryOverride:q),p=platformOverride||platform;setQ(query);setPlatform(p);const cut=query.lastIndexOf('#');if(cut<1||cut===query.length-1){setError('Use o formato Nome#TAG.');return}const gameName=query.slice(0,cut).trim(),tagLine=query.slice(cut+1).trim();ztProductEvent('riot_id_submitted',{area:'product_funnel',context:{server:p,source:silentUrl?'shared_link':'search'}});setLoading(true);setError('');setData(null);setChanges(null);setOpenMatch(null);setMatchFilter('ALL');setProfileView('moment');setShowMomentExplanation(false);setChampionView('recent');setMatchLimit(5);const {data:r,error:e}=await supabase.functions.invoke('public-lol-profile',{body:{gameName,tagLine,platform:p,region:regionFor(p),limit:100,matchLimit:100,historyDepth:100}});setLoading(false);if(e||r?.error){setError(r?.message||'Não foi possível consultar este jogador agora.');return}const key='zt_public_'+p+'_'+(gameName+'#'+tagLine).toLowerCase();let prev:any=null;try{prev=JSON.parse(localStorage.getItem(key)||'null')}catch{}const latestAt=Number(r.matches?.[0]?.playedAt||0),newMatches=prev?.lastSeenPlayedAt?(r.matches||[]).filter((m:any)=>Number(m.playedAt||0)>Number(prev.lastSeenPlayedAt)).length:0,kdaDelta=prev?.avgKda!=null&&r.summary?.avgKda!=null?+(Number(r.summary.avgKda)-Number(prev.avgKda)).toFixed(2):null;setChanges(prev?{newMatches,modeChanged:!!prev.mainContext&&prev.mainContext!==r.summary?.mainContext,previousMode:prev.mainContext,kdaDelta}:null);try{localStorage.setItem(key,JSON.stringify({lastSeenPlayedAt:latestAt,mainContext:r.summary?.mainContext,avgKda:r.summary?.avgKda,searchedAt:Date.now()}));const riotId=r.player.gameName+'#'+r.player.tagLine;const recent=[{riotId,platform:p,searchedAt:Date.now()},...recentPlayers.filter(x=>x.riotId.toLowerCase()!==riotId.toLowerCase()||x.platform!==p)].slice(0,5);localStorage.setItem('zt_recent_players',JSON.stringify(recent));setRecentPlayers(recent)}catch{}ztProductEvent('riot_player_found',{area:'product_funnel',context:{server:p,source:silentUrl?'shared_link':'search',matches:r.summary?.matches||0,main_context:r.summary?.mainContext||null}});setData(r);if(!silentUrl){const nextUrl=location.pathname+'?player='+encodeURIComponent(r.player.gameName+'#'+r.player.tagLine)+'&server='+encodeURIComponent(p);if(location.pathname+location.search!==nextUrl)window.history.pushState({},document.title,nextUrl)}setTimeout(()=>document.querySelector('.publicPlayerResult')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
@@ -92,7 +120,7 @@ export function PublicPlayerLookup(){
   </div>
   <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button></div>
  </section>
- <RiotLifeExperience data={data} platform={platform} champions={champions} ddv={ddv}/>
+ <Suspense fallback={<div className="riotLifeDeferredLoading">CARREGANDO ANÁLISE COMPLETA<span>...</span></div>}><RiotLifeExperience data={data} platform={platform} champions={champions} ddv={ddv}/></Suspense>
  <details id="riot-evidence" className="gameDataVault">
   <summary><span><small>EVIDÊNCIAS DA ANÁLISE</small><b>VER PARTIDAS E DADOS</b><em>{data.matches.length} partidas · {(data.mastery||[]).length} maestrias · {data.modeSummaries?.length||0} contextos</em></span><Icon name="arrow"/></summary>
   <div className="gameDataVaultBody">
