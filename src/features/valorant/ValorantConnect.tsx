@@ -7,6 +7,8 @@ const RSO_ENABLED=import.meta.env.VITE_VALORANT_RSO_ENABLED==='true';
 const SHARDS=[
   ['br','BR'],['latam','LATAM'],['na','NA'],['eu','EU'],['kr','KR'],['ap','AP']
 ] as const;
+const RIOT_DEVELOPER_PORTAL='https://developer.riotgames.com/';
+const VALORANT_RSO_CALLBACK='https://bieihhaobdztjyoweewa.supabase.co/functions/v1/valorant-rso-callback';
 
 export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onLinkedChange?:(linked:boolean,profile?:any)=>void,expanded?:boolean,onUseLeague?:()=>void}){
  const [profile,setProfile]=useState<any>(null);
@@ -50,11 +52,15 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
 
  async function connect(){
   setStatus('');
+  if(!RSO_ENABLED){
+   setStatus('O ZeroTwo ainda não recebeu um RSO Client de produção da Riot. O fluxo já está pronto; falta a liberação/credencial no Riot Developer Portal.');
+   return;
+  }
   setLoading(true);
   const {data,error}=await supabase.functions.invoke('valorant-rso-start',{body:{shard}});
   setLoading(false);
   if(error||!data?.authorizationUrl){
-   setStatus('RSO da Riot ainda não está disponível para este projeto.');
+   setStatus('O login Riot não pôde ser iniciado. Verifique se RIOT_RSO_CLIENT_ID, RIOT_RSO_CLIENT_SECRET e RIOT_RSO_REDIRECT_URI estão configurados no Supabase.');
    return;
   }
   location.assign(data.authorizationUrl);
@@ -86,10 +92,14 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
      <article><Icon name="dna"/><small>ANÁLISE</small><b>PÓS-PARTIDA</b><p>Agentes, filas e resultados entram como história depois das partidas.</p></article>
      <article><Icon name="status"/><small>SEPARAÇÃO</small><b>LEAGUE ≠ VALORANT</b><p>Cada jogo mantém seu próprio contexto; não misturamos métricas incompatíveis.</p></article>
     </div>
-    <div className="valorantUnavailableCta">
-     <div><small>COMEÇAR AGORA</small><h3>AUTORIZE SUA PRÓPRIA CONTA.</h3><p>Selecione a região da sua conta VALORANT. O botão abaixo tenta abrir o login oficial da Riot imediatamente.</p></div>
-     <label>REGIÃO<select aria-label="Região do VALORANT" value={shard} onChange={e=>setShard(e.target.value)}>{SHARDS.map(([value,label])=><option value={value} key={value}>{label}</option>)}</select></label>
-     <button className="valorantConnectPrimary" onClick={connect} disabled={loading}>{loading?'ABRINDO RIOT...':'CONECTAR CONTA RIOT →'}</button>
+    <div className="valorantUnavailableCta valorantProductionCta">
+     <div><small>PRÓXIMO PASSO</small><h3>LIBERAR O RIOT SIGN ON DO ZEROTWO.</h3><p>A interface e as Edge Functions já estão prontas. Para o login oficial abrir, a Riot precisa liberar um RSO Client para a aplicação de produção.</p></div>
+     <a className="valorantConnectPrimary" href={RIOT_DEVELOPER_PORTAL} target="_blank" rel="noreferrer">ABRIR RIOT DEVELOPER PORTAL ↗</a>
+    </div>
+    <div className="valorantRsoSetup">
+     <span><small>REDIRECT URI PARA CADASTRAR</small><b>{VALORANT_RSO_CALLBACK}</b></span>
+     <span><small>SECRETS NECESSÁRIOS NO SUPABASE</small><b>RIOT_RSO_CLIENT_ID · RIOT_RSO_CLIENT_SECRET · RIOT_RSO_REDIRECT_URI</b></span>
+     <span><small>DEPOIS DA LIBERAÇÃO</small><b>VITE_VALORANT_RSO_ENABLED=true</b></span>
     </div>
     {status&&<p className="valorantStatus valorantStatusAction" role="status">{status}</p>}
     <footer className="valorantLifeFooter">{onUseLeague&&<button className="secondary" onClick={onUseLeague}>← VOLTAR AO LEAGUE</button>}<span>{status?'VERIFIQUE O STATUS ACIMA':'PRONTO PARA TENTAR A CONEXÃO'}</span></footer>
@@ -132,8 +142,8 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
  if(!RSO_ENABLED){
   return <div id="valorant-connect" className="connectedGame upcoming valorantIntegration valorantIntegrationActionable">
    <GameBadge game="valorant"/>
-   <div><small>VALORANT // RIOT SIGN ON</small><b>CONECTAR CONTA RIOT</b><em>Escolha sua região e tente iniciar o login oficial.</em>{status&&<em className="valorantStatus">{status}</em>}</div>
-   <div className="valorantInlineActions"><select aria-label="Região do VALORANT" value={shard} onChange={e=>setShard(e.target.value)}>{SHARDS.map(([value,label])=><option value={value} key={value}>{label}</option>)}</select><button onClick={connect} disabled={loading}>{loading?'ABRINDO...':'CONECTAR RIOT'}</button></div>
+   <div><small>VALORANT // RIOT SIGN ON</small><b>RSO AGUARDANDO LIBERAÇÃO</b><em>O código está pronto. Falta o RSO Client de produção da Riot.</em>{status&&<em className="valorantStatus">{status}</em>}</div>
+   <div className="valorantInlineActions"><a href={RIOT_DEVELOPER_PORTAL} target="_blank" rel="noreferrer">LIBERAR LOGIN RIOT ↗</a></div>
   </div>;
  }
 
