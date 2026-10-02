@@ -169,17 +169,18 @@ export function FrequentTeammates({data,platform}:Props){
   }
 
   const repeated=rows.filter(row=>row.games>=2);
-  const featured=repeated[0]||rows[0]||null;
+  const singleEncounterCount=rows.length-repeated.length;
+  const featured=repeated[0]||null;
   const featuredStatus=featured?relationshipStatus(featured.lastPlayedAt):null;
   const featuredShare=featured&&analyzed?Math.round(featured.games/analyzed*100):0;
   const observedSpan=featured?.firstPlayedAt&&featured?.lastPlayedAt
     ?Math.max(0,Math.ceil((featured.lastPlayedAt-featured.firstPlayedAt)/86400000))
     :0;
   const timeline=useMemo(()=>({
-    now:rows.filter(row=>row.phase==='now').sort((a,b)=>b.recentGames-a.recentGames),
-    persistent:rows.filter(row=>row.phase==='persistent').sort((a,b)=>b.recentGames-a.recentGames||b.games-a.games),
-    before:rows.filter(row=>row.phase==='before').sort((a,b)=>b.olderGames-a.olderGames)
-  }),[rows]);
+    now:repeated.filter(row=>row.phase==='now').sort((a,b)=>b.recentGames-a.recentGames),
+    persistent:repeated.filter(row=>row.phase==='persistent').sort((a,b)=>b.recentGames-a.recentGames||b.games-a.games),
+    before:repeated.filter(row=>row.phase==='before').sort((a,b)=>b.olderGames-a.olderGames)
+  }),[repeated]);
   const hasTimeline=analyzed>=5&&(timeline.now.length+timeline.persistent.length+timeline.before.length)>0;
 
   if(attempted&&!loading&&!rows.length&&lookupError)return <section className="frequentTeammates teammateEmpty" ref={root}>
@@ -189,10 +190,10 @@ export function FrequentTeammates({data,platform}:Props){
     </div>
   </section>;
 
-  if(attempted&&!loading&&!rows.length)return <section className="frequentTeammates teammateEmpty" ref={root}>
+  if(attempted&&!loading&&!repeated.length)return <section className="frequentTeammates teammateEmpty" ref={root}>
     <div className="teammateEmptyState">
       <Icon name="user"/>
-      <div><small>{focusContext?focusContext+' // PARCEIROS':'PESSOAS // PARCEIROS'}</small><b>NENHUM PARCEIRO RECORRENTE FOI ENCONTRADO NESTA AMOSTRA.</b><p>O ZeroTwo analisou {analyzed||matchIds.length} partidas {focusContext?'de '+focusContext:''}. Quando o mesmo parceiro aparecer novamente, ele entra aqui automaticamente.</p></div>
+      <div><small>{focusContext?focusContext+' // PARCEIROS':'PESSOAS // PARCEIROS'}</small><b>NENHUM PARCEIRO RECORRENTE FOI ENCONTRADO NESTA AMOSTRA.</b><p>O ZeroTwo analisou {analyzed||matchIds.length} partidas {focusContext?'de '+focusContext:''}. {singleEncounterCount>0?singleEncounterCount+' jogador'+(singleEncounterCount===1?' apareceu':'es apareceram')+' apenas uma vez e não entra'+(singleEncounterCount===1?'':'m')+' neste ranking. ':''}Quando alguém aparecer em 2 ou mais partidas, entra aqui automaticamente.</p></div>
     </div>
   </section>;
 
@@ -262,15 +263,15 @@ export function FrequentTeammates({data,platform}:Props){
       </section>}
 
       <div className="teammateSectionLabel">
-        <span><small>{repeated.length?'JOGADORES QUE SE REPETIRAM':'JOGADORES MAIS ENCONTRADOS'}</small><b>{rows.length} jogadores identificados</b></span>
-        {repeated.length>0&&<em>{repeated.length} apareceram em 2+ partidas</em>}
+        <span><small>JOGADORES QUE SE REPETIRAM</small><b>{repeated.length} recorrente{repeated.length===1?'':'s'} identificado{repeated.length===1?'':'s'}</b></span>
+        <em>mínimo 2 partidas{singleEncounterCount>0?' · '+singleEncounterCount+' encontro'+(singleEncounterCount===1?'':'s')+' único'+(singleEncounterCount===1?'':'s')+' oculto'+(singleEncounterCount===1?'':'s'):''}</em>
       </div>
 
-      <div className="teammateGrid">{rows.slice(0,6).map((row,index)=>{
+      <div className="teammateGrid">{repeated.slice(0,6).map((row,index)=>{
         const status=relationshipStatus(row.lastPlayedAt);
         return <button key={row.riotId} onClick={()=>openPlayer(row.riotId)}>
           <span className="mateRank">{String(index+1).padStart(2,'0')}</span>
-          <div className="mateIdentity"><small>{row.games>=2?'JOGADOR RECORRENTE':'ENCONTRADO NA AMOSTRA'}</small><b>{row.gameName}<em>#{row.tagLine}</em></b><span><i className={'mateMiniStatus '+status.tone}/>{status.label} · {when(row.lastPlayedAt)}</span></div>
+          <div className="mateIdentity"><small>JOGADOR RECORRENTE</small><b>{row.gameName}<em>#{row.tagLine}</em></b><span><i className={'mateMiniStatus '+status.tone}/>{status.label} · {when(row.lastPlayedAt)}</span></div>
           <div className="mateNumbers"><span><b>{row.games}</b><small>JUNTOS</small></span><span><b>{row.winRate}%</b><small>VITÓRIAS*</small></span></div>
           <div className="mateChampions"><small>MAIS VISTOS</small><b>{row.champions?.map(x=>x.name).join(' · ')||'—'}</b>{row.pairChampions?.[0]&&<em>{row.pairChampions[0].name}</em>}</div>
           <Icon name="arrow"/>
@@ -278,6 +279,6 @@ export function FrequentTeammates({data,platform}:Props){
       })}</div>
     </>}
 
-    {!loading&&rows.length>0&&<footer><span>* Resultado da equipe nas partidas da amostra. Não mede “sinergia” nem causalidade.</span><b>ABRA UM JOGADOR PARA VER A RIOT LIFE DELE →</b></footer>}
+    {!loading&&repeated.length>0&&<footer><span>* Resultado da equipe nas partidas da amostra. Não mede “sinergia” nem causalidade.</span><b>ABRA UM JOGADOR PARA VER A RIOT LIFE DELE →</b></footer>}
   </section>;
 }
