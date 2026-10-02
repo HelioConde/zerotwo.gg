@@ -562,6 +562,20 @@ const EN:Record<string,string>={
 };
 
 const RULES:Array<[RegExp,string]>=[
+  [/Gaming DNA atualizado com (\d+) partida\./g,'Gaming DNA updated with $1 match.'],
+  [/Gaming DNA atualizado com (\d+) partidas\./g,'Gaming DNA updated with $1 matches.'],
+  [/Seu dia mais ativo na amostra é (.+?)\. Esse padrão ajuda a entender seu ritmo ao longo do tempo\./g,'Your most active day in the sample is $1. This pattern helps explain your rhythm over time.'],
+  [/(\d+) partidas já carregadas de (\d+) solicitadas\. O restante entra conforme o limite temporário da Riot permite\./g,'$1 matches already loaded out of $2 requested. The rest is added as Riot temporary limits allow.'],
+  [/(\d+) partidas desta janela vieram desse contexto\./g,'$1 matches in this window came from this context.'],
+  [/Este é o contexto mais presente entre as partidas disponíveis\./g,'This is the most present context among available matches.'],
+  [/A última partida observada foi em (.+?)\./g,'The last observed match was on $1.'],
+  [/Vocês apareceram juntos em (\d+) partidas/g,'You appeared together in $1 matches'],
+  [/Na amostra, você somou (\d+) partidas\./g,'In the sample, you accumulated $1 matches.'],
+  [/(\d+) partidas em comum/g,'$1 matches together'],
+  [/(\d+) partidas analisadas/g,'$1 matches analyzed'],
+  [/(\d+) de (\d+) partidas analisadas/g,'$1 of $2 matches analyzed'],
+  [/Preparando (\d+) partidas do histórico…/g,'Preparing $1 history matches…'],
+  [/ATIVA ATÉ /g,'ACTIVE UNTIL '],
   [/(\d+) partidas\b/g,'$1 matches'],
   [/(\d+) partida\b/g,'$1 match'],
   [/(\d+) jogos\b/g,'$1 games'],
@@ -601,18 +615,18 @@ const RULES:Array<[RegExp,string]>=[
   [/d atrás/g,'d ago'],
   [/jogos ·/g,'games ·'],
   [/partidas ·/g,'matches ·'],
-  [/\bjan\.\b/gi,'Jan'],
-  [/\bfev\.\b/gi,'Feb'],
-  [/\bmar\.\b/gi,'Mar'],
-  [/\babr\.\b/gi,'Apr'],
-  [/\bmai\.\b/gi,'May'],
-  [/\bjun\.\b/gi,'Jun'],
-  [/\bjul\.\b/gi,'Jul'],
-  [/\bago\.\b/gi,'Aug'],
-  [/\bset\.\b/gi,'Sep'],
-  [/\bout\.\b/gi,'Oct'],
-  [/\bnov\.\b/gi,'Nov'],
-  [/\bdez\.\b/gi,'Dec']
+  [/jan\./gi,'Jan'],
+  [/fev\./gi,'Feb'],
+  [/mar\./gi,'Mar'],
+  [/abr\./gi,'Apr'],
+  [/mai\./gi,'May'],
+  [/jun\./gi,'Jun'],
+  [/jul\./gi,'Jul'],
+  [/ago\./gi,'Aug'],
+  [/set\./gi,'Sep'],
+  [/out\./gi,'Oct'],
+  [/nov\./gi,'Nov'],
+  [/dez\./gi,'Dec']
 ];
 
 function translateString(value:string){
