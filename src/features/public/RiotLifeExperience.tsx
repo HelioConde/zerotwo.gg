@@ -34,7 +34,7 @@ const RIOT_CHAPTERS=[
   ['riot-damage','DANO'],
   ['riot-economy','ECONOMIA'],
   ['riot-survival','SOBREVIVÊNCIA'],
-  ['riot-pool','POOL'],
+  ['riot-mastery','MAESTRIA'],
   ['riot-arena','ARENA'],
   ['riot-streaks','SEQUÊNCIAS'],
   ['riot-hours','HORÁRIOS'],
@@ -411,6 +411,40 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     return rows.sort((a:any,b:any)=>b.games-a.games).slice(0,4).map((row:any)=>({...row,share:Math.round(row.games/total*100)}));
   },[data,matches.length]);
   const signatureTop=(data?.championSummaries||[]).slice(0,5);
+  const masteryStory=useMemo(()=>{
+    const rows=(data?.mastery||[]).slice(0,5).map((m:any,index:number)=>{
+      const champion=champions?.[String(m.championId)]||null;
+      const name=champion?.name||('Campeão '+m.championId);
+      const recent=matches.filter((match:any)=>match.champion===name);
+      return {
+        rank:index+1,
+        championId:m.championId,
+        champion,
+        name,
+        level:Number(m.level||0),
+        points:Number(m.points||0),
+        lastPlayTime:Number(m.lastPlayTime||0),
+        recentGames:recent.length,
+        recentShare:matches.length?Math.round(recent.length/matches.length*100):0,
+        recentKda:recent.length?avg(recent,'kda'):0,
+        recentResult:recent.length?resultRate(recent):null
+      };
+    });
+    const totalPoints=rows.reduce((sum:number,row:any)=>sum+row.points,0);
+    const recentMasteryGames=rows.reduce((sum:number,row:any)=>sum+row.recentGames,0);
+    const top=rows[0]||null;
+    const recentTop=signatureTop[0]?.name||null;
+    const alignment=top&&recentTop?top.name===recentTop?'ALINHADA':'FASE DIFERENTE':'SEM COMPARAÇÃO';
+    return {
+      rows,
+      top,
+      totalPoints,
+      recentMasteryGames,
+      recentMasteryShare:matches.length?Math.round(recentMasteryGames/matches.length*100):0,
+      alignment,
+      recentTop
+    };
+  },[data?.mastery,champions,matches,signatureTop]);
   const recentCompare=recentVsOld?[
     {label:'KDA',recent:recentVsOld.recentKda,old:recentVsOld.oldKda,format:(v:number)=>v.toFixed(2)},
     {label:'RESULTADO',recent:recentVsOld.recentWr,old:recentVsOld.oldWr,format:(v:number)=>Math.round(v)+'%'}
@@ -630,12 +664,32 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString('pt-BR')}
       ]}/>
 
-      <DeepDiveChapter id="riot-pool" number="12" kicker="POOL // ESCOLHAS" title="VOCÊ ESTÁ REPETINDO OU EXPLORANDO CAMPEÕES?" copy="Aqui olhamos diversidade e concentração. Um pool amplo e um pool focado são estilos diferentes; não há julgamento de qual é melhor." metrics={[
-        {label:'CAMPEÕES ÚNICOS',value:deepDive.pool.unique},
-        {label:'TOP 5 CONCENTRA',value:deepDive.pool.top5Share+'%'},
-        {label:'USADOS 2+ VEZES',value:deepDive.pool.repeated},
-        {label:'MAIS PRESENTE',value:deepDive.pool.most}
-      ]}/>
+      <section id="riot-mastery" className="riotMasteryChapter">
+        <span className="riotChapterNumber">12</span>
+        <div className="riotMasteryCopy">
+          <small>MAESTRIA // HISTÓRIA ACUMULADA</small>
+          <h3>{masteryStory.top?masteryStory.top.name+' CARREGA SUA MAIOR MAESTRIA.':'AINDA NÃO HÁ MAESTRIA DISPONÍVEL.'}</h3>
+          <p>{masteryStory.top
+            ?'Maestria conta a experiência acumulada ao longo da conta. A Riot Life cruza isso com as '+matches.length+' partidas recentes para mostrar se seu legado ainda aparece na fase atual.'
+            :'Quando a Riot disponibilizar dados de Champion Mastery para esta conta, eles entram aqui sem misturar experiência histórica com desempenho recente.'}</p>
+          <small className="chapterSource">FONTE // RIOT CHAMPION-MASTERY-V4 · forma recente // MATCH-V5</small>
+        </div>
+        <div className="riotMasterySummary">
+          <span><small>MAIOR MAESTRIA</small><b>{masteryStory.top?masteryStory.top.points.toLocaleString('pt-BR'):'—'}</b><em>{masteryStory.top?'nível '+masteryStory.top.level:'sem dados'}</em></span>
+          <span><small>FASE RECENTE</small><b>{masteryStory.recentTop||'—'}</b><em>campeão mais presente</em></span>
+          <span><small>RELAÇÃO</small><b>{masteryStory.alignment}</b><em>{masteryStory.top&&masteryStory.recentTop&&masteryStory.top.name!==masteryStory.recentTop?masteryStory.top.name+' → '+masteryStory.recentTop:'história e fase atual'}</em></span>
+          <span><small>TOP 5 NA AMOSTRA</small><b>{masteryStory.recentMasteryShare}%</b><em>{masteryStory.recentMasteryGames} de {matches.length} partidas</em></span>
+        </div>
+        {masteryStory.rows.length>0?<div className="riotMasteryList">{masteryStory.rows.map((row:any)=><article key={row.championId} className={row.rank===1?'featured':''}>
+          <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
+          {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
+          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString('pt-BR')} pontos</em></div>
+          <div className="masteryRecent"><small>NESTA RIOT LIFE</small><b>{row.recentGames}x</b><em>{row.recentGames?row.recentShare+'% da amostra':'não apareceu'}</em></div>
+          <div className="masteryRecent"><small>KDA RECENTE</small><b>{row.recentGames?row.recentKda.toFixed(2):'—'}</b><em>{row.recentResult!=null?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+row.recentResult+'%':'sem amostra recente'}</em></div>
+          <div className="masteryLast"><small>ÚLTIMO REGISTRO</small><b>{row.lastPlayTime?formatDate(row.lastPlayTime):'—'}</b></div>
+        </article>)}</div>:<div className="riotMasteryEmpty">Nenhum dado de maestria foi retornado pela Riot para esta consulta.</div>}
+        <div className="riotMasteryPool"><span><small>POOL RECENTE</small><b>{deepDive.pool.unique} campeões únicos</b></span><span><small>CONCENTRAÇÃO</small><b>Top 5 = {deepDive.pool.top5Share}%</b></span><span><small>REPETIÇÃO</small><b>{deepDive.pool.repeated} usados 2+ vezes</b></span></div>
+      </section>
 
       <DeepDiveChapter id="riot-arena" number="13" kicker="ARENA // COLOCAÇÕES" title={arenaPlacement?"ONDE SUAS ARENAS ESTÃO TERMINANDO?":"AINDA NÃO HÁ ARENAS SUFICIENTES NESTA JANELA."} copy={arenaPlacement?"Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado.":"Este capítulo fica reservado para colocação média, Top 4 e primeiros lugares quando partidas de Arena entrarem na amostra."} metrics={arenaPlacement?[
         {label:'ARENAS',value:arenaPlacement.games},
