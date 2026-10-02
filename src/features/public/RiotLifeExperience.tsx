@@ -11,6 +11,7 @@ import {
   type RiotLifeSnapshot as Snapshot
 } from './riotLifeMemory';
 import '../../riot-life.css';
+import { getLocale } from '../../i18n';
 
 type RiotLifeProps={
   data:any;
@@ -88,7 +89,7 @@ function sessionize(matches:any[]){
 }
 function formatDate(ts:number){
   if(!ts)return '—';
-  return new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(ts));
+  return new Intl.DateTimeFormat(getLocale(),{day:'2-digit',month:'short',year:'numeric'}).format(new Date(ts));
 }
 function formatDuration(matches:any[]){
   if(!matches.length)return '—';
@@ -516,9 +517,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const signatureShare=signature&&matches.length?Math.round(Number(signature.games||0)/matches.length*100):0;
   const peakMatch=useMemo(()=>[...matches].sort((a:any,b:any)=>num(b?.kda)-num(a?.kda))[0]||null,[matches]);
   const peakFacts=useMemo(()=>peakMatch?[
-    {label:'DANO / MIN',value:peakMatch.damagePerMin?Math.round(num(peakMatch.damagePerMin)).toLocaleString('pt-BR'):'—'},
-    {label:'DANO TOTAL',value:peakMatch.damage?Math.round(num(peakMatch.damage)).toLocaleString('pt-BR'):'—'},
-    {label:'OURO',value:peakMatch.gold?Math.round(num(peakMatch.gold)).toLocaleString('pt-BR'):'—'},
+    {label:'DANO / MIN',value:peakMatch.damagePerMin?Math.round(num(peakMatch.damagePerMin)).toLocaleString(getLocale()):'—'},
+    {label:'DANO TOTAL',value:peakMatch.damage?Math.round(num(peakMatch.damage)).toLocaleString(getLocale()):'—'},
+    {label:'OURO',value:peakMatch.gold?Math.round(num(peakMatch.gold)).toLocaleString(getLocale()):'—'},
     {label:'PARTICIPAÇÃO',value:peakMatch.killParticipation!=null?Math.round(num(peakMatch.killParticipation))+'%':'—'}
   ]:[],[peakMatch]);
   const peakChampion=peakMatch?champions?.[peakMatch.champion]:null;
@@ -596,7 +597,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>ASSINATURA // QUEM MAIS APARECEU</small>
           <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
           <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p><small className="chapterSource">FATO // frequência observada na amostra, não avaliação de habilidade</small>
-          {signatureTop.length>1&&<div className="signatureTopList signatureTopRich" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.top4Rate!=null?' · Top 4 '+champ.top4Rate+'%':champ.winRate!=null?' · '+champ.winRate+'% WR':''}</em><small>KDA {num(champ.avgKda).toFixed(2)}{champ.avgDamagePerMin?' · '+Math.round(num(champ.avgDamagePerMin)).toLocaleString('pt-BR')+' dano/min':''}</small></span>)}</div>}
+          {signatureTop.length>1&&<div className="signatureTopList signatureTopRich" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.top4Rate!=null?' · Top 4 '+champ.top4Rate+'%':champ.winRate!=null?' · '+champ.winRate+'% WR':''}</em><small>KDA {num(champ.avgKda).toFixed(2)}{champ.avgDamagePerMin?' · '+Math.round(num(champ.avgDamagePerMin)).toLocaleString(getLocale())+' dano/min':''}</small></span>)}</div>}
         </div>
         <div className="riotChapterHeroMetric">
           <b>{signatureShare}%</b>
@@ -659,14 +660,14 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
             {[
               {label:'KDA',old:focusedComparison.previous.kda,now:focusedComparison.recent.kda,fmt:(v:number)=>v.toFixed(2)},
               {label:focusedComparison.context==='ARENA'?'TOP 4':'RESULTADO',old:focusedComparison.previous.result,now:focusedComparison.recent.result,fmt:(v:number)=>Math.round(v)+'%'},
-              {label:'DANO / MIN',old:focusedComparison.previous.damagePerMin,now:focusedComparison.recent.damagePerMin,fmt:(v:number)=>Math.round(v).toLocaleString('pt-BR')},
-              {label:'OURO / MIN',old:focusedComparison.previous.goldPerMin,now:focusedComparison.recent.goldPerMin,fmt:(v:number)=>Math.round(v).toLocaleString('pt-BR')},
+              {label:'DANO / MIN',old:focusedComparison.previous.damagePerMin,now:focusedComparison.recent.damagePerMin,fmt:(v:number)=>Math.round(v).toLocaleString(getLocale())},
+              {label:'OURO / MIN',old:focusedComparison.previous.goldPerMin,now:focusedComparison.recent.goldPerMin,fmt:(v:number)=>Math.round(v).toLocaleString(getLocale())},
               {label:'MORTES / JOGO',old:focusedComparison.previous.deaths,now:focusedComparison.recent.deaths,fmt:(v:number)=>v.toFixed(1)},
               {label:'DURAÇÃO',old:focusedComparison.previous.duration,now:focusedComparison.recent.duration,fmt:(v:number)=>Math.round(v)+' min'}
             ].map((row:any)=>{
               const delta=row.now-row.old;
               const tone=Math.abs(delta)<.01?'flat':delta>0?'up':'down';
-              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label==='KDA'?delta.toFixed(2):row.label==='TOP 4'||row.label==='RESULTADO'?delta.toFixed(0)+' p.p.':row.label==='MORTES / JOGO'?delta.toFixed(1):row.label==='DURAÇÃO'?Math.round(delta)+' min':Math.round(delta).toLocaleString('pt-BR'))}</p></article>
+              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label==='KDA'?delta.toFixed(2):row.label==='TOP 4'||row.label==='RESULTADO'?delta.toFixed(0)+' p.p.':row.label==='MORTES / JOGO'?delta.toFixed(1):row.label==='DURAÇÃO'?Math.round(delta)+' min':Math.round(delta).toLocaleString(getLocale()))}</p></article>
             })}
           </div>
           <div className="riotCompareMeta">
@@ -704,9 +705,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       ]}/>
 
       <DeepDiveChapter id="riot-damage" number="09" art={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO.png')} secondaryArt={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO (2).png')} kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Além do dano bruto, agora usamos a participação no dano da equipe e a composição físico/mágico/verdadeiro quando o Match-V5 fornece esses campos." metrics={[
-        {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString('pt-BR')},
-        {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString('pt-BR')},
-        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString('pt-BR')},
+        {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString(getLocale())},
+        {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString(getLocale())},
+        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString(getLocale())},
         {label:'% DO DANO DO TIME',value:deepDive.damage.teamShare?deepDive.damage.teamShare.toFixed(1)+'%':'—'}
       ]}>
         <div className="damageTypeBars">
@@ -717,9 +718,9 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </DeepDiveChapter>
 
       <DeepDiveChapter id="riot-economy" number="10" art={z2Art('QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO.png')} kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto agora usa o valor oficial do Match-V5 quando disponível. Também mostramos os itens que mais se repetem na janela." metrics={[
-        {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString('pt-BR')},
-        {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString('pt-BR')},
-        {label:'OURO GASTO / JOGO',value:Math.round(deepDive.economy.spent).toLocaleString('pt-BR')},
+        {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString(getLocale())},
+        {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString(getLocale())},
+        {label:'OURO GASTO / JOGO',value:Math.round(deepDive.economy.spent).toLocaleString(getLocale())},
         ...(deepDive.economy.csPerMin>0?[{label:'CS / MIN',value:deepDive.economy.csPerMin.toFixed(1),note:'Summoner’s Rift'}]:[])
       ]}>
         {itemStory.length>0&&<div className="commonItems"><small>ITENS MAIS RECORRENTES</small><div>{itemStory.map((item:any)=><span key={item.id}><img loading="lazy" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/item/'+item.id+'.png'} alt={'Item '+item.id}/><b>{item.games}x</b><em>{item.resultRate}% resultado</em></span>)}</div></div>}
@@ -727,10 +728,10 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
       <DeepDiveChapter id="riot-survival" number="11" art={z2Art('QUANTO CUSTA FICAR VIVO NESSA FASE.png')} kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, mitigação, controle e tempo fora da luta contextualizam melhor o KDA do que olhar apenas abates e mortes." metrics={[
         {label:'MORTES / JOGO',value:deepDive.survival.deaths.toFixed(1)},
-        {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString('pt-BR')},
-        {label:'DANO MITIGADO',value:Math.round(deepDive.survival.mitigated).toLocaleString('pt-BR')},
+        {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString(getLocale())},
+        {label:'DANO MITIGADO',value:Math.round(deepDive.survival.mitigated).toLocaleString(getLocale())},
         {label:'CC / JOGO',value:Math.round(deepDive.survival.cc)+' s'},
-        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString('pt-BR')},
+        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString(getLocale())},
         {label:'TEMPO MORTO / JOGO',value:Math.round(deepDive.survival.timeDead/60)+' min'},
         {label:'MAIOR TEMPO VIVO',value:Math.round(deepDive.survival.longestLiving/60)+' min'}
       ]}/>
@@ -748,7 +749,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small className="chapterSource">FONTE // RIOT CHAMPION-MASTERY-V4 · forma recente // MATCH-V5</small>
         </div>
         <div className="riotMasterySummary">
-          <span><small>MAIOR MAESTRIA</small><b>{masteryStory.top?masteryStory.top.points.toLocaleString('pt-BR'):'—'}</b><em>{masteryStory.top?'nível '+masteryStory.top.level:'sem dados'}</em></span>
+          <span><small>MAIOR MAESTRIA</small><b>{masteryStory.top?masteryStory.top.points.toLocaleString(getLocale()):'—'}</b><em>{masteryStory.top?'nível '+masteryStory.top.level:'sem dados'}</em></span>
           <span><small>FASE RECENTE</small><b>{masteryStory.recentTop||'—'}</b><em>campeão mais presente</em></span>
           <span><small>RELAÇÃO</small><b>{masteryStory.alignment}</b><em>{masteryStory.top&&masteryStory.recentTop&&masteryStory.top.name!==masteryStory.recentTop?masteryStory.top.name+' → '+masteryStory.recentTop:'história e fase atual'}</em></span>
           <span><small>TOP 5 NA AMOSTRA</small><b>{masteryStory.recentMasteryShare}%</b><em>{masteryStory.recentMasteryGames} de {matches.length} partidas</em></span>
@@ -756,7 +757,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {masteryStory.rows.length>0?<div className="riotMasteryList">{masteryStory.rows.map((row:any)=><article key={row.championId} className={row.rank===1?'featured':''}>
           <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
           {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
-          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString('pt-BR')} pontos</em></div>
+          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString(getLocale())} pontos</em></div>
           <div className="masteryRecent"><small>NESTA RIOT LIFE</small><b>{row.recentGames}x</b><em>{row.recentGames?row.recentShare+'% da amostra':'não apareceu'}</em></div>
           <div className="masteryRecent"><small>KDA RECENTE</small><b>{row.recentGames?row.recentKda.toFixed(2):'—'}</b><em>{row.recentResult!=null?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+row.recentResult+'%':'sem amostra recente'}</em></div>
           <div className="masteryLast"><small>ÚLTIMO REGISTRO</small><b>{row.lastPlayTime?formatDate(row.lastPlayTime):'—'}</b></div>
@@ -810,17 +811,17 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {label:'SOLO KILLS',value:deepDive.impact.soloKills},
         {label:'MULTIKILLS',value:deepDive.impact.multikills,note:deepDive.impact.pentas?deepDive.impact.pentas+' pentakill(s)':''},
         {label:'FIRST BLOOD',value:deepDive.impact.firstBloods+'x',note:'abate ou assistência'},
-        {label:'CURA + SHIELD EM ALIADOS',value:Math.round(deepDive.impact.allySupport).toLocaleString('pt-BR')},
+        {label:'CURA + SHIELD EM ALIADOS',value:Math.round(deepDive.impact.allySupport).toLocaleString(getLocale())},
         {label:'OBJETIVOS',value:deepDive.impact.objectives,note:deepDive.impact.objectiveSteals?deepDive.impact.objectiveSteals+' steal(s)':''},
-        {label:'DANO EM OBJETIVOS',value:Math.round(deepDive.impact.objectiveDamage).toLocaleString('pt-BR')},
+        {label:'DANO EM OBJETIVOS',value:Math.round(deepDive.impact.objectiveDamage).toLocaleString(getLocale())},
         {label:'VISÃO',value:deepDive.impact.wardsPlaced+' / '+deepDive.impact.wardsKilled,note:deepDive.impact.controlWards+' sentinelas de controle'},
-        ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString('pt-BR')}]:[])
+        ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString(getLocale())}]:[])
       ]}/>
 
       <DeepDiveChapter id="riot-trend" number="19" art={z2Art('AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES.png')} kicker="TENDÊNCIA // ÚLTIMAS 10" title={deepDive.trend?"AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?":"AINDA FALTAM PARTIDAS PARA UMA TENDÊNCIA CURTA."} copy={deepDive.trend?"Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela.":"Precisamos de pelo menos 15–20 partidas comparáveis no contexto principal para separar uma janela recente de uma anterior."} metrics={deepDive.trend?[
         {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
         {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
-        {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString('pt-BR'),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString('pt-BR')},
+        {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString(getLocale()),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString(getLocale())},
         {label:'MAIS JOGADO',value:deepDive.trend.champNow||'—',note:'antes '+(deepDive.trend.champOld||'—')}
       ]:[
         {label:'STATUS',value:'EM FORMAÇÃO'},
