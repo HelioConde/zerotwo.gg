@@ -692,6 +692,16 @@ const EN:Record<string,string>={
   'Criando sua conta...':'Creating your account...',
   'Entrar no ZeroTwo':'Sign in to ZeroTwo',
   'resultado misto':'mixed result',
+  'CAPÍTULOS':'CHAPTERS',
+  'PARTIDAS NO HISTÓRICO':'MATCH HISTORY',
+  'CONTEXTOS SEPARADOS':'SEPARATE CONTEXTS',
+  'LER RIOT LIFE ↓':'READ RIOT LIFE ↓',
+  'EVIDÊNCIAS':'EVIDENCE',
+  'Resumo do que a Riot Life analisa':'Summary of what Riot Life analyzes',
+  'CAPÍTULO':'CHAPTER',
+  'analisadas':'analyzed',
+  'maestrias':'mastery entries',
+  'contextos':'contexts',
 };
 
 const RULES:Array<[RegExp,string]>=[
