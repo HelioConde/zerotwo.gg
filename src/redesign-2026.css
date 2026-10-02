@@ -6532,3 +6532,38 @@ select{cursor:pointer}
   font-weight:950!important;
   letter-spacing:-.45px!important;
 }
+
+
+/* 2026-10-02 footer divider cleanup — remove inherited rules between nav links. */
+.siteFooterNav,
+.siteFooterNav section,
+.siteFooterNav a{
+  border:0!important;
+  border-top:0!important;
+  border-right:0!important;
+  border-bottom:0!important;
+  border-left:0!important;
+  box-shadow:none!important;
+  background-image:none!important;
+}
+.siteFooterNav section{
+  position:relative;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+}
+.siteFooterNav section::before,
+.siteFooterNav section::after,
+.siteFooterNav a::before,
+.siteFooterNav a::after{
+  content:none!important;
+  display:none!important;
+}
+.siteFooterNav a{
+  padding:0!important;
+  background:transparent!important;
+  text-decoration:none!important;
+}
+.siteFooterLegal{
+  border:0!important;
+}
