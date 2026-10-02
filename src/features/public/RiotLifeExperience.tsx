@@ -189,6 +189,57 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     };
   },[matches]);
 
+  const focusedComparison=useMemo(()=>{
+    const context=String(data?.summary?.mainContext||'');
+    const source=context?matches.filter((m:any)=>String(m?.context||'')===context):matches;
+    if(source.length<8)return null;
+    const size=Math.min(20,Math.max(4,Math.floor(source.length/2)));
+    const recent=source.slice(0,size);
+    const previous=source.slice(size,size*2);
+    if(previous.length<4)return null;
+    const summarize=(rows:any[])=>{
+      const positive=rows.filter((m:any)=>m.context==='ARENA'?(num(m.placement)>0&&num(m.placement)<=4):!!m.win).length;
+      const placements=rows.map((m:any)=>num(m.placement)).filter((v:number)=>v>0);
+      const goldPerMin=rows.map((m:any)=>num(m.duration)>0?num(m.gold)/num(m.duration):0).filter((v:number)=>v>0);
+      return {
+        games:rows.length,
+        result:pct(positive,rows.length),
+        kda:avg(rows,'kda'),
+        damagePerMin:avg(rows,'damagePerMin'),
+        goldPerMin:goldPerMin.length?goldPerMin.reduce((s:number,v:number)=>s+v,0)/goldPerMin.length:0,
+        duration:avg(rows,'duration'),
+        deaths:avg(rows,'deaths'),
+        uniqueChampions:new Set(rows.map((m:any)=>m.champion).filter(Boolean)).size,
+        topChampion:topBy(rows,(m:any)=>m.champion||''),
+        avgPlacement:placements.length?placements.reduce((s:number,v:number)=>s+v,0)/placements.length:null
+      };
+    };
+    return {context,size,recent:summarize(recent),previous:summarize(previous)};
+  },[data?.summary?.mainContext,matches]);
+
+  const arenaPlacement=useMemo(()=>{
+    const arena=matches.filter((m:any)=>m.context==='ARENA'&&num(m.placement)>0);
+    if(!arena.length)return null;
+    const first=arena.filter((m:any)=>num(m.placement)===1).length;
+    const top4=arena.filter((m:any)=>num(m.placement)<=4).length;
+    const mid=arena.filter((m:any)=>num(m.placement)>=2&&num(m.placement)<=4).length;
+    const outside=arena.length-top4;
+    return {
+      games:arena.length,
+      first:pct(first,arena.length),
+      mid:pct(mid,arena.length),
+      outside:pct(outside,arena.length),
+      avg:+(arena.reduce((s:number,m:any)=>s+num(m.placement),0)/arena.length).toFixed(2)
+    };
+  },[matches]);
+
+  const peakFacts=useMemo(()=>peakMatch?[
+    {label:'DANO / MIN',value:peakMatch.damagePerMin?Math.round(num(peakMatch.damagePerMin)).toLocaleString('pt-BR'):'—'},
+    {label:'DANO TOTAL',value:peakMatch.damage?Math.round(num(peakMatch.damage)).toLocaleString('pt-BR'):'—'},
+    {label:'OURO',value:peakMatch.gold?Math.round(num(peakMatch.gold)).toLocaleString('pt-BR'):'—'},
+    {label:'PARTICIPAÇÃO',value:peakMatch.killParticipation!=null?Math.round(num(peakMatch.killParticipation))+'%':'—'}
+  ]:[],[peakMatch]);
+
   const personalMeta=useMemo(()=>{
     const map=new Map<string,{name:string;games:number;wins:number;kda:number;contexts:Set<string>}>();
     matches.forEach((m:any)=>{
@@ -315,7 +366,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>ASSINATURA // QUEM MAIS APARECEU</small>
           <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
           <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p><small className="chapterSource">FATO // frequência observada na amostra, não avaliação de habilidade</small>
-          {signatureTop.length>1&&<div className="signatureTopList" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.top4Rate!=null?' · Top 4 '+champ.top4Rate+'%':champ.winRate!=null?' · '+champ.winRate+'% WR':''}</em></span>)}</div>}
+          {signatureTop.length>1&&<div className="signatureTopList signatureTopRich" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.top4Rate!=null?' · Top 4 '+champ.top4Rate+'%':champ.winRate!=null?' · '+champ.winRate+'% WR':''}</em><small>KDA {num(champ.avgKda).toFixed(2)}{champ.avgDamagePerMin?' · '+Math.round(num(champ.avgDamagePerMin)).toLocaleString('pt-BR')+' dano/min':''}</small></span>)}</div>}
         </div>
         <div className="riotChapterHeroMetric">
           <b>{signatureShare}%</b>
@@ -336,6 +387,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
           <span><small>RESULTADO</small><b>{latestSessionDesc.winRate}%</b></span>
           <span><small>JOGOS</small><b>{latestSessionDesc.games}</b></span>
+          <span><small>KDA MÉDIO</small><b>{latestSessionDesc.avgKda.toFixed(2)}</b></span>
         </div>}
       </section>
 
@@ -347,6 +399,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>PONTO ALTO // UMA PARTIDA</small>
           <h3>{peakMatch.champion||'UMA PARTIDA'} <span>FOI SEU MAIOR KDA DESTA JANELA.</span></h3>
           <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p><small className="chapterSource">CRITÉRIO // maior KDA dentro da janela atual, não “melhor partida” absoluta</small>
+          <div className="peakFactGrid">{peakFacts.map((fact:any)=><span key={fact.label}><small>{fact.label}</small><b>{fact.value}</b></span>)}</div>
         </div>
         <div className="riotChapterHeroMetric">
           <b>{peakMatch.kda??'—'}</b>
@@ -366,6 +419,36 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
             {!snapshotDelta&&recentResultDelta!=null&&<span><small>RESULTADO RECENTE VS. ANTERIOR</small><b>{recentResultDelta>=0?'+':''}{recentResultDelta} p.p.</b></span>}
           </div>
         </div>
+        {focusedComparison&&<section className="riotWindowCompare">
+          <header><div><small>COMPARATIVO // {focusedComparison.context||'JANELA'}</small><h4>{focusedComparison.size} RECENTES VS. {focusedComparison.size} ANTERIORES</h4><p>Mesma janela e mesmo contexto principal para reduzir comparações injustas entre modos diferentes.</p></div><span><b>{focusedComparison.recent.topChampion||'—'}</b><small>campeão mais presente agora</small></span></header>
+          <div className="riotCompareGrid">
+            {[
+              {label:'KDA',old:focusedComparison.previous.kda,now:focusedComparison.recent.kda,fmt:(v:number)=>v.toFixed(2)},
+              {label:focusedComparison.context==='ARENA'?'TOP 4':'RESULTADO',old:focusedComparison.previous.result,now:focusedComparison.recent.result,fmt:(v:number)=>Math.round(v)+'%'},
+              {label:'DANO / MIN',old:focusedComparison.previous.damagePerMin,now:focusedComparison.recent.damagePerMin,fmt:(v:number)=>Math.round(v).toLocaleString('pt-BR')},
+              {label:'OURO / MIN',old:focusedComparison.previous.goldPerMin,now:focusedComparison.recent.goldPerMin,fmt:(v:number)=>Math.round(v).toLocaleString('pt-BR')},
+              {label:'MORTES / JOGO',old:focusedComparison.previous.deaths,now:focusedComparison.recent.deaths,fmt:(v:number)=>v.toFixed(1)},
+              {label:'DURAÇÃO',old:focusedComparison.previous.duration,now:focusedComparison.recent.duration,fmt:(v:number)=>Math.round(v)+' min'}
+            ].map((row:any)=>{
+              const delta=row.now-row.old;
+              const tone=Math.abs(delta)<.01?'flat':delta>0?'up':'down';
+              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label.includes('%')?delta.toFixed(0):row.label==='KDA'?delta.toFixed(2):row.label==='MORTES / JOGO'?delta.toFixed(1):Math.round(delta).toLocaleString('pt-BR'))}</p></article>
+            })}
+          </div>
+          <div className="riotCompareMeta">
+            <span><small>CAMPEÕES DIFERENTES</small><b>{focusedComparison.previous.uniqueChampions} → {focusedComparison.recent.uniqueChampions}</b></span>
+            <span><small>MAIS JOGADO</small><b>{focusedComparison.previous.topChampion||'—'} → {focusedComparison.recent.topChampion||'—'}</b></span>
+            {focusedComparison.context==='ARENA'&&focusedComparison.previous.avgPlacement!=null&&focusedComparison.recent.avgPlacement!=null&&<span><small>COLOCAÇÃO MÉDIA</small><b>{focusedComparison.previous.avgPlacement.toFixed(2)} → {focusedComparison.recent.avgPlacement.toFixed(2)}</b></span>}
+          </div>
+          {arenaPlacement&&focusedComparison.context==='ARENA'&&<div className="arenaPlacementPanel">
+            <div><small>DISTRIBUIÇÃO // ARENA</small><b>COMO SUAS {arenaPlacement.games} ARENAS TERMINARAM</b><p>Colocação média <strong>{arenaPlacement.avg}</strong>. A distribuição abaixo usa toda a amostra Arena atual.</p></div>
+            <div className="placementBars">
+              <span><label>1º LUGAR</label><i><em style={{width:arenaPlacement.first+'%'}}/></i><b>{arenaPlacement.first}%</b></span>
+              <span><label>2º–4º</label><i><em style={{width:arenaPlacement.mid+'%'}}/></i><b>{arenaPlacement.mid}%</b></span>
+              <span><label>FORA DO TOP 4</label><i><em style={{width:arenaPlacement.outside+'%'}}/></i><b>{arenaPlacement.outside}%</b></span>
+            </div>
+          </div>}
+        </section>}
         <PlayerEras data={data} champions={champions} ddv={ddv}/>
       </section>
 
