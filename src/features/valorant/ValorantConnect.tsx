@@ -78,15 +78,21 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
   if(!RSO_ENABLED){
    return <section id="valorant-connect" className="valorantLife valorantLifeUnavailable">
     <header className="valorantLifeHero">
-     <div><GameBadge game="valorant"/><small>RIOT LIFE // VALORANT</small><h2>INTEGRAÇÃO PRONTA.<br/><span>ACESSO AINDA NÃO.</span></h2><p>A experiência foi preparada para usar Riot Sign On e dados autorizados pelo próprio jogador. A ativação depende das credenciais de produção da Riot.</p></div>
-     <em>PRODUCTION ACCESS</em>
+     <div><GameBadge game="valorant"/><small>RIOT LIFE // VALORANT</small><h2>CONECTE SUA <span>CONTA RIOT.</span></h2><p>O fluxo já está preparado para Riot Sign On. Escolha sua região e tente iniciar a conexão; se o acesso Production/RSO ainda não estiver ativo, o ZeroTwo informa isso aqui sem deixar você preso.</p></div>
+     <em>RIOT SIGN ON</em>
     </header>
     <div className="valorantLifePrinciples">
      <article><Icon name="riot"/><small>IDENTIDADE</small><b>RIOT SIGN ON</b><p>A conta só é conectada quando o próprio jogador autoriza.</p></article>
      <article><Icon name="dna"/><small>ANÁLISE</small><b>PÓS-PARTIDA</b><p>Agentes, filas e resultados entram como história depois das partidas.</p></article>
      <article><Icon name="status"/><small>SEPARAÇÃO</small><b>LEAGUE ≠ VALORANT</b><p>Cada jogo mantém seu próprio contexto; não misturamos métricas incompatíveis.</p></article>
     </div>
-    <footer className="valorantLifeFooter">{onUseLeague&&<button onClick={onUseLeague}>← VOLTAR AO LEAGUE</button>}<span>AGUARDANDO RIOT PRODUCTION / RSO</span></footer>
+    <div className="valorantUnavailableCta">
+     <div><small>COMEÇAR AGORA</small><h3>AUTORIZE SUA PRÓPRIA CONTA.</h3><p>Selecione a região da sua conta VALORANT. O botão abaixo tenta abrir o login oficial da Riot imediatamente.</p></div>
+     <label>REGIÃO<select aria-label="Região do VALORANT" value={shard} onChange={e=>setShard(e.target.value)}>{SHARDS.map(([value,label])=><option value={value} key={value}>{label}</option>)}</select></label>
+     <button className="valorantConnectPrimary" onClick={connect} disabled={loading}>{loading?'ABRINDO RIOT...':'CONECTAR CONTA RIOT →'}</button>
+    </div>
+    {status&&<p className="valorantStatus valorantStatusAction" role="status">{status}</p>}
+    <footer className="valorantLifeFooter">{onUseLeague&&<button className="secondary" onClick={onUseLeague}>← VOLTAR AO LEAGUE</button>}<span>{status?'VERIFIQUE O STATUS ACIMA':'PRONTO PARA TENTAR A CONEXÃO'}</span></footer>
    </section>;
   }
 
@@ -124,10 +130,10 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
  }
 
  if(!RSO_ENABLED){
-  return <div id="valorant-connect" className="connectedGame upcoming valorantIntegration">
+  return <div id="valorant-connect" className="connectedGame upcoming valorantIntegration valorantIntegrationActionable">
    <GameBadge game="valorant"/>
-   <div><small>VALORANT</small><b>RSO PREPARADO</b><em>AGUARDANDO ACESSO DE PRODUÇÃO DA RIOT</em></div>
-   <span>EM PREPARAÇÃO</span>
+   <div><small>VALORANT // RIOT SIGN ON</small><b>CONECTAR CONTA RIOT</b><em>Escolha sua região e tente iniciar o login oficial.</em>{status&&<em className="valorantStatus">{status}</em>}</div>
+   <div className="valorantInlineActions"><select aria-label="Região do VALORANT" value={shard} onChange={e=>setShard(e.target.value)}>{SHARDS.map(([value,label])=><option value={value} key={value}>{label}</option>)}</select><button onClick={connect} disabled={loading}>{loading?'ABRINDO...':'CONECTAR RIOT'}</button></div>
   </div>;
  }
 
