@@ -27,23 +27,23 @@ const pct=(wins:number,total:number)=>total?Math.round((wins/total)*100):0;
 const RIOT_CHAPTERS=[
   ['riot-now','AGORA'],
   ['riot-signature','ASSINATURA'],
-  ['riot-session','SESSÃO'],
-  ['riot-peak','PONTO ALTO'],
+  ['riot-mastery','MAESTRIA'],
   ['riot-change','MUDANÇA'],
+  ['riot-trend','TENDÊNCIA'],
+  ['riot-peak','PONTO ALTO'],
   ['riot-people','PESSOAS'],
-  ['riot-rhythm','RITMO'],
-  ['riot-consistency','CONSISTÊNCIA'],
+  ['riot-streaks','SEQUÊNCIAS'],
+  ['riot-arena','ARENA'],
+  ['riot-impact','IMPACTO'],
   ['riot-damage','DANO'],
   ['riot-economy','ECONOMIA'],
   ['riot-survival','SOBREVIVÊNCIA'],
-  ['riot-mastery','MAESTRIA'],
-  ['riot-arena','ARENA'],
-  ['riot-streaks','SEQUÊNCIAS'],
+  ['riot-session','SESSÃO'],
+  ['riot-consistency','CONSISTÊNCIA'],
+  ['riot-duration','DURAÇÃO'],
+  ['riot-rhythm','RITMO'],
   ['riot-hours','HORÁRIOS'],
   ['riot-days','DIAS'],
-  ['riot-duration','DURAÇÃO'],
-  ['riot-impact','IMPACTO'],
-  ['riot-trend','TENDÊNCIA'],
   ['riot-next','AGORA VAI']
 ] as const;
 
@@ -618,46 +618,40 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         </div>
       </section>}
 
-      <section id="riot-session" className="riotChapter riotChapterSession">
-        <img className="riotNarrativeArt riotNarrativeArtSession" loading="lazy" decoding="async" src={STORY_ART.session} alt="" aria-hidden="true"/>
-        <div className="riotNarrativeShade"/>
-        <div className="riotChapterNumber">03</div>
-        <div className="riotChapterCopy">
-          <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
-          <h3>{latestSessionDesc?latestSessionDesc.games+' '+(latestSessionDesc.games===1?'PARTIDA':'PARTIDAS')+' NA ÚLTIMA SESSÃO.':'AINDA NÃO HÁ UMA SESSÃO CLARA.'}</h3>
-          <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p><small className="chapterSource">MÉTODO // partidas separadas por até 2 horas entram na mesma sessão</small>
-          {latestSession.length>0&&<div className="sessionTimeline" aria-label="Linha do tempo da última sessão">{[...latestSession].sort((a:any,b:any)=>playedAt(a)-playedAt(b)).map((match:any,index:number)=><span key={match.id||index} data-win={match.context==='ARENA'?(num(match.placement)>0&&num(match.placement)<=4):!!match.win}><i/><b>{match.champion||match.context||'Jogo'}</b><em>{match.context==='ARENA'&&match.placement?match.placement+'º':match.win?'V':'D'}</em></span>)}</div>}
+      <section id="riot-mastery" className="riotMasteryChapter hasArt">
+        <img className="riotMasteryArtwork" loading="lazy" decoding="async" src={z2Art('CARREGA SUA MAIOR MAESTRIA.png')} alt="" aria-hidden="true"/>
+        <div className="riotMasteryArtShade"/>
+        <span className="riotChapterNumber">03</span>
+        <div className="riotMasteryCopy">
+          <small>MAESTRIA // HISTÓRIA ACUMULADA</small>
+          <h3>{masteryStory.top?masteryStory.top.name+' CARREGA SUA MAIOR MAESTRIA.':'AINDA NÃO HÁ MAESTRIA DISPONÍVEL.'}</h3>
+          <p>{masteryStory.top
+            ?'Maestria conta a experiência acumulada ao longo da conta. A Riot Life cruza isso com as '+matches.length+' partidas recentes para mostrar se seu legado ainda aparece na fase atual.'
+            :'Quando a Riot disponibilizar dados de Champion Mastery para esta conta, eles entram aqui sem misturar experiência histórica com desempenho recente.'}</p>
+          <small className="chapterSource">FONTE // RIOT CHAMPION-MASTERY-V4 · forma recente // MATCH-V5</small>
         </div>
-        {latestSessionDesc&&<div className="riotSessionFacts">
-          <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
-          <span><small>RESULTADO</small><b>{latestSessionDesc.winRate}%</b></span>
-          <span><small>JOGOS</small><b>{latestSessionDesc.games}</b></span>
-          <span><small>KDA MÉDIO</small><b>{latestSessionDesc.avgKda.toFixed(2)}</b></span>
-        </div>}
+        <div className="riotMasterySummary">
+          <span><small>MAIOR MAESTRIA</small><b>{masteryStory.top?masteryStory.top.points.toLocaleString(getLocale()):'—'}</b><em>{masteryStory.top?'nível '+masteryStory.top.level:'sem dados'}</em></span>
+          <span><small>FASE RECENTE</small><b>{masteryStory.recentTop||'—'}</b><em>campeão mais presente</em></span>
+          <span><small>RELAÇÃO</small><b>{masteryStory.alignment}</b><em>{masteryStory.top&&masteryStory.recentTop&&masteryStory.top.name!==masteryStory.recentTop?masteryStory.top.name+' → '+masteryStory.recentTop:'história e fase atual'}</em></span>
+          <span><small>TOP 5 NA AMOSTRA</small><b>{masteryStory.recentMasteryShare}%</b><em>{masteryStory.recentMasteryGames} de {matches.length} partidas</em></span>
+        </div>
+        {masteryStory.rows.length>0?<div className="riotMasteryList">{masteryStory.rows.map((row:any)=><article key={row.championId} className={row.rank===1?'featured':''}>
+          <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
+          {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
+          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString(getLocale())} pontos</em></div>
+          <div className="masteryRecent"><small>NESTA RIOT LIFE</small><b>{row.recentGames}x</b><em>{row.recentGames?row.recentShare+'% da amostra':'não apareceu'}</em></div>
+          <div className="masteryRecent"><small>KDA RECENTE</small><b>{row.recentGames?row.recentKda.toFixed(2):'—'}</b><em>{row.recentResult!=null?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+row.recentResult+'%':'sem amostra recente'}</em></div>
+          <div className="masteryLast"><small>ÚLTIMO REGISTRO</small><b>{row.lastPlayTime?formatDate(row.lastPlayTime):'—'}</b></div>
+        </article>)}</div>:<div className="riotMasteryEmpty">Nenhum dado de maestria foi retornado pela Riot para esta consulta.</div>}
+        <div className="riotMasteryPool hasArt"><img className="riotMasteryPoolArt" loading="lazy" decoding="async" src={z2Art('VOCÊ ESTÁ REPETINDO OU EXPLORANDO CAMPEÕES.png')} alt="" aria-hidden="true"/><span><small>POOL RECENTE</small><b>{deepDive.pool.unique} campeões únicos</b></span><span><small>CONCENTRAÇÃO</small><b>Top 5 = {deepDive.pool.top5Share}%</b></span><span><small>REPETIÇÃO</small><b>{deepDive.pool.repeated} usados 2+ vezes</b></span></div>
       </section>
-
-      {peakMatch&&<section id="riot-peak" className="riotChapter riotChapterPeak">
-        {peakChampion&&<img className="riotChapterArt riotChapterArtPeak" loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/'+peakChampion.id+'_0.jpg'} alt=""/>}
-        <div className="riotChapterShade"/>
-        <div className="riotChapterNumber">04</div>
-        <div className="riotChapterCopy">
-          <small>PONTO ALTO // UMA PARTIDA</small>
-          <h3>{peakMatch.champion||'UMA PARTIDA'} <span>FOI SEU MAIOR KDA DESTA JANELA.</span></h3>
-          <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p><small className="chapterSource">CRITÉRIO // maior KDA dentro da janela atual, não “melhor partida” absoluta</small>
-          <div className="peakFactGrid">{peakFacts.map((fact:any)=><span key={fact.label}><small>{fact.label}</small><b>{fact.value}</b></span>)}</div>
-        </div>
-        <div className="riotChapterHeroMetric">
-          <b>{peakMatch.kda??'—'}</b>
-          <span>KDA</span>
-          <em>{peakMatch.duration??'—'} min</em>
-        </div>
-      </section>}
 
       <section id="riot-change" className="riotChapterGroup riotChapterChange">
         <div className="riotChapterGroupIntro riotGroupIntroArt">
           <img className="riotGroupArtwork" loading="lazy" decoding="async" src={STORY_ART.change} alt="" aria-hidden="true"/>
           <div className="riotGroupArtworkShade"/>
-          <span className="riotChapterNumber">05</span>
+          <span className="riotChapterNumber">04</span>
           <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p>{recentCompare.length>0&&<div className="riotBeforeAfter">{recentCompare.map((row:any)=>{const max=Math.max(Math.abs(row.old),Math.abs(row.recent),.01);return <span key={row.label}><small>{row.label}</small><div className="compareBars"><i><label>ANTES</label><em style={{width:Math.max(6,Math.abs(row.old)/max*100)+'%'}}/></i><i className="recent"><label>AGORA</label><em style={{width:Math.max(6,Math.abs(row.recent)/max*100)+'%'}}/></i></div><b>{row.format(row.old)} → {row.format(row.recent)}</b></span>})}</div>}</div>
           <div className="riotChangeFacts">
             {snapshotDelta?.kda!=null&&Math.abs(snapshotDelta.kda)>=.1&&<span><small>KDA DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.kda>0?'+':''}{snapshotDelta.kda.toFixed(2)}</b></span>}
@@ -692,92 +686,50 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <PlayerEras data={data} champions={champions} ddv={ddv}/>
       </section>
 
+      <DeepDiveChapter id="riot-trend" number="05" art={z2Art('AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES.png')} kicker="TENDÊNCIA // ÚLTIMAS 10" title={deepDive.trend?"AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?":"AINDA FALTAM PARTIDAS PARA UMA TENDÊNCIA CURTA."} copy={deepDive.trend?"Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela.":"Precisamos de pelo menos 15–20 partidas comparáveis no contexto principal para separar uma janela recente de uma anterior."} metrics={deepDive.trend?[
+        {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
+        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
+        {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString(getLocale()),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString(getLocale())},
+        {label:'MAIS JOGADO',value:deepDive.trend.champNow||'—',note:'antes '+(deepDive.trend.champOld||'—')}
+      ]:[
+        {label:'STATUS',value:'EM FORMAÇÃO'},
+        {label:'AMOSTRA',value:deepDive.games+' jogos'}
+      ]}/>
+
+      {peakMatch&&<section id="riot-peak" className="riotChapter riotChapterPeak">
+        {peakChampion&&<img className="riotChapterArt riotChapterArtPeak" loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/'+peakChampion.id+'_0.jpg'} alt=""/>}
+        <div className="riotChapterShade"/>
+        <div className="riotChapterNumber">06</div>
+        <div className="riotChapterCopy">
+          <small>PONTO ALTO // UMA PARTIDA</small>
+          <h3>{peakMatch.champion||'UMA PARTIDA'} <span>FOI SEU MAIOR KDA DESTA JANELA.</span></h3>
+          <p>{formatDate(playedAt(peakMatch))} · {peakMatch.context||'League'} · {peakMatch.kills}/{peakMatch.deaths}/{peakMatch.assists}. Aqui o KDA aparece uma única vez porque esta seção é sobre a partida que mais se destacou por esse critério.</p><small className="chapterSource">CRITÉRIO // maior KDA dentro da janela atual, não “melhor partida” absoluta</small>
+          <div className="peakFactGrid">{peakFacts.map((fact:any)=><span key={fact.label}><small>{fact.label}</small><b>{fact.value}</b></span>)}</div>
+        </div>
+        <div className="riotChapterHeroMetric">
+          <b>{peakMatch.kda??'—'}</b>
+          <span>KDA</span>
+          <em>{peakMatch.duration??'—'} min</em>
+        </div>
+      </section>}
+
       <section id="riot-people" className="riotChapterGroup riotChapterPeople">
         <div className="riotChapterGroupIntro riotGroupIntroArt">
           <img className="riotGroupArtwork" loading="lazy" decoding="async" src={STORY_ART.people} alt="" aria-hidden="true"/>
           <div className="riotGroupArtworkShade"/>
-          <span className="riotChapterNumber">06</span>
+          <span className="riotChapterNumber">07</span>
           <div><small>PESSOAS // QUEM SE REPETE</small><h3>ALGUNS NOMES VOLTAM A APARECER.</h3><p>Aqui não tentamos medir amizade ou “sinergia”. Só mostramos quem realmente se repetiu nas partidas analisadas.</p><small className="chapterSource">FONTE // participantes do Match-V5; recorrência não significa amizade ou causalidade</small></div>
         </div>
         <FrequentTeammates data={data} platform={platform}/>
       </section>
 
-      <DeepDiveChapter id="riot-rhythm" number="07" art={z2Art('COM QUE RITMO VOCÊ ESTÁ JOGANDO.png')} kicker="RITMO // FREQUÊNCIA" title="COM QUE RITMO VOCÊ ESTÁ JOGANDO?" copy="A frequência ajuda a separar uma fase intensa de uma janela espalhada no tempo. Não mede qualidade; mede presença." metrics={[
-        {label:'JOGOS / DIA',value:deepDive.rhythm.gamesPerDay.toFixed(1),note:deepDive.days+' dias de janela'},
-        {label:'SESSÕES',value:deepDive.rhythm.sessions,note:'intervalo de até 2h'},
-        {label:'JOGOS / SESSÃO',value:deepDive.rhythm.gamesPerSession.toFixed(1)},
-        {label:'DIAS ATIVOS',value:deepDive.rhythm.activeDays}
+      <DeepDiveChapter id="riot-streaks" number="08" art={z2Art('QUAL FOI SUA MAIOR SEQUÊNCIA.png')} kicker="SEQUÊNCIAS // EMBALO" title="QUAL FOI SUA MAIOR SEQUÊNCIA?" copy="Contamos resultados positivos consecutivos dentro do contexto principal da amostra. Em Arena, resultado positivo significa Top 4." metrics={[
+        {label:'MELHOR SEQUÊNCIA',value:deepDive.streaks.best+' jogos'},
+        {label:'MAIOR SEQUÊNCIA FORA',value:deepDive.streaks.worst+' jogos'},
+        {label:'SEQUÊNCIA ATUAL',value:deepDive.streaks.current.games+' jogos',note:deepDive.streaks.current.positive?'positiva':'fora do resultado'}
       ]}/>
 
-      <DeepDiveChapter id="riot-consistency" number="08" art={z2Art('SEUS RESULTADOS OSCILAM OU SE REPETEM.png')} kicker="CONSISTÊNCIA // VARIAÇÃO" title="SEUS RESULTADOS OSCILAM OU SE REPETEM?" copy="Comparamos a dispersão do seu KDA e a frequência de partidas próximas da sua própria média. Isso mede regularidade, não habilidade." metrics={[
-        {label:'KDA MÉDIO',value:deepDive.consistency.avgKda.toFixed(2)},
-        {label:'DESVIO DE KDA',value:deepDive.consistency.kdaDev.toFixed(2),note:'quanto menor, mais estável'},
-        {label:'PERTO DA MÉDIA',value:deepDive.consistency.consistent+'%',note:'dentro de ±25% ou 0,5'},
-        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.consistency.result+'%'}
-      ]}/>
-
-      <DeepDiveChapter id="riot-damage" number="09" art={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO.png')} secondaryArt={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO (2).png')} kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Além do dano bruto, agora usamos a participação no dano da equipe e a composição físico/mágico/verdadeiro quando o Match-V5 fornece esses campos." metrics={[
-        {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString(getLocale())},
-        {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString(getLocale())},
-        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString(getLocale())},
-        {label:'% DO DANO DO TIME',value:deepDive.damage.teamShare?deepDive.damage.teamShare.toFixed(1)+'%':'—'}
-      ]}>
-        <div className="damageTypeBars">
-          <span><label>FÍSICO</label><i><em style={{width:deepDive.damage.physical+'%'}}/></i><b>{deepDive.damage.physical}%</b></span>
-          <span><label>MÁGICO</label><i><em style={{width:deepDive.damage.magic+'%'}}/></i><b>{deepDive.damage.magic}%</b></span>
-          <span><label>VERDADEIRO</label><i><em style={{width:deepDive.damage.trueDamage+'%'}}/></i><b>{deepDive.damage.trueDamage}%</b></span>
-        </div>
-      </DeepDiveChapter>
-
-      <DeepDiveChapter id="riot-economy" number="10" art={z2Art('QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO.png')} kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto agora usa o valor oficial do Match-V5 quando disponível. Também mostramos os itens que mais se repetem na janela." metrics={[
-        {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString(getLocale())},
-        {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString(getLocale())},
-        {label:'OURO GASTO / JOGO',value:Math.round(deepDive.economy.spent).toLocaleString(getLocale())},
-        ...(deepDive.economy.csPerMin>0?[{label:'CS / MIN',value:deepDive.economy.csPerMin.toFixed(1),note:'Summoner’s Rift'}]:[])
-      ]}>
-        {itemStory.length>0&&<div className="commonItems"><small>ITENS MAIS RECORRENTES</small><div>{itemStory.map((item:any)=><span key={item.id}><img loading="lazy" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/item/'+item.id+'.png'} alt={'Item '+item.id}/><b>{item.games}x</b><em>{item.resultRate}% resultado</em></span>)}</div></div>}
-      </DeepDiveChapter>
-
-      <DeepDiveChapter id="riot-survival" number="11" art={z2Art('QUANTO CUSTA FICAR VIVO NESSA FASE.png')} kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, mitigação, controle e tempo fora da luta contextualizam melhor o KDA do que olhar apenas abates e mortes." metrics={[
-        {label:'MORTES / JOGO',value:deepDive.survival.deaths.toFixed(1)},
-        {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString(getLocale())},
-        {label:'DANO MITIGADO',value:Math.round(deepDive.survival.mitigated).toLocaleString(getLocale())},
-        {label:'CC / JOGO',value:Math.round(deepDive.survival.cc)+' s'},
-        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString(getLocale())},
-        {label:'TEMPO MORTO / JOGO',value:Math.round(deepDive.survival.timeDead/60)+' min'},
-        {label:'MAIOR TEMPO VIVO',value:Math.round(deepDive.survival.longestLiving/60)+' min'}
-      ]}/>
-
-      <section id="riot-mastery" className="riotMasteryChapter hasArt">
-        <img className="riotMasteryArtwork" loading="lazy" decoding="async" src={z2Art('CARREGA SUA MAIOR MAESTRIA.png')} alt="" aria-hidden="true"/>
-        <div className="riotMasteryArtShade"/>
-        <span className="riotChapterNumber">12</span>
-        <div className="riotMasteryCopy">
-          <small>MAESTRIA // HISTÓRIA ACUMULADA</small>
-          <h3>{masteryStory.top?masteryStory.top.name+' CARREGA SUA MAIOR MAESTRIA.':'AINDA NÃO HÁ MAESTRIA DISPONÍVEL.'}</h3>
-          <p>{masteryStory.top
-            ?'Maestria conta a experiência acumulada ao longo da conta. A Riot Life cruza isso com as '+matches.length+' partidas recentes para mostrar se seu legado ainda aparece na fase atual.'
-            :'Quando a Riot disponibilizar dados de Champion Mastery para esta conta, eles entram aqui sem misturar experiência histórica com desempenho recente.'}</p>
-          <small className="chapterSource">FONTE // RIOT CHAMPION-MASTERY-V4 · forma recente // MATCH-V5</small>
-        </div>
-        <div className="riotMasterySummary">
-          <span><small>MAIOR MAESTRIA</small><b>{masteryStory.top?masteryStory.top.points.toLocaleString(getLocale()):'—'}</b><em>{masteryStory.top?'nível '+masteryStory.top.level:'sem dados'}</em></span>
-          <span><small>FASE RECENTE</small><b>{masteryStory.recentTop||'—'}</b><em>campeão mais presente</em></span>
-          <span><small>RELAÇÃO</small><b>{masteryStory.alignment}</b><em>{masteryStory.top&&masteryStory.recentTop&&masteryStory.top.name!==masteryStory.recentTop?masteryStory.top.name+' → '+masteryStory.recentTop:'história e fase atual'}</em></span>
-          <span><small>TOP 5 NA AMOSTRA</small><b>{masteryStory.recentMasteryShare}%</b><em>{masteryStory.recentMasteryGames} de {matches.length} partidas</em></span>
-        </div>
-        {masteryStory.rows.length>0?<div className="riotMasteryList">{masteryStory.rows.map((row:any)=><article key={row.championId} className={row.rank===1?'featured':''}>
-          <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
-          {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
-          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString(getLocale())} pontos</em></div>
-          <div className="masteryRecent"><small>NESTA RIOT LIFE</small><b>{row.recentGames}x</b><em>{row.recentGames?row.recentShare+'% da amostra':'não apareceu'}</em></div>
-          <div className="masteryRecent"><small>KDA RECENTE</small><b>{row.recentGames?row.recentKda.toFixed(2):'—'}</b><em>{row.recentResult!=null?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+row.recentResult+'%':'sem amostra recente'}</em></div>
-          <div className="masteryLast"><small>ÚLTIMO REGISTRO</small><b>{row.lastPlayTime?formatDate(row.lastPlayTime):'—'}</b></div>
-        </article>)}</div>:<div className="riotMasteryEmpty">Nenhum dado de maestria foi retornado pela Riot para esta consulta.</div>}
-        <div className="riotMasteryPool hasArt"><img className="riotMasteryPoolArt" loading="lazy" decoding="async" src={z2Art('VOCÊ ESTÁ REPETINDO OU EXPLORANDO CAMPEÕES.png')} alt="" aria-hidden="true"/><span><small>POOL RECENTE</small><b>{deepDive.pool.unique} campeões únicos</b></span><span><small>CONCENTRAÇÃO</small><b>Top 5 = {deepDive.pool.top5Share}%</b></span><span><small>REPETIÇÃO</small><b>{deepDive.pool.repeated} usados 2+ vezes</b></span></div>
-      </section>
-
-      <DeepDiveChapter id="riot-arena" number="13" art={z2Art('ONDE SUAS ARENAS ESTÃO TERMINANDO.png')} kicker="ARENA // COLOCAÇÕES" title={arenaPlacement?"ONDE SUAS ARENAS ESTÃO TERMINANDO?":"AINDA NÃO HÁ ARENAS SUFICIENTES NESTA JANELA."} copy={arenaPlacement?"Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado.":"Este capítulo fica reservado para colocação média, Top 4 e primeiros lugares quando partidas de Arena entrarem na amostra."} metrics={arenaPlacement?[
+      <DeepDiveChapter id="riot-arena" number="09" art={z2Art('ONDE SUAS ARENAS ESTÃO TERMINANDO.png')} kicker="ARENA // COLOCAÇÕES" title={arenaPlacement?"ONDE SUAS ARENAS ESTÃO TERMINANDO?":"AINDA NÃO HÁ ARENAS SUFICIENTES NESTA JANELA."} copy={arenaPlacement?"Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado.":"Este capítulo fica reservado para colocação média, Top 4 e primeiros lugares quando partidas de Arena entrarem na amostra."} metrics={arenaPlacement?[
         {label:'ARENAS',value:arenaPlacement.games},
         {label:'COLOCAÇÃO MÉDIA',value:arenaPlacement.avg},
         {label:'1º LUGAR',value:arenaPlacement.first+'%'},
@@ -794,31 +746,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {arenaAugments.length>0&&<div className="arenaAugmentPanel"><small>AUMENTOS MAIS RECORRENTES</small><p>Os IDs vêm diretamente do Match-V5. O nome visual será enriquecido quando houver catálogo estável disponível.</p><div>{arenaAugments.map((augment:any)=><span key={augment.id}><b>Augment #{augment.id}</b><em>{augment.games} partidas · {augment.top4Rate}% Top 4{augment.firstRate?' · '+augment.firstRate+'% 1º':''}{augment.champion?' · '+augment.champion:''}</em></span>)}</div></div>}
       </DeepDiveChapter>
 
-      <DeepDiveChapter id="riot-streaks" number="14" art={z2Art('QUAL FOI SUA MAIOR SEQUÊNCIA.png')} kicker="SEQUÊNCIAS // EMBALO" title="QUAL FOI SUA MAIOR SEQUÊNCIA?" copy="Contamos resultados positivos consecutivos dentro do contexto principal da amostra. Em Arena, resultado positivo significa Top 4." metrics={[
-        {label:'MELHOR SEQUÊNCIA',value:deepDive.streaks.best+' jogos'},
-        {label:'MAIOR SEQUÊNCIA FORA',value:deepDive.streaks.worst+' jogos'},
-        {label:'SEQUÊNCIA ATUAL',value:deepDive.streaks.current.games+' jogos',note:deepDive.streaks.current.positive?'positiva':'fora do resultado'}
-      ]}/>
-
-      <DeepDiveChapter id="riot-hours" number="15" art={z2Art('QUE PARTE DO DIA VOCÊ MAIS APARECE.png')} kicker="HORÁRIOS // QUANDO" title="EM QUE PARTE DO DIA VOCÊ MAIS APARECE?" copy="Horários são calculados no fuso local do dispositivo. Só tratamos uma faixa como comparável quando há partidas suficientes nela." metrics={[
-        {label:'MAIS JOGADO',value:deepDive.periods.most?.name||'—',note:deepDive.periods.most?deepDive.periods.most.games+' jogos':''},
-        {label:'MELHOR AMOSTRA',value:deepDive.periods.best?.name||'—',note:deepDive.periods.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.periods.best.result+'%':''},
-        {label:'KDA NESSE HORÁRIO',value:deepDive.periods.best?deepDive.periods.best.kda.toFixed(2):'—'}
-      ]}/>
-
-      <DeepDiveChapter id="riot-days" number="16" art={z2Art('QUAL DIA DA SEMANA MAIS APARECE NESSA JANELA.png')} kicker="DIAS // CALENDÁRIO" title="QUAL DIA DA SEMANA MAIS APARECE NESSA JANELA?" copy="Este capítulo observa distribuição e resultado por dia da semana. Ele descreve a amostra; não afirma que o dia causa um desempenho melhor." metrics={[
-        {label:'MAIS ATIVO',value:deepDive.daysOfWeek.most?.name||'—',note:deepDive.daysOfWeek.most?deepDive.daysOfWeek.most.games+' jogos':''},
-        {label:'MELHOR AMOSTRA',value:deepDive.daysOfWeek.best?.name||'—',note:deepDive.daysOfWeek.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.daysOfWeek.best.result+'%':''},
-        {label:'KDA',value:deepDive.daysOfWeek.best?deepDive.daysOfWeek.best.kda.toFixed(2):'—'}
-      ]}/>
-
-      <DeepDiveChapter id="riot-duration" number="17" art={z2Art('O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA.png')} kicker="DURAÇÃO // CURTA OU LONGA" title="O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA?" copy="Dividimos a própria amostra pela duração mediana. Isso evita escolher um corte arbitrário igual para todos os modos." metrics={[
-        {label:'MEDIANA',value:Math.round(deepDive.duration.median)+' min'},
-        {label:deepDive.context==='ARENA'?'TOP 4 · CURTAS':'RESULTADO · CURTAS',value:deepDive.duration.shortRate+'%',note:deepDive.duration.shortGames+' jogos'},
-        {label:deepDive.context==='ARENA'?'TOP 4 · LONGAS':'RESULTADO · LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
-      ]}/>
-
-      <DeepDiveChapter id="riot-impact" number="18" art={z2Art('COMO VOCÊ PARTICIPA ALÉM DO KDA.png')} kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Agora o impacto reúne participação, solo kills, multikills, suporte em aliados, objetivos e visão. Cada métrica só descreve o que o Match-V5 registrou." metrics={[
+      <DeepDiveChapter id="riot-impact" number="10" art={z2Art('COMO VOCÊ PARTICIPA ALÉM DO KDA.png')} kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Agora o impacto reúne participação, solo kills, multikills, suporte em aliados, objetivos e visão. Cada métrica só descreve o que o Match-V5 registrou." metrics={[
         {label:'PARTICIPAÇÃO',value:deepDive.impact.kp?Math.round(deepDive.impact.kp)+'%':'—'},
         {label:'SOLO KILLS',value:deepDive.impact.soloKills},
         {label:'MULTIKILLS',value:deepDive.impact.multikills,note:deepDive.impact.pentas?deepDive.impact.pentas+' pentakill(s)':''},
@@ -830,14 +758,86 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString(getLocale())}]:[])
       ]}/>
 
-      <DeepDiveChapter id="riot-trend" number="19" art={z2Art('AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES.png')} kicker="TENDÊNCIA // ÚLTIMAS 10" title={deepDive.trend?"AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?":"AINDA FALTAM PARTIDAS PARA UMA TENDÊNCIA CURTA."} copy={deepDive.trend?"Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela.":"Precisamos de pelo menos 15–20 partidas comparáveis no contexto principal para separar uma janela recente de uma anterior."} metrics={deepDive.trend?[
-        {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
-        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
-        {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString(getLocale()),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString(getLocale())},
-        {label:'MAIS JOGADO',value:deepDive.trend.champNow||'—',note:'antes '+(deepDive.trend.champOld||'—')}
-      ]:[
-        {label:'STATUS',value:'EM FORMAÇÃO'},
-        {label:'AMOSTRA',value:deepDive.games+' jogos'}
+      <DeepDiveChapter id="riot-damage" number="11" art={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO.png')} secondaryArt={z2Art('QUANTO DANO SUA FASE ESTÁ PRODUZINDO (2).png')} kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Além do dano bruto, agora usamos a participação no dano da equipe e a composição físico/mágico/verdadeiro quando o Match-V5 fornece esses campos." metrics={[
+        {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString(getLocale())},
+        {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString(getLocale())},
+        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString(getLocale())},
+        {label:'% DO DANO DO TIME',value:deepDive.damage.teamShare?deepDive.damage.teamShare.toFixed(1)+'%':'—'}
+      ]}>
+        <div className="damageTypeBars">
+          <span><label>FÍSICO</label><i><em style={{width:deepDive.damage.physical+'%'}}/></i><b>{deepDive.damage.physical}%</b></span>
+          <span><label>MÁGICO</label><i><em style={{width:deepDive.damage.magic+'%'}}/></i><b>{deepDive.damage.magic}%</b></span>
+          <span><label>VERDADEIRO</label><i><em style={{width:deepDive.damage.trueDamage+'%'}}/></i><b>{deepDive.damage.trueDamage}%</b></span>
+        </div>
+      </DeepDiveChapter>
+
+      <DeepDiveChapter id="riot-economy" number="12" art={z2Art('QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO.png')} kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto agora usa o valor oficial do Match-V5 quando disponível. Também mostramos os itens que mais se repetem na janela." metrics={[
+        {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString(getLocale())},
+        {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString(getLocale())},
+        {label:'OURO GASTO / JOGO',value:Math.round(deepDive.economy.spent).toLocaleString(getLocale())},
+        ...(deepDive.economy.csPerMin>0?[{label:'CS / MIN',value:deepDive.economy.csPerMin.toFixed(1),note:'Summoner’s Rift'}]:[])
+      ]}>
+        {itemStory.length>0&&<div className="commonItems"><small>ITENS MAIS RECORRENTES</small><div>{itemStory.map((item:any)=><span key={item.id}><img loading="lazy" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/item/'+item.id+'.png'} alt={'Item '+item.id}/><b>{item.games}x</b><em>{item.resultRate}% resultado</em></span>)}</div></div>}
+      </DeepDiveChapter>
+
+      <DeepDiveChapter id="riot-survival" number="13" art={z2Art('QUANTO CUSTA FICAR VIVO NESSA FASE.png')} kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, mitigação, controle e tempo fora da luta contextualizam melhor o KDA do que olhar apenas abates e mortes." metrics={[
+        {label:'MORTES / JOGO',value:deepDive.survival.deaths.toFixed(1)},
+        {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString(getLocale())},
+        {label:'DANO MITIGADO',value:Math.round(deepDive.survival.mitigated).toLocaleString(getLocale())},
+        {label:'CC / JOGO',value:Math.round(deepDive.survival.cc)+' s'},
+        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString(getLocale())},
+        {label:'TEMPO MORTO / JOGO',value:Math.round(deepDive.survival.timeDead/60)+' min'},
+        {label:'MAIOR TEMPO VIVO',value:Math.round(deepDive.survival.longestLiving/60)+' min'}
+      ]}/>
+
+      <section id="riot-session" className="riotChapter riotChapterSession">
+        <img className="riotNarrativeArt riotNarrativeArtSession" loading="lazy" decoding="async" src={STORY_ART.session} alt="" aria-hidden="true"/>
+        <div className="riotNarrativeShade"/>
+        <div className="riotChapterNumber">14</div>
+        <div className="riotChapterCopy">
+          <small>SESSÃO // COMO VOCÊ JOGOU DE UMA VEZ</small>
+          <h3>{latestSessionDesc?latestSessionDesc.games+' '+(latestSessionDesc.games===1?'PARTIDA':'PARTIDAS')+' NA ÚLTIMA SESSÃO.':'AINDA NÃO HÁ UMA SESSÃO CLARA.'}</h3>
+          <p>{latestSessionDesc?.trend?'Entre o começo e o fim, seu ritmo de KDA '+latestSessionDesc.trend+'.':'Sessões são agrupadas quando as partidas ficam próximas no tempo. Precisamos de uma sequência maior para falar de ritmo interno.'}</p><small className="chapterSource">MÉTODO // partidas separadas por até 2 horas entram na mesma sessão</small>
+          {latestSession.length>0&&<div className="sessionTimeline" aria-label="Linha do tempo da última sessão">{[...latestSession].sort((a:any,b:any)=>playedAt(a)-playedAt(b)).map((match:any,index:number)=><span key={match.id||index} data-win={match.context==='ARENA'?(num(match.placement)>0&&num(match.placement)<=4):!!match.win}><i/><b>{match.champion||match.context||'Jogo'}</b><em>{match.context==='ARENA'&&match.placement?match.placement+'º':match.win?'V':'D'}</em></span>)}</div>}
+        </div>
+        {latestSessionDesc&&<div className="riotSessionFacts">
+          <span><small>DURAÇÃO</small><b>{latestSessionDesc.duration}</b></span>
+          <span><small>RESULTADO</small><b>{latestSessionDesc.winRate}%</b></span>
+          <span><small>JOGOS</small><b>{latestSessionDesc.games}</b></span>
+          <span><small>KDA MÉDIO</small><b>{latestSessionDesc.avgKda.toFixed(2)}</b></span>
+        </div>}
+      </section>
+
+      <DeepDiveChapter id="riot-consistency" number="15" art={z2Art('SEUS RESULTADOS OSCILAM OU SE REPETEM.png')} kicker="CONSISTÊNCIA // VARIAÇÃO" title="SEUS RESULTADOS OSCILAM OU SE REPETEM?" copy="Comparamos a dispersão do seu KDA e a frequência de partidas próximas da sua própria média. Isso mede regularidade, não habilidade." metrics={[
+        {label:'KDA MÉDIO',value:deepDive.consistency.avgKda.toFixed(2)},
+        {label:'DESVIO DE KDA',value:deepDive.consistency.kdaDev.toFixed(2),note:'quanto menor, mais estável'},
+        {label:'PERTO DA MÉDIA',value:deepDive.consistency.consistent+'%',note:'dentro de ±25% ou 0,5'},
+        {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.consistency.result+'%'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-duration" number="16" art={z2Art('O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA.png')} kicker="DURAÇÃO // CURTA OU LONGA" title="O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA?" copy="Dividimos a própria amostra pela duração mediana. Isso evita escolher um corte arbitrário igual para todos os modos." metrics={[
+        {label:'MEDIANA',value:Math.round(deepDive.duration.median)+' min'},
+        {label:deepDive.context==='ARENA'?'TOP 4 · CURTAS':'RESULTADO · CURTAS',value:deepDive.duration.shortRate+'%',note:deepDive.duration.shortGames+' jogos'},
+        {label:deepDive.context==='ARENA'?'TOP 4 · LONGAS':'RESULTADO · LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-rhythm" number="17" art={z2Art('COM QUE RITMO VOCÊ ESTÁ JOGANDO.png')} kicker="RITMO // FREQUÊNCIA" title="COM QUE RITMO VOCÊ ESTÁ JOGANDO?" copy="A frequência ajuda a separar uma fase intensa de uma janela espalhada no tempo. Não mede qualidade; mede presença." metrics={[
+        {label:'JOGOS / DIA',value:deepDive.rhythm.gamesPerDay.toFixed(1),note:deepDive.days+' dias de janela'},
+        {label:'SESSÕES',value:deepDive.rhythm.sessions,note:'intervalo de até 2h'},
+        {label:'JOGOS / SESSÃO',value:deepDive.rhythm.gamesPerSession.toFixed(1)},
+        {label:'DIAS ATIVOS',value:deepDive.rhythm.activeDays}
+      ]}/>
+
+      <DeepDiveChapter id="riot-hours" number="18" art={z2Art('QUE PARTE DO DIA VOCÊ MAIS APARECE.png')} kicker="HORÁRIOS // QUANDO" title="EM QUE PARTE DO DIA VOCÊ MAIS APARECE?" copy="Horários são calculados no fuso local do dispositivo. Só tratamos uma faixa como comparável quando há partidas suficientes nela." metrics={[
+        {label:'MAIS JOGADO',value:deepDive.periods.most?.name||'—',note:deepDive.periods.most?deepDive.periods.most.games+' jogos':''},
+        {label:'MELHOR AMOSTRA',value:deepDive.periods.best?.name||'—',note:deepDive.periods.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.periods.best.result+'%':''},
+        {label:'KDA NESSE HORÁRIO',value:deepDive.periods.best?deepDive.periods.best.kda.toFixed(2):'—'}
+      ]}/>
+
+      <DeepDiveChapter id="riot-days" number="19" art={z2Art('QUAL DIA DA SEMANA MAIS APARECE NESSA JANELA.png')} kicker="DIAS // CALENDÁRIO" title="QUAL DIA DA SEMANA MAIS APARECE NESSA JANELA?" copy="Este capítulo observa distribuição e resultado por dia da semana. Ele descreve a amostra; não afirma que o dia causa um desempenho melhor." metrics={[
+        {label:'MAIS ATIVO',value:deepDive.daysOfWeek.most?.name||'—',note:deepDive.daysOfWeek.most?deepDive.daysOfWeek.most.games+' jogos':''},
+        {label:'MELHOR AMOSTRA',value:deepDive.daysOfWeek.best?.name||'—',note:deepDive.daysOfWeek.best?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+deepDive.daysOfWeek.best.result+'%':''},
+        {label:'KDA',value:deepDive.daysOfWeek.best?deepDive.daysOfWeek.best.kda.toFixed(2):'—'}
       ]}/>
 
       <section id="riot-next" className="riotChapterGroup riotChapterNext">
