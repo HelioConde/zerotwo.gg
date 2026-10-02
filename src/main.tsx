@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import './ux-polish.css';
@@ -7,8 +7,9 @@ import { supabase } from './supabase';
 import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
 import { I18nProvider, useLanguage } from './i18n';
-import { Connect01 } from './features/onboarding/Connect01';
 import { PublicPlayerLookup } from './features/public/PublicPlayerLookup';
+
+const Connect01=lazy(()=>import('./features/onboarding/Connect01').then(module=>({default:module.Connect01})));
 
 type OwnRiotAccount={
   game_name:string;
@@ -148,11 +149,13 @@ function App(){
 
   if(session&&authReady&&needsOnboarding){
     return <main className="gamingLanding onboardingGate">
-      <Connect01
-        session={session}
-        onSessionChange={setSession}
-        onProfileComplete={()=>routePlayer(session,{autoOpen:true})}
-      />
+      <Suspense fallback={<div className="clientLoading">PREPARANDO SUA RIOT LIFE<span>...</span></div>}>
+        <Connect01
+          session={session}
+          onSessionChange={setSession}
+          onProfileComplete={()=>routePlayer(session,{autoOpen:true})}
+        />
+      </Suspense>
     </main>;
   }
 
@@ -196,11 +199,13 @@ function App(){
       >
         <div className="authOverlayPanel">
           <button className="authOverlayClose" aria-label="Fechar" onClick={()=>setAuthOpen(false)}>×</button>
-          <Connect01
-            session={session}
-            onSessionChange={setSession}
-            onProfileComplete={()=>routePlayer(session,{autoOpen:true})}
-          />
+          <Suspense fallback={<div className="clientLoading">ABRINDO LOGIN<span>...</span></div>}>
+            <Connect01
+              session={session}
+              onSessionChange={setSession}
+              onProfileComplete={()=>routePlayer(session,{autoOpen:true})}
+            />
+          </Suspense>
         </div>
       </div>
     }
