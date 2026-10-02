@@ -702,3 +702,393 @@
     font-size:9px!important;
   }
 }
+
+
+/* ==========================================================================
+   SCREENSHOT REVIEW PASS — 2026-10-02
+   The full Riot Life still reads too small and low-contrast at normal desktop
+   distance. Increase the actual reading scale and contrast, especially in the
+   dense comparison / evidence sections visible in the long-page capture.
+   ========================================================================== */
+
+/* Main result shell: keep a comfortable reading column instead of spreading
+   tiny text across too much horizontal space. */
+.publicPlayerResult{
+  max-width:1180px!important;
+}
+.playerIdentityMain{
+  padding:17px 20px!important;
+}
+.playerIdentityMain small{
+  font-size:10px!important;
+  color:#9aa6b5!important;
+}
+.playerIdentityMain p{
+  font-size:11px!important;
+  color:#a0aab8!important;
+}
+.playerIdentityRanks>span{
+  min-width:142px!important;
+  padding:13px 16px!important;
+}
+.playerIdentityRanks small{
+  font-size:9.5px!important;
+  color:#8f9aa9!important;
+}
+.playerIdentityRanks b{
+  font-size:14px!important;
+}
+.playerIdentityRanks em{
+  font-size:10px!important;
+  color:#929dac!important;
+}
+
+/* Story introduction */
+.riotStoryIntro p{
+  max-width:66ch!important;
+  color:#b1bac6!important;
+  font-size:14px!important;
+  line-height:1.7!important;
+}
+.riotStoryCoverage small{
+  color:#8d98a7!important;
+  font-size:9.5px!important;
+}
+.riotStoryCoverage em{
+  color:#929dac!important;
+  font-size:10px!important;
+}
+.riotSampleNote span small{
+  color:#a3adba!important;
+  font-size:11px!important;
+}
+
+/* Chapter navigation must be readable, not decorative. */
+.riotStoryNav a span{
+  font-size:9px!important;
+}
+.riotStoryNav a b{
+  font-size:9.5px!important;
+  letter-spacing:.15px!important;
+}
+
+/* Chapters 01–06 */
+.riotChapterCopy>small,
+.riotChapterGroupIntro>div>small{
+  font-size:10.5px!important;
+}
+.riotChapterCopy p,
+.riotChapterGroupIntro p{
+  max-width:64ch!important;
+  color:#b0bac7!important;
+  font-size:13.5px!important;
+  line-height:1.7!important;
+}
+.chapterSource{
+  color:#909cac!important;
+  font-size:9.5px!important;
+}
+.riotNowMeta small,
+.peakFactGrid small,
+.riotSessionFacts small,
+.riotChangeFacts small{
+  color:#8f9aa9!important;
+  font-size:9.5px!important;
+}
+.riotNowMeta b,
+.peakFactGrid b{
+  font-size:11px!important;
+}
+.riotModeDistribution b,
+.riotModeDistribution em{
+  font-size:10px!important;
+}
+.signatureTopList>span{
+  padding:10px 11px!important;
+}
+.signatureTopList b{
+  font-size:11px!important;
+}
+.signatureTopList em,
+.signatureTopRich>span>small{
+  color:#8e99a8!important;
+  font-size:9.5px!important;
+}
+.sessionTimeline>span{
+  min-height:34px!important;
+  padding:8px 10px!important;
+}
+.sessionTimeline b,
+.sessionTimeline em{
+  font-size:10px!important;
+}
+
+/* Chapter 05 comparison was one of the smallest areas in the capture. */
+.riotWindowCompare{
+  padding:32px 38px 38px!important;
+}
+.riotWindowCompare>header small{
+  font-size:10px!important;
+}
+.riotWindowCompare>header p{
+  max-width:64ch!important;
+  color:#abb5c2!important;
+  font-size:12.5px!important;
+  line-height:1.65!important;
+}
+.riotWindowCompare>header>span b{
+  font-size:15px!important;
+}
+.riotWindowCompare>header>span small{
+  color:#8d98a8!important;
+  font-size:9px!important;
+}
+.riotCompareGrid{
+  gap:10px!important;
+}
+.riotCompareGrid article{
+  padding:16px!important;
+}
+.riotCompareGrid article>small{
+  color:#929dad!important;
+  font-size:9.5px!important;
+}
+.riotCompareGrid article>div>span em{
+  color:#8b96a6!important;
+  font-size:9px!important;
+}
+.riotCompareGrid article>div>span b{
+  font-size:18px!important;
+}
+.riotCompareGrid article>p{
+  font-size:10px!important;
+  line-height:1.4!important;
+}
+.riotCompareMeta small{
+  color:#8e99a8!important;
+  font-size:9px!important;
+}
+.riotCompareMeta b{
+  font-size:11px!important;
+  line-height:1.35!important;
+}
+
+/* People / eras: raise text contrast and stop using micro-copy. */
+.featuredMateLead>small,
+.featuredMatePair>small,
+.teammateSectionLabel small{
+  font-size:9px!important;
+}
+.featuredMateLead p,
+.featuredMatePair p{
+  color:#a8b2bf!important;
+  font-size:11px!important;
+}
+.mateIdentity small,
+.mateNumbers small,
+.mateChampions small{
+  color:#8995a5!important;
+  font-size:9px!important;
+}
+.mateIdentity b{
+  font-size:12px!important;
+}
+.mateIdentity span,
+.mateChampions b,
+.mateChampions em{
+  color:#929dac!important;
+  font-size:10px!important;
+}
+.eraCopy>small,
+.eraStats small{
+  color:#8995a5!important;
+  font-size:9px!important;
+}
+.eraCopy p{
+  color:#a9b3c0!important;
+  font-size:11px!important;
+}
+.eraStats b{
+  font-size:14px!important;
+}
+
+/* Chapters 07–19: prioritize reading over density. */
+.riotDeepChapter{
+  grid-template-columns:64px minmax(330px,1.12fr) minmax(360px,.88fr)!important;
+  min-height:238px!important;
+  padding:30px 32px!important;
+  gap:22px!important;
+}
+.riotDeepCopy>small{
+  font-size:10.5px!important;
+}
+.riotDeepCopy h3{
+  max-width:560px!important;
+}
+.riotDeepCopy p{
+  max-width:60ch!important;
+  color:#b0bac7!important;
+  font-size:13.5px!important;
+  line-height:1.7!important;
+}
+.riotDeepMetrics{
+  gap:10px!important;
+}
+.riotDeepMetrics>span{
+  min-height:84px!important;
+  padding:14px 15px!important;
+}
+.riotDeepMetrics small{
+  color:#909baa!important;
+  font-size:9.5px!important;
+  letter-spacing:.35px!important;
+}
+.riotDeepMetrics b{
+  font-size:clamp(21px,2vw,29px)!important;
+}
+.riotDeepMetrics em{
+  color:#929dac!important;
+  font-size:10px!important;
+  line-height:1.4!important;
+}
+.damageTypeBars label,
+.placementBars label{
+  color:#929dac!important;
+  font-size:9.5px!important;
+}
+.damageTypeBars b,
+.placementBars b{
+  font-size:10px!important;
+}
+.commonItems>small,
+.arenaAugmentPanel>small{
+  font-size:9.5px!important;
+}
+.commonItems b{
+  font-size:11px!important;
+}
+.commonItems em,
+.arenaAugmentPanel>p,
+.arenaAugmentPanel span em{
+  color:#929dac!important;
+  font-size:9.5px!important;
+}
+
+/* Mastery: the screenshot showed too many tiny columns. */
+.riotMasteryCopy>small:first-child{
+  font-size:10.5px!important;
+}
+.riotMasteryCopy p{
+  color:#b0bac7!important;
+  font-size:13.5px!important;
+  line-height:1.7!important;
+}
+.riotMasterySummary small{
+  color:#909baa!important;
+  font-size:9.5px!important;
+}
+.riotMasterySummary em{
+  color:#929dac!important;
+  font-size:10px!important;
+}
+.masteryIdentity small,
+.masteryRecent small,
+.masteryLast small{
+  color:#8f9aa9!important;
+  font-size:9px!important;
+}
+.masteryIdentity b{
+  font-size:13px!important;
+}
+.masteryIdentity em,
+.masteryRecent em{
+  color:#939eac!important;
+  font-size:9.5px!important;
+}
+.masteryRecent b,
+.masteryLast b{
+  font-size:12.5px!important;
+}
+.riotMasteryPool small{
+  font-size:9px!important;
+}
+.riotMasteryPool b{
+  font-size:11px!important;
+}
+
+/* Final interactive sections */
+.myRiotPatch header p,
+.riotArcade header p{
+  color:#aab4c1!important;
+  font-size:12px!important;
+}
+.patchChanges small,
+.arcadeGame>small{
+  font-size:9px!important;
+}
+.patchChanges p,
+.arcadeResult p{
+  color:#9faab8!important;
+  font-size:10.5px!important;
+}
+.riotStoryEnd p{
+  color:#9da8b6!important;
+  font-size:10.5px!important;
+}
+.riotBackTop{
+  font-size:9px!important;
+}
+
+/* Tablet: keep the larger type but stack the metrics sooner. */
+@media(max-width:1000px){
+  .publicPlayerResult{
+    max-width:100%!important;
+  }
+  .riotDeepChapter{
+    grid-template-columns:56px minmax(0,1fr)!important;
+  }
+  .riotDeepMetrics{
+    grid-column:2!important;
+  }
+}
+
+/* Mobile should still feel intentionally large and readable. */
+@media(max-width:700px){
+  .riotStoryIntro p,
+  .riotChapterCopy p,
+  .riotChapterGroupIntro p,
+  .riotWindowCompare>header p,
+  .riotDeepCopy p,
+  .riotMasteryCopy p{
+    font-size:13px!important;
+    line-height:1.65!important;
+  }
+  .riotDeepChapter{
+    grid-template-columns:1fr!important;
+    padding:25px 19px!important;
+  }
+  .riotDeepMetrics{
+    grid-column:auto!important;
+  }
+  .riotDeepMetrics small,
+  .riotMasterySummary small{
+    font-size:9px!important;
+  }
+  .riotDeepMetrics em,
+  .riotMasterySummary em{
+    font-size:9.5px!important;
+  }
+  .riotWindowCompare{
+    padding:26px 20px 30px!important;
+  }
+}
+
+@media(max-width:430px){
+  .riotStoryNav a b{
+    font-size:8.5px!important;
+  }
+  .riotDeepMetrics,
+  .riotMasterySummary{
+    grid-template-columns:1fr!important;
+  }
+}
