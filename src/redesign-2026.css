@@ -4508,3 +4508,284 @@ select{cursor:pointer}
     grid-column:2!important;
   }
 }
+
+
+/* ==========================================================================
+   RIOT LIFE DATA-RICH PASS — richer comparisons from the same 100 matches
+   ========================================================================== */
+.signatureTopRich>span{
+  grid-template-rows:auto auto auto;
+}
+.signatureTopRich>span>small{
+  grid-column:2;
+  margin-top:3px;
+  color:#667384;
+  font-size:6px;
+  line-height:1.35;
+}
+
+.riotSessionFacts{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+.riotSessionFacts>span{
+  min-width:0!important;
+}
+
+.peakFactGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin-top:14px;
+  max-width:720px;
+}
+.peakFactGrid>span{
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid #ffffff0d;
+  border-radius:10px;
+  background:#05080cb5;
+}
+.peakFactGrid small,
+.peakFactGrid b{display:block}
+.peakFactGrid small{
+  color:#788596;
+  font:800 6px ui-monospace,monospace;
+  letter-spacing:.55px;
+}
+.peakFactGrid b{
+  margin-top:5px;
+  color:#f1f4f8;
+  font-size:10px;
+  font-variant-numeric:tabular-nums;
+}
+
+.riotWindowCompare{
+  padding:28px 34px 34px;
+  border-top:1px solid #ffffff0c;
+  background:
+    radial-gradient(circle at 88% 12%,#75ddff09,transparent 30%),
+    linear-gradient(180deg,#070a0f,#06090d);
+}
+.riotWindowCompare>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:end;
+}
+.riotWindowCompare>header small{
+  color:#ff779f;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:.8px;
+}
+.riotWindowCompare>header h4{
+  margin:5px 0 0;
+  color:#f4f6f8;
+  font-size:clamp(22px,3vw,34px);
+  line-height:.98;
+  letter-spacing:-1px;
+}
+.riotWindowCompare>header p{
+  max-width:700px;
+  margin:8px 0 0;
+  color:#8793a2;
+  font-size:9px;
+  line-height:1.55;
+}
+.riotWindowCompare>header>span{
+  min-width:180px;
+  padding:12px 14px;
+  border:1px solid #ffffff10;
+  border-radius:12px;
+  background:#05080c;
+}
+.riotWindowCompare>header>span b,
+.riotWindowCompare>header>span small{display:block}
+.riotWindowCompare>header>span b{
+  color:#fff;
+  font-size:13px;
+}
+.riotWindowCompare>header>span small{
+  margin-top:3px;
+  color:#697687;
+  font-size:6px;
+}
+
+.riotCompareGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:20px;
+}
+.riotCompareGrid article{
+  min-width:0;
+  padding:14px;
+  border:1px solid #ffffff0d;
+  border-radius:13px;
+  background:#05080cb5;
+}
+.riotCompareGrid article>small{
+  display:block;
+  color:#758294;
+  font:900 6.5px ui-monospace,monospace;
+  letter-spacing:.65px;
+}
+.riotCompareGrid article>div{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+}
+.riotCompareGrid article>div>span em,
+.riotCompareGrid article>div>span b{
+  display:block;
+}
+.riotCompareGrid article>div>span em{
+  color:#657183;
+  font-size:6px;
+  font-style:normal;
+  font-weight:900;
+}
+.riotCompareGrid article>div>span b{
+  margin-top:2px;
+  color:#eef2f6;
+  font-size:15px;
+  font-variant-numeric:tabular-nums;
+}
+.riotCompareGrid article>div>i{
+  color:#596475;
+  font-style:normal;
+}
+.riotCompareGrid article>p{
+  margin:8px 0 0;
+  color:#788596;
+  font-size:7px;
+  font-variant-numeric:tabular-nums;
+}
+.riotCompareGrid article[data-tone="up"]>p{color:#75ddff}
+.riotCompareGrid article[data-tone="down"]>p{color:#ff8caf}
+.riotCompareGrid article[data-tone="flat"]>p{color:#778394}
+
+.riotCompareMeta{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.riotCompareMeta>span{
+  padding:11px 12px;
+  border:1px solid #ffffff0c;
+  border-radius:11px;
+  background:#05080c8f;
+}
+.riotCompareMeta small,
+.riotCompareMeta b{display:block}
+.riotCompareMeta small{
+  color:#6f7c8d;
+  font:800 6px ui-monospace,monospace;
+  letter-spacing:.55px;
+}
+.riotCompareMeta b{
+  margin-top:4px;
+  color:#dfe5ec;
+  font-size:9px;
+}
+
+.arenaPlacementPanel{
+  display:grid;
+  grid-template-columns:minmax(0,.8fr) minmax(260px,1.2fr);
+  gap:22px;
+  align-items:center;
+  margin-top:18px;
+  padding:18px;
+  border:1px solid #75ddff18;
+  border-radius:14px;
+  background:linear-gradient(135deg,#75ddff08,#05080c 55%,#ff477e06);
+}
+.arenaPlacementPanel>div:first-child small{
+  color:#75ddff;
+  font:900 6.5px ui-monospace,monospace;
+  letter-spacing:.7px;
+}
+.arenaPlacementPanel>div:first-child b{
+  display:block;
+  margin-top:5px;
+  color:#f0f4f8;
+  font-size:13px;
+}
+.arenaPlacementPanel>div:first-child p{
+  margin:6px 0 0;
+  color:#7f8b9a;
+  font-size:8px;
+  line-height:1.55;
+}
+.placementBars{
+  display:grid;
+  gap:8px;
+}
+.placementBars>span{
+  display:grid;
+  grid-template-columns:86px minmax(0,1fr) 38px;
+  gap:8px;
+  align-items:center;
+}
+.placementBars label{
+  color:#8490a0;
+  font:800 6px ui-monospace,monospace;
+}
+.placementBars i{
+  height:7px;
+  overflow:hidden;
+  border-radius:99px;
+  background:#ffffff0c;
+}
+.placementBars i em{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#ad88ff,#75ddff);
+}
+.placementBars b{
+  text-align:right;
+  color:#dfe5eb;
+  font-size:8px;
+  font-variant-numeric:tabular-nums;
+}
+
+@media(max-width:900px){
+  .riotCompareGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .arenaPlacementPanel{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+  .peakFactGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .riotWindowCompare{
+    padding:24px 20px 28px;
+  }
+  .riotWindowCompare>header{
+    grid-template-columns:1fr;
+  }
+  .riotWindowCompare>header>span{
+    min-width:0;
+  }
+  .riotCompareGrid{
+    grid-template-columns:1fr;
+  }
+  .riotCompareMeta{
+    grid-template-columns:1fr;
+  }
+  .riotCompareGrid article>div>span b{
+    font-size:14px;
+  }
+  .placementBars>span{
+    grid-template-columns:74px minmax(0,1fr) 34px;
+  }
+}
