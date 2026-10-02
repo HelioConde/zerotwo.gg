@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
@@ -161,6 +161,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const [memoryReady,setMemoryReady]=useState(false);
   const [lifeView,setLifeView]=useState<'overview'|'story'|'explore'>('overview');
   const [activeChapter,setActiveChapter]=useState<string>('riot-now');
+  const storyNavRef=useRef<HTMLElement|null>(null);
 
   useEffect(()=>{
     const sections=RIOT_CHAPTERS.map(([id])=>document.getElementById(id)).filter(Boolean) as HTMLElement[];
@@ -172,6 +173,15 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     sections.forEach(section=>observer.observe(section));
     return()=>observer.disconnect();
   },[matches.length]);
+
+  useEffect(()=>{
+    const nav=storyNavRef.current;
+    if(!nav)return;
+    const current=nav.querySelector<HTMLAnchorElement>('a[href="#'+activeChapter+'"]');
+    if(!current)return;
+    const left=current.offsetLeft-(nav.clientWidth-current.offsetWidth)/2;
+    nav.scrollTo({left:Math.max(0,left),behavior:'smooth'});
+  },[activeChapter]);
 
   const currentSnapshot=useMemo<Snapshot>(()=>({
     at:Date.now(),
@@ -541,7 +551,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     ?matches.length+' partidas já carregadas de '+Math.max(availableDepth,requestedDepth)+' solicitadas. O restante entra conforme o limite temporário da Riot permite.'
     :matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
 
-  return <section className="riotStory" aria-label="Riot Life em capítulos">
+  return <section id="riot-life-story" className="riotStory" aria-label="Riot Life em capítulos">
     <header className="riotStoryIntro riotStoryIntroWithArt">
       <img className="riotLifeIntroArtwork" loading="eager" decoding="async" src={z2Art('Duelo Celestial entre Luz e Sombra.png')} alt="" aria-hidden="true"/>
       <div className="riotLifeIntroArtShade"/>
@@ -559,7 +569,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <div className="riotSampleNote" data-tone={matches.length<30?'low':matches.length<75?'mid':'good'}><Icon name="status"/><span><b>{sampleQuality}</b><small>{sampleWarning}</small></span></div>
     </header>
 
-    <nav className="riotStoryNav" aria-label="Capítulos da Riot Life">
+    <nav ref={storyNavRef} className="riotStoryNav" aria-label="Capítulos da Riot Life">
+      <span className="riotStoryCurrent"><small>CAPÍTULO {chapterIndex+1}/{RIOT_CHAPTERS.length}</small><b>{RIOT_CHAPTERS[chapterIndex]?.[1]||'AGORA'}</b></span>
       {RIOT_CHAPTERS.map(([id,label],index)=><a key={id} href={'#'+id} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>)}
       <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
       <small className="riotStoryReadout">{readingProgress}% · ~5 min de leitura</small>
