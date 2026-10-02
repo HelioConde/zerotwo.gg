@@ -919,8 +919,8 @@ export function I18nProvider({children}:{children:React.ReactNode}){
   return <LanguageContext.Provider value={value}>
     {children}
     <div className="ztLanguageSwitcher" data-i18n-skip aria-label="Language">
-      <button className={language==='pt-BR'?'active':''} onClick={()=>setLanguage('pt-BR')} aria-pressed={language==='pt-BR'}>PT-BR</button>
-      <button className={language==='en'?'active':''} onClick={()=>setLanguage('en')} aria-pressed={language==='en'}>EN</button>
+      <button title="Português (Brasil)" className={language==='pt-BR'?'active':''} onClick={()=>setLanguage('pt-BR')} aria-pressed={language==='pt-BR'}>PT-BR</button>
+      <button title="English" className={language==='en'?'active':''} onClick={()=>setLanguage('en')} aria-pressed={language==='en'}>EN</button>
     </div>
   </LanguageContext.Provider>;
 }
