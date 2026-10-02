@@ -1,4 +1,5 @@
 import { Icon, GameBadge } from '../../components/ZeroTwoUI';
+import { getLocale } from '../../i18n';
 
 type Sync02ViewProps={
   syncLoading:boolean;
@@ -76,7 +77,7 @@ export function Sync02View({syncLoading,connections,gamerName,riotId,openSync,du
 
           <div className="syncOrigin">
             <span>{c.searchType==='RECURRING'?'PARCERIA RECORRENTE':'SESSÃO AGORA'} // <b>{c.matchedMode==='ANY'?'QUALQUER MODO':c.matchedMode||'QUALQUER MODO'}</b></span>
-            <em>MATCH EM {new Date(c.matchedAt).toLocaleDateString('pt-BR')}</em>
+            <em>MATCH EM {new Date(c.matchedAt).toLocaleDateString(getLocale())}</em>
           </div>
 
           <div className="syncIdentity">
