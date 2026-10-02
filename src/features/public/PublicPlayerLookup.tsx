@@ -52,6 +52,7 @@ function HomeExperience(){
     <article><Icon name="game"/><small>03 // CONTEXTO</small><b>MODOS SEPARADOS</b><p>Ranked, Normal, ARAM e Arena não são tratados como se fossem o mesmo tipo de partida.</p></article>
     <article><Icon name="dna"/><small>04 // LIMITE</small><b>SEM MMR PARALELO</b><p>Não criamos ELO/MMR alternativo nem uma nota única para definir a habilidade do jogador.</p></article>
    </div>
+   <a className="homeMethodologyLink" href="/zerotwo.gg/como-funciona/">COMO O ZEROTWO CALCULA E ORGANIZA OS DADOS →</a>
   </section>
   <section className="homeJourneyEnd">
    <img className="homeJourneyArt homeJourneyEndArt" loading="lazy" decoding="async" src="/zerotwo.gg/assets/zerotwo/Imagem%20do%20ChatGPT%201%20de%20out.%20de%202026,%2017_10_12-1.png" alt="" aria-hidden="true"/>
