@@ -6,7 +6,7 @@ Public prototype: https://helioconde.github.io/zerotwo.gg/
 
 ## Product summary
 
-**ZeroTwo.gg is a multi-game player analytics and Looking For Group platform.**
+**ZeroTwo.gg is a League of Legends player-history, post-game analytics and Looking For Group platform.**
 
 For League of Legends, a visitor can search a Riot ID and view permitted recent match information, official ranked data, champion mastery and transformative post-game analysis called **Gaming DNA**.
 
@@ -115,22 +115,9 @@ Potential future use:
 - richer post-game explanations
 - deeper historical trend views
 
-### VALORANT
+### Current production scope
 
-VALORANT will **not** reuse League's public Riot-ID lookup model.
-
-ZeroTwo now includes an implementation-ready RSO integration scaffold:
-
-- authenticated Player 01 can start Riot Sign On;
-- OAuth state is stored server-side with a short expiration;
-- Riot callback links only the authenticated player's own Riot account;
-- VAL-MATCH-V1 and VAL-CONTENT-V1 are consumed only after opt-in;
-- PUUID remains server-side;
-- the player can unlink VALORANT;
-- public arbitrary Riot-ID lookup is not provided for VALORANT;
-- the frontend remains feature-flagged until Riot Production/RSO credentials are approved and the Supabase functions are deployed.
-
-VALORANT player-specific data requires explicit player opt-in through RSO before it is displayed.
+The current Production API application is intentionally scoped to **League of Legends only**. Experimental VALORANT work is disabled in the public product and is not part of this production request.
 
 ## Game integrity
 
@@ -206,16 +193,9 @@ If monetization is introduced:
 
 Potential transformative paid features may include deeper historical trend analysis, additional post-game insights and advanced personal analytics, subject to Riot approval and applicable policy.
 
-## Multi-game architecture
+## Product scope
 
-ZeroTwo is the platform; individual games are integrations/data sources.
-
-Player identity is separated conceptually from game-specific data:
-
-- ZeroTwo Player identity
-- League identity and League Gaming DNA
-- future VALORANT identity and VALORANT Gaming DNA via RSO
-- future cross-game insights only when supported by permitted data and player consent
+The submitted product experience is League of Legends only. The public site, authenticated Riot Life and data-processing paths presented for review use League APIs and League data only.
 
 ## Legal attribution
 
@@ -251,12 +231,12 @@ Production access is needed to:
 
 - keep the public League lookup reliably available;
 - operate within appropriate Riot rate limits;
-- continue testing the full player flow with a broader audience;
-- prepare future approved RSO integrations where required.
+- support the Riot Life experience for a broader League audience;
+- continue validating post-game history, trends and player-facing explanations at production scale.
 
 ## Suggested short application description
 
-> ZeroTwo.gg is a multi-game player analytics and Looking For Group platform. For League of Legends, players can search Riot IDs to view permitted recent match history, official ranked data, champion mastery and transformative post-game analysis called Gaming DNA. Gaming DNA separates Ranked, Normal, ARAM and Arena contexts and does not create an alternative MMR/ELO. Players may optionally create a ZeroTwo account and use Find Your 02, an LFG experience that considers player-selected game mode, server, availability and gameplay patterns. After mutual interest and completed games, 02 Sync uses permitted post-game data and voluntary feedback to improve future recommendations. ZeroTwo does not provide live competitive information, hidden opponent information, cheating functionality or prescriptive in-game decisions.
+> ZeroTwo.gg is a League of Legends Riot Life experience that turns permitted Riot data into a readable player history. Visitors can search a Riot ID to explore recent matches, official ranked data, champion mastery, mode-aware trends, sessions, recurring co-players and post-game comparisons. Ranked, Normal, ARAM and Arena are kept in their proper contexts, and ZeroTwo does not create an alternative MMR/ELO. Players may optionally create a ZeroTwo account to preserve their Riot Life and use social/LFG features. ZeroTwo does not provide live competitive information, hidden opponent information, cheating functionality or prescriptive in-game decisions.
 
 ## Submission checklist
 
@@ -272,6 +252,3 @@ Before submitting:
 - [ ] Confirm Gaming DNA does not display unofficial MMR/ELO.
 - [ ] Confirm the Developer Portal product metadata matches the current ZeroTwo flow.
 - [ ] Submit the Production API key application.
-- [ ] Request/complete Riot Sign On provisioning for VALORANT.
-- [ ] Deploy VALORANT RSO migration and Edge Functions to the ZeroTwo Supabase project.
-- [ ] Enable `VITE_VALORANT_RSO_ENABLED=true` only after the RSO callback is approved.
