@@ -92,19 +92,19 @@ Deno.serve(async(req)=>{
   const equipNames=new Map<string,string>((content?.equips||[]).map((x:any)=>[String(x.id),localizedName(x,'Arma')]));
 
   const observed=(Array.isArray(list?.history)?list.history:[]).filter((x:any)=>x?.matchId);
-  const observedIds=[...new Set(observed.map((x:any)=>String(x.matchId)))];
+  const observedIds:string[]=[...new Set<string>(observed.map((x:any)=>String(x.matchId)))];
 
   const {data:cachedRows}=observedIds.length
     ?await admin.from('valorant_match_cache').select('match_id,match_data').in('match_id',observedIds)
     :{data:[] as any[]};
   const cacheMap=new Map<string,any>((cachedRows||[]).map((row:any)=>[String(row.match_id),row.match_data]));
-  const missing=observedIds.filter(id=>!cacheMap.has(id));
+  const missing:string[]=observedIds.filter((id:string)=>!cacheMap.has(id));
   let fetchedNow=0;
   let rateLimited=false;
 
   for(let i=0;i<missing.length;i+=4){
-    const batch=missing.slice(i,i+4);
-    const results=await Promise.all(batch.map(async(matchId)=>{
+    const batch:string[]=missing.slice(i,i+4);
+    const results=await Promise.all(batch.map(async(matchId:string)=>{
       try{
         const response=await fetch(base+'/val/match/v1/matches/'+encodeURIComponent(matchId),{headers:riotHeaders});
         if(response.status===429)return {matchId,status:429,data:null};
@@ -134,7 +134,7 @@ Deno.serve(async(req)=>{
     if(rateLimited)break;
   }
 
-  const observedById=new Map<string,any>(observed.map((entry:any)=>[String(entry.matchId),entry]));
+  const observedById=new Map<string,any>(observed.map((entry:any):[string,any]=>[String(entry.matchId),entry]));
   const historyLinks=observedIds.filter(id=>cacheMap.has(id)).map(matchId=>{
     const entry=observedById.get(matchId)||{};
     const match=cacheMap.get(matchId);
