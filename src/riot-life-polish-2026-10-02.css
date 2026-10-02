@@ -1278,3 +1278,140 @@
     margin-top:12px!important;
   }
 }
+
+
+/* ==========================================================================
+   SINGLE READING AXIS PASS — 2026-10-02
+   Every desktop story chapter now uses the same horizontal reading rail.
+   This prevents headings/data from jumping left and right while scrolling.
+   ========================================================================== */
+@media(min-width:1001px){
+  .riotStoryFlow{
+    --story-rail:120px;
+    --story-edge:32px;
+    --story-number:64px;
+    --story-gap:24px;
+  }
+
+  /* Top-level chapter types all start copy at exactly the same x position. */
+  .riotStoryFlow>.riotChapter{
+    grid-template-columns:var(--story-number) minmax(0,1.25fr) minmax(220px,.55fr)!important;
+    gap:var(--story-gap)!important;
+    padding-left:var(--story-edge)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotStoryFlow>.riotDeepChapter{
+    grid-template-columns:var(--story-number) minmax(330px,1.12fr) minmax(360px,.88fr)!important;
+    gap:var(--story-gap)!important;
+    padding-left:var(--story-edge)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotStoryFlow>.riotMasteryChapter{
+    grid-template-columns:var(--story-number) minmax(0,.85fr) minmax(360px,1.15fr)!important;
+    gap:var(--story-gap)!important;
+    padding-left:var(--story-edge)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterGroupIntro{
+    grid-template-columns:var(--story-number) minmax(0,1fr) auto!important;
+    gap:var(--story-gap)!important;
+    padding-left:var(--story-edge)!important;
+    padding-right:var(--story-edge)!important;
+  }
+
+  /* CHANGE: comparison and eras continue from the same chapter copy rail. */
+  .riotChapterChange>.riotWindowCompare{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterChange>.playerEras .erasTrack>article{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterChange>.playerEras>footer{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+
+  /* PEOPLE: loading, featured player, timeline and recurring list use one rail. */
+  .riotChapterPeople .teammatesLoading{
+    justify-content:flex-start!important;
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterPeople .teammateEmpty{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterPeople .featuredTeammate{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterPeople .playersTimeline>header,
+  .riotChapterPeople .teammateSectionLabel,
+  .riotChapterPeople .frequentTeammates>footer{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterPeople .playersTimelineLanes,
+  .riotChapterPeople .teammateGrid{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+
+  /* FINAL CHAPTER: patch and arcade no longer snap back to the far left. */
+  .riotChapterNext .myRiotPatch>header,
+  .riotChapterNext .riotArcade>header{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterNext .patchChanges,
+  .riotChapterNext .arcadeGame{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+  .riotChapterNext .myRiotPatch>footer{
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+
+  /* Empty/neutral states keep the same visual axis instead of floating center. */
+  .riotChapterNext .patchLoading,
+  .riotChapterNext .patchEmpty{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding-left:var(--story-rail)!important;
+    padding-right:var(--story-edge)!important;
+  }
+
+  /* Keep nested rails visually contained instead of edge-to-edge. */
+  .riotChapterPeople .playersTimelineLanes,
+  .riotChapterPeople .teammateGrid,
+  .riotChapterNext .patchChanges{
+    background-clip:content-box;
+  }
+}
+
+/* Tablet/mobile intentionally returns to the compact single-column rhythm. */
+@media(max-width:1000px){
+  .riotChapterChange>.riotWindowCompare,
+  .riotChapterChange>.playerEras .erasTrack>article,
+  .riotChapterPeople .teammatesLoading,
+  .riotChapterPeople .teammateEmpty,
+  .riotChapterPeople .featuredTeammate,
+  .riotChapterPeople .playersTimeline>header,
+  .riotChapterPeople .playersTimelineLanes,
+  .riotChapterPeople .teammateSectionLabel,
+  .riotChapterPeople .teammateGrid,
+  .riotChapterPeople .frequentTeammates>footer,
+  .riotChapterNext .myRiotPatch>header,
+  .riotChapterNext .riotArcade>header,
+  .riotChapterNext .patchChanges,
+  .riotChapterNext .arcadeGame,
+  .riotChapterNext .myRiotPatch>footer,
+  .riotChapterNext .patchLoading,
+  .riotChapterNext .patchEmpty{
+    padding-left:20px!important;
+    padding-right:20px!important;
+  }
+}
