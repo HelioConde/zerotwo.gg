@@ -8,7 +8,7 @@ const SHARDS=[
   ['br','BR'],['latam','LATAM'],['na','NA'],['eu','EU'],['kr','KR'],['ap','AP']
 ] as const;
 
-export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onLinkedChange?:(linked:boolean)=>void,expanded?:boolean,onUseLeague?:()=>void}){
+export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onLinkedChange?:(linked:boolean,profile?:any)=>void,expanded?:boolean,onUseLeague?:()=>void}){
  const [profile,setProfile]=useState<any>(null);
  const [loading,setLoading]=useState(false);
  const [status,setStatus]=useState('');
@@ -16,7 +16,7 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
 
  async function load(){
   if(!RSO_ENABLED){
-   onLinkedChange?.(false);
+   onLinkedChange?.(false,null);
    return;
   }
   setLoading(true);
@@ -24,12 +24,12 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
   setLoading(false);
   if(error){
    setStatus('Integração VALORANT indisponível no momento.');
-   onLinkedChange?.(false);
+   onLinkedChange?.(false,null);
    return;
   }
   setProfile(data);
   const linked=Boolean(data?.linked);
-  onLinkedChange?.(linked);
+  onLinkedChange?.(linked,data);
   if(linked&&data?.account?.shard)setShard(data.account.shard);
  }
 
@@ -70,7 +70,7 @@ export function ValorantConnect({onLinkedChange,expanded=false,onUseLeague}:{onL
    return;
   }
   setProfile({linked:false});
-  onLinkedChange?.(false);
+  onLinkedChange?.(false,{linked:false});
   setStatus('VALORANT desconectado.');
  }
 
