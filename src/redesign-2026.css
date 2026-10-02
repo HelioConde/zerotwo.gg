@@ -4320,3 +4320,111 @@ select{cursor:pointer}
   .riotStoryEnd{grid-template-columns:auto 1fr!important}
   .riotBackTop{grid-column:1/-1;width:100%}
 }
+
+
+/* ==========================================================================
+   MOBILE SEARCH HOTFIX — keep clear action inside the Riot ID field
+   ========================================================================== */
+.homeLookup .lookupSearch>div>button.lookupClear{
+  position:absolute!important;
+  top:50%!important;
+  right:10px!important;
+  left:auto!important;
+  grid-column:auto!important;
+  transform:translateY(-50%)!important;
+  width:32px!important;
+  min-width:32px!important;
+  max-width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+  margin:0!important;
+  padding:0!important;
+  border:1px solid transparent!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  background-image:none!important;
+  color:#8893a2!important;
+  box-shadow:none!important;
+  font-size:19px!important;
+  font-weight:700!important;
+  line-height:30px!important;
+  text-align:center!important;
+  z-index:6!important;
+}
+.homeLookup .lookupSearch>div>button.lookupClear:hover,
+.homeLookup .lookupSearch>div>button.lookupClear:focus-visible{
+  border-color:#ffffff12!important;
+  background:#ffffff09!important;
+  color:#fff!important;
+}
+.homeLookup .lookupSearch>div>button.lookupClear:active{
+  transform:translateY(-50%) scale(.94)!important;
+}
+.homeLookup .lookupSearch>div>input{
+  min-width:0!important;
+  padding-right:52px!important;
+}
+
+@media(max-width:700px){
+  .homeLookup:not(.hasResult) .lookupSearch{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 78px!important;
+    grid-template-areas:
+      "riotid server"
+      "submit submit"!important;
+    gap:7px!important;
+    padding:7px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupSearch>div{
+    grid-area:riotid!important;
+    min-width:0!important;
+    min-height:52px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupSearch>select{
+    grid-area:server!important;
+    width:78px!important;
+    min-width:78px!important;
+    min-height:52px!important;
+    padding:0 9px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupSearch>button:not(.lookupClear){
+    grid-area:submit!important;
+    grid-column:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:52px!important;
+    margin:0!important;
+  }
+  .homeLookup:not(.hasResult) .lookupSearch>div>button.lookupClear{
+    right:7px!important;
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    border-radius:50%!important;
+    font-size:18px!important;
+  }
+  .homeLookup:not(.hasResult) .lookupSearch input{
+    font-size:16px!important;
+    line-height:1.3!important;
+  }
+  .lookupHelp{
+    margin-top:7px!important;
+    font-size:7px!important;
+  }
+
+  /* Result-header search uses the same clear control without inheriting CTA size. */
+  .homeLookup.hasResult .lookupSearch>div>button.lookupClear{
+    right:5px!important;
+    width:28px!important;
+    min-width:28px!important;
+    max-width:28px!important;
+    height:28px!important;
+    min-height:28px!important;
+    max-height:28px!important;
+    font-size:16px!important;
+  }
+}
