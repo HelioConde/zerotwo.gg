@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { getLocale } from '../../i18n';
 
 type Props={
   data:any;
@@ -40,7 +41,7 @@ function counts(rows:any[],get:(row:any)=>string){
 function pct(value:number,total:number){return total?Math.round(value/total*100):0}
 function avg(rows:any[],get:(row:any)=>number){return rows.length?rows.reduce((sum,row)=>sum+get(row),0)/rows.length:0}
 function fmtDate(ts:number){
-  return ts?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short'}).format(new Date(ts)):'—';
+  return ts?new Intl.DateTimeFormat(getLocale(),{day:'2-digit',month:'short'}).format(new Date(ts)):'—';
 }
 function streak(matches:any[]){
   let bestWin=0,currentWin=0,bestLoss=0,currentLoss=0;
