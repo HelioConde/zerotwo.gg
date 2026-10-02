@@ -288,7 +288,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <h3>{data?.summary?.mainContext||'SEU CONTEXTO'} <span>É ONDE SUA HISTÓRIA ESTÁ ACONTECENDO.</span></h3>
           <p>{currentModeGames>0?currentModeGames+' de '+matches.length+' partidas desta janela vieram desse contexto.':'Este é o contexto mais presente entre as partidas disponíveis.'} O número ao lado pertence só a este capítulo.</p><small className="chapterSource">FONTE // RIOT MATCH-V5 · {matches.length} partidas observadas</small>
           <div className="riotNowMeta"><span><small>PERÍODO</small><b>{windowStart} → {windowEnd}</b></span><span><small>ÚLTIMA PARTIDA</small><b>{daysSinceLatest===0?'hoje':daysSinceLatest+'d atrás'}</b></span></div>
-          {modeDistribution.length>0&&<div className="riotModeDistribution" aria-label="Distribuição dos modos jogados">{modeDistribution.map((mode:any)=><span key={mode.name}><i style={{width:mode.share+'%'}}/><b>{mode.name}</b><em>{mode.games} · {mode.share}%</em></span>)}</div>
+          {modeDistribution.length>0&&<div className="riotModeDistribution" aria-label="Distribuição dos modos jogados">{modeDistribution.map((mode:any)=><span key={mode.name}><i style={{width:mode.share+'%'}}/><b>{mode.name}</b><em>{mode.games} · {mode.share}%</em></span>)}</div>}
         </div>
         <div className="riotChapterHeroMetric">
           <b>{currentMetric.value}</b>
