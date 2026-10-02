@@ -6524,3 +6524,11 @@ select{cursor:pointer}
     height:23px!important;
   }
 }
+
+
+/* 2026-10-02 brand parity pass */
+.gameNav .brand.brandButton,
+.siteFooterIdentity .brand.brandButton{
+  font-weight:950!important;
+  letter-spacing:-.45px!important;
+}
