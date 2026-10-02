@@ -6,6 +6,7 @@ import './redesign-2026.css';
 import { supabase } from './supabase';
 import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
+import { I18nProvider } from './i18n';
 import { Connect01 } from './features/onboarding/Connect01';
 import { PublicPlayerLookup } from './features/public/PublicPlayerLookup';
 import { PlayerHome } from './features/player/PlayerHome';
@@ -15,4 +16,4 @@ function App(){const [session,setSession]=useState<any>(null),[accountOpen,setAc
 {!session&&authOpen&&<div className="authOverlay" role="dialog" aria-modal="true" aria-label="Entrar no ZeroTwo" onMouseDown={e=>{if(e.target===e.currentTarget)setAuthOpen(false)}}><div className="authOverlayPanel"><button className="authOverlayClose" aria-label="Fechar" onClick={()=>setAuthOpen(false)}>×</button><Connect01 session={session} onSessionChange={setSession} onProfileComplete={()=>routePlayer(session)}/></div></div>}
 <footer><button className="brand brandButton" onClick={()=>goHome()}><b className="brandMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></b> ZERO<span>TWO</span><small>.GG</small></button><p>Sua história Riot, viva.</p><small>ZeroTwo.gg is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</small></footer>
 </main>}
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+createRoot(document.getElementById('root')!).render(<React.StrictMode><I18nProvider><App/></I18nProvider></React.StrictMode>);
