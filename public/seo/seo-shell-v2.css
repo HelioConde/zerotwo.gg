@@ -281,3 +281,101 @@ footer{padding:28px 0 44px;border-top:1px solid var(--line);color:#778393;font-s
   }
   .seoFooterGrid{width:calc(100% - 24px)}
 }
+
+
+/* 2026-10-02 alignment pass — exact product brand proportions + centered content. */
+.seoHeaderInner{
+  width:100%;
+  max-width:none;
+  padding:0 max(20px,calc((100vw - 1240px)/2));
+}
+.seoHeader .brand.brandButton{
+  display:inline-flex;
+  align-items:center;
+  gap:0;
+  color:#fff;
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:-.35px;
+  line-height:1;
+}
+.seoHeader .brandMark{
+  width:30px;
+  height:30px;
+  display:inline-grid;
+  place-items:center;
+  margin-right:4px;
+  border-radius:9px;
+  flex:0 0 30px;
+}
+.seoHeader .brandMark img{
+  display:block;
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 7px #ff376f35);
+}
+.seoHeader .brand.brandButton>span{
+  margin-left:1px;
+  color:#ff477e;
+}
+.seoHeader .brand.brandButton>small{
+  margin-left:0;
+  color:#7e8799;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+/* The generic .grid margin shorthand was cancelling .wrap auto-centering. */
+.hero>.wrap,
+main>.wrap.grid,
+main>.wrap.content{
+  width:min(1120px,calc(100% - 48px));
+  margin-left:auto;
+  margin-right:auto;
+}
+main>.wrap.grid{
+  margin-top:18px;
+  margin-bottom:46px;
+}
+.hero>.wrap{
+  display:block;
+}
+.content>section{
+  width:100%;
+}
+
+/* Keep cards and long-form copy on the same centered visual axis. */
+.grid,
+.related,
+.termGrid{
+  min-width:0;
+}
+.card,
+.termGrid article{
+  min-width:0;
+}
+
+@media(max-width:760px){
+  .seoHeaderInner{
+    padding:0 12px;
+  }
+  .seoHeader .brand.brandButton{
+    font-size:11px;
+  }
+  .seoHeader .brandMark{
+    width:27px;
+    height:27px;
+    flex-basis:27px;
+  }
+  .seoHeader .brandMark img{
+    width:20px;
+    height:20px;
+  }
+  .hero>.wrap,
+  main>.wrap.grid,
+  main>.wrap.content{
+    width:calc(100% - 28px);
+  }
+}
