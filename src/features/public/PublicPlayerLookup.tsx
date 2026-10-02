@@ -42,6 +42,8 @@ function HomeExperience(){
      <a href="/zerotwo.gg/riot-id/"><b>Buscar por Riot ID</b><small>Como usar Nome#TAG e servidor →</small></a>
      <a href="/zerotwo.gg/maestria-lol/"><b>Maestria LoL</b><small>Pontos, nível e fase recente →</small></a>
      <a href="/zerotwo.gg/historico-lol/"><b>Histórico LoL</b><small>Como interpretar partidas recentes →</small></a>
+     <a href="/zerotwo.gg/rank-lol/"><b>Rank LoL</b><small>Elo, divisão, LP e win rate →</small></a>
+     <a href="/zerotwo.gg/arena-lol/"><b>Arena LoL</b><small>Top 4, colocações e histórico →</small></a>
     </nav>
    </div>
   </section>
