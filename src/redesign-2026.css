@@ -6329,3 +6329,19 @@ select{cursor:pointer}
   .homeSeoGuides b{font-size:12px}
   .homeSeoGuides small{font-size:10px}
 }
+
+.homeTransparency .homeMethodologyLink{
+  grid-column:1/-1;
+  width:max-content;
+  max-width:100%;
+  margin-top:4px;
+  color:#9de8ff;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.3px;
+  text-decoration:none;
+}
+.homeTransparency .homeMethodologyLink:hover{color:#fff}
+@media(max-width:700px){
+  .homeTransparency .homeMethodologyLink{font-size:10px;line-height:1.45}
+}
