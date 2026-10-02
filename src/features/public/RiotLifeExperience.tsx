@@ -637,9 +637,11 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <span><small>TOP 5 NA AMOSTRA</small><b>{masteryStory.recentMasteryShare}%</b><em>{masteryStory.recentMasteryGames} de {matches.length} partidas</em></span>
         </div>
         {masteryStory.rows.length>0?<div className="riotMasteryList">{masteryStory.rows.map((row:any)=><article key={row.championId} className={row.rank===1?'featured':''}>
-          <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
-          {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
-          <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString(getLocale())} pontos</em></div>
+          <div className="masteryChampion">
+            <span className="masteryRank">{String(row.rank).padStart(2,'0')}</span>
+            {row.champion&&<img loading="lazy" decoding="async" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/champion/'+row.champion.id+'.png'} alt={row.name}/>}
+            <div className="masteryIdentity"><small>MAESTRIA {row.level}</small><b>{row.name}</b><em>{row.points.toLocaleString(getLocale())} pontos</em></div>
+          </div>
           <div className="masteryRecent"><small>NESTA RIOT LIFE</small><b>{row.recentGames}x</b><em>{row.recentGames?row.recentShare+'% da amostra':'não apareceu'}</em></div>
           <div className="masteryRecent"><small>KDA RECENTE</small><b>{row.recentGames?row.recentKda.toFixed(2):'—'}</b><em>{row.recentResult!=null?(deepDive.context==='ARENA'?'Top 4 ':'resultado ')+row.recentResult+'%':'sem amostra recente'}</em></div>
           <div className="masteryLast"><small>ÚLTIMO REGISTRO</small><b>{row.lastPlayTime?formatDate(row.lastPlayTime):'—'}</b></div>
