@@ -11,6 +11,7 @@ import {
   type RiotLifeSnapshot as Snapshot
 } from './riotLifeMemory';
 import '../../riot-life.css';
+import '../../riot-life-polish-2026-10-02.css';
 import { getLocale } from '../../i18n';
 
 type RiotLifeProps={
