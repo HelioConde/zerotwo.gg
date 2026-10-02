@@ -5806,3 +5806,51 @@ select{cursor:pointer}
     background:linear-gradient(0deg,#07090ffc 0%,#07090fe5 62%,#07090f82 100%);
   }
 }
+
+
+/* Riot Life opening art — latest upload */
+.riotStoryIntroWithArt{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.riotLifeIntroArtwork{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 46%;
+  opacity:.24;
+  filter:saturate(.88) contrast(1.06) brightness(.76);
+  pointer-events:none;
+  user-select:none;
+}
+.riotLifeIntroArtShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    linear-gradient(90deg,#07090ff6 0%,#07090fe7 38%,#07090fb6 68%,#07090f82 100%),
+    linear-gradient(0deg,#07090fd0,#07090f1c 60%,#07090f78);
+  pointer-events:none;
+}
+.riotStoryIntroWithArt>div:not(.riotLifeIntroArtShade){
+  position:relative;
+  z-index:2;
+}
+.riotStoryIntroWithArt .riotStoryCoverage>span,
+.riotStoryIntroWithArt .riotSampleNote{
+  backdrop-filter:blur(8px);
+  background:#05080cba;
+}
+@media(max-width:700px){
+  .riotLifeIntroArtwork{
+    opacity:.16;
+    object-position:center center;
+  }
+  .riotLifeIntroArtShade{
+    background:linear-gradient(0deg,#07090ffc 0%,#07090fe6 62%,#07090f7a 100%);
+  }
+}
