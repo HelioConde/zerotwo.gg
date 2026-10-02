@@ -473,3 +473,38 @@ main>.wrap.grid{
     justify-content:flex-start;
   }
 }
+
+
+/* Footer divider cleanup — keep link columns completely borderless. */
+.seoFooterNav,
+.seoFooterNav section,
+.seoFooterNav a{
+  border:0!important;
+  border-top:0!important;
+  border-right:0!important;
+  border-bottom:0!important;
+  border-left:0!important;
+  box-shadow:none!important;
+  background-image:none!important;
+}
+.seoFooterNav section{
+  position:relative;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+}
+.seoFooterNav section::before,
+.seoFooterNav section::after,
+.seoFooterNav a::before,
+.seoFooterNav a::after{
+  content:none!important;
+  display:none!important;
+}
+.seoFooterNav a{
+  padding:0!important;
+  background:transparent!important;
+  text-decoration:none!important;
+}
+.seoFooterLegal{
+  border:0!important;
+}
