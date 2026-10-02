@@ -673,6 +673,24 @@ const EN:Record<string,string>={
   'AD/nível':'AD/level',
   'ENTRAR NO ZEROTWO':'SIGN IN TO ZEROTWO',
 
+  'LEMBRE':'REMEMBER',
+  'Sem cadastro.':'No sign-up required.',
+  'Nome#TAG · Ex.: AlchemyFlames#BR1':'Name#TAG · e.g.: AlchemyFlames#BR1',
+  'Limpar Riot ID':'Clear Riot ID',
+  'Formato:':'Format:',
+  'partida':'match',
+  'dias':'days',
+  'resultado':'result',
+  'dano por minuto':'damage per minute',
+  'Jogo':'Game',
+  'MORTES / JOGO':'DEATHS / GAME',
+  'CC / JOGO':'CC / GAME',
+  'CURA / JOGO':'HEALING / GAME',
+  'TEMPO MORTO / JOGO':'DEAD TIME / GAME',
+  'CURA + SHIELD EM ALIADOS':'HEALING + SHIELDING ON ALLIES',
+  'Criando sua conta...':'Creating your account...',
+  'Entrar no ZeroTwo':'Sign in to ZeroTwo',
+  'resultado misto':'mixed result',
 };
 
 const RULES:Array<[RegExp,string]>=[
