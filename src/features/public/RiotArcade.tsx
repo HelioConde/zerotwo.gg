@@ -46,7 +46,11 @@ export function RiotArcade({data}:Props){
   const active=questions.find(q=>!answers[q.id])||questions[questions.length-1];
   const finished=answered>=questions.length;
 
-  return <section className="riotArcade">
+  const historyArt=import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent('VOCÊ CONHECE O SEU PRÓPRIO HISTÓRICO.png');
+
+  return <section className="riotArcade riotArcadeWithArt">
+    <img className="riotArcadeArt" loading="lazy" decoding="async" src={historyArt} alt="" aria-hidden="true"/>
+    <div className="riotArcadeArtShade"/>
     <header><div><small>RIOT CHALLENGES ARCADE</small><h3>VOCÊ CONHECE O SEU <span>PRÓPRIO HISTÓRICO?</span></h3><p>Um minijogo curto criado apenas com fatos encontrados nas suas partidas atuais.</p></div><div className="arcadeScore"><small>PLACAR</small><b>{score}/{questions.length}</b><em>{finished?'final':'em andamento'}</em></div></header>
     {!finished?<div className="arcadeGame">
       <div className="arcadeProgress">{questions.map((q,i)=><i key={q.id} className={answers[q.id]?(answers[q.id]===q.answer?'correct':'wrong'):q.id===active.id?'active':''}><span>{i+1}</span></i>)}</div>
