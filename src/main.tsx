@@ -210,19 +210,39 @@ function App(){
       </div>
     }
 
-    <footer>
-      <button className="brand brandButton" onClick={()=>goHome()}>
-        <b className="brandMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></b>
-        ZERO<span>TWO</span><small>.GG</small>
-      </button>
-      <p>Sua história Riot, viva.</p>
-      <nav className="siteTrustLinks" aria-label="Informações do ZeroTwo">
-        <a href="/zerotwo.gg/sobre/">Sobre</a>
-        <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
-        <a href="/zerotwo.gg/glossario-lol/">Glossário LoL</a>
-        <a href="/zerotwo.gg/sitemap.xml">Sitemap</a>
+    <footer className="siteFooter">
+      <div className="siteFooterIdentity">
+        <button className="brand brandButton" onClick={()=>goHome()}>
+          <b className="brandMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></b>
+          ZERO<span>TWO</span><small>.GG</small>
+        </button>
+        <p>Sua história Riot, viva.</p>
+        <span>League of Legends por Riot ID, com contexto em vez de uma parede de números.</span>
+      </div>
+
+      <nav className="siteFooterNav" aria-label="Informações e guias do ZeroTwo">
+        <section>
+          <small>ZEROTWO</small>
+          <a href="/zerotwo.gg/sobre/">Sobre</a>
+          <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
+        </section>
+        <section>
+          <small>GUIAS</small>
+          <a href="/zerotwo.gg/lol-stats-tracker/">LoL Stats Tracker</a>
+          <a href="/zerotwo.gg/maestria-lol/">Maestria LoL</a>
+          <a href="/zerotwo.gg/historico-lol/">Histórico LoL</a>
+          <a href="/zerotwo.gg/rank-lol/">Rank LoL</a>
+        </section>
+        <section>
+          <small>RECURSOS</small>
+          <a href="/zerotwo.gg/glossario-lol/">Glossário LoL</a>
+          <a href="/zerotwo.gg/arena-lol/">Arena LoL</a>
+          <a href="/zerotwo.gg/sitemap.xml">Sitemap</a>
+          <a href="https://github.com/HelioConde/zerotwo.gg" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </section>
       </nav>
-      <small>
+
+      <small className="siteFooterLegal">
         ZeroTwo.gg is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone
         officially involved in producing or managing Riot Games properties. Riot Games and all associated properties
         are trademarks or registered trademarks of Riot Games, Inc.
