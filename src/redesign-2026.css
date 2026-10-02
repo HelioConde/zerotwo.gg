@@ -6382,3 +6382,110 @@ select{cursor:pointer}
   .gamingLanding>footer .siteTrustLinks,
   .gamingLanding>footer .siteTrustLinks+small{grid-column:1}
 }
+
+
+/* 2026-10-02 screenshot pass — compact, readable footer with clear hierarchy. */
+.homeLookup:not(.hasResult) .homeJourney{
+  padding-bottom:48px!important;
+}
+.gamingLanding>.siteFooter{
+  width:min(1240px,calc(100% - 48px))!important;
+  max-width:1240px!important;
+  margin:0 auto!important;
+  padding:34px 24px 30px!important;
+  border-top:1px solid #ffffff12!important;
+  display:grid!important;
+  grid-template-columns:minmax(250px,.8fr) minmax(0,1.2fr)!important;
+  gap:28px 56px!important;
+  align-items:start!important;
+  color:#7c8898!important;
+}
+.siteFooterIdentity{
+  min-width:0;
+}
+.siteFooterIdentity>.brand{
+  width:max-content;
+  margin:0 0 14px!important;
+  font-size:15px!important;
+}
+.siteFooterIdentity>.brand .brandMark{
+  width:34px!important;
+  height:34px!important;
+}
+.siteFooterIdentity>p{
+  margin:0 0 8px!important;
+  color:#d7dde5!important;
+  font-size:12px!important;
+  font-weight:800;
+}
+.siteFooterIdentity>span{
+  display:block;
+  max-width:330px;
+  color:#778394;
+  font-size:10px;
+  line-height:1.6;
+}
+.siteFooterNav{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:26px!important;
+}
+.siteFooterNav section{
+  display:grid;
+  align-content:start;
+  gap:8px;
+}
+.siteFooterNav section>small{
+  margin-bottom:3px;
+  color:#596576;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:1px;
+}
+.siteFooterNav a{
+  width:max-content;
+  max-width:100%;
+  color:#9aa5b4;
+  font-size:10px;
+  font-weight:760;
+  line-height:1.35;
+  text-decoration:none;
+  transition:color .16s ease,transform .16s ease;
+}
+.siteFooterNav a:hover{
+  color:#fff;
+  transform:translateX(2px);
+}
+.siteFooterLegal{
+  grid-column:1/-1!important;
+  max-width:none!important;
+  margin-top:2px;
+  padding-top:18px;
+  border-top:1px solid #ffffff0b;
+  color:#5f6b7c!important;
+  font-size:8.5px!important;
+  line-height:1.65!important;
+}
+@media(max-width:760px){
+  .homeLookup:not(.hasResult) .homeJourney{
+    padding-bottom:36px!important;
+  }
+  .gamingLanding>.siteFooter{
+    width:calc(100% - 24px)!important;
+    grid-template-columns:1fr!important;
+    gap:24px!important;
+    padding:28px 12px 32px!important;
+  }
+  .siteFooterNav{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:22px 18px!important;
+  }
+  .siteFooterNav section:last-child{
+    grid-column:1/-1;
+  }
+  .siteFooterNav a{font-size:11px}
+  .siteFooterIdentity>span{font-size:10.5px}
+  .siteFooterLegal{
+    grid-column:1!important;
+    font-size:8px!important;
+  }
+}
