@@ -5007,3 +5007,159 @@ select{cursor:pointer}
     font-size:20px;
   }
 }
+
+
+/* ==========================================================================
+   RIOT LIFE STORY ART — Novas 02/10
+   Uses the new cinematic assets without sacrificing text contrast.
+   ========================================================================== */
+.riotNarrativeArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  user-select:none;
+  filter:saturate(.9) contrast(1.05);
+}
+.riotNarrativeArtMode{
+  object-position:center center;
+  opacity:.46;
+}
+.riotNarrativeArtSession{
+  object-position:center 42%;
+  opacity:.38;
+}
+.riotNarrativeShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,#07090ff8 0%,#07090fe7 34%,#07090fa8 61%,#07090f70 100%),
+    linear-gradient(0deg,#07090f88,#07090f12 55%,#07090f62);
+}
+.riotChapterNow .riotChapterHeroMetric,
+.riotChapterSession .riotSessionFacts{
+  backdrop-filter:blur(9px);
+  background:#05080cc7!important;
+}
+
+/* Chapter 05 / 06 cinematic headers */
+.riotGroupIntroArt{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.riotGroupArtwork{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  opacity:.42;
+  filter:saturate(.88) contrast(1.07);
+  pointer-events:none;
+  user-select:none;
+}
+.riotGroupArtworkShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,#07090ff9 0%,#07090fe8 36%,#07090fb0 66%,#07090f7d 100%);
+}
+.riotGroupIntroArt>.riotChapterNumber,
+.riotGroupIntroArt>.riotChangeFacts,
+.riotGroupIntroArt>div:not(.riotGroupArtworkShade){
+  position:relative;
+  z-index:3;
+}
+.riotChapterPeople .riotGroupArtwork{
+  object-position:center 52%;
+}
+.riotChapterChange .riotGroupArtwork{
+  object-position:center 48%;
+}
+
+/* Riot Arcade gets its dedicated "Você conhece..." artwork. */
+.riotArcadeWithArt{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+.riotArcadeArt{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 45%;
+  opacity:.25;
+  filter:saturate(.9) contrast(1.05);
+  pointer-events:none;
+  user-select:none;
+}
+.riotArcadeArtShade{
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    linear-gradient(90deg,#07090ff0 0%,#07090fd7 45%,#07090f9a 100%),
+    linear-gradient(0deg,#07090fd9,#07090f22 55%,#07090f9a);
+  pointer-events:none;
+}
+.riotArcadeWithArt>header,
+.riotArcadeWithArt>.arcadeGame,
+.riotArcadeWithArt>.arcadeResult{
+  position:relative;
+  z-index:2;
+}
+.riotArcadeWithArt .arcadeScore,
+.riotArcadeWithArt .arcadeOptions button{
+  backdrop-filter:blur(8px);
+}
+
+/* Keep all story artwork supportive on smaller screens. */
+@media(max-width:980px){
+  .riotNarrativeArtMode,
+  .riotNarrativeArtSession{
+    opacity:.32;
+  }
+  .riotGroupArtwork{
+    opacity:.30;
+  }
+}
+@media(max-width:700px){
+  .riotNarrativeArt,
+  .riotGroupArtwork,
+  .riotArcadeArt{
+    object-position:center center;
+  }
+  .riotNarrativeArtMode{
+    opacity:.24;
+  }
+  .riotNarrativeArtSession{
+    opacity:.22;
+  }
+  .riotNarrativeShade{
+    background:linear-gradient(0deg,#07090fff 0%,#07090fe8 54%,#07090f72 100%);
+  }
+  .riotGroupArtwork{
+    opacity:.22;
+  }
+  .riotGroupArtworkShade{
+    background:linear-gradient(0deg,#07090ff8 0%,#07090fe0 58%,#07090f88 100%);
+  }
+  .riotArcadeArt{
+    opacity:.18;
+  }
+  .riotArcadeArtShade{
+    background:linear-gradient(0deg,#07090ffc 0%,#07090fe2 62%,#07090f86 100%);
+  }
+}
