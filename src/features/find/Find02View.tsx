@@ -1,5 +1,6 @@
 import { Icon, GameBadge, RoleBadge } from '../../components/ZeroTwoUI';
 import { ztLog } from '../../lib/telemetry';
+import { getLocale } from '../../i18n';
 
 type Find02ViewProps={
   activeGame:'lol'|'valorant';
@@ -155,7 +156,7 @@ export function Find02View({activeGame,setActiveGame,finding,findType,findMeta,s
       <small>{findType==='RECURRING'?'BUSCA RECORRENTE ATIVA':'BUSCA ATIVA'}</small>
       <b>{findType==='RECURRING'?'AINDA NÃO HÁ UMA PARCERIA REAL NESTE CONTEXTO.':'AINDA NÃO HÁ UM 02 REAL DISPONÍVEL AGORA.'}</b>
       <p>{findType==='RECURRING'?'Sua busca fica aberta por até 14 dias. Quando você voltar, o ZeroTwo continua procurando alguém com servidor, modo e rotina compatíveis.':'Seu Player 01 continua disponível por até 2 horas. Você pode tentar de novo agora ou compartilhar seu Player com alguém que já joga com você.'}</p>
-      {findMeta?.sessionExpiresAt&&<em>ATIVA ATÉ {new Date(findMeta.sessionExpiresAt).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</em>}
+      {findMeta?.sessionExpiresAt&&<em>ATIVA ATÉ {new Date(findMeta.sessionExpiresAt).toLocaleString(getLocale(),{dateStyle:'short',timeStyle:'short'})}</em>}
       <div><button onClick={()=>find02(findMode,findType)}><Icon name="search"/> TENTAR NOVAMENTE</button><button onClick={shareMyPlayer}><Icon name="arrow"/> COMPARTILHAR MEU PLAYER</button></div>
     </div>:<div className="findStartPanel"><Icon name="search"/><b>SUA BUSCA AINDA NÃO COMEÇOU.</b><p>Escolha se quer jogar agora ou criar uma parceria recorrente, selecione o modo e confirme em “Iniciar busca”.</p></div>}
   </section>;
