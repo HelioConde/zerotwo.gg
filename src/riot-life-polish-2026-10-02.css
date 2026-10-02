@@ -1,0 +1,333 @@
+/*
+ * Riot Life polish pass — 2026-10-02
+ * Fixes blank off-screen chapters in long captures/fast scrolling and tightens
+ * the 20-chapter reading experience without changing the data model.
+ */
+
+/* The previous content-visibility optimisation leaves large empty placeholders
+   in full-page captures and can visibly pop chapters in during fast scrolling. */
+.riotStory .riotChapter,
+.riotStory .riotChapterGroup,
+.riotStory .riotDeepChapter,
+.riotStory .riotMasteryChapter,
+.riotStory .gameDataVault{
+  content-visibility:visible!important;
+  contain:none!important;
+}
+.riotStory .riotDeepChapter img{
+  content-visibility:visible!important;
+}
+
+/* Keep anchored chapter jumps clear of the sticky navigation. */
+#riot-life-story [id^="riot-"]{
+  scroll-margin-top:132px!important;
+}
+
+/* Make the long story feel like one continuous editorial surface. */
+.riotStoryFlow{
+  gap:9px!important;
+}
+.riotChapter,
+.riotChapterGroup,
+.riotDeepChapter,
+.riotMasteryChapter{
+  box-shadow:0 18px 52px #00000018,inset 0 1px #ffffff03;
+}
+.riotChapter:hover,
+.riotDeepChapter:hover,
+.riotMasteryChapter:hover{
+  border-color:#ffffff18;
+}
+
+/* Chapters 01–04: less empty vertical space, stronger hierarchy. */
+.riotChapter{
+  min-height:330px!important;
+  padding:36px 38px!important;
+}
+.riotChapterCopy h3{
+  max-width:700px;
+  text-wrap:balance;
+}
+.riotChapterCopy p{
+  max-width:720px;
+}
+.riotChapterHeroMetric{
+  min-width:0;
+  min-height:0!important;
+}
+.riotChapterHeroMetric b{
+  font-variant-numeric:tabular-nums;
+}
+.riotChapterArt,
+.riotNarrativeArt{
+  transform:scale(1.015);
+}
+
+/* Chapters 07–19: denser, easier to scan, no giant empty cards. */
+.riotDeepChapter{
+  min-height:220px!important;
+  padding:26px 30px!important;
+  gap:20px!important;
+}
+.riotDeepCopy h3{
+  text-wrap:balance;
+}
+.riotDeepCopy p{
+  max-width:680px;
+  font-size:10px!important;
+}
+.riotDeepMetrics{
+  align-self:stretch;
+}
+.riotDeepMetrics>span{
+  min-height:72px!important;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.riotDeepMetrics>span:hover{
+  border-color:#ffffff18;
+  background:#070b11d9!important;
+  transform:translateY(-1px);
+}
+
+/* The cinematic artwork should be visible, but never compete with the data. */
+.riotDeepArt{
+  opacity:.34!important;
+  transform:scale(1.012);
+}
+.riotDeepArtShade{
+  background:
+    linear-gradient(90deg,#06090ffc 0%,#06090fed 31%,#06090fbd 58%,#06090f72 100%),
+    linear-gradient(0deg,#06090f9c,#06090f12 52%,#06090f70)!important;
+}
+.riotMasteryArtwork{
+  opacity:.31!important;
+}
+
+/* Navigation: clearer active state and less visual noise across 20 chapters. */
+.riotStoryNav{
+  box-shadow:0 14px 34px #00000038;
+}
+.riotStoryNav a{
+  min-height:50px!important;
+}
+.riotStoryNav a span{
+  opacity:.72;
+}
+.riotStoryNav a b{
+  white-space:nowrap;
+}
+.riotStoryNav a.active,
+.riotStoryNav a[aria-current="step"]{
+  background:linear-gradient(180deg,#ff477e16,#ff477e07)!important;
+}
+.riotStoryNav a.active span,
+.riotStoryNav a[aria-current="step"] span{
+  opacity:1;
+}
+
+/* Group intros now read as chapter headers rather than another large hero. */
+.riotChapterGroupIntro{
+  padding:32px 38px!important;
+}
+.riotChapterGroupIntro h3{
+  text-wrap:balance;
+}
+
+/* Mastery is information-dense: keep the important rows closer together. */
+.riotMasteryChapter{
+  padding:28px 30px!important;
+  gap:20px!important;
+}
+.riotMasteryList{
+  gap:5px!important;
+}
+.riotMasteryList article{
+  min-height:70px!important;
+}
+
+/* Better small-screen reading density. */
+@media(max-width:1000px){
+  .riotChapter{
+    min-height:0!important;
+  }
+  .riotDeepChapter{
+    min-height:0!important;
+  }
+  .riotStoryNav{
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+  }
+  .riotStoryNav a{
+    scroll-snap-align:start;
+  }
+}
+
+@media(max-width:700px){
+  #riot-life-story [id^="riot-"]{
+    scroll-margin-top:126px!important;
+  }
+
+  .riotStoryIntro{
+    padding:25px 20px!important;
+    border-radius:20px 20px 0 0!important;
+  }
+  .riotStoryIntro h2{
+    font-size:clamp(30px,9.5vw,42px)!important;
+    line-height:.94!important;
+    letter-spacing:-2px!important;
+  }
+  .riotStoryIntro p{
+    font-size:11px!important;
+  }
+
+  .riotStoryNav{
+    min-height:58px!important;
+  }
+  .riotStoryCurrent{
+    min-height:57px!important;
+  }
+  .riotStoryNav a{
+    min-height:57px!important;
+    flex-basis:88px!important;
+    min-width:88px!important;
+  }
+
+  .riotChapter{
+    min-height:0!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+    padding:24px 19px!important;
+    border-radius:20px!important;
+  }
+  .riotChapter>.riotChapterNumber{
+    position:absolute!important;
+    top:18px;
+    left:19px;
+    font-size:52px!important;
+  }
+  .riotChapterCopy{
+    padding-top:58px;
+  }
+  .riotChapterCopy h3{
+    font-size:clamp(28px,8.7vw,39px)!important;
+    line-height:.95!important;
+    letter-spacing:-1.8px!important;
+  }
+  .riotChapterCopy p{
+    font-size:11px!important;
+    line-height:1.55!important;
+  }
+  .riotChapterHeroMetric,
+  .riotSessionFacts{
+    grid-column:auto!important;
+    min-height:104px!important;
+  }
+  .riotChapterHeroMetric b{
+    font-size:clamp(44px,15vw,66px)!important;
+  }
+
+  .riotChapterGroupIntro{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    padding:24px 19px!important;
+  }
+  .riotChapterGroupIntro>.riotChapterNumber{
+    position:static!important;
+    font-size:46px!important;
+    letter-spacing:-4px!important;
+  }
+  .riotChangeFacts{
+    grid-column:auto!important;
+    min-width:0!important;
+  }
+
+  .riotDeepChapter{
+    gap:12px!important;
+    padding:23px 18px!important;
+    border-radius:20px!important;
+  }
+  .riotDeepChapter>.riotChapterNumber{
+    top:17px!important;
+    left:18px!important;
+    font-size:50px!important;
+  }
+  .riotDeepCopy{
+    padding-top:58px!important;
+  }
+  .riotDeepCopy h3{
+    font-size:clamp(27px,8.5vw,38px)!important;
+    line-height:.96!important;
+    letter-spacing:-1.5px!important;
+  }
+  .riotDeepCopy p{
+    margin-top:9px!important;
+    font-size:11px!important;
+  }
+  .riotDeepMetrics{
+    gap:6px!important;
+  }
+  .riotDeepMetrics>span{
+    min-height:76px!important;
+    padding:11px!important;
+  }
+  .riotDeepMetrics b{
+    font-size:20px!important;
+  }
+
+  .riotDeepArt{
+    opacity:.23!important;
+  }
+  .riotDeepArtShade{
+    background:linear-gradient(0deg,#06090fff 0%,#06090fe8 58%,#06090f70 100%)!important;
+  }
+
+  .riotMasteryChapter{
+    padding:23px 18px!important;
+    border-radius:20px!important;
+  }
+  .riotMasteryCopy{
+    padding-top:58px!important;
+  }
+  .riotMasteryCopy h3{
+    font-size:clamp(27px,8.5vw,38px)!important;
+  }
+  .riotMasteryArtwork{
+    opacity:.20!important;
+  }
+}
+
+@media(max-width:420px){
+  .riotStoryCoverage{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .riotDeepMetrics,
+  .riotMasterySummary{
+    grid-template-columns:1fr!important;
+  }
+  .riotDeepMetrics>span,
+  .riotMasterySummary>span{
+    min-height:68px!important;
+  }
+  .riotNowMeta{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  .sessionTimeline{
+    display:grid!important;
+    grid-template-columns:1fr 1fr;
+  }
+  .sessionTimeline>span{
+    min-width:0!important;
+  }
+}
+
+/* Avoid animation work on long pages for users that request reduced motion. */
+@media(prefers-reduced-motion:reduce){
+  .riotChapter,
+  .riotDeepChapter,
+  .riotMasteryChapter,
+  .riotDeepMetrics>span{
+    transition:none!important;
+    transform:none!important;
+  }
+}
