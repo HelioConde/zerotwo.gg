@@ -6363,3 +6363,22 @@ select{cursor:pointer}
   letter-spacing:.8px;
 }
 .riotLifeDeferredLoading span{color:#ff769e}
+
+.gamingLanding>footer .siteTrustLinks{
+  grid-column:2;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.gamingLanding>footer .siteTrustLinks a{
+  color:#8793a2;
+  font-size:9px;
+  font-weight:800;
+  text-decoration:none;
+}
+.gamingLanding>footer .siteTrustLinks a:hover{color:#fff}
+.gamingLanding>footer .siteTrustLinks+small{grid-column:2}
+@media(max-width:760px){
+  .gamingLanding>footer .siteTrustLinks,
+  .gamingLanding>footer .siteTrustLinks+small{grid-column:1}
+}
