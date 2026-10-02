@@ -98,7 +98,7 @@ export function FrequentTeammates({data,platform}:Props){
   );
   const playerKey=((data?.player?.gameName||'player')+'#'+(data?.player?.tagLine||'')+'-'+platform).toLowerCase();
   const matchSignature=matchIds.join(',');
-  const cacheKey='zt_recurring_players_v6_'+playerKey+'_'+(focusContext||'all').toLowerCase();
+  const cacheKey='zt_recurring_players_v7_'+playerKey+'_'+(focusContext||'all').toLowerCase();
 
   useEffect(()=>{
     setRows([]);
@@ -203,7 +203,7 @@ export function FrequentTeammates({data,platform}:Props){
       <div className="teammateSample"><small>AMOSTRA</small><b>{analyzed||matchIds.length}</b><em>partidas</em></div>
     </header>
 
-    {loading?<div className="teammatesLoading"><Icon name="sync"/><b>PROCURANDO JOGADORES RECORRENTES...</b></div>:<>
+    {loading?<div className="teammatesLoading"><Icon name="sync"/><div><b>PROCURANDO JOGADORES RECORRENTES...</b><span>{analyzed>0?analyzed+' de '+matchIds.length+' partidas analisadas':'Preparando '+matchIds.length+' partidas do histórico…'}</span><i><em style={{width:(matchIds.length?Math.round(analyzed/matchIds.length*100):0)+'%'}}/></i></div></div>:<>
       {featured&&featured.games>=2&&<article className="featuredTeammate">
         <div className="featuredMateLead">
           <small>PARCERIA MAIS RECORRENTE DA AMOSTRA</small>
