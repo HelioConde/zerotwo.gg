@@ -4,7 +4,7 @@ import { Icon } from '../../components/ZeroTwoUI';
 
 type Props={data:any;platform:string};
 
-const TEAMMATE_HISTORY_LIMIT=200;
+const TEAMMATE_HISTORY_LIMIT=100;
 const TEAMMATE_BATCH_SIZE=25;
 
 type Teammate={
