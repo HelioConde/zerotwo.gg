@@ -542,7 +542,23 @@ const EN:Record<string,string>={
   'ERA NÃO É RÓTULO PERMANENTE.':'AN ERA IS NOT A PERMANENT LABEL.',
   'É uma forma visual de organizar mudanças observadas em uma janela limitada de partidas.':'It is a visual way to organize observed changes within a limited match window.',
   'VOCÊ CONHECE O SEU':'DO YOU KNOW YOUR',
-  'PRÓPRIO HISTÓRICO?':'OWN HISTORY?'
+  'PRÓPRIO HISTÓRICO?':'OWN HISTORY?',
+  'MADRUGADA':'LATE NIGHT',
+  'MANHÃ':'MORNING',
+  'TARDE':'AFTERNOON',
+  'NOITE':'EVENING',
+  'DOM':'SUN',
+  'SEG':'MON',
+  'TER':'TUE',
+  'QUA':'WED',
+  'QUI':'THU',
+  'SEX':'FRI',
+  'SÁB':'SAT',
+  'HOJE':'TODAY',
+  'ONTEM':'YESTERDAY',
+  'ÚLTIMAS 10':'LAST 10',
+  'ANTERIORES':'PREVIOUS',
+  'MAIS JOGADO AGORA':'MOST PLAYED NOW'
 };
 
 const RULES:Array<[RegExp,string]>=[
