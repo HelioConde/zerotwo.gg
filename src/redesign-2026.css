@@ -6151,3 +6151,34 @@ select{cursor:pointer}
     scroll-margin-top:122px;
   }
 }
+
+
+/* Mobile density pass */
+@media(max-width:700px){
+  .riotStoryCoverage{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:5px!important;
+  }
+  .riotStoryCoverage>span{
+    min-height:62px;
+    padding:9px 10px!important;
+  }
+  .riotStoryCoverage b{
+    font-size:16px!important;
+  }
+  .riotStoryIntro{
+    gap:18px!important;
+  }
+  .riotChapter{
+    min-height:360px!important;
+  }
+  .riotChapterHeroMetric{
+    min-height:118px;
+  }
+  .riotDeepMetrics>span{
+    min-height:84px!important;
+  }
+  .riotMasterySummary>span{
+    min-height:82px!important;
+  }
+}
