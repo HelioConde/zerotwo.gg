@@ -702,6 +702,9 @@ const EN:Record<string,string>={
   'analisadas':'analyzed',
   'maestrias':'mastery entries',
   'contextos':'contexts',
+  'partidas ·':'matches ·',
+  'maestrias ·':'mastery entries ·',
+  'LER RIOT LIFE':'READ RIOT LIFE',
 };
 
 const RULES:Array<[RegExp,string]>=[
