@@ -6507,3 +6507,20 @@ select{cursor:pointer}
   min-height:clamp(320px,52vh,520px)!important;
   margin-bottom:42px!important;
 }
+
+
+/* Brand mark weight pass — make the leading Z as visually bold as the wordmark. */
+.gameNav .brandMark img,
+.siteFooterIdentity .brandMark img{
+  width:25px!important;
+  height:25px!important;
+  transform:scale(1.08);
+  filter:drop-shadow(0 0 8px #ff376f55) saturate(1.16) contrast(1.14)!important;
+}
+@media(max-width:760px){
+  .gameNav .brandMark img,
+  .siteFooterIdentity .brandMark img{
+    width:23px!important;
+    height:23px!important;
+  }
+}
