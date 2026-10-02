@@ -6563,3 +6563,62 @@ select{cursor:pointer}
     font-size:7px;
   }
 }
+
+
+/* ==========================================================================
+   GLOBAL LANGUAGE SWITCHER — PT-BR default / English optional
+   ========================================================================== */
+.ztLanguageSwitcher{
+  position:fixed;
+  z-index:120;
+  top:12px;
+  right:12px;
+  display:flex;
+  gap:3px;
+  padding:4px;
+  border:1px solid #ffffff16;
+  border-radius:999px;
+  background:#07090de8;
+  box-shadow:0 10px 34px #00000055;
+  backdrop-filter:blur(14px);
+}
+.ztLanguageSwitcher button{
+  min-width:44px;
+  height:30px;
+  padding:0 10px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#727d8d;
+  font:900 7px ui-monospace,monospace;
+  letter-spacing:.5px;
+  cursor:pointer;
+}
+.ztLanguageSwitcher button.active{
+  background:linear-gradient(135deg,#ff477e,#ad88ff);
+  color:#fff;
+  box-shadow:0 4px 14px #ff477e24;
+}
+.ztLanguageSwitcher button:focus-visible{
+  outline:2px solid #75ddff;
+  outline-offset:2px;
+}
+@media(max-width:900px){
+  .ztLanguageSwitcher{
+    top:auto;
+    right:14px;
+    bottom:74px;
+  }
+}
+@media(max-width:700px){
+  .ztLanguageSwitcher{
+    right:12px;
+    bottom:78px;
+    padding:3px;
+  }
+  .ztLanguageSwitcher button{
+    min-width:40px;
+    height:28px;
+    padding:0 8px;
+  }
+}
