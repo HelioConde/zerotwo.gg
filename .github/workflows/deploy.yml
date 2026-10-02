@@ -43,17 +43,12 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Check Supabase Edge Functions
+      - name: Check League Edge Functions
         run: |
-          deno check supabase/functions/valorant-rso-start/index.ts
-          deno check supabase/functions/valorant-rso-callback/index.ts
-          deno check supabase/functions/valorant-profile/index.ts
-          deno check supabase/functions/valorant-unlink/index.ts
           deno check supabase/functions/public-lol-teammates/index.ts
+          deno check supabase/functions/public-lol-profile/index.ts
 
       - name: Vite build
-        env:
-          VITE_VALORANT_RSO_ENABLED: ${{ vars.VITE_VALORANT_RSO_ENABLED }}
         run: npm run build
 
       - name: Configure GitHub Pages
