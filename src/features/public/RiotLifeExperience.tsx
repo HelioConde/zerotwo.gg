@@ -307,6 +307,43 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     };
   },[matches]);
 
+  const arenaAugments=useMemo(()=>{
+    const arena=matches.filter((m:any)=>m.context==='ARENA'&&Array.isArray(m.augments)&&m.augments.length);
+    const map=new Map<number,{id:number,games:number,top4:number,first:number,champions:Map<string,number>}>();
+    arena.forEach((match:any)=>{
+      const seen=new Set<number>((match.augments||[]).map(Number).filter((id:number)=>id>0));
+      seen.forEach(id=>{
+        const row=map.get(id)||{id,games:0,top4:0,first:0,champions:new Map<string,number>()};
+        row.games++;
+        if(num(match.placement)>0&&num(match.placement)<=4)row.top4++;
+        if(num(match.placement)===1)row.first++;
+        if(match.champion)row.champions.set(match.champion,(row.champions.get(match.champion)||0)+1);
+        map.set(id,row);
+      });
+    });
+    return [...map.values()].map(row=>({
+      id:row.id,
+      games:row.games,
+      top4Rate:pct(row.top4,row.games),
+      firstRate:pct(row.first,row.games),
+      champion:[...row.champions.entries()].sort((a,b)=>b[1]-a[1])[0]?.[0]||null
+    })).sort((a,b)=>b.games-a.games||b.top4Rate-a.top4Rate).slice(0,6);
+  },[matches]);
+
+  const itemStory=useMemo(()=>{
+    const map=new Map<number,{id:number,games:number,positive:number}>();
+    matches.forEach((match:any)=>{
+      const seen=new Set<number>((match.items||[]).map(Number).filter((id:number)=>id>0));
+      seen.forEach(id=>{
+        const row=map.get(id)||{id,games:0,positive:0};
+        row.games++;
+        if(positiveResult(match))row.positive++;
+        map.set(id,row);
+      });
+    });
+    return [...map.values()].map(row=>({...row,resultRate:pct(row.positive,row.games)})).sort((a,b)=>b.games-a.games||b.resultRate-a.resultRate).slice(0,6);
+  },[matches]);
+
   const deepDive=useMemo(()=>{
     const context=String(data?.summary?.mainContext||'');
     const focus=context?matches.filter((m:any)=>String(m?.context||'')===context):matches;
@@ -316,7 +353,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     const avgKda=meanValues(kdas);
     const kdaDev=deviation(kdas);
     const consistent=kdas.length?pct(kdas.filter((v:number)=>Math.abs(v-avgKda)<=Math.max(.5,avgKda*.25)).length,kdas.length):0;
-    const goldPerMin=safe.map((m:any)=>num(m.duration)>0?num(m.gold)/num(m.duration):0).filter((v:number)=>v>0);
+    const goldPerMin=safe.map((m:any)=>num(m.goldPerMin)>0?num(m.goldPerMin):(num(m.duration)>0?num(m.gold)/num(m.duration):0)).filter((v:number)=>v>0);
     const damages=safe.map((m:any)=>num(m.damagePerMin)).filter((v:number)=>v>0);
     const durations=safe.map((m:any)=>num(m.duration)).filter((v:number)=>v>0);
     const deathValues=safe.map((m:any)=>num(m.deaths));
@@ -345,6 +382,21 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     const short=safe.filter((m:any)=>num(m.duration)<=medDuration);
     const long=safe.filter((m:any)=>num(m.duration)>medDuration);
     const kp=safe.map((m:any)=>num(m.killParticipation)).filter((v:number)=>v>0);
+    const teamDamageShares=safe.map((m:any)=>num(m.teamDamageShare)).filter((v:number)=>v>0);
+    const physicalTotal=safe.reduce((s:number,m:any)=>s+num(m.physicalDamage),0);
+    const magicTotal=safe.reduce((s:number,m:any)=>s+num(m.magicDamage),0);
+    const trueTotal=safe.reduce((s:number,m:any)=>s+num(m.trueDamage),0);
+    const typedDamageTotal=physicalTotal+magicTotal+trueTotal;
+    const soloKills=safe.reduce((s:number,m:any)=>s+num(m.soloKills),0);
+    const multikills=safe.reduce((s:number,m:any)=>s+num(m.doubleKills)+num(m.tripleKills)+num(m.quadraKills)+num(m.pentaKills),0);
+    const pentas=safe.reduce((s:number,m:any)=>s+num(m.pentaKills),0);
+    const firstBloods=safe.filter((m:any)=>m.firstBloodKill||m.firstBloodAssist).length;
+    const allySupport=safe.reduce((s:number,m:any)=>s+num(m.healsOnTeammates)+num(m.shieldOnTeammates),0);
+    const objectives=safe.reduce((s:number,m:any)=>s+num(m.dragonKills)+num(m.baronKills)+num(m.riftHeraldTakedowns)+num(m.objectivesStolen),0);
+    const objectiveSteals=safe.reduce((s:number,m:any)=>s+num(m.objectivesStolen),0);
+    const wardsPlaced=safe.reduce((s:number,m:any)=>s+num(m.wardsPlaced),0);
+    const wardsKilled=safe.reduce((s:number,m:any)=>s+num(m.wardsKilled),0);
+    const controlWards=safe.reduce((s:number,m:any)=>s+num(m.controlWards),0);
     const recent10=safe.slice(0,10),previous10=safe.slice(10,20);
     const recentTrend=previous10.length>=5?{
       kdaNow:avg(recent10,'kda'),kdaOld:avg(previous10,'kda'),
@@ -357,15 +409,15 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       context,games:safe.length,days,
       rhythm:{gamesPerDay:safe.length/days,sessions:sessionize(safe).length,gamesPerSession:sessionize(safe).length?safe.length/sessionize(safe).length:0,activeDays:new Set(safe.map((m:any)=>new Date(playedAt(m)).toDateString())).size},
       consistency:{kdaDev,consistent,avgKda,result:resultRate(safe)},
-      damage:{avg:meanValues(damages),peak:damages.length?Math.max(...damages):0,total:meanValues(safe.map((m:any)=>num(m.damage)).filter((v:number)=>v>0))},
-      economy:{goldPerMin:meanValues(goldPerMin),gold:avg(safe,'gold'),csPerMin:avg(safe.filter((m:any)=>num(m.csPerMin)>0),'csPerMin')},
-      survival:{deaths:meanValues(deathValues),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing')},
+      damage:{avg:meanValues(damages),peak:damages.length?Math.max(...damages):0,total:meanValues(safe.map((m:any)=>num(m.damage)).filter((v:number)=>v>0)),teamShare:meanValues(teamDamageShares),physical:typedDamageTotal?pct(physicalTotal,typedDamageTotal):0,magic:typedDamageTotal?pct(magicTotal,typedDamageTotal):0,trueDamage:typedDamageTotal?pct(trueTotal,typedDamageTotal):0},
+      economy:{goldPerMin:meanValues(goldPerMin),gold:avg(safe,'gold'),spent:avg(safe,'goldSpent'),csPerMin:avg(safe.filter((m:any)=>num(m.csPerMin)>0),'csPerMin')},
+      survival:{deaths:meanValues(deathValues),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing'),mitigated:avg(safe,'damageMitigated'),cc:avg(safe,'ccSeconds'),timeDead:avg(safe,'timeSpentDead'),longestLiving:Math.max(0,...safe.map((m:any)=>num(m.longestTimeLiving)))},
       pool:{unique:uniqueChampions.size,top5Share,repeated:repeatedChamps,most:orderedChamps[0]?.[0]||'—'},
       streaks:{best:longestResultStreak(safe,true),worst:longestResultStreak(safe,false),current:currentStreak},
       periods:{most:periodRows[0]||null,best:bestPeriod,rows:periodRows},
       daysOfWeek:{most:dayRows[0]||null,best:bestDay,rows:dayRows},
       duration:{median:medDuration,shortRate:resultRate(short),longRate:resultRate(long),shortGames:short.length,longGames:long.length},
-      impact:{kp:meanValues(kp),turret:avg(safe,'turretDamage'),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing')},
+      impact:{kp:meanValues(kp),turret:avg(safe,'turretDamage'),taken:avg(safe,'damageTaken'),healing:avg(safe,'healing'),soloKills,multikills,pentas,firstBloods,allySupport,objectives,objectiveSteals,objectiveDamage:avg(safe,'objectiveDamage'),wardsPlaced,wardsKilled,controlWards},
       trend:recentTrend
     };
   },[data?.summary?.mainContext,matches,sessions]);
@@ -646,22 +698,36 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.consistency.result+'%'}
       ]}/>
 
-      <DeepDiveChapter id="riot-damage" number="09" kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Dano por minuto reduz parte da diferença causada pela duração das partidas e permite comparar janelas de forma mais justa." metrics={[
+      <DeepDiveChapter id="riot-damage" number="09" kicker="DANO // PRESSÃO" title="QUANTO DANO SUA FASE ESTÁ PRODUZINDO?" copy="Além do dano bruto, agora usamos a participação no dano da equipe e a composição físico/mágico/verdadeiro quando o Match-V5 fornece esses campos." metrics={[
         {label:'DANO / MIN',value:Math.round(deepDive.damage.avg).toLocaleString('pt-BR')},
         {label:'PICO / MIN',value:Math.round(deepDive.damage.peak).toLocaleString('pt-BR')},
-        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString('pt-BR')}
-      ]}/>
+        {label:'DANO / PARTIDA',value:Math.round(deepDive.damage.total).toLocaleString('pt-BR')},
+        {label:'% DO DANO DO TIME',value:deepDive.damage.teamShare?deepDive.damage.teamShare.toFixed(1)+'%':'—'}
+      ]}>
+        <div className="damageTypeBars">
+          <span><label>FÍSICO</label><i><em style={{width:deepDive.damage.physical+'%'}}/></i><b>{deepDive.damage.physical}%</b></span>
+          <span><label>MÁGICO</label><i><em style={{width:deepDive.damage.magic+'%'}}/></i><b>{deepDive.damage.magic}%</b></span>
+          <span><label>VERDADEIRO</label><i><em style={{width:deepDive.damage.trueDamage+'%'}}/></i><b>{deepDive.damage.trueDamage}%</b></span>
+        </div>
+      </DeepDiveChapter>
 
-      <DeepDiveChapter id="riot-economy" number="10" kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto funciona em todos os contextos carregados. CS/min só aparece quando a amostra contém partidas em que essa métrica faz sentido." metrics={[
+      <DeepDiveChapter id="riot-economy" number="10" kicker="ECONOMIA // RECURSOS" title="QUANTO RECURSO VOCÊ TRANSFORMA POR MINUTO?" copy="Ouro por minuto agora usa o valor oficial do Match-V5 quando disponível. Também mostramos os itens que mais se repetem na janela." metrics={[
         {label:'OURO / MIN',value:Math.round(deepDive.economy.goldPerMin).toLocaleString('pt-BR')},
         {label:'OURO / JOGO',value:Math.round(deepDive.economy.gold).toLocaleString('pt-BR')},
+        {label:'OURO GASTO / JOGO',value:Math.round(deepDive.economy.spent).toLocaleString('pt-BR')},
         ...(deepDive.economy.csPerMin>0?[{label:'CS / MIN',value:deepDive.economy.csPerMin.toFixed(1),note:'Summoner’s Rift'}]:[])
-      ]}/>
+      ]}>
+        {itemStory.length>0&&<div className="commonItems"><small>ITENS MAIS RECORRENTES</small><div>{itemStory.map((item:any)=><span key={item.id}><img loading="lazy" src={'https://ddragon.leagueoflegends.com/cdn/'+ddv+'/img/item/'+item.id+'.png'} alt={'Item '+item.id}/><b>{item.games}x</b><em>{item.resultRate}% resultado</em></span>)}</div></div>}
+      </DeepDiveChapter>
 
-      <DeepDiveChapter id="riot-survival" number="11" kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, dano recebido e cura ajudam a contextualizar o KDA. Eles não dizem sozinhos se uma jogada foi boa ou ruim." metrics={[
+      <DeepDiveChapter id="riot-survival" number="11" kicker="SOBREVIVÊNCIA // TROCAS" title="QUANTO CUSTA FICAR VIVO NESSA FASE?" copy="Mortes, mitigação, controle e tempo fora da luta contextualizam melhor o KDA do que olhar apenas abates e mortes." metrics={[
         {label:'MORTES / JOGO',value:deepDive.survival.deaths.toFixed(1)},
         {label:'DANO RECEBIDO',value:Math.round(deepDive.survival.taken).toLocaleString('pt-BR')},
-        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString('pt-BR')}
+        {label:'DANO MITIGADO',value:Math.round(deepDive.survival.mitigated).toLocaleString('pt-BR')},
+        {label:'CC / JOGO',value:Math.round(deepDive.survival.cc)+' s'},
+        {label:'CURA / JOGO',value:Math.round(deepDive.survival.healing).toLocaleString('pt-BR')},
+        {label:'TEMPO MORTO / JOGO',value:Math.round(deepDive.survival.timeDead/60)+' min'},
+        {label:'MAIOR TEMPO VIVO',value:Math.round(deepDive.survival.longestLiving/60)+' min'}
       ]}/>
 
       <section id="riot-mastery" className="riotMasteryChapter">
@@ -705,6 +771,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <span><label>2º–4º</label><i><em style={{width:arenaPlacement.mid+'%'}}/></i><b>{arenaPlacement.mid}%</b></span>
           <span><label>FORA DO TOP 4</label><i><em style={{width:arenaPlacement.outside+'%'}}/></i><b>{arenaPlacement.outside}%</b></span>
         </div>}
+        {arenaAugments.length>0&&<div className="arenaAugmentPanel"><small>AUMENTOS MAIS RECORRENTES</small><p>Os IDs vêm diretamente do Match-V5. O nome visual será enriquecido quando houver catálogo estável disponível.</p><div>{arenaAugments.map((augment:any)=><span key={augment.id}><b>Augment #{augment.id}</b><em>{augment.games} partidas · {augment.top4Rate}% Top 4{augment.firstRate?' · '+augment.firstRate+'% 1º':''}{augment.champion?' · '+augment.champion:''}</em></span>)}</div></div>}
       </DeepDiveChapter>
 
       <DeepDiveChapter id="riot-streaks" number="14" kicker="SEQUÊNCIAS // EMBALO" title="QUAL FOI SUA MAIOR SEQUÊNCIA?" copy="Contamos resultados positivos consecutivos dentro do contexto principal da amostra. Em Arena, resultado positivo significa Top 4." metrics={[
@@ -731,10 +798,15 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {label:deepDive.context==='ARENA'?'TOP 4 · LONGAS':'RESULTADO · LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
       ]}/>
 
-      <DeepDiveChapter id="riot-impact" number="18" kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Participação em abates, dano recebido, cura e pressão em estruturas adicionam contexto ao placar individual." metrics={[
+      <DeepDiveChapter id="riot-impact" number="18" kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Agora o impacto reúne participação, solo kills, multikills, suporte em aliados, objetivos e visão. Cada métrica só descreve o que o Match-V5 registrou." metrics={[
         {label:'PARTICIPAÇÃO',value:deepDive.impact.kp?Math.round(deepDive.impact.kp)+'%':'—'},
-        {label:'DANO RECEBIDO',value:Math.round(deepDive.impact.taken).toLocaleString('pt-BR')},
-        {label:'CURA',value:Math.round(deepDive.impact.healing).toLocaleString('pt-BR')},
+        {label:'SOLO KILLS',value:deepDive.impact.soloKills},
+        {label:'MULTIKILLS',value:deepDive.impact.multikills,note:deepDive.impact.pentas?deepDive.impact.pentas+' pentakill(s)':''},
+        {label:'FIRST BLOOD',value:deepDive.impact.firstBloods+'x',note:'abate ou assistência'},
+        {label:'CURA + SHIELD EM ALIADOS',value:Math.round(deepDive.impact.allySupport).toLocaleString('pt-BR')},
+        {label:'OBJETIVOS',value:deepDive.impact.objectives,note:deepDive.impact.objectiveSteals?deepDive.impact.objectiveSteals+' steal(s)':''},
+        {label:'DANO EM OBJETIVOS',value:Math.round(deepDive.impact.objectiveDamage).toLocaleString('pt-BR')},
+        {label:'VISÃO',value:deepDive.impact.wardsPlaced+' / '+deepDive.impact.wardsKilled,note:deepDive.impact.controlWards+' sentinelas de controle'},
         ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString('pt-BR')}]:[])
       ]}/>
 
