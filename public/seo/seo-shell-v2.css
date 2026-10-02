@@ -397,3 +397,79 @@ main>.wrap.grid{
     height:23px;
   }
 }
+
+
+/* 2026-10-02 exact shell parity + centered reading width */
+.seoHeader .brand.brandButton{
+  font-weight:950;
+  letter-spacing:-.45px;
+}
+.seoHeader .seoNavLink,
+.seoHeader .seoNavCta{
+  gap:6px;
+}
+.seoHeader .seoNavLink img,
+.seoHeader .seoNavCta img{
+  width:12px;
+  height:12px;
+  object-fit:contain;
+  opacity:.92;
+}
+.seoHeader .seoNavLink img{
+  filter:drop-shadow(0 0 4px #ff477e30);
+}
+.seoHeader .seoNavCta img{
+  filter:drop-shadow(0 0 5px #ff477e45);
+}
+
+/* Static guide pages now share the same centered content rhythm as the app. */
+.hero>.wrap,
+main>.wrap.grid,
+main>.wrap.content{
+  width:min(920px,calc(100% - 48px));
+  margin-left:auto;
+  margin-right:auto;
+}
+.hero>.wrap{
+  text-align:center;
+}
+.hero>.wrap .lead{
+  margin-left:auto;
+  margin-right:auto;
+}
+.heroActions{
+  justify-content:center;
+}
+main>.wrap.grid{
+  margin-top:18px;
+  margin-bottom:46px;
+}
+.content{
+  text-align:left;
+}
+
+/* Keep three cards, but avoid the edge-to-edge look on desktop. */
+.grid{
+  gap:12px;
+}
+.card{
+  padding:22px 20px;
+}
+
+@media(max-width:760px){
+  .hero>.wrap,
+  main>.wrap.grid,
+  main>.wrap.content{
+    width:calc(100% - 28px);
+  }
+  .hero>.wrap{
+    text-align:left;
+  }
+  .hero>.wrap .lead{
+    margin-left:0;
+    margin-right:0;
+  }
+  .heroActions{
+    justify-content:flex-start;
+  }
+}
