@@ -1,6 +1,6 @@
 # ZeroTwo.gg — VALORANT via Riot Sign On (RSO)
 
-Status: **frontend + backend scaffold implemented; activation pending Riot Production/RSO credentials and Supabase deployment**
+Status: **frontend + backend rich-data foundation implemented and Supabase schema/function deployed; player activation still depends on Riot Production/RSO credentials and the browser feature flag**
 
 ## Why VALORANT is different from League
 
@@ -185,10 +185,49 @@ VALORANT API:
 - User can unlink VALORANT from Player 01.
 - Match analysis is post-game only.
 
+## Rich Riot Life foundation added
+
+The linked VALORANT flow is now prepared to grow similarly to League Riot Life while keeping VALORANT-specific metrics and access rules.
+
+Server-side additions:
+
+- protected `valorant_match_cache` for immutable completed-match payloads;
+- protected `valorant_user_matches` relation that accumulates authorized history across visits;
+- up to 100 accumulated matches can be returned when the account has observed enough history over time;
+- VAL-CONTENT-V1 resolves agent, map and equipment names when available;
+- normalized post-match metrics now include:
+  - agent, map, queue and result;
+  - K/D/A and K/D;
+  - score per round / ACS-style score;
+  - round damage / ADR;
+  - head/body/leg hits and headshot rate;
+  - first kills and first deaths;
+  - 2K/3K/4K/ace rounds;
+  - plants and defuses;
+  - loadout value and round spend;
+  - weapon usage by round;
+  - ability casts;
+  - rounds won/lost and round differential.
+
+Frontend additions:
+
+- `src/features/valorant/ValorantLifeExperience.tsx`;
+- 20 VALORANT-specific Riot Life chapters;
+- recent-vs-previous trend comparisons;
+- session grouping;
+- evidence rows that trace narrative metrics back to matches.
+
+No PUUID is returned to the browser. Player identities from other participants are not used for public scouting; teammate/opponent context is reduced to agent composition where useful.
+
 ## Remaining activation blocker
 
-The ZeroTwo Supabase project (`bieihhaobdztjyoweewa`) is not currently exposed through the connected Supabase management integration in this ChatGPT environment, so the migration/functions cannot be deployed from here.
+The technical foundation is deployed. Public activation should remain disabled until Riot has provisioned the approved Production/RSO credentials and redirect for the application.
 
-The connected Supabase account currently exposes a different project. Do not deploy these functions to that unrelated project.
+The browser-safe switch remains:
 
-Once Riot provides the Production/RSO credentials and the correct Supabase project is connected or deployed through CLI/CI, the frontend flag can be enabled.
+```text
+VITE_VALORANT_RSO_ENABLED=true
+```
+
+Only enable it after the Riot credentials/secrets are confirmed in the production environment.
+
