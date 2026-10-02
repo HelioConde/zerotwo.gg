@@ -233,13 +233,6 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     };
   },[matches]);
 
-  const peakFacts=useMemo(()=>peakMatch?[
-    {label:'DANO / MIN',value:peakMatch.damagePerMin?Math.round(num(peakMatch.damagePerMin)).toLocaleString('pt-BR'):'—'},
-    {label:'DANO TOTAL',value:peakMatch.damage?Math.round(num(peakMatch.damage)).toLocaleString('pt-BR'):'—'},
-    {label:'OURO',value:peakMatch.gold?Math.round(num(peakMatch.gold)).toLocaleString('pt-BR'):'—'},
-    {label:'PARTICIPAÇÃO',value:peakMatch.killParticipation!=null?Math.round(num(peakMatch.killParticipation))+'%':'—'}
-  ]:[],[peakMatch]);
-
   const personalMeta=useMemo(()=>{
     const map=new Map<string,{name:string;games:number;wins:number;kda:number;contexts:Set<string>}>();
     matches.forEach((m:any)=>{
@@ -295,6 +288,12 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const signatureChampion=signature?champions?.[signature.name]:null;
   const signatureShare=signature&&matches.length?Math.round(Number(signature.games||0)/matches.length*100):0;
   const peakMatch=useMemo(()=>[...matches].sort((a:any,b:any)=>num(b?.kda)-num(a?.kda))[0]||null,[matches]);
+  const peakFacts=useMemo(()=>peakMatch?[
+    {label:'DANO / MIN',value:peakMatch.damagePerMin?Math.round(num(peakMatch.damagePerMin)).toLocaleString('pt-BR'):'—'},
+    {label:'DANO TOTAL',value:peakMatch.damage?Math.round(num(peakMatch.damage)).toLocaleString('pt-BR'):'—'},
+    {label:'OURO',value:peakMatch.gold?Math.round(num(peakMatch.gold)).toLocaleString('pt-BR'):'—'},
+    {label:'PARTICIPAÇÃO',value:peakMatch.killParticipation!=null?Math.round(num(peakMatch.killParticipation))+'%':'—'}
+  ]:[],[peakMatch]);
   const peakChampion=peakMatch?champions?.[peakMatch.champion]:null;
   const sampleLabel=sampleDays>0?sampleDays+' '+(sampleDays===1?'dia':'dias'):'janela recente';
   const changeTitle=snapshotDelta
@@ -432,7 +431,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
             ].map((row:any)=>{
               const delta=row.now-row.old;
               const tone=Math.abs(delta)<.01?'flat':delta>0?'up':'down';
-              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label.includes('%')?delta.toFixed(0):row.label==='KDA'?delta.toFixed(2):row.label==='MORTES / JOGO'?delta.toFixed(1):Math.round(delta).toLocaleString('pt-BR'))}</p></article>
+              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label==='KDA'?delta.toFixed(2):row.label==='TOP 4'||row.label==='RESULTADO'?delta.toFixed(0)+' p.p.':row.label==='MORTES / JOGO'?delta.toFixed(1):row.label==='DURAÇÃO'?Math.round(delta)+' min':Math.round(delta).toLocaleString('pt-BR'))}</p></article>
             })}
           </div>
           <div className="riotCompareMeta">
