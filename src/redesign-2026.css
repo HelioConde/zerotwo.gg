@@ -6489,3 +6489,21 @@ select{cursor:pointer}
     font-size:8px!important;
   }
 }
+
+
+/* 2026-10-02 shell consistency pass */
+.gamingLanding>.siteFooter{
+  border-top:0!important;
+  background:
+    radial-gradient(circle at 22% 0,#ff477e08,transparent 30%),
+    #05070a!important;
+}
+.siteFooterLegal{
+  border-top:0!important;
+  padding-top:8px!important;
+  margin-top:4px!important;
+}
+.lookupLoading{
+  min-height:clamp(320px,52vh,520px)!important;
+  margin-bottom:42px!important;
+}
