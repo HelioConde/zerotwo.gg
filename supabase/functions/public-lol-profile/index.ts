@@ -17,7 +17,7 @@ Deno.serve(async(req:Request)=>{
  if(!key||!url||!service)return out({error:"unavailable",message:"Consulta temporariamente indisponível."},503);
  let b:any={};try{b=await req.json()}catch{return out({error:"json"},400)}
  const gn=String(b.gameName||"").trim(),tl=String(b.tagLine||"").replace(/^#/,"").trim(),reg=String(b.region||"americas").toLowerCase(),plat=String(b.platform||"br1").toLowerCase();
- const requestedLimit=Math.min(200,Math.max(1,Math.floor(Number(b.limit||b.matchLimit||50)||50)));
+ const requestedLimit=Math.min(100,Math.max(1,Math.floor(Number(b.limit||b.matchLimit||100)||100)));
  if(!gn||!tl)return out({error:"riot_id",message:"Use o formato Nome#TAG."},400);
  if(!RH[reg]||!PH[plat])return out({error:"routing",message:"Servidor não suportado."},400);
  const db=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
@@ -34,13 +34,11 @@ Deno.serve(async(req:Request)=>{
    await db.from("riot_player_cache").upsert({cache_key:cacheKey,puuid:account.puuid,game_name:account.gameName,tag_line:account.tagLine,region:reg,platform:plat,account_data:account,summoner_data:summoner,fetched_at:now.toISOString(),expires_at:exp.toISOString(),updated_at:now.toISOString()},{onConflict:"cache_key"});
  }
  const puuid=account.puuid;
- const [idsPage1,idsPage2,ranked,mastery]=await Promise.all([
-   rf("https://"+RH[reg]+"/lol/match/v5/matches/by-puuid/"+encodeURIComponent(puuid)+"/ids?start=0&count="+Math.min(100,requestedLimit),key),
-   requestedLimit>100?rf("https://"+RH[reg]+"/lol/match/v5/matches/by-puuid/"+encodeURIComponent(puuid)+"/ids?start=100&count="+Math.min(100,requestedLimit-100),key):Promise.resolve({ok:true,status:200,retryAfter:null,data:[]}),
+ const [ids,ranked,mastery]=await Promise.all([
+   rf("https://"+RH[reg]+"/lol/match/v5/matches/by-puuid/"+encodeURIComponent(puuid)+"/ids?start=0&count="+requestedLimit,key),
    rf("https://"+PH[plat]+"/lol/league/v4/entries/by-puuid/"+encodeURIComponent(puuid),key),
    rf("https://"+PH[plat]+"/lol/champion-mastery/v4/champion-masteries/by-puuid/"+encodeURIComponent(puuid)+"/top?count=5",key)
  ]);
- const ids={ok:idsPage1.ok,status:idsPage1.status,data:[...(Array.isArray(idsPage1.data)?idsPage1.data:[]),...(idsPage2.ok&&Array.isArray(idsPage2.data)?idsPage2.data:[])]};
  const player={gameName:account.gameName||gn,tagLine:account.tagLine||tl,level:summoner?.summonerLevel??null,profileIconId:summoner?.profileIconId??null,platform:plat.toUpperCase()};
  if(!ids.ok)return out({error:"matches",message:"Jogador encontrado, mas as partidas não puderam ser carregadas.",player},ids.status===429?429:502);
  const target=(ids.data||[]).slice(0,requestedLimit) as string[];
