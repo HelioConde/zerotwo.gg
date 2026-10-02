@@ -256,7 +256,12 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const sampleQuality=matches.length>=150?'HISTÓRIA FORTE':matches.length>=75?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
   const chapterIndex=Math.max(0,RIOT_CHAPTERS.findIndex(([id])=>id===activeChapter));
   const readingProgress=Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
-  const sampleWarning=matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
+  const requestedDepth=Number(data?.cache?.requested||200);
+  const availableDepth=Number(data?.cache?.availableIds||matches.length);
+  const pendingDepth=Math.max(0,Number(data?.cache?.pending||0));
+  const sampleWarning=pendingDepth>0
+    ?matches.length+' partidas já carregadas de '+Math.max(availableDepth,requestedDepth)+' solicitadas. O restante entra conforme o limite temporário da Riot permite.'
+    :matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
 
   return <section className="riotStory" aria-label="Riot Life em capítulos">
     <header className="riotStoryIntro">
@@ -269,7 +274,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
         <span><small>JANELA</small><b>{sampleDays||'—'}</b><em>{sampleDays===1?'dia':'dias'}</em></span>
         <span><small>MEMÓRIA</small><b>{Math.max(1,snapshots.length)}</b><em>{memoryMode==='cloud'?'cloud':memoryMode==='checking'?'sync':'local'}</em></span>
-        <span><small>QUALIDADE</small><b className="sampleQualityValue">{sampleQuality}</b><em>{matches.length}/200 analisadas</em></span>
+        <span><small>QUALIDADE</small><b className="sampleQualityValue">{sampleQuality}</b><em>{matches.length}/{requestedDepth} analisadas</em></span>
       </div>
       <div className="riotSampleNote" data-tone={matches.length<30?'low':matches.length<75?'mid':'good'}><Icon name="status"/><span><b>{sampleQuality}</b><small>{sampleWarning}</small></span></div>
     </header>
