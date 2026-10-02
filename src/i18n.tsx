@@ -632,7 +632,23 @@ const EN:Record<string,string>={
   'ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.':'ARAM, Arena, Normal, and Ranked can contribute to the reading.',
   'Métricas específicas só são comparadas quando fazem sentido naquele modo.':'Mode-specific metrics are only compared when they make sense for that mode.',
   'INICIAL':'INITIAL',
-  'BOA':'GOOD'
+  'BOA':'GOOD',
+  'Use o formato Nome#TAG.':'Use the Name#TAG format.',
+  'Riot ID público':'Public Riot ID',
+  'Nome#TAG':'Name#TAG',
+  'LOCALIZAR E CRIAR MINHA RIOT LIFE →':'FIND AND CREATE MY RIOT LIFE →',
+  '. O ZeroTwo organiza seu momento, sua história e as mudanças que aparecem conforme você joga.':'. ZeroTwo organizes your current moment, your history, and the changes that appear as you play.',
+  '· NÍVEL':'· LEVEL',
+  'Conecte sua conta para começar':'Connect your account to begin',
+  'MOMENTOS DA AMOSTRA':'SAMPLE MOMENTS',
+  'Recordes objetivos — sem criar uma nota de habilidade.':'Objective records — without creating a skill score.',
+  'MAIS ASSISTÊNCIAS':'MOST ASSISTS',
+  'MAIOR DANO':'HIGHEST DAMAGE',
+  'PARTIDA MAIS LONGA':'LONGEST MATCH',
+  'SUA ZONA DE CONFORTO':'YOUR COMFORT ZONE',
+  'Frequência e resultado dentro da cobertura atual.':'Frequency and result within the current coverage.',
+  'nas partidas carregadas':'in loaded matches',
+  'Riot IDs únicos encontrados':'unique Riot IDs found'
 };
 
 const RULES:Array<[RegExp,string]>=[
