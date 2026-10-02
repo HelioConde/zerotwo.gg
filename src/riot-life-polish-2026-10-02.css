@@ -331,3 +331,374 @@
     transform:none!important;
   }
 }
+
+
+/* ==========================================================================
+   READABILITY PASS — 2026-10-02
+   The original visual language used 5–8px labels in many places. On a real
+   desktop viewport that looks stylish in mockups but is tiring to read.
+   Preserve the compact UI while enforcing practical text sizes.
+   ========================================================================== */
+
+/* Player identity / top controls */
+.publicPlayerResult .publicBackHome{
+  font-size:11px!important;
+}
+.publicPlayerResult .playerIdentityMain small,
+.publicPlayerResult .playerMomentIdentity small{
+  font-size:9px!important;
+  line-height:1.35!important;
+}
+.publicPlayerResult .playerIdentityMain p,
+.publicPlayerResult .playerMomentIdentity p{
+  font-size:10px!important;
+  line-height:1.45!important;
+}
+.publicPlayerResult .playerIdentityRanks small,
+.publicPlayerResult .rankMini small{
+  font-size:8.5px!important;
+  line-height:1.3!important;
+}
+.publicPlayerResult .playerIdentityRanks b,
+.publicPlayerResult .rankMini b{
+  font-size:13px!important;
+}
+.publicPlayerResult .playerIdentityRanks em,
+.publicPlayerResult .rankMini em{
+  font-size:9px!important;
+  line-height:1.35!important;
+}
+.publicPlayerResult .playerIdentityActions a,
+.publicPlayerResult .playerIdentityActions button,
+.publicPlayerResult .playerShare{
+  font-size:9px!important;
+}
+
+/* Story opening */
+.riotStoryIntro>div>small{
+  font-size:10px!important;
+  line-height:1.35!important;
+}
+.riotStoryIntro p{
+  font-size:13px!important;
+  line-height:1.65!important;
+}
+.riotStoryCoverage small{
+  font-size:8.5px!important;
+  line-height:1.25!important;
+}
+.riotStoryCoverage b{
+  font-size:19px!important;
+}
+.riotStoryCoverage em{
+  font-size:9px!important;
+  line-height:1.3!important;
+}
+.riotSampleNote span b{
+  font-size:10px!important;
+}
+.riotSampleNote span small{
+  font-size:10px!important;
+  line-height:1.45!important;
+}
+
+/* Sticky chapter navigation */
+.riotStoryNav a span{
+  font-size:8px!important;
+}
+.riotStoryNav a b{
+  font-size:8.5px!important;
+  letter-spacing:.1px!important;
+}
+.riotStoryReadout{
+  font-size:8.5px!important;
+}
+.riotStoryCurrent small{
+  font-size:7.5px!important;
+}
+.riotStoryCurrent b{
+  font-size:10px!important;
+}
+
+/* Chapters 01–06 */
+.riotChapterCopy>small,
+.riotChapterGroupIntro>div>small{
+  font-size:10px!important;
+  line-height:1.35!important;
+}
+.riotChapterCopy p,
+.riotChapterGroupIntro p{
+  font-size:12px!important;
+  line-height:1.65!important;
+}
+.chapterSource{
+  font-size:9px!important;
+  line-height:1.5!important;
+  letter-spacing:.25px!important;
+}
+.riotChapterHeroMetric span{
+  font-size:10px!important;
+  line-height:1.3!important;
+}
+.riotChapterHeroMetric em{
+  font-size:9.5px!important;
+  line-height:1.35!important;
+}
+.riotSessionFacts small,
+.riotChangeFacts small{
+  font-size:9px!important;
+}
+.riotSessionFacts b,
+.riotChangeFacts b{
+  line-height:1.2!important;
+}
+.riotNowMeta small{
+  font-size:8.5px!important;
+}
+.riotNowMeta b{
+  font-size:10px!important;
+  line-height:1.35!important;
+}
+.riotModeDistribution b,
+.riotModeDistribution em{
+  font-size:9px!important;
+}
+.signatureTopList b{
+  font-size:10px!important;
+}
+.signatureTopList em,
+.signatureTopList small{
+  font-size:8.5px!important;
+  line-height:1.35!important;
+}
+.sessionTimeline b,
+.sessionTimeline em{
+  font-size:9px!important;
+}
+.peakFactGrid small{
+  font-size:8.5px!important;
+}
+
+/* Chapters 07–19 */
+.riotDeepCopy>small{
+  font-size:10px!important;
+  line-height:1.35!important;
+}
+.riotDeepCopy p{
+  font-size:12px!important;
+  line-height:1.65!important;
+}
+.riotDeepMetrics small{
+  font-size:8.5px!important;
+  line-height:1.3!important;
+}
+.riotDeepMetrics em{
+  font-size:9px!important;
+  line-height:1.35!important;
+}
+.riotDeepMetrics b{
+  line-height:1.05!important;
+}
+.damageTypeBars label,
+.placementBars label{
+  font-size:8.5px!important;
+}
+.damageTypeBars b,
+.placementBars b{
+  font-size:9px!important;
+}
+.commonItems>small,
+.arenaAugmentPanel>small{
+  font-size:8.5px!important;
+}
+.commonItems b{
+  font-size:10px!important;
+}
+.commonItems em,
+.arenaAugmentPanel>p{
+  font-size:8.5px!important;
+  line-height:1.4!important;
+}
+.arenaAugmentPanel span b{
+  font-size:10px!important;
+}
+.arenaAugmentPanel span em{
+  font-size:8.5px!important;
+  line-height:1.4!important;
+}
+
+/* Mastery chapter */
+.riotMasteryCopy>small:first-child{
+  font-size:10px!important;
+}
+.riotMasteryCopy p{
+  font-size:12px!important;
+  line-height:1.65!important;
+}
+.riotMasterySummary small{
+  font-size:8.5px!important;
+}
+.riotMasterySummary em{
+  font-size:9px!important;
+  line-height:1.35!important;
+}
+.masteryIdentity small,
+.masteryRecent small,
+.masteryLast small{
+  font-size:8.5px!important;
+}
+.masteryIdentity b{
+  font-size:13px!important;
+}
+.masteryIdentity em,
+.masteryRecent em{
+  font-size:9px!important;
+  line-height:1.35!important;
+}
+.masteryRecent b,
+.masteryLast b{
+  font-size:12px!important;
+}
+.riotMasteryPool small{
+  font-size:8.5px!important;
+}
+.riotMasteryPool b{
+  font-size:10px!important;
+}
+.riotMasteryEmpty{
+  font-size:10px!important;
+  line-height:1.5!important;
+}
+
+/* Recurring players / eras / patch / arcade: these are part of the same story. */
+.frequentTeammates header small,
+.playerEras header small,
+.myRiotPatch header small,
+.riotArcade header small{
+  font-size:9.5px!important;
+}
+.frequentTeammates header p,
+.playerEras header p,
+.myRiotPatch header p,
+.riotArcade header p{
+  font-size:11px!important;
+  line-height:1.6!important;
+}
+.mateIdentity small,
+.mateNumbers small,
+.mateChampions small,
+.eraCopy>small,
+.eraStats small,
+.patchChanges small,
+.arcadeGame>small{
+  font-size:8.5px!important;
+}
+.mateIdentity b,
+.eraCopy p,
+.patchChanges p,
+.arcadeResult p{
+  font-size:10px!important;
+  line-height:1.5!important;
+}
+.mateIdentity span,
+.mateChampions b,
+.mateChampions em,
+.featuredMateLead p,
+.featuredMatePair p{
+  font-size:9.5px!important;
+  line-height:1.5!important;
+}
+.teammateSectionLabel span b,
+.teammateSectionLabel em,
+.frequentTeammates>footer,
+.playerEras>footer,
+.myRiotPatch>footer{
+  font-size:9px!important;
+  line-height:1.45!important;
+}
+
+/* End-of-story and technical evidence */
+.riotStoryEnd small{
+  font-size:9px!important;
+}
+.riotStoryEnd b{
+  font-size:11px!important;
+}
+.riotStoryEnd p{
+  font-size:10px!important;
+  line-height:1.5!important;
+}
+.gameDataVault>summary span small{
+  font-size:8.5px!important;
+}
+.gameDataVault>summary span b{
+  font-size:11px!important;
+}
+.gameDataVault>summary span em{
+  font-size:9px!important;
+  line-height:1.45!important;
+}
+
+/* Mobile: do not shrink explanatory text back down. */
+@media(max-width:700px){
+  .riotStoryIntro p,
+  .riotChapterCopy p,
+  .riotChapterGroupIntro p,
+  .riotDeepCopy p,
+  .riotMasteryCopy p{
+    font-size:12px!important;
+    line-height:1.6!important;
+  }
+
+  .riotChapterCopy>small,
+  .riotChapterGroupIntro>div>small,
+  .riotDeepCopy>small,
+  .riotMasteryCopy>small:first-child{
+    font-size:9px!important;
+  }
+
+  .chapterSource{
+    font-size:8.5px!important;
+  }
+
+  .riotStoryNav a span{
+    font-size:7.5px!important;
+  }
+  .riotStoryNav a b{
+    font-size:8px!important;
+  }
+  .riotStoryCurrent small{
+    font-size:7px!important;
+  }
+  .riotStoryCurrent b{
+    font-size:9px!important;
+  }
+
+  .riotDeepMetrics small,
+  .riotMasterySummary small{
+    font-size:8px!important;
+  }
+  .riotDeepMetrics em,
+  .riotMasterySummary em{
+    font-size:8.5px!important;
+  }
+}
+
+/* On very narrow phones, retain readable type and solve density with layout,
+   never by shrinking labels to 5–6px again. */
+@media(max-width:420px){
+  .riotStoryCoverage small{
+    font-size:8px!important;
+  }
+  .riotStoryCoverage em{
+    font-size:8.5px!important;
+  }
+  .riotDeepMetrics small,
+  .riotMasterySummary small{
+    font-size:8.5px!important;
+  }
+  .riotDeepMetrics em,
+  .riotMasterySummary em{
+    font-size:9px!important;
+  }
+}
