@@ -1,4 +1,5 @@
 import { corsHeaders, json } from '../_shared/http.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 type Input={
   gameName?:string;
@@ -52,7 +53,10 @@ Deno.serve(async req=>{
   if(req.method!=='POST')return json({error:'method_not_allowed'},405);
 
   const riotApiKey=Deno.env.get('RIOT_API_KEY');
+  const supabaseUrl=Deno.env.get('SUPABASE_URL');
+  const serviceKey=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if(!riotApiKey)return json({error:'riot_not_configured'},503);
+  const db=supabaseUrl&&serviceKey?createClient(supabaseUrl,serviceKey,{auth:{persistSession:false,autoRefreshToken:false}}):null;
 
   let input:Input={};
   try{input=await req.json()}catch{return json({error:'invalid_json'},400)}
@@ -74,14 +78,45 @@ Deno.serve(async req=>{
 
     const mates=new Map<string,MateRow>();
     let analyzed=0;
+    let cacheHits=0;
+    let riotFetches=0;
     const detection={subteam:0,placement:0,teamId:0,unresolvedArena:0};
+    const cachedMatches=new Map<string,any>();
 
-    // Process in small batches to avoid creating unnecessary bursts against Match-V5.
+    if(db&&matchIds.length){
+      const {data:cacheRows}=await db.from('lol_match_cache').select('match_id,match_data').in('match_id',matchIds);
+      for(const row of cacheRows||[]){
+        if(row?.match_id&&row?.match_data)cachedMatches.set(String(row.match_id),row.match_data);
+      }
+    }
+
+    // Match history is immutable after completion. Prefer the cache populated by
+    // public-lol-profile and only fall back to Riot when a match is missing.
     for(let i=0;i<matchIds.length;i+=4){
       const batch=matchIds.slice(i,i+4);
       const results=await Promise.all(batch.map(async (matchId,batchIndex)=>{
         try{
+          const cached=cachedMatches.get(matchId);
+          if(cached){
+            cacheHits++;
+            return {match:cached,sampleIndex:i+batchIndex};
+          }
           const match=await riotGet('https://'+region+'.api.riotgames.com/lol/match/v5/matches/'+encodeURIComponent(matchId),riotApiKey);
+          riotFetches++;
+          if(db&&match){
+            const info=match?.info||{};
+            await db.from('lol_match_cache').upsert({
+              match_id:matchId,
+              region,
+              game_start:info.gameStartTimestamp?new Date(info.gameStartTimestamp).toISOString():null,
+              game_duration:info.gameDuration||null,
+              queue_id:info.queueId||null,
+              match_data:match,
+              fetched_at:new Date().toISOString(),
+              expires_at:new Date(Date.now()+24*60*60*1000).toISOString(),
+              updated_at:new Date().toISOString()
+            },{onConflict:'match_id'});
+          }
           return {match,sampleIndex:i+batchIndex};
         }catch(error){
           console.warn('public-lol-teammates match skipped',matchId,error);
@@ -190,7 +225,7 @@ Deno.serve(async req=>{
         phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>=2?'now':row.olderGames>=2?'before':'single'
       }));
 
-    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length,detection});
+    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length,cacheHits,riotFetches,detection});
   }catch(error){
     console.error('public-lol-teammates failed',error);
     const message=error instanceof Error?error.message:'unknown_error';
