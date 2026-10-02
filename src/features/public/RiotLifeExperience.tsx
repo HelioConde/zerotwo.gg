@@ -310,7 +310,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <small>ASSINATURA // QUEM MAIS APARECEU</small>
           <h3>{signature.name}<span> MARCOU ESTA FASE.</span></h3>
           <p>Não é “seu melhor campeão”. É simplesmente quem mais apareceu nesta janela: <strong>{signature.games} de {matches.length} partidas</strong>.</p><small className="chapterSource">FATO // frequência observada na amostra, não avaliação de habilidade</small>
-          {signatureTop.length>1&&<div className="signatureTopList" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.winRate!=null?' · '+champ.winRate+'%':''}</em></span>)}</div>}
+          {signatureTop.length>1&&<div className="signatureTopList" aria-label="Campeões mais presentes">{signatureTop.map((champ:any,index:number)=><span key={champ.name}><i>{index+1}</i><b>{champ.name}</b><em>{champ.games}x{champ.top4Rate!=null?' · Top 4 '+champ.top4Rate+'%':champ.winRate!=null?' · '+champ.winRate+'% WR':''}</em></span>)}</div>}
         </div>
         <div className="riotChapterHeroMetric">
           <b>{signatureShare}%</b>
@@ -353,7 +353,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <section id="riot-change" className="riotChapterGroup riotChapterChange">
         <div className="riotChapterGroupIntro">
           <span className="riotChapterNumber">05</span>
-          <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p>{recentCompare.length>0&&<div className="riotBeforeAfter">{recentCompare.map((row:any)=><span key={row.label}><small>{row.label}</small><i><em style={{width:Math.min(100,Math.max(8,(row.old/(Math.max(row.old,row.recent)||1))*100))+'%'}}/></i><b>{row.format(row.old)} → {row.format(row.recent)}</b></span>)}</div>}</div>
+          <div><small>MUDANÇA // O QUE NÃO É MAIS IGUAL</small><h3>{changeTitle}</h3><p>Este capítulo não repete seus números atuais; ele mostra apenas diferenças entre momentos comparáveis.</p>{recentCompare.length>0&&<div className="riotBeforeAfter">{recentCompare.map((row:any)=>{const max=Math.max(Math.abs(row.old),Math.abs(row.recent),.01);return <span key={row.label}><small>{row.label}</small><div className="compareBars"><i><label>ANTES</label><em style={{width:Math.max(6,Math.abs(row.old)/max*100)+'%'}}/></i><i className="recent"><label>AGORA</label><em style={{width:Math.max(6,Math.abs(row.recent)/max*100)+'%'}}/></i></div><b>{row.format(row.old)} → {row.format(row.recent)}</b></span>})}</div>}</div>
           <div className="riotChangeFacts">
             {snapshotDelta?.kda!=null&&Math.abs(snapshotDelta.kda)>=.1&&<span><small>KDA DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.kda>0?'+':''}{snapshotDelta.kda.toFixed(2)}</b></span>}
             {snapshotDelta?.winRate!=null&&Math.abs(snapshotDelta.winRate)>=1&&<span><small>RESULTADO DESDE A PRIMEIRA MEMÓRIA</small><b>{snapshotDelta.winRate>0?'+':''}{snapshotDelta.winRate.toFixed(0)} p.p.</b></span>}
