@@ -6345,3 +6345,21 @@ select{cursor:pointer}
 @media(max-width:700px){
   .homeTransparency .homeMethodologyLink{font-size:10px;line-height:1.45}
 }
+
+
+/* Deferred heavy modules: keep layout stable while code-split chunks load. */
+.riotLifeDeferredLoading{
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  margin-top:10px;
+  border:1px solid #ffffff10;
+  border-radius:18px;
+  background:#080b10;
+  color:#9ca7b5;
+  font:900 10px ui-monospace,monospace;
+  letter-spacing:.8px;
+}
+.riotLifeDeferredLoading span{color:#ff769e}
