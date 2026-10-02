@@ -911,11 +911,19 @@ export function I18nProvider({children}:{children:React.ReactNode}){
   useEffect(()=>{
     activeLanguage=language;
     document.documentElement.lang=language;
-    document.title=language==='en'?'ZeroTwo.gg — Your Riot Life':'ZeroTwo.gg — Sua Riot Life';
-    const meta=document.querySelector('meta[name="description"]');
-    if(meta)meta.setAttribute('content',language==='en'
+    const english=language==='en';
+    const title=english?'ZeroTwo.gg — Your Riot Life':'ZeroTwo.gg — Sua Riot Life';
+    const description=english
       ?'ZeroTwo.gg turns permitted Riot data into a personal League of Legends experience: history, champions, mastery, sessions, and changes over time.'
-      :'ZeroTwo.gg transforma dados permitidos da Riot em uma experiência pessoal: resumo, história, campeões, sessões e mudanças ao longo do tempo.');
+      :'ZeroTwo.gg transforma dados permitidos da Riot em uma experiência pessoal de League of Legends: história, partidas, campeões, maestria, sessões e mudanças ao longo do tempo.';
+    document.title=title;
+    const setMeta=(selector:string,value:string)=>document.querySelector(selector)?.setAttribute('content',value);
+    setMeta('meta[name="description"]',description);
+    setMeta('meta[property="og:title"]',title);
+    setMeta('meta[property="og:description"]',description);
+    setMeta('meta[property="og:locale"]',english?'en_US':'pt_BR');
+    setMeta('meta[name="twitter:title"]',title);
+    setMeta('meta[name="twitter:description"]',description);
     processTree(document.body,language);
     const observer=new MutationObserver(records=>{
       for(const record of records){
