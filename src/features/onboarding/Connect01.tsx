@@ -169,10 +169,10 @@ export function Connect01({session:externalSession,onSessionChange,onProfileComp
    <div className="connectCard valorantConnectCard">
     <div className="connectStepHead"><small>PASSO 02</small><b>AUTORIZAR VALORANT</b><span>Riot Sign On</span></div>
     <div className="connectGameIdentity"><GameBadge game="valorant"/><div><small>CONTA AUTORIZADA</small><b>VALORANT</b><em>Escolha sua região e continue no login oficial da Riot.</em></div></div>
-    <div className="valorantFlowSteps">
-     <span><i>01</i><b>REGIÃO</b><small>BR, LATAM, NA, EU, KR ou AP</small></span>
-     <span><i>02</i><b>RIOT SIGN ON</b><small>login e consentimento na Riot</small></span>
-     <span><i>03</i><b>RIOT LIFE</b><small>retorno automático ao ZeroTwo</small></span>
+    <div className="valorantFlowSteps" aria-label="Etapas para conectar VALORANT">
+     <article className="valorantFlowStep"><i>01</i><div><b>REGIÃO</b><small>BR, LATAM, NA, EU, KR ou AP</small></div></article>
+     <article className="valorantFlowStep"><i>02</i><div><b>RIOT SIGN ON</b><small>login e consentimento na Riot</small></div></article>
+     <article className="valorantFlowStep"><i>03</i><div><b>RIOT LIFE</b><small>retorno automático ao ZeroTwo</small></div></article>
     </div>
     <ValorantConnect onLinkedChange={finishValorant}/>
     {status&&<p className="status" role="status" aria-live="polite">{status}</p>}
