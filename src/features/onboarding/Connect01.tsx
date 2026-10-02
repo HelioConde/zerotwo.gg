@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../../supabase';
 import { ztLog, ztProductEvent } from '../../lib/telemetry';
 import { GameBadge, Icon } from '../../components/ZeroTwoUI';
+import { ValorantConnect } from '../valorant/ValorantConnect';
 
 export function Connect01({session:externalSession,onSessionChange,onProfileComplete}:{session?:any,onSessionChange?:(s:any)=>void,onProfileComplete?:()=>void}={}){
  const [mode,setMode]=useState<'signup'|'login'>('signup');
@@ -15,6 +16,8 @@ export function Connect01({session:externalSession,onSessionChange,onProfileComp
  const [nickname,setNickname]=useState('');
  const [savedIntent,setSavedIntent]=useState('Riot Life');
  const [savedAvailability,setSavedAvailability]=useState('');
+ const valorantIntent=sessionStorage.getItem('zt_pending_action')==='valorant';
+ const valorantFinalized=useRef(false);
 
  useEffect(()=>{
   if(!externalSession?.user?.id)return;
@@ -123,12 +126,65 @@ export function Connect01({session:externalSession,onSessionChange,onProfileComp
   onProfileComplete?.();
  }
 
+ async function finishValorant(linked:boolean,valorantProfile?:any){
+  if(!linked||!session?.user?.id||valorantFinalized.current)return;
+  const account=valorantProfile?.account;
+  if(!account?.gameName)return;
+  valorantFinalized.current=true;
+  setStatus('Conta Riot autorizada. Preparando sua Riot Life de VALORANT...');
+  const {error}=await supabase.from('profiles').upsert({
+   user_id:session.user.id,
+   nickname:(nickname||account.gameName||'Player').trim(),
+   primary_game:'VALORANT',
+   intent:savedIntent||'Riot Life',
+   availability:savedAvailability||null,
+   onboarding_complete:true,
+   updated_at:new Date().toISOString()
+  },{onConflict:'user_id'});
+  if(error){
+   valorantFinalized.current=false;
+   setStatus('VALORANT conectado, mas não foi possível concluir seu perfil agora.');
+   return;
+  }
+  sessionStorage.removeItem('zt_pending_action');
+  sessionStorage.setItem('zt_active_game','valorant');
+  sessionStorage.setItem('zt_player_focus','valorant');
+  setStatus('Tudo pronto. Abrindo sua Riot Life de VALORANT...');
+  onProfileComplete?.();
+ }
+
  const signedIn=Boolean(session);
+ if(signedIn&&valorantIntent){
+  return <section id="connect01" className="connect01 riotLifeOnboarding isSetup valorantOnboarding">
+   <div className="connectIntro">
+    <div className="connectBrandLine"><span className="connectMiniMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></span><small>ZEROTWO // RIOT LIFE // VALORANT</small></div>
+    <h2>CONECTE SUA <em>CONTA RIOT.</em></h2>
+    <p>No VALORANT, a Riot Life começa com autorização do próprio jogador. Você entra na Riot, concede o acesso aprovado e volta para o ZeroTwo com o histórico pós-partida.</p>
+    <div className="connectBenefits">
+     <span><Icon name="riot"/><b>LOGIN RIOT</b><small>autorização oficial via RSO</small></span>
+     <span><Icon name="status"/><b>OPT-IN</b><small>somente a sua própria conta</small></span>
+     <span><Icon name="dna"/><b>20 CAPÍTULOS</b><small>mira, mapas, agentes e evolução</small></span>
+    </div>
+   </div>
+   <div className="connectCard valorantConnectCard">
+    <div className="connectStepHead"><small>PASSO 02</small><b>AUTORIZAR VALORANT</b><span>Riot Sign On</span></div>
+    <div className="connectGameIdentity"><GameBadge game="valorant"/><div><small>CONTA AUTORIZADA</small><b>VALORANT</b><em>Escolha sua região e continue no login oficial da Riot.</em></div></div>
+    <div className="valorantFlowSteps">
+     <span><i>01</i><b>REGIÃO</b><small>BR, LATAM, NA, EU, KR ou AP</small></span>
+     <span><i>02</i><b>RIOT SIGN ON</b><small>login e consentimento na Riot</small></span>
+     <span><i>03</i><b>RIOT LIFE</b><small>retorno automático ao ZeroTwo</small></span>
+    </div>
+    <ValorantConnect onLinkedChange={finishValorant}/>
+    {status&&<p className="status" role="status" aria-live="polite">{status}</p>}
+   </div>
+  </section>;
+ }
+
  return <section id="connect01" className={'connect01 riotLifeOnboarding '+(signedIn?'isSetup':'isAuth')}>
   <div className="connectIntro">
    <div className="connectBrandLine"><span className="connectMiniMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></span><small>ZEROTWO // RIOT LIFE</small></div>
-   <h2>{signedIn?'CONECTE SEU ':'CRIE SUA '}<em>RIOT LIFE.</em></h2>
-   <p>{signedIn?'League é a primeira fonte da sua história. Informe seu Riot ID para começar com partidas, campeões, eras e mudanças observadas.':'Pesquise jogadores sem conta. Crie a sua somente quando quiser manter memória, conectar jogos e construir sua própria história.'}</p>
+   <h2>{signedIn?'CONECTE SEU ':valorantIntent?'ENTRE PARA CONECTAR ':'CRIE SUA '}<em>{valorantIntent?'VALORANT.':'RIOT LIFE.'}</em></h2>
+   <p>{signedIn?'League é a primeira fonte da sua história. Informe seu Riot ID para começar com partidas, campeões, eras e mudanças observadas.':valorantIntent?'Primeiro entre no ZeroTwo. Em seguida você será levado ao Riot Sign On para autorizar sua própria conta de VALORANT.':'Pesquise jogadores sem conta. Crie a sua somente quando quiser manter memória, conectar jogos e construir sua própria história.'}</p>
    <div className="connectBenefits">
     <span><Icon name="spark"/><b>RESUMO PESSOAL</b><small>Wrapped e sinais relevantes</small></span>
     <span><Icon name="dna"/><b>HISTÓRIA</b><small>Eras e mudanças ao longo do tempo</small></span>
@@ -138,7 +194,7 @@ export function Connect01({session:externalSession,onSessionChange,onProfileComp
 
   <div className="connectCard">
    {!signedIn?<>
-    <div className="connectStepHead"><small>PASSO 01</small><b>ENTRE NO ZEROTWO</b><span>leva poucos segundos</span></div>
+    <div className="connectStepHead"><small>PASSO 01</small><b>ENTRE NO ZEROTWO</b><span>{valorantIntent?'antes do login Riot':'leva poucos segundos'}</span></div>
     <button className="social google" onClick={google}><b>G</b><span>Continuar com Google<small>Mais rápido</small></span><Icon name="arrow"/></button>
     <div className="or"><span>ou use e-mail</span></div>
     <details className="authMore">
@@ -150,7 +206,7 @@ export function Connect01({session:externalSession,onSessionChange,onProfileComp
      <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Mínimo 6 caracteres"/>
      <button className="authPrimary" onClick={emailAuth}>{mode==='signup'?'CRIAR MINHA RIOT LIFE →':'ENTRAR →'}</button>
     </details>
-    <p className="connectPrivacy"><Icon name="status"/> Sua conta serve para memória e integrações. A busca pública de League continua disponível sem login.</p>
+    <p className="connectPrivacy"><Icon name="status"/> {valorantIntent?'Depois deste login, você continuará para a autorização oficial da Riot.':'Sua conta serve para memória e integrações. A busca pública de League continua disponível sem login.'}</p>
    </>:<>
     <div className="connectStepHead"><small>PASSO 02</small><b>CONECTE LEAGUE</b><span>Riot ID público</span></div>
     <div className="connectGameIdentity"><GameBadge game="lol"/><div><small>PRIMEIRA FONTE</small><b>LEAGUE OF LEGENDS</b><em>VALORANT poderá ser conectado separadamente via RSO</em></div></div>
