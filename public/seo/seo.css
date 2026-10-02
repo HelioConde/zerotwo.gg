@@ -179,3 +179,105 @@ footer{padding:28px 0 44px;border-top:1px solid var(--line);color:#778393;font-s
   .seoFooterNav section:last-child{grid-column:1/-1}
   .seoFooterNav a{font-size:11px}
 }
+
+
+/* 2026-10-02 product-shell match */
+.seoHeader{
+  height:64px;
+  border-bottom:1px solid #ffffff12;
+  background:#05070ae8;
+  backdrop-filter:blur(18px);
+}
+.seoHeaderInner{
+  width:min(1240px,calc(100% - 40px));
+  height:64px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.seoHeader .brand{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#e8edf5;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:-.35px;
+  text-decoration:none;
+}
+.seoHeader .brand img{
+  width:30px;
+  height:30px;
+}
+.seoHeader .brand span{color:#ff477e}
+.seoHeader .brand small{
+  color:#8b96a5;
+  font-size:8px;
+  font-weight:900;
+}
+.seoHeader nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.seoHeader .seoNavLink,
+.seoHeader .seoNavCta{
+  min-height:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 11px;
+  border-radius:9px;
+  text-decoration:none;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.15px;
+}
+.seoHeader .seoNavLink{
+  border:1px solid transparent;
+  color:#7d8796;
+}
+.seoHeader .seoNavLink:hover{
+  color:#e3e8ee;
+  border-color:#ffffff09;
+  background:#ffffff04;
+}
+.seoHeader .seoNavCta{
+  border:1px solid #ff477e38;
+  background:#ff477e0b;
+  color:#ff8caf;
+}
+.seoHeader .seoNavCta:hover{background:#ff477e14}
+
+.seoFooter{
+  border-top:0;
+  background:
+    radial-gradient(circle at 22% 0,#ff477e08,transparent 30%),
+    #05070a;
+}
+.seoFooterGrid{
+  width:min(1240px,calc(100% - 48px));
+}
+.seoFooterLegal{
+  border-top:0;
+  padding-top:8px;
+  margin-top:4px;
+}
+@media(max-width:760px){
+  .seoHeader{height:56px}
+  .seoHeaderInner{
+    width:calc(100% - 24px);
+    height:56px;
+  }
+  .seoHeader .brand{font-size:11px}
+  .seoHeader .brand img{width:27px;height:27px}
+  .seoHeader .seoNavLink{display:none}
+  .seoHeader .seoNavCta{
+    min-height:34px;
+    padding:0 9px;
+    font-size:8px;
+  }
+  .seoFooterGrid{width:calc(100% - 24px)}
+}
