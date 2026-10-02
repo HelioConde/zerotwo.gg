@@ -35,13 +35,22 @@
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Organization",
+        "@id": "https://helioconde.github.io/zerotwo.gg/#organization",
+        "name": "ZeroTwo.gg",
+        "url": "https://helioconde.github.io/zerotwo.gg/",
+        "logo": "https://helioconde.github.io/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg",
+        "description": "Produto independente para organizar dados públicos permitidos de League of Legends em uma experiência visual chamada Riot Life."
+      },
+      {
         "@type": "WebSite",
         "@id": "https://helioconde.github.io/zerotwo.gg/#website",
         "url": "https://helioconde.github.io/zerotwo.gg/",
         "name": "ZeroTwo.gg",
         "alternateName": "ZeroTwo Riot Life",
         "inLanguage": "pt-BR",
-        "description": "Ferramenta para pesquisar Riot ID e explorar histórico, rank, maestria, campeões, Arena e tendências de League of Legends."
+        "description": "Ferramenta para pesquisar Riot ID e explorar histórico, rank, maestria, campeões, Arena e tendências de League of Legends.",
+        "publisher": {"@id": "https://helioconde.github.io/zerotwo.gg/#organization"}
       },
       {
         "@type": "WebApplication",
@@ -59,7 +68,8 @@
         },
         "isPartOf": {
           "@id": "https://helioconde.github.io/zerotwo.gg/#website"
-        }
+        },
+        "publisher": {"@id": "https://helioconde.github.io/zerotwo.gg/#organization"}
       }
     ]
   }
