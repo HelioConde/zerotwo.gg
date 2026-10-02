@@ -26,6 +26,15 @@ function HomeExperience(){
    <div><small>RECONHEÇA</small><h2>ALGUNS NOMES <span>VOLTAM A APARECER.</span></h2><p>Jogadores recorrentes entram como parte da história social da sua amostra — sem chamar isso de amizade, química ou compatibilidade.</p></div>
    <aside><Icon name="user"/><b>PLAYERS TIMELINE</b><small>quem entrou, ficou ou deixou de aparecer</small></aside>
   </section>
+  <section className="homeTransparency">
+   <header><small>TRANSPARÊNCIA // DADOS RIOT</small><h2>O QUE O ZEROTWO FAZ — <span>E O QUE NÃO FAZ.</span></h2><p>A Riot Life organiza dados permitidos em uma história pós-partida. A interpretação nunca substitui os dados oficiais.</p></header>
+   <div>
+    <article><Icon name="check"/><small>01 // FONTE</small><b>DADOS RIOT</b><p>Riot ID, partidas, rank e maestria vêm das APIs e fontes oficiais usadas pelo produto.</p></article>
+    <article><Icon name="status"/><small>02 // MOMENTO</small><b>PÓS-PARTIDA</b><p>O ZeroTwo não fornece orientação competitiva em tempo real nem informação oculta do adversário.</p></article>
+    <article><Icon name="game"/><small>03 // CONTEXTO</small><b>MODOS SEPARADOS</b><p>Ranked, Normal, ARAM e Arena não são tratados como se fossem o mesmo tipo de partida.</p></article>
+    <article><Icon name="dna"/><small>04 // LIMITE</small><b>SEM MMR PARALELO</b><p>Não criamos ELO/MMR alternativo nem uma nota única para definir a habilidade do jogador.</p></article>
+   </div>
+  </section>
   <section className="homeJourneyEnd">
    <img className="homeJourneyArt homeJourneyEndArt" loading="lazy" decoding="async" src="/zerotwo.gg/assets/zerotwo/Imagem%20do%20ChatGPT%201%20de%20out.%20de%202026,%2017_10_12-1.png" alt="" aria-hidden="true"/>
    <div><small>ZEROTWO // RIOT LIFE</small><h2>MENOS DASHBOARD.<br/><span>MAIS DESCOBERTA.</span></h2></div>
