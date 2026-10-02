@@ -340,7 +340,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
     return {
       context,games:safe.length,days,
-      rhythm:{gamesPerDay:safe.length/days,sessions:sessions.length,gamesPerSession:sessions.length?safe.length/sessions.length:0,activeDays:new Set(safe.map((m:any)=>new Date(playedAt(m)).toDateString())).size},
+      rhythm:{gamesPerDay:safe.length/days,sessions:sessionize(safe).length,gamesPerSession:sessionize(safe).length?safe.length/sessionize(safe).length:0,activeDays:new Set(safe.map((m:any)=>new Date(playedAt(m)).toDateString())).size},
       consistency:{kdaDev,consistent,avgKda,result:resultRate(safe)},
       damage:{avg:meanValues(damages),peak:damages.length?Math.max(...damages):0,total:meanValues(safe.map((m:any)=>num(m.damage)).filter((v:number)=>v>0))},
       economy:{goldPerMin:meanValues(goldPerMin),gold:avg(safe,'gold'),csPerMin:avg(safe.filter((m:any)=>num(m.csPerMin)>0),'csPerMin')},
@@ -440,7 +440,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <div>
         <small>ZEROTWO // RIOT LIFE</small>
         <h2>ISTO NÃO É UM DASHBOARD.<br/><span>É A SUA HISTÓRIA RECENTE.</span></h2>
-        <p>{matches.length} partidas disponíveis organizadas em capítulos. O ZeroTwo pode aprofundar esta Riot Life até 100 partidas para encontrar padrões mais confiáveis sem despejar tudo na tela.</p>
+        <p>{matches.length} partidas disponíveis organizadas em <strong>20 capítulos</strong>. O ZeroTwo pode aprofundar esta Riot Life até 100 partidas e extrair comparativos diferentes sem despejar o histórico bruto inteiro na tela.</p>
       </div>
       <div className="riotStoryCoverage">
         <span><small>AMOSTRA</small><b>{matches.length}</b><em>partidas</em></span>
@@ -613,18 +613,21 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         {label:'MAIS PRESENTE',value:deepDive.pool.most}
       ]}/>
 
-      {arenaPlacement&&<DeepDiveChapter id="riot-arena" number="13" kicker="ARENA // COLOCAÇÕES" title="ONDE SUAS ARENAS ESTÃO TERMINANDO?" copy="Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado." metrics={[
+      <DeepDiveChapter id="riot-arena" number="13" kicker="ARENA // COLOCAÇÕES" title={arenaPlacement?"ONDE SUAS ARENAS ESTÃO TERMINANDO?":"AINDA NÃO HÁ ARENAS SUFICIENTES NESTA JANELA."} copy={arenaPlacement?"Distribuição das colocações dentro da amostra Arena. Top 4 é usado como resultado positivo, mas 1º lugar continua separado.":"Este capítulo fica reservado para colocação média, Top 4 e primeiros lugares quando partidas de Arena entrarem na amostra."} metrics={arenaPlacement?[
         {label:'ARENAS',value:arenaPlacement.games},
         {label:'COLOCAÇÃO MÉDIA',value:arenaPlacement.avg},
         {label:'1º LUGAR',value:arenaPlacement.first+'%'},
         {label:'TOP 4',value:(arenaPlacement.first+arenaPlacement.mid)+'%'}
+      ]:[
+        {label:'ARENAS',value:'0'},
+        {label:'STATUS',value:'SEM AMOSTRA',note:'nenhum dado inventado'}
       ]}>
-        <div className="placementBars deepPlacement">
+        {arenaPlacement&&<div className="placementBars deepPlacement">
           <span><label>1º LUGAR</label><i><em style={{width:arenaPlacement.first+'%'}}/></i><b>{arenaPlacement.first}%</b></span>
           <span><label>2º–4º</label><i><em style={{width:arenaPlacement.mid+'%'}}/></i><b>{arenaPlacement.mid}%</b></span>
           <span><label>FORA DO TOP 4</label><i><em style={{width:arenaPlacement.outside+'%'}}/></i><b>{arenaPlacement.outside}%</b></span>
-        </div>
-      </DeepDiveChapter>}
+        </div>}
+      </DeepDiveChapter>
 
       <DeepDiveChapter id="riot-streaks" number="14" kicker="SEQUÊNCIAS // EMBALO" title="QUAL FOI SUA MAIOR SEQUÊNCIA?" copy="Contamos resultados positivos consecutivos dentro do contexto principal da amostra. Em Arena, resultado positivo significa Top 4." metrics={[
         {label:'MELHOR SEQUÊNCIA',value:deepDive.streaks.best+' jogos'},
@@ -646,8 +649,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
       <DeepDiveChapter id="riot-duration" number="17" kicker="DURAÇÃO // CURTA OU LONGA" title="O RESULTADO MUDA QUANDO A PARTIDA SE ALONGA?" copy="Dividimos a própria amostra pela duração mediana. Isso evita escolher um corte arbitrário igual para todos os modos." metrics={[
         {label:'MEDIANA',value:Math.round(deepDive.duration.median)+' min'},
-        {label:'PARTIDAS CURTAS',value:deepDive.duration.shortRate+'%',note:deepDive.duration.shortGames+' jogos'},
-        {label:'PARTIDAS LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
+        {label:deepDive.context==='ARENA'?'TOP 4 · CURTAS':'RESULTADO · CURTAS',value:deepDive.duration.shortRate+'%',note:deepDive.duration.shortGames+' jogos'},
+        {label:deepDive.context==='ARENA'?'TOP 4 · LONGAS':'RESULTADO · LONGAS',value:deepDive.duration.longRate+'%',note:deepDive.duration.longGames+' jogos'}
       ]}/>
 
       <DeepDiveChapter id="riot-impact" number="18" kicker="IMPACTO // PARTICIPAÇÃO" title="COMO VOCÊ PARTICIPA ALÉM DO KDA?" copy="Participação em abates, dano recebido, cura e pressão em estruturas adicionam contexto ao placar individual." metrics={[
@@ -657,12 +660,15 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         ...(deepDive.impact.turret>0?[{label:'DANO EM TORRES',value:Math.round(deepDive.impact.turret).toLocaleString('pt-BR')}]:[])
       ]}/>
 
-      {deepDive.trend&&<DeepDiveChapter id="riot-trend" number="19" kicker="TENDÊNCIA // ÚLTIMAS 10" title="AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?" copy="Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela." metrics={[
+      <DeepDiveChapter id="riot-trend" number="19" kicker="TENDÊNCIA // ÚLTIMAS 10" title={deepDive.trend?"AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?":"AINDA FALTAM PARTIDAS PARA UMA TENDÊNCIA CURTA."} copy={deepDive.trend?"Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela.":"Precisamos de pelo menos 15–20 partidas comparáveis no contexto principal para separar uma janela recente de uma anterior."} metrics={deepDive.trend?[
         {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
         {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
         {label:'DANO / MIN',value:Math.round(deepDive.trend.damageNow).toLocaleString('pt-BR'),note:'antes '+Math.round(deepDive.trend.damageOld).toLocaleString('pt-BR')},
         {label:'MAIS JOGADO',value:deepDive.trend.champNow||'—',note:'antes '+(deepDive.trend.champOld||'—')}
-      ]}/>}
+      ]:[
+        {label:'STATUS',value:'EM FORMAÇÃO'},
+        {label:'AMOSTRA',value:deepDive.games+' jogos'}
+      ]}/>
 
       <section id="riot-next" className="riotChapterGroup riotChapterNext">
         <div className="riotChapterGroupIntro">
