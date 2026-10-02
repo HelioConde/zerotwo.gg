@@ -705,6 +705,21 @@ const EN:Record<string,string>={
   'partidas ·':'matches ·',
   'maestrias ·':'mastery entries ·',
   'LER RIOT LIFE':'READ RIOT LIFE',
+  'TRANSPARÊNCIA // DADOS RIOT':'TRANSPARENCY // RIOT DATA',
+  'O QUE O ZEROTWO FAZ —':'WHAT ZEROTWO DOES —',
+  'E O QUE NÃO FAZ.':'AND WHAT IT DOESN\'T.',
+  'A Riot Life organiza dados permitidos em uma história pós-partida. A interpretação nunca substitui os dados oficiais.':'Riot Life organizes permitted data into a post-match story. Interpretation never replaces official data.',
+  '01 // FONTE':'01 // SOURCE',
+  'Riot ID, partidas, rank e maestria vêm das APIs e fontes oficiais usadas pelo produto.':'Riot ID, matches, rank, and mastery come from the official APIs and sources used by the product.',
+  '02 // MOMENTO':'02 // TIMING',
+  'PÓS-PARTIDA':'POST-MATCH',
+  'O ZeroTwo não fornece orientação competitiva em tempo real nem informação oculta do adversário.':'ZeroTwo does not provide real-time competitive guidance or hidden opponent information.',
+  '03 // CONTEXTO':'03 // CONTEXT',
+  'MODOS SEPARADOS':'SEPARATE MODES',
+  'Ranked, Normal, ARAM e Arena não são tratados como se fossem o mesmo tipo de partida.':'Ranked, Normal, ARAM, and Arena are not treated as if they were the same type of match.',
+  '04 // LIMITE':'04 // LIMIT',
+  'SEM MMR PARALELO':'NO PARALLEL MMR',
+  'Não criamos ELO/MMR alternativo nem uma nota única para definir a habilidade do jogador.':'We do not create an alternative ELO/MMR or a single score to define player skill.',
 };
 
 const RULES:Array<[RegExp,string]>=[
