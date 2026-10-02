@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import { Icon, GameBadge } from '../../components/ZeroTwoUI';
-import { ValorantConnect } from '../valorant/ValorantConnect';
 import { fmtStatNumber, hourLabel } from '../../lib/format';
 
 type PlayerCentralViewProps={
@@ -17,18 +15,9 @@ type PlayerCentralViewProps={
   history:any;
   openHistory:(deepen:boolean)=>void;
   dna:any;
-  activeGame:'lol'|'valorant';
-  setActiveGame:(game:'lol'|'valorant')=>void;
 };
 
-export function PlayerCentralView({riot,riotId,server,onSetup,notice,publicProfile,analyzeDna,analyzing,mainPublicMode,soloRank,history,openHistory,dna,activeGame,setActiveGame}:PlayerCentralViewProps){
-  const [valorantLinked,setValorantLinked]=useState(false);
-  const gameSwitch=<div className="playerGameSwitch lifeGameSwitch" role="tablist" aria-label="Jogo ativo">
-    <button role="tab" aria-selected={activeGame==='lol'} className={activeGame==='lol'?'active':''} onClick={()=>setActiveGame('lol')}><GameBadge game="lol"/><span><b>LEAGUE</b><small>{riot?'CONECTADO':'CONFIGURAR'}</small></span></button>
-    <button role="tab" aria-selected={activeGame==='valorant'} className={activeGame==='valorant'?'active valorant':''} onClick={()=>setActiveGame('valorant')}><GameBadge game="valorant"/><span><b>VALORANT</b><small>{valorantLinked?'CONECTADO':'RSO'}</small></span></button>
-  </div>;
-
-  if(activeGame==='valorant')return <div className="loggedLifeView">{gameSwitch}<ValorantConnect expanded onLinkedChange={setValorantLinked} onUseLeague={()=>setActiveGame('lol')}/></div>;
+export function PlayerCentralView({riot,riotId,server,onSetup,notice,publicProfile,analyzeDna,analyzing,mainPublicMode,soloRank,history,openHistory,dna}:PlayerCentralViewProps){
 
   const topChampion=publicProfile?.summary?.topChampions?.[0]?.name||publicProfile?.championSummaries?.[0]?.name||'—';
   const recent=publicProfile?.matches?.slice?.(0,4)||[];
@@ -36,8 +25,6 @@ export function PlayerCentralView({riot,riotId,server,onSetup,notice,publicProfi
   const profileUrl=riot?'?player='+encodeURIComponent(riotId)+'&server='+(riot?.platform||'br1'):null;
 
   return <div className="loggedLifeView">
-    {gameSwitch}
-
     <section className="loggedLifeHero">
       <div className="loggedLifeHeroCopy">
         <small>MINHA RIOT LIFE // {server}</small>
