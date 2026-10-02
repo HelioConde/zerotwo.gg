@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { getLocale } from '../../i18n';
 
 type Props={data:any;champions:any;ddv:string};
 
@@ -9,7 +10,7 @@ const playedAt=(m:any)=>{
   const parsed=Date.parse(String(raw||''));
   return Number.isFinite(parsed)?parsed:0;
 };
-const date=(ts:number)=>ts?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(ts)):'—';
+const date=(ts:number)=>ts?new Intl.DateTimeFormat(getLocale(),{day:'2-digit',month:'short',year:'numeric'}).format(new Date(ts)):'—';
 
 export function ChampionCareer({data,champions,ddv}:Props){
   const careers=useMemo(()=>{
@@ -59,7 +60,7 @@ export function ChampionCareer({data,champions,ddv}:Props){
           <span><small>{selected.resultLabel}</small><b>{selected.resultRate}%</b></span>
           <span><small>KDA MÉDIO</small><b>{selected.avgKda.toFixed(2)}</b></span>
           <span><small>DANO MÉDIO</small><b>{Math.round(selected.avgDamage/100)/10}k</b></span>
-          <span><small>MAESTRIA</small><b>{selected.mastery?Number(selected.mastery.points).toLocaleString('pt-BR'):'—'}</b></span>
+          <span><small>MAESTRIA</small><b>{selected.mastery?Number(selected.mastery.points).toLocaleString(getLocale()):'—'}</b></span>
         </div>
         <div className="careerTimeline">
           <span><small>PRIMEIRA NA AMOSTRA</small><b>{date(playedAt(selected.first))}</b><em>{selected.first?.context||'—'}</em></span>
