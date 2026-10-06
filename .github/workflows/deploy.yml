@@ -47,6 +47,7 @@ jobs:
         run: |
           deno check supabase/functions/public-lol-teammates/index.ts
           deno check supabase/functions/public-lol-profile/index.ts
+          deno check supabase/functions/champion-journey-history/index.ts
 
       - name: Vite build
         run: npm run build
