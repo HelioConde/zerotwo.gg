@@ -2,3 +2,6 @@ project_id = "bieihhaobdztjyoweewa"
 
 [functions.public-lol-teammates]
 verify_jwt = false
+
+[functions.champion-journey-history]
+verify_jwt = false
