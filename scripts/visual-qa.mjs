@@ -54,10 +54,17 @@ try{
     // were decoded (not merely an HTML image placeholder).
     const homeArts=page.locator('.homeJourney .homeJourneyArt');
     assert.equal(await homeArts.count(),4,name+': expected four authored home illustrations');
-    for(const art of await homeArts.all()){
+    for(const [index,art] of (await homeArts.all()).entries()){
+      const src=await art.getAttribute('src');
+      const url=new URL(src,page.url()).href;
+      const response=await page.request.get(url);
+      assert.equal(response.status(),200,name+': home artwork '+(index+1)+' returned HTTP '+response.status()+' at '+url);
       await art.scrollIntoViewIfNeeded();
-      await art.evaluate(async img=>{await img.decode();});
-      assert.equal(await art.evaluate(img=>img.naturalWidth>0),true,name+': home image failed to decode');
+      await page.waitForFunction(i=>{
+        const img=document.querySelectorAll('.homeJourney .homeJourneyArt')[i];
+        return img?.complete&&img.naturalWidth>0;
+      },index,{timeout:15000}).catch(()=>{throw new Error(name+': home artwork '+(index+1)+' did not render: '+url);});
+      console.log('PASS '+name+': home artwork '+(index+1)+' decoded');
     }
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-home.png',fullPage:true,animations:'disabled'});
