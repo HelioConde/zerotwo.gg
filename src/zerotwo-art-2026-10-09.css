@@ -65,6 +65,29 @@
   background:#050b17;box-shadow:0 22px 65px #000b,0 0 50px #5368ff13
 }
 .riotSharePreview>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Match Story featured champion: portrait is a separate cinematic layer. */
+.riotSharePreview>img.riotSharePreviewBackground{z-index:0}
+.riotSharePreview>img.riotSharePreviewChampionArt{
+  z-index:1;inset:56.8% 0 auto;top:56.8%;width:100%;height:32.5%;
+  object-fit:cover;object-position:50% 42%;opacity:.97;
+  filter:saturate(1.08) contrast(1.09);
+}
+.riotSharePreviewChampionShade{
+  position:absolute;z-index:2;inset:55.7% 0 9.2%;pointer-events:none;
+  background:linear-gradient(180deg,rgba(3,7,19,.92),rgba(3,7,19,.35) 27%,rgba(3,7,19,.40) 63%,rgba(3,7,19,.94));
+}
+.riotSharePreview.hasChampion .riotSharePreviewContent{
+  z-index:3;
+  background:linear-gradient(180deg,#03071360 0%,#03071380 24%,#030713ce 50%,#0307131a 65%,#03071335 80%,#03071390 100%);
+}
+.riotSharePreview.hasChampion .riotSharePreviewContext,
+.riotSharePreview.hasChampion .riotSharePreviewChampion,
+.riotSharePreview.hasChampion .riotSharePreviewFoot,
+.riotSharePreview.hasChampion .riotSharePreviewContent>small:not(:first-child){
+  text-shadow:0 2px 8px #02050dee,0 0 12px #02050dee;
+}
+
 .riotSharePreviewContent{
   position:absolute;z-index:1;inset:0;display:flex;flex-direction:column;align-items:center;
   gap:7px;padding:22px 12px 16px;text-align:center;color:#f5faff;
