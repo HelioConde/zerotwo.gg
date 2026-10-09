@@ -175,14 +175,14 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   // Explicit chapter navigation is needed: relying on the browser's default
   // fragment jump does not consistently account for the sticky chapter rail.
   function jumpToChapter(event:MouseEvent<HTMLAnchorElement>,id:string){
-    const target=document.getElementById(id);
-    if(!target)return;
     event.preventDefault();
-    // Unhide deeper chapters before measuring positions: otherwise hidden
-    // sections return a stale zero-sized rectangle and clicks appear broken.
+    // Deep chapters are not mounted in mobile quick mode. Mount them
+    // synchronously before measuring the target's actual position.
     if(readingMode==='compact'&&!['riot-now','riot-signature','riot-mastery','riot-change'].includes(id)){
       flushSync(()=>setReadingMode('full'));
     }
+    const target=document.getElementById(id);
+    if(!target)return;
     const nav=storyNavRef.current;
     const stickyTop=nav?parseFloat(window.getComputedStyle(nav).top)||0:0;
     const navHeight=nav?.getBoundingClientRect().height||0;
@@ -729,6 +729,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         <PlayerEras data={data} champions={champions} ddv={ddv}/>
       </section>
 
+      {readingMode==='full'&&<>
       <DeepDiveChapter id="riot-trend" number="05" art={z2Art('AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES.png')} kicker="TENDÊNCIA // ÚLTIMAS 10" title={deepDive.trend?"AS ÚLTIMAS 10 ESTÃO DIFERENTES DAS 10 ANTERIORES?":"AINDA FALTAM PARTIDAS PARA UMA TENDÊNCIA CURTA."} copy={deepDive.trend?"Uma janela curta reage mais rápido a mudanças recentes. Ela é mostrada ao lado da história de 100 partidas, não no lugar dela.":"Precisamos de pelo menos 15–20 partidas comparáveis no contexto principal para separar uma janela recente de uma anterior."} metrics={deepDive.trend?[
         {label:'KDA',value:deepDive.trend.kdaNow.toFixed(2),note:'antes '+deepDive.trend.kdaOld.toFixed(2)},
         {label:deepDive.context==='ARENA'?'TOP 4':'RESULTADO',value:deepDive.trend.resultNow+'%',note:'antes '+deepDive.trend.resultOld+'%'},
@@ -895,6 +896,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           <RiotArcade data={data}/>
         </div>
       </section>
+      </>}
     </div>
     {readingMode==='compact'&&<div className="riotReadingContinue">
       <small>QUER EXPLORAR MAIS?</small>
