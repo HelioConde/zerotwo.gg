@@ -6,7 +6,9 @@
  * Paths are resolved against Vite's BASE_URL for GitHub Pages and local dev.
  */
 export const zerotwoArt=(fileName:string)=>
-  import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(fileName);
+  // Vite dev and GitHub Pages expect a literal comma in these legacy filenames.
+  // Encode accents/spaces, but keep commas in the pathname.
+  import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(fileName).replace(/%2C/gi,',');
 
 export const VISUAL_ASSETS={
   home:{
