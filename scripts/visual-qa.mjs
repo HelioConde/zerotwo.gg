@@ -137,6 +137,34 @@ try{
       assert.ok(probe.g>probe.r*1.22,name+': exported artwork band must include the cyan fixture portrait: '+JSON.stringify(probe));
     }
 
+    // Chapter 04: cinematic champion panel is dynamic, while comparison data stays legible.
+    const changeCompare=page.locator('#riot-change .riotWindowCompare');
+    await changeCompare.waitFor({state:'visible',timeout:15000});
+    const spotlight=changeCompare.locator('.riotCompareChampion');
+    assert.match(await spotlight.innerText(),/Ahri/,name+': recent champion spotlight matches fixture');
+    const splash=spotlight.locator('.riotCompareChampionArt');
+    await splash.scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>{
+      const img=document.querySelector('#riot-change .riotCompareChampionArt');
+      return img?.complete&&img.naturalWidth>0;
+    },null,{timeout:12000});
+    assert.match(await splash.getAttribute('src'),/Ahri_0\.jpg$/,name+': uses Riot champion splash');
+    const metric=changeCompare.locator('.riotCompareGrid article').first();
+    const legibility=await metric.evaluate(article=>{
+      const value=article.querySelector('div span b');
+      const label=article.querySelector(':scope > small');
+      return {
+        valueFont:value?parseFloat(getComputedStyle(value).fontSize):0,
+        labelFont:label?parseFloat(getComputedStyle(label).fontSize):0,
+        width:article.getBoundingClientRect().width
+      };
+    });
+    assert.ok(legibility.valueFont>=20&&legibility.labelFont>=9.5,
+      name+': chapter 04 comparison typography too small: '+JSON.stringify(legibility));
+    const changeOverflow=await changeCompare.evaluate(el=>el.scrollWidth>el.clientWidth+3);
+    assert.equal(changeOverflow,false,name+': chapter 04 comparison overflows horizontally');
+    await spotlight.scrollIntoViewIfNeeded();
+    await page.screenshot({path:'visual-qa-artifacts/'+name+'-chapter-change.png',animations:'disabled'});
     const inlineLocale=page.locator('.playerLocaleActions');
     assert.equal(await inlineLocale.isVisible(),true,name+': language picker must be visible next to profile actions');
     assert.equal(await page.locator('.ztLanguageSwitcher').isVisible(),false,name+': legacy floating language picker must not cover chapters');
