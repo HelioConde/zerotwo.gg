@@ -154,7 +154,7 @@ export function PublicPlayerLookup(){
    {data.status?.history==='partial'&&<p className="historyDepthWarning">A Riot retornou apenas parte das partidas solicitadas.</p>}
    {depthError&&<p className="historyDepthWarning" role="alert">{depthError}</p>}
   </div>
-  {(Number(data.cache?.requested||20)<100||Number(data.cache?.pending||0)>0)&&<button onClick={extendHistory} disabled={depthLoading} aria-busy={depthLoading}>{depthLoading?'AMPLIANDO HISTÓRICO...':Number(data.cache?.requested||20)>=100?'TENTAR COMPLETAR HISTÓRICO':'ANALISAR ATÉ 100 PARTIDAS →'}</button>}
+  {((Number(data.cache?.requested||20)<100&&Number(data.cache?.availableIds||0)>=Number(data.cache?.requested||20))||Number(data.cache?.pending||0)>0)&&<button onClick={extendHistory} disabled={depthLoading} aria-busy={depthLoading}>{depthLoading?'AMPLIANDO HISTÓRICO...':Number(data.cache?.requested||20)>=100?'TENTAR COMPLETAR HISTÓRICO':'ANALISAR ATÉ 100 PARTIDAS →'}</button>}
  </section>
  <Suspense fallback={<div className="riotLifeDeferredLoading">CARREGANDO ANÁLISE COMPLETA<span>...</span></div>}><RiotLifeExperience data={data} platform={platform} champions={champions} ddv={ddv}/></Suspense>
  <details id="riot-evidence" className="gameDataVault">
