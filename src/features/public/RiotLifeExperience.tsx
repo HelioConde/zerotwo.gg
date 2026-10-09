@@ -157,6 +157,32 @@ function DeepDiveChapter({id,number,kicker,title,copy,metrics,art,secondaryArt,c
   </section>
 }
 
+/** Decorative art for the most-used champion in the *recent comparison window*.
+ * The text remains visible if the CDN is unavailable, or champion metadata is missing.
+ */
+function ChangeChampionSpotlight({name,champions}:{name:string;champions:any}){
+  const [imageFailed,setImageFailed]=useState(false);
+  const normalized=name.trim();
+  const aliases:Record<string,string>={
+    Wukong:'MonkeyKing','Nunu & Willump':'Nunu','Renata Glasc':'Renata',
+    'LeBlanc':'Leblanc',"Kha'Zix":'Khazix',"Vel'Koz":'Velkoz',
+    "Kai'Sa":'Kaisa',"Cho'Gath":'Chogath',"Kog'Maw":'KogMaw'
+  };
+  const fromMetadata=champions?.[normalized]?.id;
+  const candidate=String(fromMetadata||aliases[normalized]||normalized.replace(/[^a-zA-Z0-9]/g,''));
+  const safeId=/^[A-Za-z][A-Za-z0-9]{0,39}$/.test(candidate)?candidate:null;
+  const imageUrl=safeId?'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/'+safeId+'_0.jpg':null;
+  return <div className="riotCompareChampion" data-has-art={!!imageUrl&&!imageFailed}>
+    {imageUrl&&!imageFailed&&<img className="riotCompareChampionArt" src={imageUrl} loading="lazy" decoding="async" alt="" aria-hidden="true" onError={()=>setImageFailed(true)}/>}
+    <div className="riotCompareChampionOverlay" aria-hidden="true"/>
+    <div className="riotCompareChampionLabel">
+      <small>DESTAQUE DA FASE RECENTE</small>
+      <strong>{normalized||'—'}</strong>
+      <span>Campeão mais presente agora</span>
+    </div>
+  </div>;
+}
+
 export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const matches=useMemo(()=>[...(data?.matches||[])].sort((a,b)=>playedAt(b)-playedAt(a)),[data]);
   const sessions=useMemo(()=>sessionize(matches),[matches]);
@@ -739,7 +765,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
           </div>
         </div>
         {focusedComparison&&<section className="riotWindowCompare">
-          <header><div><small>COMPARATIVO // {focusedComparison.context||'JANELA'}</small><h4>{focusedComparison.size} RECENTES VS. {focusedComparison.size} ANTERIORES</h4><p>Mesma janela e mesmo contexto principal para reduzir comparações injustas entre modos diferentes.</p></div><span><b>{focusedComparison.recent.topChampion||'—'}</b><small>campeão mais presente agora</small></span></header>
+          <header><div className="riotCompareHeading"><small>COMPARATIVO // {focusedComparison.context||'JANELA'}</small><h4>{focusedComparison.size} RECENTES VS. {focusedComparison.size} ANTERIORES</h4><p>Mesma janela e mesmo contexto principal para reduzir comparações injustas entre modos diferentes.</p></div><ChangeChampionSpotlight key={focusedComparison.recent.topChampion||'unknown'} name={focusedComparison.recent.topChampion||''} champions={champions}/></header>
           <div className="riotCompareGrid">
             {[
               {label:'KDA',old:focusedComparison.previous.kda,now:focusedComparison.recent.kda,fmt:(v:number)=>v.toFixed(2)},
@@ -750,8 +776,8 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
               {label:'DURAÇÃO',old:focusedComparison.previous.duration,now:focusedComparison.recent.duration,fmt:(v:number)=>Math.round(v)+' min'}
             ].map((row:any)=>{
               const delta=row.now-row.old;
-              const tone=Math.abs(delta)<.01?'flat':delta>0?'up':'down';
-              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p>{delta===0?'sem mudança':(delta>0?'+':'')+(row.label==='KDA'?delta.toFixed(2):row.label==='TOP 4'||row.label==='RESULTADO'?delta.toFixed(0)+' p.p.':row.label==='MORTES / JOGO'?delta.toFixed(1):row.label==='DURAÇÃO'?Math.round(delta)+' min':Math.round(delta).toLocaleString(getLocale()))}</p></article>
+              const tone=Math.abs(delta)<.01||row.label==='DURAÇÃO'?'flat':row.label==='MORTES / JOGO'?(delta<0?'up':'down'):delta>0?'up':'down';
+              return <article key={row.label} data-tone={tone}><small>{row.label}</small><div><span><em>ANTES</em><b>{row.fmt(row.old)}</b></span><i>→</i><span><em>AGORA</em><b>{row.fmt(row.now)}</b></span></div><p className="riotCompareDelta"><small>VARIAÇÃO</small> {Math.abs(delta)<.01?'sem mudança':(delta>0?'+':'')+(row.label==='KDA'?delta.toFixed(2):row.label==='TOP 4'||row.label==='RESULTADO'?delta.toFixed(0)+' p.p.':row.label==='MORTES / JOGO'?delta.toFixed(1):row.label==='DURAÇÃO'?Math.round(delta)+' min':Math.round(delta).toLocaleString(getLocale()))}</p></article>
             })}
           </div>
           <div className="riotCompareMeta">
