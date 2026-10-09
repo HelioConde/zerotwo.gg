@@ -45,6 +45,15 @@ await waitForDevServer();
 
 const errors=[];
 try{
+  // Crawler / no-JS availability: the HTML response must provide a real h1
+  // and indexable links without depending on the React bundle or Riot API.
+  const crawlerContext=await browser.newContext({javaScriptEnabled:false});
+  const crawlerPage=await crawlerContext.newPage();
+  await crawlerPage.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
+  assert.match(await crawlerPage.locator('.ztSeoFallback h1').innerText(),/Estatísticas de LoL por Riot ID/);
+  assert.ok(await crawlerPage.locator('.ztSeoFallback nav a').count()>=10,'SEO fallback needs ten crawlable guides');
+  await crawlerContext.close();
+  console.log('PASS: homepage HTML has a crawlable no-JavaScript fallback.');
   for(const [name,width,height] of [['desktop',1440,900],['laptop',1366,768],['mobile',390,844]]){
     const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'});
     const page=await context.newPage();
@@ -71,6 +80,7 @@ try{
     });
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
+    assert.equal(await page.locator('.ztSeoFallback').count(),0,name+': React must replace fallback without duplicate SEO content');
     // Full-page screenshots do not automatically trigger below-fold loading.
     // Visit the four home chapters before capturing them, then verify real bytes
     // were decoded (not merely an HTML image placeholder).
