@@ -9,6 +9,24 @@ const LanguageContext=createContext<{language:ZtLanguage;setLanguage:(language:Z
 });
 
 const EN:Record<string,string>={
+  // Guided reading, mobile-first product language
+  'LEITURA DO SEU PERFIL':'YOUR PROFILE IN CHAPTERS',
+  'Modo de leitura':'Reading mode',
+  'Escolher modo de leitura':'Choose reading mode',
+  'Resumo em quatro capítulos':'Four-chapter summary',
+  'História completa em vinte capítulos':'Complete story in twenty chapters',
+  'Veja o essencial primeiro. Nenhum dado é perdido.':'Start with the essentials. No information is lost.',
+  'Explore todos os padrões. Você pode voltar ao resumo.':'Explore all patterns. You can return to the summary.',
+  'RESUMO RÁPIDO':'QUICK SUMMARY',
+  'HISTÓRIA COMPLETA':'FULL STORY',
+  'QUER EXPLORAR MAIS?':'WANT TO EXPLORE MORE?',
+  'OS OUTROS CAPÍTULOS ESTÃO A UM TOQUE.':'THE REST OF YOUR STORY IS ONE TAP AWAY.',
+  'Compare tendência, pessoas, impacto, economia, horários e muito mais sem perder a visão rápida.':'Explore trends, players, impact, economy, timing and more without losing your quick summary.',
+  'ABRIR HISTÓRIA COMPLETA ':'OPEN THE FULL STORY ',
+  'Conectando os registros recentes...':'Connecting recent records...',
+  'Consultando e organizando partidas adicionais...':'Retrieving and organizing additional matches...',
+  'Ainda trabalhando com a Riot. O histórico que você já abriu continua disponível.':'Still waiting for Riot. Your existing match history remains available.',
+  'Na primeira consulta, a expansão pode levar cerca de um minuto. Este relógio indica tempo decorrido, não porcentagem concluída.':'The first expansion can take about a minute. This timer shows elapsed time, not completion percentage.',
   'Buscar':'Search',
   'Entrar':'Sign in',
   'Sair':'Sign out',
