@@ -226,9 +226,9 @@ export function RiotShareCard({data,champions}:Props){
       </div>
       <p className="riotShareStatus" role="status" aria-live="polite">{status||'Formato PNG · 1080 × 1920 · ideal para stories'}</p>
     </div>
-    <div className="riotSharePreview" aria-label={'Prévia do story de '+player}>
+    <div className={'riotSharePreview'+(championArt?' hasChampion':'')} aria-label={'Prévia do story de '+player}>
       <img className="riotSharePreviewBackground" src={STORY_BACKGROUND} loading="lazy" decoding="async" alt="" aria-hidden="true"/>
-      {championArt&&<img className="riotSharePreviewChampionArt" key={championArt} src={championArt} crossOrigin="anonymous" loading="lazy" decoding="async" alt="" aria-hidden="true" onError={()=>setBrokenArtwork(championArt)}/>}
+      {championArt&&<img className="riotSharePreviewChampionArt" key={championArt} src={championArt} loading="lazy" decoding="async" alt="" aria-hidden="true" onError={()=>setBrokenArtwork(championArt)}/>}
       {championArt&&<div className="riotSharePreviewChampionShade" aria-hidden="true"/>}
       <div className="riotSharePreviewContent">
         <small>ZEROTWO.GG // RIOT LIFE</small>
