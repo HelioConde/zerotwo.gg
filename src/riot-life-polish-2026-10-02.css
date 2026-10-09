@@ -1558,3 +1558,89 @@
   .riotArcadeArt{opacity:.21!important}
   .riotLifeIntroArtwork{opacity:.19!important}
 }
+
+
+/* 09/10 live mobile review — AlchemyFlames#BR1.
+   A 390px viewport previously rendered a seven-line headline at 9.5vw,
+   leaving the top chapter unreachable without excessive scrolling. */
+@media (max-width:700px){
+  #riot-life-story .riotStoryIntroWithArt{
+    padding:23px 19px 25px!important;
+    gap:14px!important;
+    align-items:start!important;
+  }
+  #riot-life-story .riotStoryIntroWithArt h2{
+    font-size:clamp(27px,7.5vw,34px)!important;
+    line-height:1.06!important;
+    letter-spacing:-1.1px!important;
+    overflow-wrap:normal;
+    text-wrap:balance;
+    margin:8px 0 12px!important;
+    max-width:100%!important;
+  }
+  #riot-life-story .riotStoryIntroWithArt p{
+    font-size:13px!important;
+    line-height:1.65!important;
+    max-width:50ch!important;
+    color:#c0c8d3!important;
+  }
+  #riot-life-story .riotStoryCoverage{
+    gap:7px!important;
+    min-width:0!important;
+  }
+  #riot-life-story .riotStoryCoverage>span{
+    padding:12px 10px!important;
+    min-height:70px!important;
+  }
+  #riot-life-story .riotStoryCoverage small{
+    font-size:9px!important;
+    letter-spacing:.25px!important;
+    color:#aab5c3!important;
+  }
+  #riot-life-story .riotStoryCoverage em{
+    font-size:10px!important;
+    color:#c0c8d3!important;
+  }
+  #riot-life-story .riotSampleNote{
+    padding:11px!important;
+    gap:9px!important;
+  }
+  #riot-life-story .riotSampleNote span b{
+    font-size:10px!important;
+  }
+  #riot-life-story .riotSampleNote span small{
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+  #riot-life-story .riotChapterCopy p,
+  #riot-life-story .riotDeepCopy p,
+  #riot-life-story .riotChapterGroupIntro p{
+    font-size:13px!important;
+    line-height:1.58!important;
+    color:#c0c8d3!important;
+  }
+  #riot-life-story .riotChapterCopy h3{
+    font-size:clamp(28px,8vw,36px)!important;
+    line-height:1.04!important;
+    letter-spacing:-1.3px!important;
+    text-wrap:balance;
+  }
+  #riot-life-story .riotDeepCopy h3{
+    font-size:clamp(28px,8vw,36px)!important;
+    line-height:1.04!important;
+    letter-spacing:-1.3px!important;
+    text-wrap:balance;
+  }
+  #riot-life-story .riotStoryNav a b{
+    font-size:10px!important;
+  }
+  #riot-life-story .riotStoryNav a span{
+    font-size:9px!important;
+  }
+}
+@media(max-width:390px){
+  #riot-life-story .riotStoryIntroWithArt h2{
+    font-size:clamp(27px,7.2vw,29px)!important;
+    letter-spacing:-.9px!important;
+  }
+}
