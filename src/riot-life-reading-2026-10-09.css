@@ -172,31 +172,37 @@
 .riotChapterJump{display:none}
 @media(max-width:700px){
   #riot-life-story .riotStoryNav .riotStoryCurrent{display:none!important}
-  #riot-life-story .riotStoryNav .riotChapterJump{
+  /* The picker and the tab strip are two independent sticky rows:
+     no sticky control can cover an anchor inside a horizontal scroller. */
+  #riot-life-story > .riotChapterJump{
     position:sticky;
-    left:0;
-    z-index:8;
+    top:64px;
+    z-index:35;
     display:flex;
-    flex:0 0 clamp(172px,48vw,212px);
+    align-items:center;
+    gap:10px;
+    width:100%;
+    height:60px;
+    min-height:60px;
     min-width:0;
-    flex-direction:column;
-    justify-content:center;
-    gap:3px;
-    align-self:stretch;
-    padding:5px 9px;
-    border-right:1px solid rgba(255,255,255,.16);
-    background:#070b12;
-    box-shadow:9px 0 16px #05070bba;
+    margin:0;
+    padding:8px 13px;
+    border:1px solid rgba(255,255,255,.17);
+    border-bottom:0;
+    background:#080c14;
+    box-shadow:0 9px 16px #05070ba6;
   }
   #riot-life-story .riotChapterJump>span{
+    flex:0 0 115px;
     color:#ff99b8;
-    font:850 9px/1.2 ui-monospace,monospace;
-    letter-spacing:.65px;
+    font:850 10px/1.2 ui-monospace,monospace;
+    letter-spacing:.45px;
   }
   #riot-life-story .riotChapterJump select{
     appearance:auto;
     display:block;
-    width:100%;
+    flex:1 1 auto;
+    width:auto;
     min-width:0;
     min-height:39px;
     padding:6px 5px;
@@ -223,6 +229,9 @@
     font-size:10px!important;
   }
   #riot-life-story .riotStoryReadout{display:none}
+  #riot-life-story .riotStoryNav{
+    top:124px!important;
+  }
 }
 
 
