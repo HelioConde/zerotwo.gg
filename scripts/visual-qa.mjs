@@ -31,7 +31,7 @@ const response=(limit)=>({
 
 const errors=[];
 try{
-  for(const [name,width,height] of [['desktop',1440,900],['mobile',390,844]]){
+  for(const [name,width,height] of [['desktop',1440,900],['laptop',1366,768],['mobile',390,844]]){
     const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'});
     const page=await context.newPage();
     page.on('pageerror',err=>errors.push(name+': '+err.message));
@@ -53,6 +53,10 @@ try{
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').fill('ZeroTwo Fixture#BR1');
     await page.getByRole('button',{name:/VER RIOT LIFE/}).click();
     await page.locator('.historyDepthPanel').waitFor({timeout:25000});
+    assert.notEqual(
+      await page.locator('.homeLookup.hasResult .homeHero').evaluate(el=>getComputedStyle(el).position),
+      'sticky',name+': result search form must not float over chapter nav'
+    );
     await page.locator('#riot-life-story .riotStoryIntroWithArt').waitFor({state:'visible',timeout:25000});
     assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/);
     const inlineLocale=page.locator('.playerLocaleActions');
@@ -129,6 +133,10 @@ try{
           targetTop:rect.top,
           targetBottom:rect.bottom,
           stickyNavBottom:nav.getBoundingClientRect().bottom,
+          stickyNavTop:nav.getBoundingClientRect().top,
+          headerBottom:document.querySelector('.gameNav')?.getBoundingClientRect().bottom??0,
+          resultSearchBottom:document.querySelector('.homeLookup.hasResult .homeHero')?.getBoundingClientRect().bottom??0,
+          navHit:document.elementFromPoint(Math.min(window.innerWidth-24,nav.getBoundingClientRect().left+30),nav.getBoundingClientRect().top+Math.min(26,nav.getBoundingClientRect().height/2))?.closest('.riotStoryNav')===nav,
           hash:location.hash,
           scrollY:window.scrollY,
           focused:document.activeElement===target
@@ -142,6 +150,11 @@ try{
       assert.ok(position.targetTop>=position.stickyNavBottom-12&&position.targetTop<=position.stickyNavBottom+70,
         name+': '+chapter+' is not visible below the sticky nav: '+JSON.stringify(position));
       assert.ok(position.targetBottom>position.stickyNavBottom,name+': '+chapter+' is obstructed');
+      assert.ok(position.stickyNavTop>=position.headerBottom-5,
+        name+': chapter nav sits behind global header: '+JSON.stringify(position));
+      assert.ok(position.resultSearchBottom<=position.stickyNavTop+3,
+        name+': VER RIOT LIFE search button overlaps the chapter rail: '+JSON.stringify(position));
+      assert.equal(position.navHit,true,name+': chapter navigation is physically covered by another element');
     }
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-chapter-nav.png',fullPage:false,animations:'disabled'});
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:false,animations:'disabled'});
