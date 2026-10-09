@@ -61,6 +61,14 @@ try{
       if(limit===100)await new Promise(resolve=>setTimeout(resolve,850)); // Cold-request UX fixture
       await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(response(limit))});
     });
+    // Deterministic splash fixture: assert preview AND exported PNG get real artwork.
+    await page.route('https://ddragon.leagueoflegends.com/cdn/img/champion/splash/**',async route=>{
+      await route.fulfill({
+        status:200,contentType:'image/svg+xml',
+        headers:{'access-control-allow-origin':'*'},
+        body:'<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720"><rect width="1200" height="720" fill="#8121ad"/><ellipse cx="580" cy="335" rx="250" ry="290" fill="#55efff"/><rect x="430" y="100" width="90" height="500" fill="#ffdb5f"/></svg>'
+      });
+    });
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
     // Full-page screenshots do not automatically trigger below-fold loading.
@@ -99,6 +107,11 @@ try{
     assert.equal(imageResponse.status(),200,name+': story image URL resolves');
     await storyImage.scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>{const image=document.querySelector('.riotSharePreview>img');return image?.complete&&image.naturalWidth>0;},null,{timeout:12000});
+    const championArt=sharePanel.locator('.riotSharePreviewChampionArt');
+    await championArt.waitFor({state:'visible',timeout:15000});
+    assert.match(await championArt.getAttribute('src'),/\/Ahri_0\.jpg$/,name+': correct featured champion');
+    await page.waitForFunction(()=>{const img=document.querySelector('.riotSharePreviewChampionArt');return img?.complete&&img.naturalWidth>0;},null,{timeout:12000});
+    assert.equal(await sharePanel.locator('.riotSharePreview').evaluate(el=>el.classList.contains('hasChampion')),true,name+': featured artwork styling active');
     assert.match(await sharePanel.innerText(),/PARTIDAS OBSERVADAS/);
     if(name==='desktop'){
       const downloadReady=page.waitForEvent('download',{timeout:15000});
@@ -109,6 +122,19 @@ try{
       assert.equal(png.subarray(1,4).toString(),'PNG','Story export uses PNG');
       assert.equal(png.readUInt32BE(16),1080,'Story export width');
       assert.equal(png.readUInt32BE(20),1920,'Story export height');
+      // The downloaded PNG should contain the bright fixture splash in the lower band.
+      const probe=await page.evaluate(async payload=>{
+        const image=new Image();
+        image.src='data:image/png;base64,'+payload;
+        await image.decode();
+        const canvas=document.createElement('canvas');
+        canvas.width=1080;canvas.height=1920;
+        const ctx=canvas.getContext('2d',{willReadFrequently:true});
+        ctx.drawImage(image,0,0);
+        const pixel=ctx.getImageData(540,1310,1,1).data;
+        return {r:pixel[0],g:pixel[1],b:pixel[2]};
+      },png.toString('base64'));
+      assert.ok(probe.g>probe.r*1.22,name+': exported artwork band must include the cyan fixture portrait: '+JSON.stringify(probe));
     }
 
     const inlineLocale=page.locator('.playerLocaleActions');
