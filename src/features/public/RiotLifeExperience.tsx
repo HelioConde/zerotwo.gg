@@ -164,6 +164,25 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const [activeChapter,setActiveChapter]=useState<string>('riot-now');
   const storyNavRef=useRef<HTMLElement|null>(null);
 
+  // Explicit chapter navigation is needed: relying on the browser's default
+  // fragment jump does not consistently account for the sticky chapter rail.
+  function jumpToChapter(event:React.MouseEvent<HTMLAnchorElement>,id:string){
+    const target=document.getElementById(id);
+    if(!target)return;
+    event.preventDefault();
+    const nav=storyNavRef.current;
+    const stickyTop=nav?parseFloat(window.getComputedStyle(nav).top)||0:0;
+    const navHeight=nav?.getBoundingClientRect().height||0;
+    const offset=stickyTop+navHeight+16;
+    const top=Math.max(0,Math.round(window.scrollY+target.getBoundingClientRect().top-offset));
+    setActiveChapter(id);
+    // Preserve the shared Riot ID and server while keeping a chapter deep link.
+    window.history.replaceState(window.history.state,'',location.pathname+location.search+'#'+id);
+    if(!target.hasAttribute('tabindex'))target.setAttribute('tabindex','-1');
+    target.focus({preventScroll:true});
+    window.scrollTo({top,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  }
+
   useEffect(()=>{
     const sections=RIOT_CHAPTERS.map(([id])=>document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if(!sections.length)return;
@@ -545,6 +564,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const sampleQuality=matches.length>=90?'HISTÓRIA FORTE':matches.length>=60?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
   const chapterIndex=Math.max(0,RIOT_CHAPTERS.findIndex(([id])=>id===activeChapter));
   const readingProgress=Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
+  const visibleChapters=RIOT_CHAPTERS.filter(([id])=>(id!=='riot-signature'||!!signature)&&(id!=='riot-peak'||!!peakMatch));
   const requestedDepth=Number(data?.cache?.requested||100);
   const availableDepth=Number(data?.cache?.availableIds||matches.length);
   const pendingDepth=Math.max(0,Number(data?.cache?.pending||0));
@@ -572,7 +592,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
     <nav ref={storyNavRef} className="riotStoryNav" aria-label="Capítulos da Riot Life">
       <span className="riotStoryCurrent"><small>CAPÍTULO {chapterIndex+1}/{RIOT_CHAPTERS.length}</small><b>{RIOT_CHAPTERS[chapterIndex]?.[1]||'AGORA'}</b></span>
-      {RIOT_CHAPTERS.map(([id,label],index)=><a key={id} href={'#'+id} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>)}
+      {visibleChapters.map(([id,label])=>{const index=RIOT_CHAPTERS.findIndex(([chapterId])=>chapterId===id);return <a key={id} href={'#'+id} onClick={event=>jumpToChapter(event,id)} aria-label={'Ir para o capítulo '+String(index+1)+': '+label} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>})}
       <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
       <small className="riotStoryReadout">{readingProgress}% · ~5 min de leitura</small>
     </nav>
