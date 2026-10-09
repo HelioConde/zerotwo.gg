@@ -6027,9 +6027,7 @@ select{cursor:pointer}
     flex:0 0 96px!important;
     min-height:61px!important;
   }
-  .riotStoryNav a span{font-size:6px!important}
-  .riotStoryNav a b{font-size:6.5px!important}
-  .riotStoryProgress{
+      .riotStoryProgress{
     left:126px!important;
     right:10px!important;
     width:auto!important;
