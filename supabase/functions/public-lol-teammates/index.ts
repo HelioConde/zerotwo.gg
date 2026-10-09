@@ -35,17 +35,20 @@ function inc(map:Map<string,number>,key:string){
   map.set(key,(map.get(key)||0)+1);
 }
 async function riotGet(url:string,key:string){
-  const res=await fetch(url,{headers:{'X-Riot-Token':key}});
-  if(res.status===429){
-    const retry=Math.min(2,Number(res.headers.get('Retry-After')||1));
-    await new Promise(resolve=>setTimeout(resolve,retry*1000));
-    return riotGet(url,key);
+  for(let attempt=0;attempt<2;attempt++){
+    let res:Response;
+    try{res=await fetch(url,{headers:{'X-Riot-Token':key},signal:AbortSignal.timeout(12000)});}
+    catch{throw new Error('riot_service_unavailable');}
+    if(res.status===429){
+      if(attempt>0)throw new Error('riot_rate_limited');
+      const retryAfter=Number(res.headers.get('Retry-After')||1);
+      await new Promise(resolve=>setTimeout(resolve,Math.max(500,Math.min(3000,retryAfter*1000))));
+      continue;
+    }
+    if(!res.ok)throw new Error(res.status===401||res.status===403?'riot_auth_unavailable':res.status===404?'riot_player_unavailable':'riot_service_unavailable');
+    return res.json();
   }
-  if(!res.ok){
-    const body=await res.text().catch(()=> '');
-    throw new Error('Riot API '+res.status+(body?': '+body.slice(0,120):''));
-  }
-  return res.json();
+  throw new Error('riot_rate_limited');
 }
 
 Deno.serve(async req=>{
@@ -207,7 +210,7 @@ Deno.serve(async req=>{
 
     const teammates=[...mates.values()]
       .sort((a,b)=>b.games-a.games||b.wins-a.wins||b.lastPlayedAt-a.lastPlayedAt)
-      .slice(0,8)
+      .slice(0,30)
       .map(row=>({
         riotId:row.riotId,
         gameName:row.gameName,
@@ -229,6 +232,6 @@ Deno.serve(async req=>{
   }catch(error){
     console.error('public-lol-teammates failed',error);
     const message=error instanceof Error?error.message:'unknown_error';
-    return json({error:'teammates_lookup_failed',message},502);
+    return json({error:message==='riot_rate_limited'?'riot_rate_limited':'teammates_lookup_failed',message:message==='riot_rate_limited'?'Limite temporário da Riot. Tente novamente mais tarde.':message==='riot_auth_unavailable'?'Consulta Riot indisponível. Verifique a configuração da API.':'Não foi possível analisar os parceiros agora.'},message==='riot_rate_limited'?429:502);
   }
 });
