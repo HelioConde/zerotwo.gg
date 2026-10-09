@@ -68,6 +68,18 @@ try{
       const h=await page.locator('#riot-life-story .riotStoryIntroWithArt h2').boundingBox();
       assert.ok(h&&h.height<=175,'Mobile chapter introduction wraps excessively: '+h?.height);
     }
+    const story=page.locator('#riot-life-story');
+    const readingBar=story.locator('.riotReadingBar');
+    await readingBar.waitFor({state:'visible',timeout:15000});
+    assert.equal(await story.getAttribute('data-reading-mode'),name==='mobile'?'compact':'full',name+': default chapter reading mode');
+    const deepChapter=story.locator('#riot-trend');
+    if(name==='mobile'){
+      assert.equal(await deepChapter.isVisible(),false,'Mobile quick summary hides deep chapters until requested');
+      await readingBar.getByRole('button',{name:'HISTÓRIA COMPLETA'}).click();
+      assert.equal(await deepChapter.isVisible(),true,'Full story switch should reveal deep chapters');
+      await readingBar.getByRole('button',{name:'RESUMO RÁPIDO'}).click();
+      assert.equal(await deepChapter.isVisible(),false,'Quick summary switch should hide deep chapters again');
+    }
     // Click the actual chapter rail (rather than relying on the URL hash).
     // Verify navigation changes scroll position and reveals the target below
     // the sticky nav on both desktop and mobile. Regressions here were reported.
@@ -90,6 +102,7 @@ try{
         };
       },chapter);
       assert.ok(position,name+': chapter '+chapter+' must exist');
+      if(chapter==='riot-trend')assert.equal(await story.getAttribute('data-reading-mode'),'full',name+': clicking a deep chapter reveals the whole story');
       assert.equal(position.hash,'#'+chapter,name+': chapter deep link must update');
       assert.equal(position.focused,true,name+': chapter must receive keyboard focus');
       assert.ok(position.scrollY>80,name+': chapter '+chapter+' did not scroll');
