@@ -1,0 +1,190 @@
+/* ZeroTwo // Riot Life chapter 04.
+   The splash depicts the champion most played in the NEWER comparable window,
+   while the underlying statistics stay on an opaque data surface. */
+#riot-life-story #riot-change .riotWindowCompare{
+  padding-top:clamp(24px,3.2vw,37px)!important;
+  padding-bottom:clamp(27px,3.4vw,42px)!important;
+  background:radial-gradient(ellipse at 89% 5%,rgba(96,69,179,.13),transparent 45%),
+    linear-gradient(180deg,#080c15,#060910)!important;
+}
+#riot-life-story #riot-change .riotWindowCompare>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(236px,310px);
+  gap:clamp(16px,2.5vw,30px);
+  align-items:center;
+  min-width:0;
+}
+#riot-life-story #riot-change .riotCompareHeading{min-width:0}
+#riot-life-story #riot-change .riotCompareHeading>small{
+  display:block;color:#ff85b0!important;font-size:11px!important;
+  font-weight:850;letter-spacing:.75px;line-height:1.4;
+}
+#riot-life-story #riot-change .riotCompareHeading h4{
+  max-width:20ch;
+  margin:9px 0 12px;
+  font-size:clamp(27px,3vw,38px)!important;
+  line-height:1.06;
+  letter-spacing:-.8px;
+  text-wrap:balance;
+}
+#riot-life-story #riot-change .riotCompareHeading p{
+  max-width:50ch!important;
+  color:#b6c3d6!important;
+  font-size:clamp(12px,1.12vw,14px)!important;
+  line-height:1.62!important;
+}
+#riot-life-story #riot-change .riotCompareChampion{
+  position:relative;isolation:isolate;
+  min-width:0;min-height:176px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  border:1px solid rgba(176,142,255,.38);
+  border-radius:16px;
+  background:radial-gradient(ellipse at 72% 22%,rgba(129,78,207,.35),transparent 55%),
+    linear-gradient(140deg,#172237,#090c17 75%);
+  box-shadow:0 18px 32px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.03);
+}
+#riot-life-story #riot-change .riotCompareChampionArt{
+  position:absolute;z-index:0;inset:0;
+  display:block;width:100%;height:100%;
+  object-fit:cover;object-position:51% 37%;
+  filter:contrast(1.07) saturate(1.08);
+  opacity:.96;
+}
+#riot-life-story #riot-change .riotCompareChampionOverlay{
+  position:absolute;z-index:1;inset:0;
+  background:linear-gradient(0deg,rgba(5,8,20,.98) 0%,rgba(5,8,20,.84) 25%,
+      rgba(5,8,20,.29) 64%,rgba(5,8,20,.12) 100%),
+    linear-gradient(90deg,rgba(8,10,20,.28),transparent 55%);
+  pointer-events:none;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;gap:5px;
+  min-width:0;padding:16px 19px 17px;
+  text-shadow:0 2px 10px #03040bef;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel small{
+  color:#c9b2ff!important;font:850 10px/1.2 ui-monospace,monospace!important;
+  letter-spacing:.9px;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel strong{
+  color:#fff;font-size:clamp(23px,2.15vw,29px);
+  font-weight:900;line-height:1.1;
+  overflow-wrap:anywhere;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel span{
+  color:#d3dcf0;font-size:12px;line-height:1.3;
+}
+#riot-life-story #riot-change .riotCompareGrid{
+  gap:12px!important;margin-top:24px;
+}
+#riot-life-story #riot-change .riotCompareGrid article{
+  padding:clamp(15px,1.8vw,20px)!important;
+  min-height:135px;
+  border:1px solid rgba(180,206,255,.14);
+  border-radius:15px;
+  background:rgba(5,10,19,.97);
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+}
+#riot-life-story #riot-change .riotCompareGrid article>small{
+  color:#b1c6e8!important;
+  font:850 10px/1.3 ui-monospace,monospace!important;
+  letter-spacing:.65px;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div{
+  gap:clamp(7px,1vw,14px);
+  margin-top:13px;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span{min-width:0}
+#riot-life-story #riot-change .riotCompareGrid article>div>span em{
+  color:#92a7c4!important;font-size:10px!important;
+  letter-spacing:.3px;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span b{
+  margin-top:6px;
+  font-size:clamp(21px,2.05vw,27px)!important;
+  line-height:1.18;
+  letter-spacing:-.45px;
+  font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span:last-child b{
+  color:#f9fbff;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>i{
+  color:#7a92b5;font-size:18px;
+}
+#riot-life-story #riot-change .riotCompareGrid .riotCompareDelta{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  margin:13px 0 0;
+  color:#b0c0d5;
+  font-size:13px!important;
+  line-height:1.35!important;
+  font-weight:850;
+  font-variant-numeric:tabular-nums;
+}
+#riot-life-story #riot-change .riotCompareGrid .riotCompareDelta small{
+  color:#95a3b8!important;font:800 9px/1.25 ui-monospace,monospace!important;
+  letter-spacing:.65px;
+}
+#riot-life-story #riot-change .riotCompareGrid article[data-tone="up"] .riotCompareDelta{color:#8de3f9}
+#riot-life-story #riot-change .riotCompareGrid article[data-tone="down"] .riotCompareDelta{color:#ff96b8}
+#riot-life-story #riot-change .riotCompareMeta{
+  gap:12px!important;margin-top:12px;
+}
+#riot-life-story #riot-change .riotCompareMeta>span{
+  min-width:0;padding:14px 16px;
+  border:1px solid rgba(180,206,255,.11);
+  border-radius:12px;background:rgba(6,10,19,.92);
+}
+#riot-life-story #riot-change .riotCompareMeta small{
+  color:#9cb0cd!important;font-size:10px!important;
+  line-height:1.35!important;
+}
+#riot-life-story #riot-change .riotCompareMeta b{
+  color:#ecf3ff!important;font-size:13px!important;
+  line-height:1.45!important;overflow-wrap:anywhere;
+}
+@media(max-width:1000px){
+  #riot-life-story #riot-change .riotWindowCompare>header{
+    grid-template-columns:minmax(0,1fr) minmax(200px,270px);
+  }
+  #riot-life-story #riot-change .riotCompareGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #riot-life-story #riot-change .riotCompareMeta{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:700px){
+  #riot-life-story #riot-change .riotWindowCompare{
+    padding:24px 17px 29px!important;
+  }
+  #riot-life-story #riot-change .riotWindowCompare>header{
+    grid-template-columns:minmax(0,1fr);
+    gap:18px;
+  }
+  #riot-life-story #riot-change .riotCompareHeading h4{
+    font-size:clamp(25px,7vw,33px)!important;
+  }
+  #riot-life-story #riot-change .riotCompareChampion{
+    min-height:174px;width:100%;max-width:100%;
+  }
+  #riot-life-story #riot-change .riotCompareChampionArt{
+    object-position:50% 33%;
+  }
+  #riot-life-story #riot-change .riotCompareGrid{
+    grid-template-columns:minmax(0,1fr);
+    gap:10px!important;margin-top:18px;
+  }
+  #riot-life-story #riot-change .riotCompareGrid article{
+    min-height:125px;padding:16px!important;
+  }
+  #riot-life-story #riot-change .riotCompareGrid article>div>span b{
+    font-size:clamp(21px,6vw,26px)!important;
+  }
+  #riot-life-story #riot-change .riotCompareMeta{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
