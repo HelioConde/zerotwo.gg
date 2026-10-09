@@ -163,6 +163,10 @@ body:has(.publicPlayerResult) .ztLanguageSwitcher{
    .gamingLanding previously had overflow:hidden, making it an implicit
    vertical scroll container and preventing position:sticky from following
    the document scroll. overflow:clip clips decoration without creating one. */
+html,body,#root{
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+}
 .gamingLanding{
   overflow-x:clip!important;
   overflow-y:visible!important;
