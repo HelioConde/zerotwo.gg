@@ -101,12 +101,12 @@ try{
     assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/);
     const sharePanel=page.locator('.riotSharePanel');
     await sharePanel.waitFor({state:'visible',timeout:25000});
-    const storyImage=sharePanel.locator('.riotSharePreview>img');
+    const storyImage=sharePanel.locator('.riotSharePreviewBackground');
     const imageSrc=await storyImage.getAttribute('src');
     const imageResponse=await page.request.get(new URL(imageSrc,page.url()).href);
     assert.equal(imageResponse.status(),200,name+': story image URL resolves');
     await storyImage.scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>{const image=document.querySelector('.riotSharePreview>img');return image?.complete&&image.naturalWidth>0;},null,{timeout:12000});
+    await page.waitForFunction(()=>{const image=document.querySelector('.riotSharePreviewBackground');return image?.complete&&image.naturalWidth>0;},null,{timeout:12000});
     const championArt=sharePanel.locator('.riotSharePreviewChampionArt');
     await championArt.waitFor({state:'visible',timeout:15000});
     assert.match(await championArt.getAttribute('src'),/\/Ahri_0\.jpg$/,name+': correct featured champion');
