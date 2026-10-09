@@ -49,6 +49,17 @@ try{
     });
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
+    // Full-page screenshots do not automatically trigger below-fold loading.
+    // Visit the four home chapters before capturing them, then verify real bytes
+    // were decoded (not merely an HTML image placeholder).
+    const homeArts=page.locator('.homeJourney .homeJourneyArt');
+    assert.equal(await homeArts.count(),4,name+': expected four authored home illustrations');
+    for(const art of await homeArts.all()){
+      await art.scrollIntoViewIfNeeded();
+      await art.evaluate(async img=>{await img.decode();});
+      assert.equal(await art.evaluate(img=>img.naturalWidth>0),true,name+': home image failed to decode');
+    }
+    await page.evaluate(()=>window.scrollTo(0,0));
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-home.png',fullPage:true,animations:'disabled'});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').fill('ZeroTwo Fixture#BR1');
     await page.getByRole('button',{name:/VER RIOT LIFE/}).click();
