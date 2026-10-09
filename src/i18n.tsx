@@ -11,6 +11,8 @@ const LanguageContext=createContext<{language:ZtLanguage;setLanguage:(language:Z
 const EN:Record<string,string>={
   // Guided reading, mobile-first product language
   'LEITURA DO SEU PERFIL':'YOUR PROFILE IN CHAPTERS',
+  'IR PARA CAPÍTULO':'GO TO CHAPTER',
+  'Escolha um capítulo da Riot Life':'Choose a Riot Life chapter',
   'Modo de leitura':'Reading mode',
   'Escolher modo de leitura':'Choose reading mode',
   'Resumo em quatro capítulos':'Four-chapter summary',
