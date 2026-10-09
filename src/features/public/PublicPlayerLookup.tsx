@@ -155,6 +155,7 @@ export function PublicPlayerLookup(){
   <div><small>HISTÓRICO OBSERVADO</small><b>{data.matches?.length||0} partidas carregadas</b><p>Começamos com uma amostra menor para preservar velocidade e limites da API. Os dados da Riot podem ser expandidos para até 100 partidas.</p>
    {data.status?.mastery==='unavailable'&&<p className="historyDepthWarning">A maestria não pôde ser consultada agora; isso não significa que o jogador não tenha maestria.</p>}
    {data.status?.history==='partial'&&<p className="historyDepthWarning">A Riot retornou apenas parte das partidas solicitadas.</p>}
+   {depthLoading&&<p className="historyDepthProgress" role="status">Buscando partidas adicionais na Riot. O histórico atual continua disponível; na primeira consulta, a expansão pode levar cerca de um minuto.</p>}
    {depthError&&<p className="historyDepthWarning" role="alert">{depthError}</p>}
   </div>
   {((Number(data.cache?.requested||20)<100&&Number(data.cache?.availableIds||0)>=Number(data.cache?.requested||20))||Number(data.cache?.pending||0)>0)&&<button onClick={extendHistory} disabled={depthLoading} aria-busy={depthLoading}>{depthLoading?'AMPLIANDO HISTÓRICO...':Number(data.cache?.requested||20)>=100?'TENTAR COMPLETAR HISTÓRICO':'ANALISAR ATÉ 100 PARTIDAS →'}</button>}
