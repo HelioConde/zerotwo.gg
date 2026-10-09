@@ -1,0 +1,123 @@
+/* ZeroTwo image audit 09/10 — give artwork breathing room without sacrificing readability.
+ * Asset files are kept separate from UI content. In particular, the 02/03 home
+ * scenes must render when scrolled into view, not disappear under solid overlays.
+ */
+.homeJourney .homeJourneyChapter {
+  isolation:isolate;
+  border-color:rgba(173,198,255,.17)!important;
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+.homeJourney .homeJourneyChapter:hover {
+  border-color:rgba(169,203,255,.35)!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.35),0 0 40px rgba(107,99,234,.09)!important;
+}
+.homeJourney .homeJourneyChapter>.homeJourneyArt {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  opacity:.92!important;
+  object-fit:cover!important;
+  object-position:74% 47%!important;
+  filter:saturate(1.06) contrast(1.09)!important;
+  transform:scale(1.006);
+}
+.homeJourney .homeJourneyRemember>.homeJourneyArt {object-position:75% 48%!important}
+.homeJourney .homeJourneyPeople>.homeJourneyArt {object-position:76% 47%!important}
+.homeJourney .homeJourneyChapter:before {
+  z-index:1!important;
+  opacity:1!important;
+  background:linear-gradient(90deg,
+    rgba(5,8,15,.98) 0%,rgba(5,8,15,.91) 31%,
+    rgba(5,8,15,.66) 54%,rgba(5,8,15,.20) 78%,rgba(5,8,15,.30) 100%)!important;
+}
+.homeJourney .homeJourneyChapter>div,.homeJourney .homeJourneyChapter>aside,
+.homeJourney .homeJourneyChapter>.homeJourneyNo {position:relative;z-index:2}
+.homeJourney .homeJourneyChapter h2 {text-wrap:balance}
+.homeJourney .homeJourneyChapter p {
+  color:#c2cadb!important;
+  font-size:clamp(12px,1.06vw,14px)!important;
+  line-height:1.58!important;
+}
+.homeJourney .homeJourneyChapter>aside {
+  background:rgba(3,7,17,.83)!important;
+  border-color:rgba(188,214,255,.25)!important;
+  backdrop-filter:blur(12px);
+}
+.homeJourney .homeJourneyChapter>aside small {
+  font-size:11px!important;
+  color:#a8b5cb!important;
+  line-height:1.5!important;
+}
+.homeJourney .homeJourneyChapter>aside b{font-size:12px!important;line-height:1.3!important}
+.homeJourney .homeJourneyEnd>.homeJourneyEndArt{opacity:.67!important;filter:saturate(1.15)!important}
+.homeJourney .homeJourneyEnd:before {
+  background:linear-gradient(90deg,#06080df6 0%,#06080ddc 42%,#06080d60 100%)!important
+}
+/* Long-form chapters: keep the data readable but restore photographic separation. */
+#riot-life-story .riotDeepChapter>.riotDeepArt {
+  opacity:.66!important;
+  filter:saturate(1.03) contrast(1.08) brightness(.97)!important;
+  object-position:75% 45%;
+}
+#riot-life-story .riotDeepChapter>.riotDeepArtSecondary {opacity:.27!important}
+#riot-life-story .riotDeepChapter>.riotDeepArtShade {
+  background:linear-gradient(90deg,
+    rgba(5,9,16,.99) 0%,rgba(5,9,16,.93) 29%,
+    rgba(5,9,16,.74) 53%,rgba(5,9,16,.38) 82%,rgba(5,9,16,.28) 100%),
+    linear-gradient(0deg,rgba(5,9,16,.6),transparent 60%)!important;
+}
+#riot-life-story .riotDeepCopy p,#riot-life-story .riotChapterCopy p,
+#riot-life-story .riotChapterGroupIntro p {
+  color:#b7c2d1!important;
+  font-size:clamp(12px,1vw,14px)!important;
+  line-height:1.65!important;
+}
+#riot-life-story .riotChapterGroupIntro>.riotGroupArtwork,
+#riot-life-story .riotChapterGroupIntro .riotGroupArtwork{opacity:.65!important}
+#riot-life-story .riotChapterGroupIntro .riotGroupArtworkShade {
+  background:linear-gradient(90deg,#050910f9 0%,#050910db 39%,#05091070 78%,#05091040 100%)!important;
+}
+#riot-life-story .riotMasteryArtwork{opacity:.54!important}
+#riot-life-story .riotLifeIntroArtwork {opacity:.40!important}
+#riot-life-story .riotNarrativeArt{opacity:.62!important}
+#riot-life-story .riotChapterHeroMetric,#riot-life-story .riotDeepMetrics>span{
+  backdrop-filter:blur(10px);
+}
+@media(max-width:760px){
+  .homeJourney .homeJourneyChapter{isolation:isolate;min-height:395px!important}
+  .homeJourney .homeJourneyChapter>.homeJourneyArt {
+    opacity:.90!important;
+    object-position:63% 38%!important;
+    transform:none;
+  }
+  .homeJourney .homeJourneyChapter:before {
+    background:linear-gradient(0deg,
+      rgba(5,8,15,.99) 0%,rgba(5,8,15,.96) 38%,
+      rgba(5,8,15,.66) 63%,rgba(5,8,15,.14) 100%)!important;
+  }
+  .homeJourney .homeJourneyChapter>div {padding-top:112px!important}
+  .homeJourney .homeJourneyChapter p{font-size:13px!important;line-height:1.65!important}
+  .homeJourney .homeJourneyChapter>aside{min-height:86px!important}
+  .homeJourney .homeJourneyEnd:before {
+    background:linear-gradient(0deg,#06080dfa 0%,#06080deb 45%,#06080d38 100%)!important;
+  }
+  #riot-life-story .riotDeepChapter>.riotDeepArt {
+    opacity:.50!important;
+    object-position:70% 28%;
+  }
+  #riot-life-story .riotDeepChapter>.riotDeepArtSecondary{opacity:.14!important}
+  #riot-life-story .riotDeepChapter>.riotDeepArtShade {
+    background:linear-gradient(0deg,
+      rgba(5,9,16,.99) 0%,rgba(5,9,16,.91) 52%,
+      rgba(5,9,16,.38) 100%)!important;
+  }
+  #riot-life-story .riotGroupArtwork{opacity:.43!important}
+  #riot-life-story .riotMasteryArtwork{opacity:.32!important}
+  #riot-life-story .riotNarrativeArt{opacity:.42!important}
+  #riot-life-story .riotDeepCopy p,#riot-life-story .riotChapterCopy p,
+  #riot-life-story .riotChapterGroupIntro p{font-size:12px!important;line-height:1.62!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .homeJourney .homeJourneyChapter{transition:none}
+  .homeJourney .homeJourneyChapter>.homeJourneyArt{transform:none}
+}
