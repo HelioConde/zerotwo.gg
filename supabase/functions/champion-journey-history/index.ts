@@ -39,13 +39,27 @@ Deno.serve(async(req:Request)=>{
     .select("captured_at,sample_matches,signature,champions,source_version")
     .eq("profile_key",profileKey)
     .order("captured_at",{ascending:false})
-    .limit(limit);
+    .limit(Math.min(72,limit*3));
 
   if(error)return json({error:"history_unavailable"},503);
 
+  // JSONB reorders object keys; compare normalized fields rather than raw JSON
+  // to keep repeated identical Riot samples from looking like progression.
+  const canonical=(champions:any)=>JSON.stringify((Array.isArray(champions)?champions:[]).map((x:any)=>({
+    name:String(x.name||""),games:Number(x.games||0),avgKda:x.avgKda==null?null:Number(x.avgKda),
+    masteryPoints:Number(x.masteryPoints||0),masteryLevel:Number(x.masteryLevel||0)
+  })));
+  const distinct:any[]=[];
+  let priorState="";
+  for(const row of (data||[])){
+    const state=JSON.stringify([Number(row.sample_matches||0),String(row.signature||""),canonical(row.champions)]);
+    if(state===priorState)continue;
+    distinct.push(row);
+    priorState=state;
+  }
   return json({
     profileKey,
-    snapshots:(data||[]).reverse().map((x:any)=>({
+    snapshots:distinct.slice(0,limit).reverse().map((x:any)=>({
       capturedAt:new Date(x.captured_at).getTime(),
       sampleMatches:Number(x.sample_matches||0),
       signature:x.signature||null,
