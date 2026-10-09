@@ -12,13 +12,13 @@
 
 ## Required verification before 9.5/10 sign-off
 
-- [ ] GitHub Pages deploy **success** after latest commit; verify actual served commit/build.
-- [ ] GitHub Actions **ZeroTwo Visual QA** success with screenshots reviewed (home, fixture 20/100 both viewports).
-- [ ] Supabase workflow deploy succeeded (both functions) on project `bieihhaobdztjyoweewa`, or equivalent manual deploy verified.
-- [ ] Live lookup AlchemyFlames#BR1: rank, mastery and recent matches with non-empty data where Riot provides them.
+- [x] GitHub Pages build and publish succeeded for commit `049a3b1` (GitHub Actions run 37879665451); later pushes need their own verification.
+- [x] GitHub Actions **ZeroTwo Visual QA** passed for synthetic fixture, desktop/mobile (run 37879665358).
+- [ ] BLOCKED: public Edge Function deployment fails because GitHub Actions secret `SUPABASE_ACCESS_TOKEN` has an invalid token format. Action 37879655882 reported `Invalid access token format. Must be like sbp_...`. It is populated but not a valid personal access token.
+- [x] Live `AlchemyFlames#BR1` lookup returned HTTP 200 with 20/20 matches, 2 ranked queue entries, 5 mastery entries (run 37880138971).
 - [ ] Live extended history: no duplicate fetches, correct pending/rateLimited status, no timeout.
 - [ ] Rate-limit test: HTTP 429 shows retry guidance, not "no history"/"no teammates".
-- [ ] Manual mobile/desktop audit and keyboard-navigation audit.
+- [ ] Review final full chapter rendering on mobile + keyboard-navigation audit. Initial real-browser smoke succeeded on desktop and mobile, but mobile screenshot was taken during lazy chapter loading; test is being tightened.
 - [ ] Secure rotation of Riot development key previously posted in a conversation; keep only in the backend.
 - [ ] Confirm production API key entitlement before public operation. Development keys are not authorized for public products.
 
@@ -51,4 +51,4 @@ Never log complete secrets.
 - Frontend: `src/features/public/PublicPlayerLookup.tsx`
 - UI: `src/polish-2026-10-09.css`
 
-**Gate status:** source-level checks passed; real deployment, live Riot data, screenshots and build result still need independent confirmation. Do not claim 9.5/10 until the checklist is complete.
+**Gate status:** live data, production frontend build, desktop/mobile base UI, and synthetic screenshot tests passed. Backend rollout is blocked by an invalid Supabase personal access token stored in GitHub Actions; the live endpoint returns data but lacks the newer `status.ranked`/`status.mastery` fields, confirming that the backend version remains outdated. Real 100-match expansion and full mobile chapter rendering have not been approved yet. Do not claim 9.5/10 until those checks and the Supabase deploy succeed.
