@@ -144,3 +144,16 @@ body:has(.publicPlayerResult) .ztLanguageSwitcher{
     min-height:47px;
   }
 }
+
+/* Cold Riot API requests may approach 50s. Keep the current sample usable. */
+.historyDepthPanel .historyDepthProgress{
+  color:#b9e4ff!important;
+  background:rgba(117,221,255,.055);
+  border-left:2px solid #75ddff;
+  border-radius:0 7px 7px 0;
+  padding:8px 10px;
+  margin-top:11px;
+  max-width:72ch;
+  font-size:12px;
+  line-height:1.5;
+}
