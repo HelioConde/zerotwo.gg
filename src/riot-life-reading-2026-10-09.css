@@ -165,3 +165,62 @@
   #riot-life-story .riotStoryCoverage small{font-size:10px!important}
   #riot-life-story .riotStoryCoverage em{font-size:11px!important}
 }
+
+
+/* Chapter index: use a native select instead of requiring 20 tiny mobile tabs.
+   Keep the original links horizontally scrollable for quick adjacent navigation. */
+.riotChapterJump{display:none}
+@media(max-width:700px){
+  #riot-life-story .riotStoryNav .riotStoryCurrent{display:none!important}
+  #riot-life-story .riotStoryNav .riotChapterJump{
+    position:sticky;
+    left:0;
+    z-index:8;
+    display:flex;
+    flex:0 0 clamp(172px,48vw,212px);
+    min-width:0;
+    flex-direction:column;
+    justify-content:center;
+    gap:3px;
+    align-self:stretch;
+    padding:5px 9px;
+    border-right:1px solid rgba(255,255,255,.16);
+    background:#070b12;
+    box-shadow:9px 0 16px #05070bba;
+  }
+  #riot-life-story .riotChapterJump>span{
+    color:#ff99b8;
+    font:850 9px/1.2 ui-monospace,monospace;
+    letter-spacing:.65px;
+  }
+  #riot-life-story .riotChapterJump select{
+    appearance:auto;
+    display:block;
+    width:100%;
+    min-width:0;
+    min-height:39px;
+    padding:6px 5px;
+    border:1px solid #ffffff38;
+    border-radius:7px;
+    background:#161c2a;
+    color:#f6f9fc;
+    font:800 12px/1.3 ui-sans-serif,system-ui,sans-serif;
+    cursor:pointer;
+  }
+  #riot-life-story .riotChapterJump select:focus-visible{
+    outline:3px solid #75ddff;
+    outline-offset:1px;
+  }
+  #riot-life-story .riotStoryNav a{
+    min-height:62px!important;
+    flex-basis:99px!important;
+    min-width:99px!important;
+  }
+  #riot-life-story .riotStoryNav a b{
+    font-size:10.5px!important;
+  }
+  #riot-life-story .riotStoryNav a span{
+    font-size:10px!important;
+  }
+  #riot-life-story .riotStoryReadout{display:none}
+}
