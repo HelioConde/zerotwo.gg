@@ -1,0 +1,116 @@
+/* ZeroTwo profile quick actions — deliberate navigation, no dead hash links. */
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction{
+  grid-row:auto!important;
+  grid-column:auto!important;
+  min-height:39px!important;
+  width:100%;
+  padding:8px!important;
+  font:800 10px/1.35 ui-sans-serif,system-ui,sans-serif!important;
+  letter-spacing:.15px;
+  border-radius:8px;
+  border:1px solid #ffffff1c;
+  background:#141821;
+  color:#e4eaf2;
+  cursor:pointer;
+}
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction:hover{
+  border-color:#ff477e80;
+  color:white;
+  background:#1b1a28;
+}
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction:focus-visible{
+  outline:3px solid #75ddff;
+  outline-offset:2px;
+}
+.publicPlayerResult .profileQuickNav{
+  display:grid!important;
+  grid-template-columns:minmax(130px,.8fr) repeat(4,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:9px!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-width:none!important;
+  margin:0 0 15px!important;
+  padding:12px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:13px;
+  background:linear-gradient(110deg,#111420,#0a0e15 75%);
+}
+.publicPlayerResult .profileQuickNav>span{
+  padding-left:9px;
+  min-width:0;
+  font:850 10px/1.35 ui-monospace,monospace;
+  letter-spacing:.8px;
+  color:#b4c4d6;
+}
+.publicPlayerResult .profileQuickNav>button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-width:0;
+  min-height:44px;
+  padding:10px 7px;
+  border:1px solid #ffffff20;
+  border-radius:9px;
+  background:#141923;
+  color:#e9f0f7;
+  font:850 11px/1.3 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.15px;
+  cursor:pointer;
+  transition:border-color .16s,background .16s;
+}
+.publicPlayerResult .profileQuickNav>button:hover{
+  border-color:#ff6898aa;
+  background:#241724;
+}
+.publicPlayerResult .profileQuickNav>button:focus-visible{
+  outline:3px solid #75ddff;
+  outline-offset:2px;
+}
+.publicPlayerResult .profileQuickNav>button svg{
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+  color:#ff8eb1;
+}
+#riot-evidence{scroll-margin-top:90px}
+@media(max-width:700px){
+  .publicPlayerResult .playerIdentityActions>.playerEvidenceAction{
+    min-height:44px!important;
+    padding:8px!important;
+    font-size:11px!important;
+  }
+  .publicPlayerResult .playerIdentityActions>a,
+  .publicPlayerResult .playerIdentityActions>.playerShare{
+    font-size:11px!important;
+    min-height:44px!important;
+    letter-spacing:.08px!important;
+  }
+  .publicPlayerResult .profileQuickNav{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin:0 0 13px!important;
+    padding:12px!important;
+  }
+  .publicPlayerResult .profileQuickNav>span{
+    grid-column:1/-1;
+    padding:0 2px 3px;
+    font-size:10px;
+  }
+  .publicPlayerResult .profileQuickNav>button{
+    min-height:48px;
+    padding:10px;
+    font-size:12px;
+    justify-content:flex-start;
+  }
+  .publicPlayerResult .profileQuickNav>button svg{
+    width:17px;
+    height:17px;
+    flex-basis:17px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .publicPlayerResult .profileQuickNav>button{transition:none}
+}
