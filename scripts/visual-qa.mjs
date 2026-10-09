@@ -71,10 +71,28 @@ try{
     const story=page.locator('#riot-life-story');
     const readingBar=story.locator('.riotReadingBar');
     await readingBar.waitFor({state:'visible',timeout:15000});
+    const shortcuts=page.locator('.profileQuickNav');
+    assert.equal(await shortcuts.isVisible(),true,name+': profile navigation shortcuts visible');
+    const vault=page.locator('#riot-evidence');
+    await shortcuts.getByRole('button',{name:/PARTIDAS/}).click();
+    assert.equal(await vault.getAttribute('open'),'','Quick Partidas shortcut must expand evidence');
+    assert.equal(await vault.locator('button[data-view="matches"]').getAttribute('aria-pressed'),'true','Partidas tab must be active');
+    assert.equal(await vault.locator('#profile-matches').isVisible(),true,'Match history must be readable');
+    await shortcuts.getByRole('button',{name:/CAMPEÕES/}).click();
+    assert.equal(await vault.locator('button[data-view="champions"]').getAttribute('aria-pressed'),'true','Campeões tab must be active');
+    await shortcuts.getByRole('button',{name:/DNA/}).click();
+    assert.equal(await vault.locator('button[data-view="dna"]').getAttribute('aria-pressed'),'true','DNA tab must be active');
+    await page.locator('.playerEvidenceAction').click();
+    assert.equal(await vault.getAttribute('open'),'','Evidence action must expand details');
+    assert.equal(await vault.locator('button[data-view="moment"]').getAttribute('aria-pressed'),'true','Evidence defaults to signs');
+    await shortcuts.getByRole('button',{name:/HISTÓRIA/}).click();
+    const storyTop=await story.evaluate(el=>el.getBoundingClientRect().top);
+    assert.ok(storyTop>0&&storyTop<160,name+': História shortcut must scroll to story: '+storyTop);
+    await vault.evaluate(el=>{el.open=false});
     assert.equal(await story.getAttribute('data-reading-mode'),name==='mobile'?'compact':'full',name+': default chapter reading mode');
     const deepChapter=story.locator('#riot-trend');
     if(name==='mobile'){
-      assert.equal(await deepChapter.isVisible(),false,'Mobile quick summary hides deep chapters until requested');
+      assert.equal(await deepChapter.count(),0,'Mobile quick summary does not mount advanced chapters');
       const compactHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
       await page.screenshot({path:'visual-qa-artifacts/'+name+'-quick-summary.png',fullPage:true,animations:'disabled'});
       await readingBar.getByRole('button',{name:'HISTÓRIA COMPLETA'}).click();
@@ -83,7 +101,7 @@ try{
         'Mobile quick summary should be materially shorter than 20 chapters: '+compactHeight+' / '+fullHeight);
       assert.equal(await deepChapter.isVisible(),true,'Full story switch should reveal deep chapters');
       await readingBar.getByRole('button',{name:'RESUMO RÁPIDO'}).click();
-      assert.equal(await deepChapter.isVisible(),false,'Quick summary switch should hide deep chapters again');
+      assert.equal(await deepChapter.count(),0,'Quick summary switch should unmount heavy chapters again');
     }
     // Click the actual chapter rail (rather than relying on the URL hash).
     // Verify navigation changes scroll position and reveals the target below
