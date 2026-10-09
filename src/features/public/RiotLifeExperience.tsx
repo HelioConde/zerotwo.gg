@@ -4,6 +4,7 @@ import { flushSync } from 'react-dom';
 import { Icon } from '../../components/ZeroTwoUI';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
+import { RiotShareCard } from './RiotShareCard';
 import { FrequentTeammates } from './FrequentTeammates';
 import { PlayerEras } from './PlayerEras';
 import {
@@ -937,6 +938,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       <button type="button" onClick={()=>setReadingMode('full')}>ABRIR HISTÓRIA COMPLETA <span aria-hidden="true">↗</span></button>
     </div>}
 
+    <RiotShareCard data={data}/>
     <footer className="riotStoryEnd">
       <Icon name="dna"/>
       <div><small>FIM DA HISTÓRIA PRINCIPAL</small><b>AS EVIDÊNCIAS CONTINUAM DISPONÍVEIS ABAIXO.</b><p>Partidas, campeões, maestria e contexto ficam separados da narrativa para não competir com ela.</p></div>
