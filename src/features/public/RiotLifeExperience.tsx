@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
+import { flushSync } from 'react-dom';
 import { Icon } from '../../components/ZeroTwoUI';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
@@ -13,6 +14,7 @@ import {
 } from './riotLifeMemory';
 import '../../riot-life.css';
 import '../../riot-life-polish-2026-10-02.css';
+import '../../riot-life-reading-2026-10-09.css';
 import { getLocale } from '../../i18n';
 
 type RiotLifeProps={
@@ -162,6 +164,11 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const [memoryMode,setMemoryMode]=useState<'checking'|'local'|'cloud'>('checking');
   const [memoryReady,setMemoryReady]=useState(false);
   const [lifeView,setLifeView]=useState<'overview'|'story'|'explore'>('overview');
+  const [readingMode,setReadingMode]=useState<'compact'|'full'>(()=>{
+    if(typeof window==='undefined')return 'full';
+    const deepLink=window.location.hash.slice(1);
+    return window.matchMedia('(max-width: 700px)').matches&&!deepLink?'compact':'full';
+  });
   const [activeChapter,setActiveChapter]=useState<string>('riot-now');
   const storyNavRef=useRef<HTMLElement|null>(null);
 
@@ -171,6 +178,11 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     const target=document.getElementById(id);
     if(!target)return;
     event.preventDefault();
+    // Unhide deeper chapters before measuring positions: otherwise hidden
+    // sections return a stale zero-sized rectangle and clicks appear broken.
+    if(readingMode==='compact'&&!['riot-now','riot-signature','riot-mastery','riot-change'].includes(id)){
+      flushSync(()=>setReadingMode('full'));
+    }
     const nav=storyNavRef.current;
     const stickyTop=nav?parseFloat(window.getComputedStyle(nav).top)||0:0;
     const navHeight=nav?.getBoundingClientRect().height||0;
@@ -193,7 +205,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     },{rootMargin:'-22% 0px -58% 0px',threshold:[.1,.25,.5]});
     sections.forEach(section=>observer.observe(section));
     return()=>observer.disconnect();
-  },[matches.length]);
+  },[matches.length,readingMode]);
 
   useEffect(()=>{
     const nav=storyNavRef.current;
@@ -573,7 +585,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     ?matches.length+' partidas já carregadas de '+Math.max(availableDepth,requestedDepth)+' solicitadas. O restante entra conforme o limite temporário da Riot permite.'
     :matches.length<30?'Amostra pequena: trate padrões como sinais iniciais.':matches.length<75?'Amostra em formação: a leitura fica mais confiável conforme o histórico cresce.':'Amostra suficiente para padrões recentes com melhor contexto.';
 
-  return <section id="riot-life-story" className="riotStory" aria-label="Riot Life em capítulos">
+  return <section id="riot-life-story" className="riotStory" data-reading-mode={readingMode} aria-label="Riot Life em capítulos">
     <header className="riotStoryIntro riotStoryIntroWithArt">
       <img className="riotLifeIntroArtwork" loading="eager" decoding="async" src={z2Art('Duelo Celestial entre Luz e Sombra.png')} alt="" aria-hidden="true"/>
       <div className="riotLifeIntroArtShade"/>
@@ -590,6 +602,14 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
       <div className="riotSampleNote" data-tone={matches.length<30?'low':matches.length<75?'mid':'good'}><Icon name="status"/><span><b>{sampleQuality}</b><small>{sampleWarning}</small></span></div>
     </header>
+
+    <div className="riotReadingBar" aria-label="Modo de leitura">
+      <div className="riotReadingBarCopy"><small>LEITURA DO SEU PERFIL</small><b>{readingMode==='compact'?'Resumo em quatro capítulos':'História completa em vinte capítulos'}</b><span>{readingMode==='compact'?'Veja o essencial primeiro. Nenhum dado é perdido.':'Explore todos os padrões. Você pode voltar ao resumo.'}</span></div>
+      <div className="riotReadingOptions" role="group" aria-label="Escolher modo de leitura">
+        <button type="button" aria-pressed={readingMode==='compact'} className={readingMode==='compact'?'active':''} onClick={()=>setReadingMode('compact')}>RESUMO RÁPIDO</button>
+        <button type="button" aria-pressed={readingMode==='full'} className={readingMode==='full'?'active':''} onClick={()=>setReadingMode('full')}>HISTÓRIA COMPLETA</button>
+      </div>
+    </div>
 
     <nav ref={storyNavRef} className="riotStoryNav" aria-label="Capítulos da Riot Life">
       <span className="riotStoryCurrent"><small>CAPÍTULO {chapterIndex+1}/{RIOT_CHAPTERS.length}</small><b>{RIOT_CHAPTERS[chapterIndex]?.[1]||'AGORA'}</b></span>
@@ -876,6 +896,12 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
         </div>
       </section>
     </div>
+    {readingMode==='compact'&&<div className="riotReadingContinue">
+      <small>QUER EXPLORAR MAIS?</small>
+      <h3>OS OUTROS CAPÍTULOS ESTÃO A UM TOQUE.</h3>
+      <p>Compare tendência, pessoas, impacto, economia, horários e muito mais sem perder a visão rápida.</p>
+      <button type="button" onClick={()=>setReadingMode('full')}>ABRIR HISTÓRIA COMPLETA <span aria-hidden="true">↗</span></button>
+    </div>}
 
     <footer className="riotStoryEnd">
       <Icon name="dna"/>
