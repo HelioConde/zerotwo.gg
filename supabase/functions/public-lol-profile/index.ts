@@ -74,8 +74,8 @@ Deno.serve(async(req:Request)=>{
  const mainContext=modeSummaries[0]?.name||null,primaryPosition=tops(srSample.filter((x:any)=>x.position),"position",1)[0]?.name||null,wins=sample.filter((x:any)=>x.win).length;const championSummaries=tops(sample,"champion",5).map((c:any)=>{const list=sample.filter((x:any)=>x.champion===c.name),arenaList=list.filter((x:any)=>x.context==="ARENA"),nonArena=list.filter((x:any)=>x.context!=="ARENA"),cw=nonArena.filter((x:any)=>x.win).length,placements=arenaList.map((x:any)=>x.placement).filter((x:any)=>Number(x)>0).map(Number);return{name:c.name,games:list.length,wins:cw,winRate:nonArena.length?Math.round(cw/nonArena.length*100):null,arenaGames:arenaList.length,avgPlacement:placements.length?+(placements.reduce((a:number,b:number)=>a+b,0)/placements.length).toFixed(1):null,top4Rate:placements.length?Math.round(placements.filter((x:number)=>x<=4).length/placements.length*100):null,avgKda:avg(list,"kda"),avgDamagePerMin:avg(list,"damagePerMin"),contexts:Array.from(new Set(list.map((x:any)=>x.context)))}});
  const rankRows=(ranked.ok&&Array.isArray(ranked.data)?ranked.data:[]).filter((x:any)=>x.queueType==="RANKED_SOLO_5x5"||x.queueType==="RANKED_FLEX_SR").map((x:any)=>({queue:x.queueType==="RANKED_SOLO_5x5"?"SOLO/DUO":"FLEX",tier:x.tier,rank:x.rank,lp:x.leaguePoints,wins:x.wins,losses:x.losses,winRate:(x.wins+x.losses)?Math.round(x.wins/(x.wins+x.losses)*100):0}));
  const masteryRows=(mastery.ok&&Array.isArray(mastery.data)?mastery.data:[]).map((x:any)=>({championId:x.championId,championName:sample.find((r:any)=>Number(r.championId)===Number(x.championId))?.champion||null,level:x.championLevel,points:x.championPoints,lastPlayTime:x.lastPlayTime}));
- const journeySnapshotsEnabled=String(Deno.env.get("CHAMPION_JOURNEY_SNAPSHOTS_ENABLED")||"").toLowerCase()==="true";
- if(journeySnapshotsEnabled){
+ const journeySnapshotsEnabled=String(Deno.env.get("CHAMPION_JOURNEY_SNAPSHOTS_ENABLED")||"true").toLowerCase()!=="false";
+ if(journeySnapshotsEnabled&&sample.length>0){
    try{
      const profileKey=plat+":"+String(account.gameName||gn).toLowerCase()+"#"+String(account.tagLine||tl).toLowerCase();
      const journeyChampions=championSummaries.map((c:any)=>{
@@ -85,7 +85,7 @@ Deno.serve(async(req:Request)=>{
      const {data:previous}=await db.from("lol_champion_journey_snapshots").select("sample_matches,signature,champions").eq("profile_key",profileKey).order("captured_at",{ascending:false}).limit(1).maybeSingle();
      const signature=journeyChampions[0]?.name||null;
      const unchanged=previous&&Number(previous.sample_matches||0)===sample.length&&String(previous.signature||"")===String(signature||"")&&JSON.stringify(previous.champions||[])===JSON.stringify(journeyChampions);
-     if(!unchanged)await db.from("lol_champion_journey_snapshots").insert({profile_key:profileKey,game_name:account.gameName||gn,tag_line:account.tagLine||tl,platform:plat,captured_at:new Date().toISOString(),sample_matches:sample.length,signature,champions:journeyChampions,source_version:"public-lol-profile-v1"});
+     if(!unchanged){const {error:writeError}=await db.from("lol_champion_journey_snapshots").insert({profile_key:profileKey,game_name:account.gameName||gn,tag_line:account.tagLine||tl,platform:plat,captured_at:new Date().toISOString(),sample_matches:sample.length,signature,champions:journeyChampions,source_version:"public-lol-profile-v1"});if(writeError)throw writeError;}
    }catch(e){console.warn("champion journey snapshot skipped",e instanceof Error?e.message:String(e))}
  }
  const enough=sample.length>0,mainMode=modeSummaries[0]||null;
