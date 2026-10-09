@@ -61,8 +61,12 @@ try{
     assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/);
     const sharePanel=page.locator('.riotSharePanel');
     await sharePanel.waitFor({state:'visible',timeout:25000});
-    assert.equal(await sharePanel.locator('.riotSharePreview>img').evaluate(img=>img.complete&&img.naturalWidth>0),
-      true,name+': 9:16 story artwork loads from the public folder');
+    const storyImage=sharePanel.locator('.riotSharePreview>img');
+    const imageSrc=await storyImage.getAttribute('src');
+    const imageResponse=await page.request.get(new URL(imageSrc,page.url()).href);
+    assert.equal(imageResponse.status(),200,name+': story image URL resolves');
+    await storyImage.scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>{const image=document.querySelector('.riotSharePreview>img');return image?.complete&&image.naturalWidth>0;},null,{timeout:12000});
     assert.match(await sharePanel.innerText(),/PARTIDAS OBSERVADAS/);
     if(name==='desktop'){
       const downloadReady=page.waitForEvent('download',{timeout:15000});
