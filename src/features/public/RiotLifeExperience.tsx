@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
 import { MyRiotPatch } from './MyRiotPatch';
 import { RiotArcade } from './RiotArcade';
@@ -166,7 +167,7 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
 
   // Explicit chapter navigation is needed: relying on the browser's default
   // fragment jump does not consistently account for the sticky chapter rail.
-  function jumpToChapter(event:React.MouseEvent<HTMLAnchorElement>,id:string){
+  function jumpToChapter(event:MouseEvent<HTMLAnchorElement>,id:string){
     const target=document.getElementById(id);
     if(!target)return;
     event.preventDefault();
