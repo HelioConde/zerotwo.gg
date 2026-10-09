@@ -74,7 +74,7 @@ function normalizeRiotId(value:string){
 }
 
 export function PublicPlayerLookup(){
- const {language}=useLanguage();
+ const {language,setLanguage}=useLanguage();
  const ddragonLocale=language==='en'?'en_US':'pt_BR';
  const initialParams=new URLSearchParams(location.search);const [q,setQ]=useState(()=>initialParams.get('player')||''),[platform,setPlatform]=useState(()=>initialParams.get('server')||'br1'),[loading,setLoading]=useState(false),[error,setError]=useState(''),[data,setData]=useState<any>(null),[champions,setChampions]=useState<any>({}),[ddv,setDdv]=useState('16.17.1'),[matchFilter,setMatchFilter]=useState('ALL'),[openMatch,setOpenMatch]=useState<string|null>(null),[changes,setChanges]=useState<any>(null),[shareStatus,setShareStatus]=useState(''),[recentPlayers,setRecentPlayers]=useState<Array<{riotId:string,platform:string,searchedAt:number}>>(()=>{try{const v=JSON.parse(localStorage.getItem('zt_recent_players')||'[]');return Array.isArray(v)?v.slice(0,5):[]}catch{return[]}}),[showMomentExplanation,setShowMomentExplanation]=useState(false),[profileView,setProfileView]=useState<'moment'|'dna'|'champions'|'matches'>('moment'),[championView,setChampionView]=useState<'recent'|'mastery'>('recent'),[matchLimit,setMatchLimit]=useState(5);
  const publicSearchStarted=useRef(false);
@@ -146,7 +146,10 @@ export function PublicPlayerLookup(){
   <div className="playerIdentityRanks">
    {data.ranked?.length>0?data.ranked.slice(0,2).map((r:any)=><span key={r.queue}><small>{r.queue}</small><b>{r.tier} {r.rank}</b><em>{r.lp} LP · {r.winRate}% WR</em></span>):<span><small>RANK OFICIAL</small><b>{data.status?.ranked==='unavailable'?'INDISPONÍVEL':'SEM RANK'}</b><em>{data.status?.ranked==='unavailable'?'Falha temporária da Riot':'nesta consulta'}</em></span>}
   </div>
-  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button></div>
+  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><div className="playerLocaleActions" role="group" aria-label="Idioma da Riot Life">
+     <button type="button" title="Português (Brasil)" onClick={()=>setLanguage('pt-BR')} aria-pressed={language==='pt-BR'} className={language==='pt-BR'?'active':''}>PT-BR</button>
+     <button type="button" title="English" onClick={()=>setLanguage('en')} aria-pressed={language==='en'} className={language==='en'?'active':''}>EN</button>
+   </div><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button></div>
  </section>
  <section className="historyDepthPanel" aria-label="Profundidade do histórico" aria-live="polite">
   <div><small>HISTÓRICO OBSERVADO</small><b>{data.matches?.length||0} partidas carregadas</b><p>Começamos com uma amostra menor para preservar velocidade e limites da API. Os dados da Riot podem ser expandidos para até 100 partidas.</p>
