@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { VISUAL_ASSETS } from '../../lib/visualAssets';
 
 type Props={data:any};
-const STORY_BACKGROUND=import.meta.env.BASE_URL+'match-story-background.webp';
+const STORY_BACKGROUND=VISUAL_ASSETS.sharing.matchStory;
 
 function saveBlob(blob:Blob,fileName:string){
   const url=URL.createObjectURL(blob);
