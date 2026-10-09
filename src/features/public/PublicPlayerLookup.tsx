@@ -148,7 +148,6 @@ export function PublicPlayerLookup(){
   </div>
   <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button></div>
  </section>
- <Suspense fallback={<div className="riotLifeDeferredLoading">CARREGANDO ANÁLISE COMPLETA<span>...</span></div>}><RiotLifeExperience data={data} platform={platform} champions={champions} ddv={ddv}/></Suspense>
  <section className="historyDepthPanel" aria-label="Profundidade do histórico" aria-live="polite">
   <div><small>HISTÓRICO OBSERVADO</small><b>{data.matches?.length||0} partidas carregadas</b><p>Começamos com uma amostra menor para preservar velocidade e limites da API. Os dados da Riot podem ser expandidos para até 100 partidas.</p>
    {data.status?.mastery==='unavailable'&&<p className="historyDepthWarning">A maestria não pôde ser consultada agora; isso não significa que o jogador não tenha maestria.</p>}
@@ -157,6 +156,7 @@ export function PublicPlayerLookup(){
   </div>
   {(Number(data.cache?.requested||20)<100||Number(data.cache?.pending||0)>0)&&<button onClick={extendHistory} disabled={depthLoading} aria-busy={depthLoading}>{depthLoading?'AMPLIANDO HISTÓRICO...':Number(data.cache?.requested||20)>=100?'TENTAR COMPLETAR HISTÓRICO':'ANALISAR ATÉ 100 PARTIDAS →'}</button>}
  </section>
+ <Suspense fallback={<div className="riotLifeDeferredLoading">CARREGANDO ANÁLISE COMPLETA<span>...</span></div>}><RiotLifeExperience data={data} platform={platform} champions={champions} ddv={ddv}/></Suspense>
  <details id="riot-evidence" className="gameDataVault">
   <summary><span><small>EVIDÊNCIAS DA ANÁLISE</small><b>VER PARTIDAS E DADOS</b><em>{data.matches.length} partidas · {(data.mastery||[]).length} maestrias · {data.modeSummaries?.length||0} contextos</em></span><Icon name="arrow"/></summary>
   <div className="gameDataVaultBody">
