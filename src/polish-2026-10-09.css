@@ -60,6 +60,10 @@ body:has(.publicPlayerResult) .ztLanguageSwitcher{
 .publicPlayerResult .playerIdentityActions>.playerQuickPrimary{
   grid-column:1/-1!important;
 }
+.publicPlayerResult .playerIdentityActions>.playerShare{
+  grid-row:auto!important;
+  grid-column:auto!important;
+}
 .publicPlayerResult .playerLocaleActions{
   display:flex;
   align-items:center;
