@@ -66,6 +66,23 @@ if(profile.status!==200||!observations.profile.identityMatched||!Array.isArray(p
     if(teammates.status!==200)failed=true;
     console.log('LIVE TEAMMATES',JSON.stringify(observations.teammates));
   }
+  // A genuine deep-history request is made once, not once per viewport.
+  // Rate-limit failures remain visible in the report and block 9.5 sign-off.
+  const extended=await invoke('public-lol-profile',{...req,limit:100});
+  const deep=extended.result||{};
+  observations.expandedHistory={
+    httpStatus:extended.status,
+    elapsedMs:extended.elapsedMs,
+    matchesLoaded:Array.isArray(deep.matches)?deep.matches.length:null,
+    requested:deep.cache?.requested??null,
+    pending:deep.cache?.pending??null,
+    rateLimited:deep.cache?.rateLimited??null,
+    errorCode:deep.error||extended.error||''
+  };
+  if(extended.status!==200||!Array.isArray(deep.matches)||deep.matches.length<observations.profile.matchesLoaded){
+    failed=true;
+    console.error('LIVE DEEP HISTORY NOT READY',JSON.stringify(observations.expandedHistory));
+  } else console.log('LIVE DEEP HISTORY',JSON.stringify(observations.expandedHistory));
 }
 
 try {
@@ -82,14 +99,25 @@ try {
         await page.goto('http://127.0.0.1:4173/zerotwo.gg/?player=AlchemyFlames%23BR1&server=br1',{waitUntil:'domcontentloaded',timeout:30000});
         await page.locator('.publicPlayerResult, .lookupError').first().waitFor({timeout:110000});
         const loaded=await page.locator('.publicPlayerResult').count()>0;
-        if(loaded)await page.locator('#riot-life-story').waitFor({state:'visible',timeout:30000});
-        const analysisRendered=loaded&&await page.locator('#riot-life-story').isVisible();
+        if(loaded)await page.locator('#riot-life-story .riotStoryIntroWithArt').waitFor({state:'visible',timeout:30000});
+        const analysisRendered=loaded&&await page.locator('#riot-life-story .riotStoryIntroWithArt').isVisible();
+        const inlineLocale=loaded?await page.locator('.playerLocaleActions').isVisible():false;
+        const floatingLocale=loaded?await page.locator('.ztLanguageSwitcher').isVisible():true;
+        let localeTogglePassed=false;
+        if(inlineLocale){
+          await page.locator('.playerLocaleActions').getByRole('button',{name:'EN'}).click();
+          const enActive=await page.locator('.playerLocaleActions').getByRole('button',{name:'EN'}).getAttribute('aria-pressed');
+          await page.locator('.playerLocaleActions').getByRole('button',{name:'PT-BR'}).click();
+          const ptActive=await page.locator('.playerLocaleActions').getByRole('button',{name:'PT-BR'}).getAttribute('aria-pressed');
+          localeTogglePassed=enActive==='true'&&ptActive==='true';
+        }
+        const titleSize=loaded?await page.locator('#riot-life-story .riotStoryIntroWithArt h2').evaluate(el=>Math.round(parseFloat(getComputedStyle(el).fontSize))):null;
         const errorText=loaded?'':((await page.locator('.lookupError').innerText()).replace(/\s+/g,' ').slice(0,180));
         const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+3);
         await page.screenshot({path:'live-qa-artifacts/'+name+'-alchemyflames.png',fullPage:false,animations:'disabled'});
-        const outcome={viewport:name,profileLoaded:loaded,analysisRendered,errorText,apiStatuses,horizontalOverflow:overflow,uncaughtErrors:browserErrors};
+        const outcome={viewport:name,profileLoaded:loaded,analysisRendered,inlineLocale,floatingLocale,localeTogglePassed,titleSize,errorText,apiStatuses,horizontalOverflow:overflow,uncaughtErrors:browserErrors};
         observations.browser.push(outcome);
-        if(!loaded||!analysisRendered||overflow||browserErrors.length)failed=true;
+        if(!loaded||!analysisRendered||!inlineLocale||floatingLocale||!localeTogglePassed||overflow||browserErrors.length||(name==='mobile'&&Number(titleSize)>31))failed=true;
         console.log('LIVE BROWSER',JSON.stringify(outcome));
       }catch(e){failed=true;observations.browser.push({viewport:name,error:String(e?.message||e).slice(0,220),apiStatuses});console.error('LIVE BROWSER FAILED',name,String(e?.message||e).slice(0,220));}
       await page.close();
