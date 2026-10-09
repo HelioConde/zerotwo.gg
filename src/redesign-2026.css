@@ -149,13 +149,17 @@ body{
 .homeProofCards b,.homeProofCards small{display:block}
 .homeProofCards b{font-size:10px}.homeProofCards small{margin-top:4px;color:#637082;font-size:8px}
 
-/* ---------- RESULT TOP BAR ---------- */
+/* ---------- RESULT SEARCH BAR ----------
+ * The search card belongs to the document flow. Keeping it sticky at top:0
+ * created a second top bar that covered the chapter navigation when scrolling.
+ * The global .gameNav is the only sticky primary header.
+ */
 .homeLookup.hasResult .homeHero{
-  position:sticky;
-  top:0;
-  z-index:45;
+  position:relative!important;
+  top:auto!important;
+  z-index:auto!important;
   background:#05070aee!important;
-  backdrop-filter:blur(18px);
+  backdrop-filter:none;
   border-bottom:1px solid var(--z2-line)!important;
 }
 .homeLookup.hasResult .lookupSearch{
@@ -634,7 +638,7 @@ body{
     font-size:8px!important;
   }
   .logoutNav{display:none!important}
-  .homeLookup.hasResult .homeHero{top:0!important}
+  .homeLookup.hasResult .homeHero{top:auto!important}
   .gamingLanding>footer{
     grid-template-columns:1fr!important;
     padding:24px 16px 38px!important;
