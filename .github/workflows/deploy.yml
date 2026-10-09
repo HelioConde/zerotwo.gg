@@ -38,6 +38,9 @@ jobs:
       - name: Audit published images
         run: npm run audit:images
 
+      - name: Audit SEO and sitemap
+        run: npm run audit:seo
+
       - name: TypeScript check
         run: npm run typecheck
 
