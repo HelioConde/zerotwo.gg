@@ -14,7 +14,7 @@
 
 - [ ] GitHub Pages deploy **success** after latest commit; verify actual served commit/build.
 - [ ] GitHub Actions **ZeroTwo Visual QA** success with screenshots reviewed (home, fixture 20/100 both viewports).
-- [ ] Correct Supabase project for ZeroTwo accessible and Edge Functions deployed there.
+- [ ] Supabase workflow deploy succeeded (both functions) on project `bieihhaobdztjyoweewa`, or equivalent manual deploy verified.
 - [ ] Live lookup AlchemyFlames#BR1: rank, mastery and recent matches with non-empty data where Riot provides them.
 - [ ] Live extended history: no duplicate fetches, correct pending/rateLimited status, no timeout.
 - [ ] Rate-limit test: HTTP 429 shows retry guidance, not "no history"/"no teammates".
@@ -26,9 +26,12 @@
 
 The repo's public frontend invokes functions on project `bieihhaobdztjyoweewa`.
 The connected Supabase tool did **not** expose that project during this audit.
-GitHub commits DO NOT automatically deploy Edge Function changes unless a separate workflow is configured.
+The existing GitHub Actions deployment workflow has now been updated to deploy
+both public Edge Functions automatically on pushes affecting their source or configuration.
+This depends on the repository secret `SUPABASE_ACCESS_TOKEN` being configured correctly;
+without it the workflow fails explicitly and **neither** function is deployed.
 
-After selecting the correct Supabase project, deploy at least:
+If the automatic job fails, authenticate the Supabase CLI against the correct project and deploy manually:
 
 ```bash
 supabase functions deploy public-lol-profile --project-ref bieihhaobdztjyoweewa
