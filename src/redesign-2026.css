@@ -482,8 +482,9 @@ body{
   justify-content:space-between!important;
   padding:0 max(20px,calc((100vw - 1240px)/2))!important;
   border-bottom:1px solid var(--z2-line)!important;
-  background:#05070ae8!important;
-  backdrop-filter:blur(18px)!important;
+  /* Opaque header prevents content bleeding through while chapters scroll. */
+  background:#05070a!important;
+  backdrop-filter:none!important;
 }
 .gameNav .brand{
   font-size:13px!important;
