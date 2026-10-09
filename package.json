@@ -9,7 +9,11 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "audit:images": "node scripts/audit-images.mjs",
-    "audit:seo": "node scripts/audit-seo.mjs"
+    "audit:seo": "node scripts/audit-seo.mjs",
+    "generate:og": "node scripts/generate-og-image.mjs",
+    "predev": "npm run generate:og",
+    "prebuild": "npm run generate:og",
+    "preaudit:seo": "npm run generate:og"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
@@ -21,6 +25,7 @@
   },
   "devDependencies": {
     "@types/react": "latest",
-    "@types/react-dom": "latest"
+    "@types/react-dom": "latest",
+    "sharp": "^0.34.4"
   }
 }
