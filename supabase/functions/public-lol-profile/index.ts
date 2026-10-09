@@ -53,12 +53,15 @@ Deno.serve(async(req:Request)=>{
    if(i>0)await new Promise(resolve=>setTimeout(resolve,300));
    const batch=missing.slice(i,i+3);
    const got=await Promise.all(batch.map(async(id:string)=>({id,res:await rf("https://"+RH[reg]+"/lol/match/v5/matches/"+encodeURIComponent(id),key)})));
+   const cacheWrites:any[]=[];
    for(const x of got){
-     if(!x.res.ok)continue;
-     const m=x.res.data,info=m?.info||{};
+     if(!x.res.ok||!x.res.data?.info)continue;
+     const m=x.res.data,info=m.info;
      cmap.set(x.id,m);fetchedNow++;
-     await db.from("lol_match_cache").upsert({match_id:x.id,region:reg,game_start:info.gameStartTimestamp?new Date(info.gameStartTimestamp).toISOString():null,game_duration:info.gameDuration||null,queue_id:info.queueId||null,match_data:m,fetched_at:new Date().toISOString(),expires_at:new Date(Date.now()+24*60*60*1000).toISOString(),updated_at:new Date().toISOString()},{onConflict:"match_id"})
+     cacheWrites.push(db.from("lol_match_cache").upsert({match_id:x.id,region:reg,game_start:info.gameStartTimestamp?new Date(info.gameStartTimestamp).toISOString():null,game_duration:info.gameDuration||null,queue_id:info.queueId||null,match_data:m,fetched_at:new Date().toISOString(),expires_at:new Date(Date.now()+30*24*60*60*1000).toISOString(),updated_at:new Date().toISOString()},{onConflict:"match_id"}))
    }
+   // Writes must not serialize every uncached Riot match.
+   if(cacheWrites.length)await Promise.allSettled(cacheWrites);
    if(got.some((x:any)=>x.res.status===429)){rateLimited=true;break}
  }
  const raw=target.map((id:string)=>cmap.get(id)).filter(Boolean);
