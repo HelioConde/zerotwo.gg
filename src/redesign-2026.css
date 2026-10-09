@@ -2630,7 +2630,7 @@ summary:focus-visible{
 }
 .riotStoryNav{
   position:sticky;
-  top:61px;
+  top:64px;
   z-index:33;
   display:grid;
   grid-template-columns:repeat(7,1fr);
@@ -3909,7 +3909,7 @@ summary:focus-visible{
 /* Sticky story navigation with current chapter and progress. */
 .riotStoryNav{
   position:sticky!important;
-  top:61px!important;
+  top:64px!important;
   grid-template-columns:repeat(7,minmax(0,1fr))!important;
   padding-bottom:16px;
   overflow:visible;
@@ -3991,7 +3991,7 @@ select{cursor:pointer}
 
 @media(max-width:980px){
   .riotStoryNav{
-    top:56px!important;
+    top:64px!important;
     display:flex!important;
     overflow-x:auto!important;
     padding-bottom:16px;
@@ -4019,7 +4019,7 @@ select{cursor:pointer}
     margin-top:6px;
   }
   .riotSampleNote{align-items:flex-start}
-  .riotStoryNav{top:54px!important}
+  .riotStoryNav{top:64px!important}
   .chapterSource{font-size:6.5px!important}
 }
 
