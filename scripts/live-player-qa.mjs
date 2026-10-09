@@ -46,13 +46,18 @@ observations.profile={
   rankRows:Array.isArray(p.ranked)?p.ranked.length:null,
   masteryRows:Array.isArray(p.mastery)?p.mastery.length:null,
   rankedStatus:p.status?.ranked??'unknown',
-  masteryStatus:p.status?.mastery??'unknown'
+  masteryStatus:p.status?.mastery??'unknown',
+  backendVersionVerified:p.status?.ranked==='ok'&&p.status?.mastery==='ok'
 };
 if(profile.status!==200||!observations.profile.identityMatched||!Array.isArray(p.matches)){
   failed=true;
   console.error('LIVE PROFILE FAILED',JSON.stringify(observations.profile));
 }else{
   console.log('LIVE PROFILE OK',JSON.stringify(observations.profile));
+  if(!observations.profile.backendVersionVerified){
+    failed=true;
+    console.error('BACKEND VERSION DRIFT: public profile returns real data, but lacks the latest upstream availability fields. Deploy updated Edge Functions.');
+  }
   const matchIds=p.matches.slice(0,5).map(x=>x.id).filter(Boolean);
   if(matchIds.length){
     const teammates=await invoke('public-lol-teammates',{gameName:'AlchemyFlames',tagLine:'BR1',region:'americas',matchIds});
@@ -77,12 +82,14 @@ try {
         await page.goto('http://127.0.0.1:4173/zerotwo.gg/?player=AlchemyFlames%23BR1&server=br1',{waitUntil:'domcontentloaded',timeout:30000});
         await page.locator('.publicPlayerResult, .lookupError').first().waitFor({timeout:110000});
         const loaded=await page.locator('.publicPlayerResult').count()>0;
+        if(loaded)await page.locator('#riot-life-story').waitFor({state:'visible',timeout:30000});
+        const analysisRendered=loaded&&await page.locator('#riot-life-story').isVisible();
         const errorText=loaded?'':((await page.locator('.lookupError').innerText()).replace(/\s+/g,' ').slice(0,180));
         const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+3);
         await page.screenshot({path:'live-qa-artifacts/'+name+'-alchemyflames.png',fullPage:false,animations:'disabled'});
-        const outcome={viewport:name,profileLoaded:loaded,errorText,apiStatuses,horizontalOverflow:overflow,uncaughtErrors:browserErrors};
+        const outcome={viewport:name,profileLoaded:loaded,analysisRendered,errorText,apiStatuses,horizontalOverflow:overflow,uncaughtErrors:browserErrors};
         observations.browser.push(outcome);
-        if(!loaded||overflow||browserErrors.length)failed=true;
+        if(!loaded||!analysisRendered||overflow||browserErrors.length)failed=true;
         console.log('LIVE BROWSER',JSON.stringify(outcome));
       }catch(e){failed=true;observations.browser.push({viewport:name,error:String(e?.message||e).slice(0,220),apiStatuses});console.error('LIVE BROWSER FAILED',name,String(e?.message||e).slice(0,220));}
       await page.close();
