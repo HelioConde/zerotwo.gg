@@ -29,6 +29,20 @@ const response=(limit)=>({
   status:{ranked:'ok',mastery:'ok',history:'ok'}
 });
 
+async function waitForDevServer(){
+  const url='http://127.0.0.1:4173/zerotwo.gg/';
+  for(let attempt=0;attempt<60;attempt++){
+    try{
+      const response=await fetch(url);
+      if(response.ok)return;
+    }catch{}
+    await new Promise(resolve=>setTimeout(resolve,250));
+  }
+  throw new Error('Vite dev server did not become ready on port 4173.');
+}
+
+await waitForDevServer();
+
 const errors=[];
 try{
   for(const [name,width,height] of [['desktop',1440,900],['laptop',1366,768],['mobile',390,844]]){
