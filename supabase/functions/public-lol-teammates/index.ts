@@ -83,6 +83,8 @@ Deno.serve(async req=>{
     let analyzed=0;
     let cacheHits=0;
     let riotFetches=0;
+    let rateLimited=false;
+    let failedMatches=0;
     const detection={subteam:0,placement:0,teamId:0,unresolvedArena:0};
     const cachedMatches=new Map<string,any>();
 
@@ -122,7 +124,9 @@ Deno.serve(async req=>{
           }
           return {match,sampleIndex:i+batchIndex};
         }catch(error){
-          console.warn('public-lol-teammates match skipped',matchId,error);
+          failedMatches++;
+          if(error instanceof Error&&error.message==='riot_rate_limited')rateLimited=true;
+          console.warn('public-lol-teammates match skipped',matchId,error instanceof Error?error.message:'unavailable');
           return null;
         }
       }));
@@ -228,7 +232,8 @@ Deno.serve(async req=>{
         phase:row.recentGames>0&&row.olderGames>0?'persistent':row.recentGames>=2?'now':row.olderGames>=2?'before':'single'
       }));
 
-    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length,cacheHits,riotFetches,detection});
+    if(rateLimited&&analyzed===0)return json({error:'riot_rate_limited',message:'Limite temporário da Riot. Tente novamente mais tarde.'},429);
+    return json({teammates,matchesAnalyzed:analyzed,sampleRequested:matchIds.length,cacheHits,riotFetches,partial:failedMatches>0,failedMatches,detection});
   }catch(error){
     console.error('public-lol-teammates failed',error);
     const message=error instanceof Error?error.message:'unknown_error';
