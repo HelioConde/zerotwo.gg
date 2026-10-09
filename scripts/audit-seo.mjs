@@ -6,7 +6,7 @@ import {join} from 'node:path';
 
 const site='https://helioconde.github.io/zerotwo.gg/';
 const directories=[
-  'estatisticas-lol','riot-id','maestria-lol','historico-lol',
+  'guias','estatisticas-lol','riot-id','maestria-lol','historico-lol',
   'como-funciona','rank-lol','arena-lol','lol-stats-tracker',
   'sobre','glossario-lol'
 ];
