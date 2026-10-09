@@ -171,13 +171,12 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   });
   const [activeChapter,setActiveChapter]=useState<string>('riot-now');
   const storyNavRef=useRef<HTMLElement|null>(null);
+  const handledDeepLinkRef=useRef('');
 
   // Explicit chapter navigation is needed: relying on the browser's default
   // fragment jump does not consistently account for the sticky chapter rail.
-  function jumpToChapter(event:MouseEvent<HTMLAnchorElement>,id:string){
-    event.preventDefault();
-    // Deep chapters are not mounted in mobile quick mode. Mount them
-    // synchronously before measuring the target's actual position.
+  function navigateToChapter(id:string,updateUrl=true){
+    // Expand before measuring: chapter 5–20 content is unmounted in quick mode.
     if(readingMode==='compact'&&!['riot-now','riot-signature','riot-mastery','riot-change'].includes(id)){
       flushSync(()=>setReadingMode('full'));
     }
@@ -188,12 +187,29 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     const navHeight=nav?.getBoundingClientRect().height||0;
     const offset=stickyTop+navHeight+16;
     const top=Math.max(0,Math.round(window.scrollY+target.getBoundingClientRect().top-offset));
+    handledDeepLinkRef.current=id;
     setActiveChapter(id);
-    // Preserve the shared Riot ID and server while keeping a chapter deep link.
-    window.history.replaceState(window.history.state,'',location.pathname+location.search+'#'+id);
+    if(updateUrl)window.history.replaceState(window.history.state,'',location.pathname+location.search+'#'+id);
     if(!target.hasAttribute('tabindex'))target.setAttribute('tabindex','-1');
     target.focus({preventScroll:true});
-    window.scrollTo({top,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    window.scrollTo({top,behavior:updateUrl&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'auto'});
+  }
+  function jumpToChapter(event:MouseEvent<HTMLAnchorElement>,id:string){
+    event.preventDefault();
+    navigateToChapter(id);
+  }
+  function showQuickSummary(){
+    flushSync(()=>{
+      setReadingMode('compact');
+      setActiveChapter('riot-now');
+    });
+    if(location.hash.startsWith('#riot-')){
+      window.history.replaceState(window.history.state,'',location.pathname+location.search);
+    }
+    handledDeepLinkRef.current='';
+    // A collapsed narrative must not strand the viewport halfway down the page.
+    const top=document.getElementById('riot-life-story')?.getBoundingClientRect().top;
+    if(top!==undefined)window.scrollTo({top:Math.max(0,window.scrollY+top-76),behavior:'auto'});
   }
 
   useEffect(()=>{
@@ -576,8 +592,18 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
   const recentResultDelta=recentVsOld?recentVsOld.recentWr-recentVsOld.oldWr:null;
   const sampleQuality=matches.length>=90?'HISTÓRIA FORTE':matches.length>=60?'BOA AMOSTRA':matches.length>=30?'EM FORMAÇÃO':'AMOSTRA INICIAL';
   const chapterIndex=Math.max(0,RIOT_CHAPTERS.findIndex(([id])=>id===activeChapter));
-  const readingProgress=Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
+  const readingProgress=readingMode==='compact'?Math.min(100,Math.round((Math.min(4,chapterIndex+1)/4)*100)):Math.round(((chapterIndex+1)/RIOT_CHAPTERS.length)*100);
   const visibleChapters=RIOT_CHAPTERS.filter(([id])=>(id!=='riot-signature'||!!signature)&&(id!=='riot-peak'||!!peakMatch));
+  // A shared URL's chapter hash exists before async Riot data has finished.
+  // Move to its chapter only after that section is mounted.
+  useEffect(()=>{
+    const id=window.location.hash.slice(1);
+    if(!RIOT_CHAPTERS.some(([chapter])=>chapter===id))return;
+    if(!visibleChapters.some(([chapter])=>chapter===id))return;
+    if(handledDeepLinkRef.current===id)return;
+    const frame=window.requestAnimationFrame(()=>navigateToChapter(id,false));
+    return()=>window.cancelAnimationFrame(frame);
+  },[playerKey,!!signature,!!peakMatch]);
   const requestedDepth=Number(data?.cache?.requested||100);
   const availableDepth=Number(data?.cache?.availableIds||matches.length);
   const pendingDepth=Math.max(0,Number(data?.cache?.pending||0));
@@ -606,16 +632,22 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
     <div className="riotReadingBar" aria-label="Modo de leitura">
       <div className="riotReadingBarCopy"><small>LEITURA DO SEU PERFIL</small><b>{readingMode==='compact'?'Resumo em quatro capítulos':'História completa em vinte capítulos'}</b><span>{readingMode==='compact'?'Veja o essencial primeiro. Nenhum dado é perdido.':'Explore todos os padrões. Você pode voltar ao resumo.'}</span></div>
       <div className="riotReadingOptions" role="group" aria-label="Escolher modo de leitura">
-        <button type="button" aria-pressed={readingMode==='compact'} className={readingMode==='compact'?'active':''} onClick={()=>setReadingMode('compact')}>RESUMO RÁPIDO</button>
+        <button type="button" aria-pressed={readingMode==='compact'} className={readingMode==='compact'?'active':''} onClick={showQuickSummary}>RESUMO RÁPIDO</button>
         <button type="button" aria-pressed={readingMode==='full'} className={readingMode==='full'?'active':''} onClick={()=>setReadingMode('full')}>HISTÓRIA COMPLETA</button>
       </div>
     </div>
 
     <nav ref={storyNavRef} className="riotStoryNav" aria-label="Capítulos da Riot Life">
       <span className="riotStoryCurrent"><small>CAPÍTULO {chapterIndex+1}/{RIOT_CHAPTERS.length}</small><b>{RIOT_CHAPTERS[chapterIndex]?.[1]||'AGORA'}</b></span>
+      <label className="riotChapterJump">
+        <span>IR PARA CAPÍTULO</span>
+        <select aria-label="Escolha um capítulo da Riot Life" value={activeChapter} onChange={event=>navigateToChapter(event.target.value)}>
+          {visibleChapters.map(([id,label])=><option key={id} value={id}>{String(RIOT_CHAPTERS.findIndex(([chapter])=>chapter===id)+1).padStart(2,'0')} · {label}</option>)}
+        </select>
+      </label>
       {visibleChapters.map(([id,label])=>{const index=RIOT_CHAPTERS.findIndex(([chapterId])=>chapterId===id);return <a key={id} href={'#'+id} onClick={event=>jumpToChapter(event,id)} aria-label={'Ir para o capítulo '+String(index+1)+': '+label} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>})}
       <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
-      <small className="riotStoryReadout">{readingProgress}% · ~5 min de leitura</small>
+      <small className="riotStoryReadout">{readingProgress}% · {readingMode==='compact'?'resumo rápido':'história completa'}</small>
     </nav>
 
     <div className="riotStoryFlow">
