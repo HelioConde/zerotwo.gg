@@ -68,6 +68,36 @@ try{
       const h=await page.locator('#riot-life-story .riotStoryIntroWithArt h2').boundingBox();
       assert.ok(h&&h.height<=175,'Mobile chapter introduction wraps excessively: '+h?.height);
     }
+    // Click the actual chapter rail (rather than relying on the URL hash).
+    // Verify navigation changes scroll position and reveals the target below
+    // the sticky nav on both desktop and mobile. Regressions here were reported.
+    for(const chapter of ['riot-mastery','riot-change','riot-trend','riot-next','riot-now']){
+      const link=page.locator('.riotStoryNav a[href="#'+chapter+'"]');
+      await link.click({timeout:10000});
+      await page.waitForTimeout(100);
+      const position=await page.evaluate(id=>{
+        const target=document.getElementById(id);
+        const nav=document.querySelector('.riotStoryNav');
+        if(!target||!nav)return null;
+        const rect=target.getBoundingClientRect();
+        return {
+          targetTop:rect.top,
+          targetBottom:rect.bottom,
+          stickyNavBottom:nav.getBoundingClientRect().bottom,
+          hash:location.hash,
+          scrollY:window.scrollY,
+          focused:document.activeElement===target
+        };
+      },chapter);
+      assert.ok(position,name+': chapter '+chapter+' must exist');
+      assert.equal(position.hash,'#'+chapter,name+': chapter deep link must update');
+      assert.equal(position.focused,true,name+': chapter must receive keyboard focus');
+      assert.ok(position.scrollY>80,name+': chapter '+chapter+' did not scroll');
+      assert.ok(position.targetTop>=position.stickyNavBottom-12&&position.targetTop<=position.stickyNavBottom+70,
+        name+': '+chapter+' is not visible below the sticky nav: '+JSON.stringify(position));
+      assert.ok(position.targetBottom>position.stickyNavBottom,name+': '+chapter+' is obstructed');
+    }
+    await page.screenshot({path:'visual-qa-artifacts/'+name+'-chapter-nav.png',fullPage:false,animations:'disabled'});
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:false,animations:'disabled'});
     await page.getByRole('button',{name:/ANALISAR ATÉ 100 PARTIDAS/}).click();
     await page.locator('.historyDepthProgress').waitFor({state:'visible',timeout:3000});
