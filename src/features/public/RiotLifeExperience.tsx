@@ -638,14 +638,15 @@ export function RiotLifeExperience({data,platform,champions,ddv}:RiotLifeProps){
       </div>
     </div>
 
+    <label className="riotChapterJump">
+      <span>IR PARA CAPÍTULO</span>
+      <select aria-label="Escolha um capítulo da Riot Life" value={activeChapter} onChange={event=>navigateToChapter(event.target.value)}>
+        {visibleChapters.map(([id,label])=><option key={id} value={id}>{String(RIOT_CHAPTERS.findIndex(([chapter])=>chapter===id)+1).padStart(2,'0')} · {label}</option>)}
+      </select>
+    </label>
+
     <nav ref={storyNavRef} className="riotStoryNav" aria-label="Capítulos da Riot Life">
       <span className="riotStoryCurrent"><small>CAPÍTULO {chapterIndex+1}/{RIOT_CHAPTERS.length}</small><b>{RIOT_CHAPTERS[chapterIndex]?.[1]||'AGORA'}</b></span>
-      <label className="riotChapterJump">
-        <span>IR PARA CAPÍTULO</span>
-        <select aria-label="Escolha um capítulo da Riot Life" value={activeChapter} onChange={event=>navigateToChapter(event.target.value)}>
-          {visibleChapters.map(([id,label])=><option key={id} value={id}>{String(RIOT_CHAPTERS.findIndex(([chapter])=>chapter===id)+1).padStart(2,'0')} · {label}</option>)}
-        </select>
-      </label>
       {visibleChapters.map(([id,label])=>{const index=RIOT_CHAPTERS.findIndex(([chapterId])=>chapterId===id);return <a key={id} href={'#'+id} onClick={event=>jumpToChapter(event,id)} aria-label={'Ir para o capítulo '+String(index+1)+': '+label} className={activeChapter===id?'active':''} aria-current={activeChapter===id?'step':undefined}><span>{String(index+1).padStart(2,'0')}</span><b>{label}</b></a>})}
       <i className="riotStoryProgress" aria-hidden="true"><span style={{width:readingProgress+'%'}}/></i>
       <small className="riotStoryReadout">{readingProgress}% · {readingMode==='compact'?'resumo rápido':'história completa'}</small>
