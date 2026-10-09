@@ -137,6 +137,26 @@ try{
       await readingBar.getByRole('button',{name:'RESUMO RÁPIDO'}).click();
       assert.equal(await deepChapter.count(),0,'Quick summary switch should unmount heavy chapters again');
     }
+    // Visual quality gate: an old style override collapsed chapter names to 6px.
+    // Check actual computed styles rather than merely that navigation is clickable.
+    const chapterLegibility=await page.locator('#riot-life-story .riotStoryNav a').first().evaluate(link=>{
+      const name=link.querySelector('b');
+      const number=link.querySelector('span');
+      return {
+        nameFont:name?parseFloat(getComputedStyle(name).fontSize):0,
+        numberFont:number?parseFloat(getComputedStyle(number).fontSize):0,
+        height:link.getBoundingClientRect().height,
+        width:link.getBoundingClientRect().width,
+        contrastColor:name?getComputedStyle(name).color:null
+      };
+    });
+    assert.ok(chapterLegibility.nameFont>=10.5,
+      name+': chapter names are too small: '+JSON.stringify(chapterLegibility));
+    assert.ok(chapterLegibility.numberFont>=9.5,
+      name+': chapter numbers are too small: '+JSON.stringify(chapterLegibility));
+    assert.ok(chapterLegibility.height>=44&&chapterLegibility.width>=96,
+      name+': chapter tap target is too small: '+JSON.stringify(chapterLegibility));
+    console.log('CHAPTER LEGIBILITY '+name,JSON.stringify(chapterLegibility));
     // Click the actual chapter rail (rather than relying on the URL hash).
     // Verify navigation changes scroll position and reveals the target below
     // the sticky nav on both desktop and mobile. Regressions here were reported.
