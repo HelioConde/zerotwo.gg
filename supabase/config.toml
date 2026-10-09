@@ -1,5 +1,8 @@
 project_id = "bieihhaobdztjyoweewa"
 
+[functions.public-lol-profile]
+verify_jwt = false
+
 [functions.public-lol-teammates]
 verify_jwt = false
 
