@@ -1,13 +1,15 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const H={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"authorization, apikey, content-type, x-client-info","Access-Control-Allow-Methods":"POST, OPTIONS"};
-const out=(x:any,s=200)=>new Response(JSON.stringify(x),{status:s,headers:{...H,"Content-Type":"application/json","Cache-Control":"public, max-age=60"}});
+const out=(x:any,s=200)=>new Response(JSON.stringify(x),{status:s,headers:{...H,"Content-Type":"application/json","Cache-Control":s===200?"private, max-age=30":"no-store"}});
 const RH:any={americas:"americas.api.riotgames.com",europe:"europe.api.riotgames.com",asia:"asia.api.riotgames.com",sea:"sea.api.riotgames.com"};
 const PH:any={br1:"br1.api.riotgames.com",na1:"na1.api.riotgames.com",la1:"la1.api.riotgames.com",la2:"la2.api.riotgames.com",euw1:"euw1.api.riotgames.com",eun1:"eun1.api.riotgames.com",kr:"kr.api.riotgames.com",jp1:"jp1.api.riotgames.com",oc1:"oc1.api.riotgames.com",tr1:"tr1.api.riotgames.com",ru:"ru.api.riotgames.com",ph2:"ph2.api.riotgames.com",sg2:"sg2.api.riotgames.com",th2:"th2.api.riotgames.com",tw2:"tw2.api.riotgames.com",vn2:"vn2.api.riotgames.com"};
 const Q:any={400:"NORMAL DRAFT",420:"RANKED SOLO/DUO",430:"NORMAL BLIND",440:"RANKED FLEX",490:"QUICKPLAY",450:"ARAM",1700:"ARENA",1710:"ARENA",1810:"SWARM",1820:"SWARM",1830:"SWARM",1840:"SWARM"};
 const CTX:any={400:"NORMAL",420:"RANKED",430:"NORMAL",440:"RANKED",480:"NORMAL",490:"NORMAL",450:"ARAM",1700:"ARENA",1710:"ARENA",1740:"ARENA",1750:"ARENA",1810:"SWARM",1820:"SWARM",1830:"SWARM",1840:"SWARM",2300:"BRAWL",2400:"ARAM MAYHEM"};
 const POS:any={TOP:"TOP",JUNGLE:"JUNGLE",MIDDLE:"MID",MID:"MID",BOTTOM:"ADC",UTILITY:"SUPPORT"};
 const SRCTX=new Set(["RANKED","NORMAL"]);
-async function rf(u:string,k:string){const r=await fetch(u,{headers:{"X-Riot-Token":k,Accept:"application/json"}});let d:any=null;try{d=await r.json()}catch{}return{ok:r.ok,status:r.status,retryAfter:r.headers.get("Retry-After"),data:d}}
+async function rf(u:string,k:string){try{const r=await fetch(u,{headers:{"X-Riot-Token":k,Accept:"application/json"},signal:AbortSignal.timeout(12000)});let d:any=null;try{d=await r.json()}catch{}return{ok:r.ok,status:r.status,retryAfter:r.headers.get("Retry-After"),data:d}}catch{return{ok:false,status:503,retryAfter:null,data:null}}}
+const riotFailure=(status:number)=>status===401||status===403?"Consulta indisponível: autenticação da Riot recusada.":status===404?"Dados não encontrados para esta conta ou servidor.":status===429?"Limite de consultas Riot atingido. Tente novamente em instantes.":"Serviço Riot indisponível temporariamente. Tente novamente mais tarde.";
+const upstreamStatus=(status:number)=>status===429?429:status===401||status===403?503:status===404?404:502;
 const avg=(arr:any[],k:string)=>arr.length?+(arr.reduce((a:number,x:any)=>a+Number(x[k]||0),0)/arr.length).toFixed(2):null;
 const tops=(arr:any[],k:string,n=3)=>{const f:any={};arr.forEach((x:any)=>{const v=x[k];if(v)f[v]=(f[v]||0)+1});return Object.entries(f).sort((a:any,b:any)=>Number(b[1])-Number(a[1])).slice(0,n).map((x:any)=>({name:x[0],games:x[1]}))};
 Deno.serve(async(req:Request)=>{
@@ -17,8 +19,8 @@ Deno.serve(async(req:Request)=>{
  if(!key||!url||!service)return out({error:"unavailable",message:"Consulta temporariamente indisponível."},503);
  let b:any={};try{b=await req.json()}catch{return out({error:"json"},400)}
  const gn=String(b.gameName||"").trim(),tl=String(b.tagLine||"").replace(/^#/,"").trim(),reg=String(b.region||"americas").toLowerCase(),plat=String(b.platform||"br1").toLowerCase();
- const requestedLimit=Math.min(100,Math.max(1,Math.floor(Number(b.limit||b.matchLimit||100)||100)));
- if(!gn||!tl)return out({error:"riot_id",message:"Use o formato Nome#TAG."},400);
+ const requestedLimit=Math.min(100,Math.max(1,Math.floor(Number(b.limit||b.matchLimit||20)||20)));
+ if(!gn||!tl||gn.length>32||tl.length>12)return out({error:"riot_id",message:"Use Nome#TAG com tamanho válido."},400);
  if(!RH[reg]||!PH[plat])return out({error:"routing",message:"Servidor não suportado."},400);
  const db=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
  const cacheKey=reg+":"+plat+":"+gn.toLowerCase()+"#"+tl.toLowerCase();
@@ -27,7 +29,7 @@ Deno.serve(async(req:Request)=>{
  if(pc&&new Date(pc.expires_at).getTime()>Date.now()){account=pc.account_data;summoner=pc.summoner_data}
  if(!account){
    const ar=await rf("https://"+RH[reg]+"/riot/account/v1/accounts/by-riot-id/"+encodeURIComponent(gn)+"/"+encodeURIComponent(tl),key);
-   if(!ar.ok)return out({error:"player",message:ar.status===404?"Riot ID não encontrado. Confira Nome#TAG.":ar.status===429?"Limite temporário da Riot atingido. Tente novamente em instantes.":"Não foi possível consultar este jogador agora.",riotStatus:ar.status},ar.status===429?429:502);
+   if(!ar.ok)return out({error:"player",message:ar.status===404?"Riot ID não encontrado. Confira Nome#TAG.":riotFailure(ar.status),riotStatus:ar.status,retryAfter:ar.retryAfter},upstreamStatus(ar.status));
    account={puuid:ar.data.puuid,gameName:ar.data.gameName||gn,tagLine:ar.data.tagLine||tl};
    const sr=await rf("https://"+PH[plat]+"/lol/summoner/v4/summoners/by-puuid/"+encodeURIComponent(account.puuid),key);summoner=sr.ok?sr.data:null;
    const now=new Date(),exp=new Date(now.getTime()+15*60*1000);
@@ -40,14 +42,16 @@ Deno.serve(async(req:Request)=>{
    rf("https://"+PH[plat]+"/lol/champion-mastery/v4/champion-masteries/by-puuid/"+encodeURIComponent(puuid)+"/top?count=5",key)
  ]);
  const player={gameName:account.gameName||gn,tagLine:account.tagLine||tl,level:summoner?.summonerLevel??null,profileIconId:summoner?.profileIconId??null,platform:plat.toUpperCase()};
- if(!ids.ok)return out({error:"matches",message:"Jogador encontrado, mas as partidas não puderam ser carregadas.",player},ids.status===429?429:502);
- const target=(ids.data||[]).slice(0,requestedLimit) as string[];
+ if(!ids.ok)return out({error:"matches",message:riotFailure(ids.status),riotStatus:ids.status,retryAfter:ids.retryAfter,player},upstreamStatus(ids.status));
+ const target=(Array.isArray(ids.data)?ids.data:[]).slice(0,requestedLimit) as string[];
  const {data:cached}=target.length?await db.from("lol_match_cache").select("match_id,match_data,expires_at").in("match_id",target):{data:[] as any[]};
- const cmap=new Map((cached||[]).filter((x:any)=>new Date(x.expires_at).getTime()>Date.now()).map((x:any)=>[x.match_id,x.match_data]));
+ // Completed Riot matches are immutable; avoid re-fetching expired cache records unnecessarily.
+ const cmap=new Map((cached||[]).filter((x:any)=>x.match_data&&x.match_id).map((x:any)=>[x.match_id,x.match_data]));
  const missing=target.filter((id:string)=>!cmap.has(id));
  let fetchedNow=0,rateLimited=false;
- for(let i=0;i<missing.length;i+=8){
-   const batch=missing.slice(i,i+8);
+ for(let i=0;i<missing.length;i+=3){
+   if(i>0)await new Promise(resolve=>setTimeout(resolve,300));
+   const batch=missing.slice(i,i+3);
    const got=await Promise.all(batch.map(async(id:string)=>({id,res:await rf("https://"+RH[reg]+"/lol/match/v5/matches/"+encodeURIComponent(id),key)})));
    for(const x of got){
      if(!x.res.ok)continue;
@@ -82,5 +86,5 @@ Deno.serve(async(req:Request)=>{
  }
  const enough=sample.length>0,mainMode=modeSummaries[0]||null;
  const performanceSignal=mainMode?.name==="ARENA"&&mainMode.avgPlacement!=null?"Na Arena, sua colocação média foi "+mainMode.avgPlacement+" e você ficou no Top 4 em "+mainMode.top4Rate+"% da amostra.":wins+" vitórias em "+sample.length+" partidas recentes analisadas.";
- return out({player,ranked:rankRows,mastery:masteryRows,modeSummaries,championSummaries,summary:{matches:sample.length,recentMatches:rows.length,wins:enough?wins:null,losses:enough?sample.length-wins:null,winRate:enough?Math.round(wins/sample.length*100):null,avgKda:avg(sample,"kda"),avgCsPerMin:avg(srSample,"csPerMin"),avgVisionPerMin:avg(srSample,"visionPerMin"),avgDamagePerMin:avg(sample,"damagePerMin"),primaryPosition,mainContext,contexts:modeSummaries.map((x:any)=>({name:x.name,games:x.games})),topChampions:tops(sample,"champion",3),confidence:sample.length>=8?"BOA":sample.length>=4?"EM FORMAÇÃO":sample.length?"INICIAL":"SEM AMOSTRA"},matches:rows,analysis:enough?{headline:sample.length<4?"AINDA ESTAMOS CONHECENDO ESTE JOGO":mainContext?"MOMENTO RECENTE: "+mainContext:"PADRÃO RECENTE",signals:["KDA médio de "+avg(sample,"kda")+" no histórico recente.",mainContext+" foi o modo mais frequente nesta amostra.",performanceSignal]}:{headline:"AINDA SEM PARTIDAS RECENTES PARA ANALISAR",signals:["Quando houver histórico disponível, o ZeroTwo separa padrões por modo.","ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.","Métricas específicas só são comparadas quando fazem sentido naquele modo."]},cache:{requested:requestedLimit,availableIds:target.length,matchesLoaded:raw.length,cached:target.length-missing.length,fetched:fetchedNow,pending:Math.max(0,target.length-raw.length),rateLimited}});
+ return out({player,ranked:rankRows,mastery:masteryRows,modeSummaries,championSummaries,status:{ranked:ranked.ok?"ok":"unavailable",mastery:mastery.ok?"ok":"unavailable",history:rateLimited||raw.length<target.length?"partial":"ok",rankedStatus:ranked.ok?null:ranked.status,masteryStatus:mastery.ok?null:mastery.status},summary:{matches:sample.length,recentMatches:rows.length,wins:enough?wins:null,losses:enough?sample.length-wins:null,winRate:enough?Math.round(wins/sample.length*100):null,avgKda:avg(sample,"kda"),avgCsPerMin:avg(srSample,"csPerMin"),avgVisionPerMin:avg(srSample,"visionPerMin"),avgDamagePerMin:avg(sample,"damagePerMin"),primaryPosition,mainContext,contexts:modeSummaries.map((x:any)=>({name:x.name,games:x.games})),topChampions:tops(sample,"champion",3),confidence:sample.length>=8?"BOA":sample.length>=4?"EM FORMAÇÃO":sample.length?"INICIAL":"SEM AMOSTRA"},matches:rows,analysis:enough?{headline:sample.length<4?"AINDA ESTAMOS CONHECENDO ESTE JOGO":mainContext?"MOMENTO RECENTE: "+mainContext:"PADRÃO RECENTE",signals:["KDA médio de "+avg(sample,"kda")+" no histórico recente.",mainContext+" foi o modo mais frequente nesta amostra.",performanceSignal]}:{headline:"AINDA SEM PARTIDAS RECENTES PARA ANALISAR",signals:["Quando houver histórico disponível, o ZeroTwo separa padrões por modo.","ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.","Métricas específicas só são comparadas quando fazem sentido naquele modo."]},cache:{requested:requestedLimit,availableIds:target.length,matchesLoaded:raw.length,cached:target.length-missing.length,fetched:fetchedNow,pending:Math.max(0,target.length-raw.length),rateLimited}});
 });
