@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - 'src/**'
+      - 'index.html'
+      - 'public/**/index.html'
+      - 'public/seo/**'
       - 'scripts/visual-qa.mjs'
       - '.github/workflows/visual-qa.yml'
 
