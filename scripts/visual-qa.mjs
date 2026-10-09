@@ -75,7 +75,12 @@ try{
     const deepChapter=story.locator('#riot-trend');
     if(name==='mobile'){
       assert.equal(await deepChapter.isVisible(),false,'Mobile quick summary hides deep chapters until requested');
+      const compactHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
+      await page.screenshot({path:'visual-qa-artifacts/'+name+'-quick-summary.png',fullPage:true,animations:'disabled'});
       await readingBar.getByRole('button',{name:'HISTÓRIA COMPLETA'}).click();
+      const fullHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
+      assert.ok(compactHeight<fullHeight*.75,
+        'Mobile quick summary should be materially shorter than 20 chapters: '+compactHeight+' / '+fullHeight);
       assert.equal(await deepChapter.isVisible(),true,'Full story switch should reveal deep chapters');
       await readingBar.getByRole('button',{name:'RESUMO RÁPIDO'}).click();
       assert.equal(await deepChapter.isVisible(),false,'Quick summary switch should hide deep chapters again');
