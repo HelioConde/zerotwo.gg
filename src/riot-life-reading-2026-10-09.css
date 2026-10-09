@@ -1,0 +1,130 @@
+/* Riot Life guided reading: same data, shorter first impression.
+ * The 20-chapter story remains available with a single explicit action.
+ */
+.riotReadingBar{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  min-width:0;
+  padding:18px 22px;
+  border:1px solid #ffffff1a;
+  border-top:0;
+  background:linear-gradient(100deg,#11101b,#070b12 65%);
+}
+.riotReadingBarCopy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.riotReadingBarCopy small{
+  color:#f985aa;
+  font:850 10px/1.3 ui-monospace,monospace;
+  letter-spacing:.8px
+}
+.riotReadingBarCopy b{font-size:17px;color:#f8faff;line-height:1.3}
+.riotReadingBarCopy>span{color:#b7c2d1;font-size:12px;line-height:1.5}
+.riotReadingOptions{
+  flex:0 0 auto;
+  display:flex;
+  gap:4px;
+  border:1px solid #ffffff24;
+  border-radius:12px;
+  padding:4px;
+  background:#070b11;
+}
+.riotReadingOptions button{
+  color:#c0ccda;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  min-height:42px;
+  padding:9px 16px;
+  font:850 11px/1.35 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.2px;
+  cursor:pointer;
+}
+.riotReadingOptions button.active{
+  color:white;
+  background:linear-gradient(112deg,#b72f66,#ff477e);
+  box-shadow:0 4px 18px #ff477e2a;
+}
+.riotReadingOptions button:focus-visible,
+.riotReadingContinue button:focus-visible{
+  outline:3px solid #75ddff;
+  outline-offset:2px;
+}
+.riotStory[data-reading-mode="compact"] .riotStoryFlow > .riotDeepChapter,
+.riotStory[data-reading-mode="compact"] .riotStoryFlow > .riotChapterGroup:not(#riot-change),
+.riotStory[data-reading-mode="compact"] .riotStoryFlow > .riotChapter:not(#riot-now):not(#riot-signature){
+  display:none!important;
+}
+.riotStory[data-reading-mode="compact"] > .riotStoryEnd{display:none!important}
+.riotReadingContinue{
+  display:grid;
+  gap:10px;
+  align-items:start;
+  justify-items:start;
+  margin:13px 0 26px;
+  padding:27px;
+  border:1px solid #ff477e44;
+  border-radius:20px;
+  background:radial-gradient(circle at 95% 5%,#ff477e18,transparent 38%),#0b0e17;
+}
+.riotReadingContinue>small{
+  color:#ff9fbd;font:900 10px ui-monospace,monospace;letter-spacing:1px;
+}
+.riotReadingContinue h3{
+  margin:0;
+  max-width:660px;
+  font-size:clamp(22px,3.5vw,32px);
+  line-height:1.12;
+  letter-spacing:-.9px;
+  color:#f6f8fb;
+}
+.riotReadingContinue p{
+  max-width:610px;
+  margin:0;
+  color:#b9c5d2;
+  font-size:13px;
+  line-height:1.55;
+}
+.riotReadingContinue button{
+  margin-top:8px;
+  padding:13px 20px;
+  border:1px solid #ff80a8;
+  border-radius:10px;
+  background:#ff477e;
+  color:white;
+  font:900 12px ui-sans-serif,system-ui,sans-serif;
+  cursor:pointer;
+}
+.riotReadingContinue button:hover{background:#ed316c}
+@media(max-width:700px){
+  .riotReadingBar{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:18px 14px;
+    gap:14px;
+  }
+  .riotReadingBarCopy b{font-size:17px}
+  .riotReadingBarCopy>span{font-size:13px}
+  .riotReadingOptions{width:100%;gap:5px}
+  .riotReadingOptions button{
+    flex:1 1 0;
+    min-width:0;
+    min-height:46px;
+    padding:8px 7px;
+    font-size:10px;
+  }
+  .riotReadingContinue{
+    margin:12px 0 24px;
+    padding:21px 18px;
+    border-radius:16px;
+  }
+  .riotReadingContinue h3{font-size:24px;line-height:1.15}
+  .riotReadingContinue p{font-size:13px}
+  .riotReadingContinue button{width:100%;min-height:48px}
+}
+@media(prefers-reduced-motion:reduce){
+  .riotReadingBar *,
+  .riotReadingContinue *{transition:none!important}
+}
