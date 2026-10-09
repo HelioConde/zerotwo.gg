@@ -26,13 +26,8 @@ function App(){
   const [ownRiot,setOwnRiot]=useState<OwnRiotAccount|null>(null);
   const [authOpen,setAuthOpen]=useState(false);
   const [publicReset,setPublicReset]=useState(0);
-  const [locationKey,setLocationKey]=useState(()=>location.href);
-
-  const hasPublicLookup=new URL(locationKey).searchParams.has('player');
-
   function showPublicRoute(url:string){
     window.history.pushState({},document.title,url);
-    setLocationKey(location.href);
     setAuthOpen(false);
     setPublicReset(v=>v+1);
     requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
@@ -41,6 +36,7 @@ function App(){
   function openOwnRiotLife(account:OwnRiotAccount|null=ownRiot){
     if(!account?.game_name||!account?.tag_line){
       setNeedsOnboarding(true);
+      setAuthOpen(true);
       return;
     }
     const params=new URLSearchParams();
@@ -86,7 +82,6 @@ function App(){
 
   function goHome(target?:'experience'){
     window.history.pushState({},document.title,location.pathname);
-    setLocationKey(location.href);
     setAuthOpen(false);
     setPublicReset(v=>v+1);
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -97,8 +92,7 @@ function App(){
 
   useEffect(()=>{
     const onPop=()=>{
-      setLocationKey(location.href);
-      setPublicReset(v=>v+1);
+        setPublicReset(v=>v+1);
     };
     window.addEventListener('popstate',onPop);
     return()=>window.removeEventListener('popstate',onPop);
@@ -147,18 +141,6 @@ function App(){
     return()=>data.subscription.unsubscribe();
   },[]);
 
-  if(session&&authReady&&needsOnboarding){
-    return <main className="gamingLanding onboardingGate">
-      <Suspense fallback={<div className="clientLoading">PREPARANDO SUA RIOT LIFE<span>...</span></div>}>
-        <Connect01
-          session={session}
-          onSessionChange={setSession}
-          onProfileComplete={()=>routePlayer(session,{autoOpen:true})}
-        />
-      </Suspense>
-    </main>;
-  }
-
   return <main className="gamingLanding">
     <nav className="gameNav">
       <button className="brand brandButton" onClick={()=>goHome()}>
@@ -189,7 +171,7 @@ function App(){
 
     <PublicPlayerLookup key={publicReset}/>
 
-    {!session&&authOpen&&
+    {authOpen&&(!session||needsOnboarding||!authReady)&&
       <div
         className="authOverlay"
         role="dialog"
