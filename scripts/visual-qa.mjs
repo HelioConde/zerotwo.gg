@@ -92,6 +92,16 @@ try{
     assert.equal(await story.getAttribute('data-reading-mode'),name==='mobile'?'compact':'full',name+': default chapter reading mode');
     const deepChapter=story.locator('#riot-trend');
     if(name==='mobile'){
+      const chapterPicker=story.locator('.riotChapterJump select');
+      assert.equal(await chapterPicker.isVisible(),true,'Mobile chapter picker must be visible');
+      assert.equal(await chapterPicker.locator('option').count()>=18,true,'Mobile chapter picker must list the available chapters');
+      await chapterPicker.selectOption('riot-hours');
+      assert.equal(await story.getAttribute('data-reading-mode'),'full','Chapter picker expands the story for deep links');
+      assert.equal(await story.locator('#riot-hours').isVisible(),true,'Chosen chapter becomes visible');
+      assert.equal(await page.evaluate(()=>location.hash),'#riot-hours','Chapter picker updates shareable URL');
+      await readingBar.getByRole('button',{name:'RESUMO RÁPIDO'}).click();
+      assert.equal(await page.evaluate(()=>location.hash),'','Quick summary clears stale deep links');
+      assert.equal(await story.getAttribute('data-reading-mode'),'compact','Quick summary restores default mode');
       assert.equal(await deepChapter.count(),0,'Mobile quick summary does not mount advanced chapters');
       const compactHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
       await page.screenshot({path:'visual-qa-artifacts/'+name+'-quick-summary.png',fullPage:true,animations:'disabled'});
@@ -142,6 +152,30 @@ try{
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-100.png',fullPage:true,animations:'disabled'});
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+3);
     assert.equal(overflow,false,name+' has horizontal document overflow');
+    // Shared Riot Life chapters must scroll correctly even when profile data
+    // and the narrative component only become available asynchronously.
+    await page.goto('http://127.0.0.1:4173/zerotwo.gg/?player=ZeroTwo%20Fixture%23BR1&server=br1#riot-trend',{waitUntil:'domcontentloaded',timeout:30000});
+    await page.locator('#riot-trend').waitFor({state:'visible',timeout:25000});
+    await page.waitForTimeout(180);
+    const deepLink=await page.evaluate(()=>{
+      const section=document.getElementById('riot-trend');
+      const nav=document.querySelector('.riotStoryNav');
+      return {
+        top:section?.getBoundingClientRect().top??-1,
+        navBottom:nav?.getBoundingClientRect().bottom??-1,
+        y:window.scrollY,
+        focused:document.activeElement===section,
+        mode:document.getElementById('riot-life-story')?.getAttribute('data-reading-mode'),
+        hash:location.hash
+      };
+    });
+    assert.equal(deepLink.hash,'#riot-trend','Shared link preserves chapter identifier');
+    assert.equal(deepLink.mode,'full','Shared deep link opens all chapters');
+    assert.equal(deepLink.focused,true,'Shared deep link focuses its target');
+    assert.ok(deepLink.y>80,'Shared chapter link must scroll to its content');
+    assert.ok(deepLink.top>=deepLink.navBottom-15&&deepLink.top<=deepLink.navBottom+85,
+      name+': shared chapter is hidden or misaligned: '+JSON.stringify(deepLink));
+    await page.screenshot({path:'visual-qa-artifacts/'+name+'-deep-link.png',fullPage:false,animations:'disabled'});
     await context.close();
   }
   assert.deepEqual(errors,[], 'No uncaught browser errors');
