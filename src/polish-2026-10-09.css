@@ -186,3 +186,42 @@ html,body,#root{
   outline:2px solid rgba(117,221,255,.8);
   outline-offset:3px;
 }
+
+/* Honest progress for a cold Riot Match-V5 request, without a fake percentage. */
+.historyDepthPanel .historyDepthProgress{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:12px;
+}
+.historyDepthProgress>span:last-child{flex:1;min-width:0}
+.historyDepthPanel .historyDepthProgress b{
+  margin:0 0 5px;
+  color:#b9e4ff;
+  font-size:13px;
+  line-height:1.35;
+  font-variant-numeric:tabular-nums;
+}
+.historyDepthPanel .historyDepthProgress small{
+  display:block;
+  color:#c6d3e1;
+  font:500 11px/1.55 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:0;
+  margin-top:3px;
+}
+.historyDepthPanel .historyDepthProgress small+small{color:#8299b0}
+.historyDepthSpinner{
+  display:block;
+  flex:0 0 16px;
+  width:16px;
+  height:16px;
+  margin-top:2px;
+  border:2px solid #75ddff43;
+  border-top-color:#75ddff;
+  border-radius:50%;
+  animation:riotLoadingSpin .9s linear infinite;
+}
+@keyframes riotLoadingSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .historyDepthSpinner{animation:none;border-style:dashed}
+}
