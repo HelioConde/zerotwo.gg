@@ -52,8 +52,22 @@ try{
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').fill('ZeroTwo Fixture#BR1');
     await page.getByRole('button',{name:/VER RIOT LIFE/}).click();
     await page.locator('.historyDepthPanel').waitFor({timeout:25000});
+    await page.locator('#riot-life-story .riotStoryIntroWithArt').waitFor({state:'visible',timeout:25000});
     assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/);
-    await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:true,animations:'disabled'});
+    const inlineLocale=page.locator('.playerLocaleActions');
+    assert.equal(await inlineLocale.isVisible(),true,name+': language picker must be visible next to profile actions');
+    assert.equal(await page.locator('.ztLanguageSwitcher').isVisible(),false,name+': legacy floating language picker must not cover chapters');
+    await inlineLocale.getByRole('button',{name:'EN'}).click();
+    assert.equal(await inlineLocale.getByRole('button',{name:'EN'}).getAttribute('aria-pressed'),'true',name+': English picker toggles');
+    await inlineLocale.getByRole('button',{name:'PT-BR'}).click();
+    assert.equal(await inlineLocale.getByRole('button',{name:'PT-BR'}).getAttribute('aria-pressed'),'true',name+': Portuguese picker toggles');
+    if(name==='mobile'){
+      const fontSize=await page.locator('#riot-life-story .riotStoryIntroWithArt h2').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+      assert.ok(fontSize<=31,'Mobile Riot Life opening title too large: '+fontSize);
+      const h=await page.locator('#riot-life-story .riotStoryIntroWithArt h2').boundingBox();
+      assert.ok(h&&h.height<=175,'Mobile chapter introduction wraps excessively: '+h?.height);
+    }
+    await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:false,animations:'disabled'});
     await page.getByRole('button',{name:/ANALISAR ATÉ 100 PARTIDAS/}).click();
     await page.locator('.historyDepthPanel').getByText('100 partidas carregadas').waitFor({timeout:25000});
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-100.png',fullPage:true,animations:'disabled'});
