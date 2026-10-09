@@ -128,3 +128,40 @@
   .riotReadingBar *,
   .riotReadingContinue *{transition:none!important}
 }
+
+
+/* Mobile reading-quality pass: avoid 6–9px supporting labels in data cards. */
+@media(max-width:700px){
+  #riot-life-story .riotDeepMetrics small,
+  #riot-life-story .riotMasterySummary small,
+  #riot-life-story .riotNowMeta small,
+  #riot-life-story .peakFactGrid small,
+  #riot-life-story .riotSessionFacts small,
+  #riot-life-story .riotChangeFacts small,
+  #riot-life-story .chapterSource{
+    color:#aebdcb!important;
+    font-size:10.5px!important;
+    line-height:1.4!important;
+    letter-spacing:.1px!important;
+    overflow-wrap:anywhere;
+  }
+  #riot-life-story .riotDeepMetrics em,
+  #riot-life-story .riotMasterySummary em,
+  #riot-life-story .riotChapterHeroMetric em{
+    color:#b7c3d2!important;
+    font-size:11px!important;
+    line-height:1.45!important;
+  }
+  #riot-life-story .riotDeepMetrics>span,
+  #riot-life-story .riotMasterySummary>span{
+    min-height:88px!important;
+    padding:12px!important;
+  }
+  #riot-life-story .riotMasteryCopy p{
+    font-size:13.5px!important;
+    color:#c0c8d3!important;
+    line-height:1.65!important;
+  }
+  #riot-life-story .riotStoryCoverage small{font-size:10px!important}
+  #riot-life-story .riotStoryCoverage em{font-size:11px!important}
+}
