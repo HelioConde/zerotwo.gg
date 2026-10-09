@@ -1,8 +1,9 @@
 // ZeroTwo SEO preflight: validates the HTML actually available to crawlers
 // without running client-side JavaScript. No network or paid API required.
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync,existsSync,statSync} from 'node:fs';
 import {strict as assert} from 'node:assert';
 import {join} from 'node:path';
+import sharp from 'sharp';
 
 const site='https://helioconde.github.io/zerotwo.gg/';
 const directories=[
@@ -45,11 +46,14 @@ for(const dir of pages){
   check(canonical===location,prefix+': canonical '+canonical+' != '+location);
   check(ogurl===location,prefix+': social URL differs from canonical');
   check(/<meta name="robots" content="index,follow/.test(html),prefix+': not indexable');
-  check(/<h1(?:\s|>)/i.test(html),prefix+': no h1 in response HTML');
+  check([...html.matchAll(/<h1(?:\s|>)/gi)].length===1,prefix+': expected exactly one h1 in initial response');
   check(/<meta name="twitter:card"/.test(html),prefix+': Twitter/X metadata missing');
   check(/<meta property="og:image:alt"/.test(html),prefix+': social image alt missing');
   check(/rel="sitemap"[^>]*href="\/zerotwo.gg\/sitemap.xml"/.test(html),prefix+': missing sitemap hint');
   check(ogimage.startsWith(site),prefix+': OG image must use absolute site URL');
+  check(ogimage.endsWith('/seo/og-zerotwo.jpg'),prefix+': social image not optimized');
+  check(match(html,/<meta property="og:image:width" content="(\d+)"/)==='1200',prefix+': OG width missing');
+  check(match(html,/<meta property="og:image:height" content="(\d+)"/)==='630',prefix+': OG height missing');
   if(ogimage.startsWith(site))check(existsSync(pathFor(ogimage)),prefix+': missing OG image '+ogimage);
   const scripts=[...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
   check(scripts.length>0,prefix+': no structured data');
@@ -60,12 +64,27 @@ for(const dir of pages){
     const local=pathFor(link);
     if(local)check(existsSync(local),prefix+': broken link to '+link);
   }
+  if(dir==='guias'){
+    check(html.includes('"@type":"ItemList"'),prefix+': missing curated guide list structured data');
+    check(links.filter(href=>href.startsWith('/zerotwo.gg/')).length>=14,prefix+': insufficient guide directory links');
+  }
   if(!dir){
     check(links.filter(href=>href.startsWith('/zerotwo.gg/')).length>=10,'home: at least ten crawlable guide links needed in HTML');
     check(/class="ztSeoFallback"/.test(html),'home: no static no-JavaScript fallback');
     check(/<script type="module" src="\/src\/main.tsx"/.test(html),'home: Vite SPA entry missing');
   }
   urls.add(location);
+}
+
+const socialAsset='public/seo/og-zerotwo.jpg';
+check(existsSync(socialAsset),'Missing generated social image');
+if(existsSync(socialAsset)){
+  const imageBytes=statSync(socialAsset).size;
+  const metadata=await sharp(socialAsset).metadata();
+  check(imageBytes<=500_000,'OG image exceeds 500KB');
+  check(metadata.width===1200&&metadata.height===630&&metadata.format==='jpeg',
+    'OG image must be a 1200x630 JPEG');
+  console.log('OG image: '+Math.round(imageBytes/1024)+' KB');
 }
 
 const sitemap=readFileSync('public/sitemap.xml','utf8');
