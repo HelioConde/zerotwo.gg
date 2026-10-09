@@ -17,6 +17,7 @@ import '../../riot-life.css';
 import '../../riot-life-polish-2026-10-02.css';
 import '../../riot-life-reading-2026-10-09.css';
 import { getLocale } from '../../i18n';
+import { zerotwoArt } from '../../lib/visualAssets';
 
 type RiotLifeProps={
   data:any;
@@ -51,7 +52,7 @@ const RIOT_CHAPTERS=[
   ['riot-next','AGORA VAI']
 ] as const;
 
-const z2Art=(name:string)=>import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(name);
+const z2Art=zerotwoArt;
 function contextArtwork(context:any){
   const value=String(context||'').toUpperCase();
   if(value.includes('ARENA'))return z2Art('arena.png');
