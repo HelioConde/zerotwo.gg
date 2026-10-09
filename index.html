@@ -5,9 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
   <meta name="theme-color" content="#090b12"/>
   <meta name="color-scheme" content="dark"/>
-  <meta name="zerotwo-build" content="2026-10-02-seo-foundation"/>
+  <meta name="zerotwo-build" content="2026-10-09-seo-audit"/>
+  <meta name="author" content="ZeroTwo.gg"/>
+  <link rel="sitemap" type="application/xml" href="/zerotwo.gg/sitemap.xml"/>
+  <script>document.documentElement.classList.add("zt-js");</script>
+  <style>
+    .ztSeoFallback{min-height:100vh;padding:clamp(32px,6vw,88px) max(24px,calc((100vw - 980px)/2));background:#080b13;color:#f3f6ff;font:16px/1.65 system-ui,sans-serif}
+    .ztSeoFallback h1{font-size:clamp(30px,5vw,56px);line-height:1.1;max-width:900px;margin:24px 0;color:#fff}
+    .ztSeoFallback p{max-width:750px;color:#c2ccdc}.ztSeoFallback a{color:#8bdeff}
+    .ztSeoFallback nav{display:flex;gap:12px 22px;flex-wrap:wrap;margin:24px 0}
+    .ztSeoFallback article{border-top:1px solid #ffffff1a;padding-top:18px}
+    .zt-js .ztSeoFallback{display:none}
+  </style>
 
-  <title>LoL Stats Tracker por Riot ID: Rank, Histórico e Maestria | ZeroTwo.gg</title>
+  <title>Estatísticas LoL por Riot ID: Rank e Histórico | ZeroTwo.gg</title>
   <meta name="description" content="LoL Stats Tracker grátis por Riot ID: veja rank, histórico, maestria, campeões, Arena e tendências de League of Legends. Sem cadastro."/>
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
   <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
@@ -82,7 +93,32 @@
   <link rel="icon" type="image/svg+xml" href="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg"/>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Progressive fallback: indexable guide and working links without JavaScript.
+         React replaces this content as soon as the interactive app mounts. -->
+    <main class="ztSeoFallback">
+      <p>ZEROTWO.GG / LEAGUE OF LEGENDS</p>
+      <h1>Estatísticas de LoL por Riot ID: rank, histórico, maestria e Arena</h1>
+      <p>Pesquise jogadores de League of Legends pelo Riot ID (Nome#TAG), consulte dados públicos disponíveis e explore o histórico de partidas, campeões mais usados, maestria, KDA e tendências por modo. A Riot Life organiza os resultados com contexto em vez de transformar números isolados em uma nota de habilidade.</p>
+      <nav aria-label="Guias de League of Legends">
+        <a href="/zerotwo.gg/riot-id/">Como buscar por Riot ID</a>
+        <a href="/zerotwo.gg/estatisticas-lol/">Estatísticas LoL</a>
+        <a href="/zerotwo.gg/historico-lol/">Histórico de partidas</a>
+        <a href="/zerotwo.gg/maestria-lol/">Maestria de campeões</a>
+        <a href="/zerotwo.gg/rank-lol/">Rank LoL</a>
+        <a href="/zerotwo.gg/arena-lol/">Arena LoL</a>
+        <a href="/zerotwo.gg/lol-stats-tracker/">LoL Stats Tracker</a>
+        <a href="/zerotwo.gg/glossario-lol/">Glossário LoL</a>
+        <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
+        <a href="/zerotwo.gg/sobre/">Sobre o ZeroTwo</a>
+      </nav>
+      <article>
+        <h2>Como funciona a Riot Life?</h2>
+        <p>Ao pesquisar Nome#TAG, o ZeroTwo consulta os dados disponíveis e mostra métricas de partidas recentes, histórico, ranqueadas, Arena e campeões. A experiência interativa exige JavaScript. Não somos afiliados nem endossados pela Riot Games.</p>
+        <p><a href="/zerotwo.gg/como-funciona/">Conheça a metodologia e os limites da análise</a></p>
+      </article>
+    </main>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
