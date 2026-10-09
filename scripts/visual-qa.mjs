@@ -44,6 +44,7 @@ try{
       }
       const body=route.request().postDataJSON()||{};
       const limit=Math.min(100,Math.max(1,Number(body.limit||20)));
+      if(limit===100)await new Promise(resolve=>setTimeout(resolve,850)); // Cold-request UX fixture
       await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(response(limit))});
     });
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
@@ -69,6 +70,8 @@ try{
     }
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:false,animations:'disabled'});
     await page.getByRole('button',{name:/ANALISAR ATÉ 100 PARTIDAS/}).click();
+    await page.locator('.historyDepthProgress').waitFor({state:'visible',timeout:3000});
+    assert.match(await page.locator('.historyDepthProgress').innerText(),/pode levar cerca de um minuto/);
     await page.locator('.historyDepthPanel').getByText('100 partidas carregadas').waitFor({timeout:25000});
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-100.png',fullPage:true,animations:'disabled'});
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+3);
