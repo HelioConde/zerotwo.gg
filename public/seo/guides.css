@@ -1,0 +1,41 @@
+
+/* Educational hub follows the existing ZeroTwo SEO design system. */
+.guideDirectory{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin:22px 0 12px;
+}
+.guideEntry{
+  min-width:0;
+  display:grid;grid-template-columns:34px minmax(0,1fr) 20px;
+  align-items:start;gap:14px;padding:18px;
+  background:linear-gradient(135deg,rgba(14,19,32,.98),rgba(7,10,16,.98));
+  border:1px solid rgba(140,163,211,.18);border-radius:15px;
+  text-decoration:none;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease;
+}
+.guideEntry:hover,.guideEntry:focus-visible{
+  border-color:rgba(255,102,151,.55);
+  background:linear-gradient(135deg,#141c2d,#0a111b);
+  transform:translateY(-2px);
+}
+.guideCount{
+  color:#ff95b7;font:800 14px/1.4 ui-monospace,monospace;
+}
+.guideEntry strong{display:block;color:#f6f8ff;font-size:17px;line-height:1.3}
+.guideEntry p{margin:7px 0 0;color:#abb8cd;font-size:13px;line-height:1.6}
+.guideArrow{color:#75ddff;font-size:18px;text-align:right}
+.content ol{padding-left:24px}
+.content li{padding-left:7px;margin:9px 0}
+.content a:not(.guideEntry){text-decoration-color:rgba(130,218,255,.5);text-underline-offset:3px}
+.content a:focus-visible,.guideEntry:focus-visible{outline:2px solid #75ddff;outline-offset:3px}
+@media(max-width:730px){
+  .guideDirectory{grid-template-columns:minmax(0,1fr);gap:10px}
+  .guideEntry{grid-template-columns:26px minmax(0,1fr) 18px;padding:15px;gap:11px}
+  .guideEntry strong{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .guideEntry{transition:none}
+  .guideEntry:hover{transform:none}
+}
