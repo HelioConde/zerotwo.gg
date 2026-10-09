@@ -7,6 +7,7 @@ import './polish-2026-10-09.css';
 import './profile-quick-nav-2026-10-09.css';
 import './zerotwo-art-2026-10-09.css';
 import './visual-media-2026-10-09.css';
+import './riot-change-cinematic-2026-10-09.css';
 import { supabase } from './supabase';
 import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
