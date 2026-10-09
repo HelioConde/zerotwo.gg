@@ -141,6 +141,22 @@ export function PublicPlayerLookup(){
   setData(extended);
   if(extended?.cache?.pending>0)setDepthError('Parte do histórico ainda não está disponível. Você pode tentar completar a análise depois.');
  }
+ function jumpToProfileSection(id:string){
+  const element=document.getElementById(id);
+  if(!element)return;
+  const top=Math.max(0,window.scrollY+element.getBoundingClientRect().top-84);
+  window.scrollTo({top,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+ }
+ function openEvidence(view:'moment'|'champions'|'matches'|'dna'){
+  const details=document.getElementById('riot-evidence') as HTMLDetailsElement|null;
+  if(!details)return;
+  setProfileView(view);
+  details.open=true;
+  window.requestAnimationFrame(()=>{
+   jumpToProfileSection('riot-evidence');
+   (details.querySelector('summary') as HTMLElement|null)?.focus({preventScroll:true});
+  });
+ }
  const shown=data?(data.matches||[]).filter((m:any)=>matchFilter==='ALL'||(matchFilter==='OTHER'?!['RANKED','NORMAL','ARAM','ARENA'].includes(m.context):m.context===matchFilter)):[];
  return <section className={'publicLookup homeLookup'+(data?' hasResult':'')+' game-lol'}><a className="skipToContent" href={data?'#profile-overview':'#experience'}>PULAR PARA O CONTEÚDO PRINCIPAL</a><div className="homeHero"><div className="homeHeroBackdrop" aria-hidden="true"><span className="heroZero">ZT</span><i/><i/></div><div className="lookupIntro homeHeroCopy"><small>ESTATÍSTICAS LOL POR RIOT ID // LEAGUE OF LEGENDS</small><h1>SUA HISTÓRIA RIOT.<br/><span>VALE MAIS QUE UM KDA.</span></h1><p>Digite um Riot ID. O ZeroTwo procura sessões, mudanças, momentos e padrões dentro dos dados que a Riot realmente disponibiliza. <b>Sem cadastro.</b></p><div className="lookupSearch"><div><Icon name="search"/><input aria-label="Riot ID para buscar jogador" aria-describedby="riot-id-help" autoCapitalize="none" autoCorrect="off" spellCheck={false} enterKeyHint="search" autoComplete="off" value={q} onFocus={()=>{if(!publicSearchStarted.current){publicSearchStarted.current=true;ztProductEvent('riot_id_started',{area:'product_funnel',context:{source:'public_search'}})}}} onChange={e=>setQ(e.target.value.replace(/\s*#\s*/g,'#'))} onBlur={()=>setQ(normalizeRiotId(q))} onPaste={e=>{const pasted=e.clipboardData.getData('text');if(pasted.includes('#')){e.preventDefault();setQ(normalizeRiotId(pasted))}}} onKeyDown={e=>e.key==='Enter'&&!loading&&search()} placeholder="Nome#TAG  ·  Ex.: AlchemyFlames#BR1"/>{q&&<button type="button" className="lookupClear" aria-label="Limpar Riot ID" onClick={()=>{setQ('');setError('')}}>×</button>}</div><select aria-label="Servidor da busca" title="Servidor da busca" value={platform} onChange={e=>setPlatform(e.target.value)}><option value="br1">BR</option><option value="na1">NA</option><option value="la1">LAN</option><option value="la2">LAS</option><option value="euw1">EUW</option><option value="eun1">EUNE</option><option value="kr">KR</option><option value="jp1">JP</option><option value="oc1">OCE</option><option value="tr1">TR</option></select><button onClick={search} disabled={loading} aria-busy={loading}>{loading?'LENDO RIOT LIFE...':'VER RIOT LIFE →'}</button></div><div id="riot-id-help" className="lookupHelp"><span>Formato: <b>Nome#TAG</b> · dados públicos da Riot</span><span>{loading?'Buscando perfil, histórico e capítulos…':'As primeiras 20 partidas aparecem rapidamente. Você pode ampliar para até 100.'}</span></div>{error&&<p className="lookupError" role="alert"><b>NÃO CONSEGUIMOS CONCLUIR A BUSCA.</b><span>{error}</span><button onClick={()=>search()} disabled={loading}>TENTAR NOVAMENTE</button></p>}<div className="lookupTrust"><span><Icon name="check"/> SEM CADASTRO</span><span><Icon name="game"/> DADOS RIOT</span><span><Icon name="dna"/> HISTÓRIA + DNA</span></div><div className="homeHeroFacts" aria-label="Resumo do que a Riot Life analisa"><span><b>20</b><small>CAPÍTULOS</small></span><span><b>20 → 100</b><small>HISTÓRICO SOB DEMANDA</small></span><span><b>4+</b><small>CONTEXTOS SEPARADOS</small></span></div>{!data&&recentPlayers.length>0&&<div className="recentPlayerSearches"><div><small>BUSCAS RECENTES</small><button onClick={()=>{localStorage.removeItem('zt_recent_players');setRecentPlayers([])}}>LIMPAR</button></div><section>{recentPlayers.map(x=><button key={x.platform+'-'+x.riotId} onClick={()=>search(x.riotId,x.platform)}><span><b>{x.riotId}</b><small>{x.platform.toUpperCase()}</small></span><Icon name="arrow"/></button>)}</section></div>}</div></div>{!data&&!loading&&<HomeExperience/>}{loading&&<div className="lookupLoading" role="status" aria-live="polite"><Icon name="search"/><b>LENDO A RIOT LIFE</b><span>Histórico, rank, maestria e padrões recentes...</span><i/></div>}{data&&<div className="publicPlayerResult publicPlayerV4">
  <button className="publicBackHome" onClick={()=>window.dispatchEvent(new CustomEvent('zt:go-home'))}>← NOVA BUSCA</button>
@@ -152,11 +168,18 @@ export function PublicPlayerLookup(){
   <div className="playerIdentityRanks">
    {data.ranked?.length>0?data.ranked.slice(0,2).map((r:any)=><span key={r.queue}><small>{r.queue}</small><b>{r.tier} {r.rank}</b><em>{r.lp} LP · {r.winRate}% WR</em></span>):<span><small>RANK OFICIAL</small><b>{data.status?.ranked==='unavailable'?'INDISPONÍVEL':'SEM RANK'}</b><em>{data.status?.ranked==='unavailable'?'Falha temporária da Riot':'nesta consulta'}</em></span>}
   </div>
-  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button><div className="playerLocaleActions" role="group" aria-label="Idioma da Riot Life">
+  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><button type="button" className="playerEvidenceAction" onClick={()=>openEvidence('moment')}>EVIDÊNCIAS</button><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button><div className="playerLocaleActions" role="group" aria-label="Idioma da Riot Life">
      <button type="button" title="Português (Brasil)" onClick={()=>setLanguage('pt-BR')} aria-pressed={language==='pt-BR'} className={language==='pt-BR'?'active':''}>PT-BR</button>
      <button type="button" title="English" onClick={()=>setLanguage('en')} aria-pressed={language==='en'} className={language==='en'?'active':''}>EN</button>
    </div></div>
  </section>
+ <nav className="profileQuickNav" aria-label="Atalhos do perfil">
+   <span>ACESSO RÁPIDO</span>
+   <button type="button" onClick={()=>jumpToProfileSection('riot-life-story')}><Icon name="dna"/> HISTÓRIA</button>
+   <button type="button" onClick={()=>openEvidence('matches')}><Icon name="game"/> PARTIDAS</button>
+   <button type="button" onClick={()=>openEvidence('champions')}><Icon name="status"/> CAMPEÕES</button>
+   <button type="button" onClick={()=>openEvidence('dna')}><Icon name="arrow"/> DNA</button>
+ </nav>
  <section className="historyDepthPanel" aria-label="Profundidade do histórico" aria-live="polite">
   <div><small>HISTÓRICO OBSERVADO</small><b>{data.matches?.length||0} partidas carregadas</b><p>Começamos com uma amostra menor para preservar velocidade e limites da API. Os dados da Riot podem ser expandidos para até 100 partidas.</p>
    {data.status?.mastery==='unavailable'&&<p className="historyDepthWarning">A maestria não pôde ser consultada agora; isso não significa que o jogador não tenha maestria.</p>}
