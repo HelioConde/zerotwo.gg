@@ -215,6 +215,7 @@ function App(){
         </section>
         <section>
           <small>GUIAS</small>
+          <a href="/zerotwo.gg/guias/">Todos os guias</a>
           <a href="/zerotwo.gg/lol-stats-tracker/">LoL Stats Tracker</a>
           <a href="/zerotwo.gg/maestria-lol/">Maestria LoL</a>
           <a href="/zerotwo.gg/historico-lol/">Histórico LoL</a>
