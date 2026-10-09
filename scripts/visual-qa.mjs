@@ -2,7 +2,7 @@
 // Screenshots are for layout regression only, not proof of live Riot availability.
 import {chromium} from 'playwright';
 import {strict as assert} from 'node:assert';
-import {mkdirSync} from 'node:fs';
+import {mkdirSync,readFileSync} from 'node:fs';
 
 mkdirSync('visual-qa-artifacts',{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -59,6 +59,22 @@ try{
     );
     await page.locator('#riot-life-story .riotStoryIntroWithArt').waitFor({state:'visible',timeout:25000});
     assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/);
+    const sharePanel=page.locator('.riotSharePanel');
+    await sharePanel.waitFor({state:'visible',timeout:25000});
+    assert.equal(await sharePanel.locator('.riotSharePreview>img').evaluate(img=>img.complete&&img.naturalWidth>0),
+      true,name+': 9:16 story artwork loads from the public folder');
+    assert.match(await sharePanel.innerText(),/PARTIDAS OBSERVADAS/);
+    if(name==='desktop'){
+      const downloadReady=page.waitForEvent('download',{timeout:15000});
+      await sharePanel.getByRole('button',{name:/BAIXAR STORY 9:16/}).click();
+      const download=await downloadReady;
+      assert.match(download.suggestedFilename(),/^zerotwo-riot-life-.*\.png$/);
+      const png=readFileSync(await download.path());
+      assert.equal(png.subarray(1,4).toString(),'PNG','Story export uses PNG');
+      assert.equal(png.readUInt32BE(16),1080,'Story export width');
+      assert.equal(png.readUInt32BE(20),1920,'Story export height');
+    }
+
     const inlineLocale=page.locator('.playerLocaleActions');
     assert.equal(await inlineLocale.isVisible(),true,name+': language picker must be visible next to profile actions');
     assert.equal(await page.locator('.ztLanguageSwitcher').isVisible(),false,name+': legacy floating language picker must not cover chapters');
