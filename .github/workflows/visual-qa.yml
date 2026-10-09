@@ -1,0 +1,50 @@
+name: ZeroTwo Visual QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'scripts/visual-qa.mjs'
+      - '.github/workflows/visual-qa.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zerotwo-visual-qa
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: Desktop + Mobile Visual Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install app and visual runner
+        run: |
+          npm install
+          npm install --no-save playwright@1.56.0
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Check TypeScript
+        run: npm run typecheck
+      - name: Run visual smoke and save captures
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/zerotwo-vite.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          node scripts/visual-qa.mjs
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerotwo-visual-qa
+          path: visual-qa-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
