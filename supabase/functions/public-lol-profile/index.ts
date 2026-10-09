@@ -44,11 +44,12 @@ Deno.serve(async(req:Request)=>{
  const player={gameName:account.gameName||gn,tagLine:account.tagLine||tl,level:summoner?.summonerLevel??null,profileIconId:summoner?.profileIconId??null,platform:plat.toUpperCase()};
  if(!ids.ok)return out({error:"matches",message:riotFailure(ids.status),riotStatus:ids.status,retryAfter:ids.retryAfter,player},upstreamStatus(ids.status));
  const target=(Array.isArray(ids.data)?ids.data:[]).slice(0,requestedLimit) as string[];
- const {data:cached}=target.length?await db.from("lol_match_cache").select("match_id,match_data,expires_at").in("match_id",target):{data:[] as any[]};
+ const {data:cached,error:cacheReadError}=target.length?await db.from("lol_match_cache").select("match_id,match_data,expires_at").in("match_id",target):{data:[] as any[],error:null};
+ if(cacheReadError)console.warn("Riot match cache read failed:",cacheReadError.code||"db_error");
  // Completed Riot matches are immutable; avoid re-fetching expired cache records unnecessarily.
  const cmap=new Map((cached||[]).filter((x:any)=>x.match_data&&x.match_id).map((x:any)=>[x.match_id,x.match_data]));
  const missing=target.filter((id:string)=>!cmap.has(id));
- let fetchedNow=0,rateLimited=false;
+ let fetchedNow=0,rateLimited=false,cacheWriteFailures=0;
  for(let i=0;i<missing.length;i+=3){
    if(i>0)await new Promise(resolve=>setTimeout(resolve,300));
    const batch=missing.slice(i,i+3);
@@ -61,7 +62,7 @@ Deno.serve(async(req:Request)=>{
      cacheWrites.push(db.from("lol_match_cache").upsert({match_id:x.id,region:reg,game_start:info.gameStartTimestamp?new Date(info.gameStartTimestamp).toISOString():null,game_duration:info.gameDuration||null,queue_id:info.queueId||null,match_data:m,fetched_at:new Date().toISOString(),expires_at:new Date(Date.now()+30*24*60*60*1000).toISOString(),updated_at:new Date().toISOString()},{onConflict:"match_id"}))
    }
    // Writes must not serialize every uncached Riot match.
-   if(cacheWrites.length)await Promise.allSettled(cacheWrites);
+   if(cacheWrites.length){const saved=await Promise.allSettled(cacheWrites);cacheWriteFailures+=saved.filter((r:any)=>r.status==="rejected"||r.value?.error).length;}
    if(got.some((x:any)=>x.res.status===429)){rateLimited=true;break}
  }
  const raw=target.map((id:string)=>cmap.get(id)).filter(Boolean);
@@ -89,5 +90,5 @@ Deno.serve(async(req:Request)=>{
  }
  const enough=sample.length>0,mainMode=modeSummaries[0]||null;
  const performanceSignal=mainMode?.name==="ARENA"&&mainMode.avgPlacement!=null?"Na Arena, sua colocação média foi "+mainMode.avgPlacement+" e você ficou no Top 4 em "+mainMode.top4Rate+"% da amostra.":wins+" vitórias em "+sample.length+" partidas recentes analisadas.";
- return out({player,ranked:rankRows,mastery:masteryRows,modeSummaries,championSummaries,status:{ranked:ranked.ok?"ok":"unavailable",mastery:mastery.ok?"ok":"unavailable",history:rateLimited||raw.length<target.length?"partial":"ok",rankedStatus:ranked.ok?null:ranked.status,masteryStatus:mastery.ok?null:mastery.status},summary:{matches:sample.length,recentMatches:rows.length,wins:enough?wins:null,losses:enough?sample.length-wins:null,winRate:enough?Math.round(wins/sample.length*100):null,avgKda:avg(sample,"kda"),avgCsPerMin:avg(srSample,"csPerMin"),avgVisionPerMin:avg(srSample,"visionPerMin"),avgDamagePerMin:avg(sample,"damagePerMin"),primaryPosition,mainContext,contexts:modeSummaries.map((x:any)=>({name:x.name,games:x.games})),topChampions:tops(sample,"champion",3),confidence:sample.length>=8?"BOA":sample.length>=4?"EM FORMAÇÃO":sample.length?"INICIAL":"SEM AMOSTRA"},matches:rows,analysis:enough?{headline:sample.length<4?"AINDA ESTAMOS CONHECENDO ESTE JOGO":mainContext?"MOMENTO RECENTE: "+mainContext:"PADRÃO RECENTE",signals:["KDA médio de "+avg(sample,"kda")+" no histórico recente.",mainContext+" foi o modo mais frequente nesta amostra.",performanceSignal]}:{headline:"AINDA SEM PARTIDAS RECENTES PARA ANALISAR",signals:["Quando houver histórico disponível, o ZeroTwo separa padrões por modo.","ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.","Métricas específicas só são comparadas quando fazem sentido naquele modo."]},cache:{requested:requestedLimit,availableIds:target.length,matchesLoaded:raw.length,cached:target.length-missing.length,fetched:fetchedNow,pending:Math.max(0,target.length-raw.length),rateLimited}});
+ return out({player,ranked:rankRows,mastery:masteryRows,modeSummaries,championSummaries,status:{ranked:ranked.ok?"ok":"unavailable",mastery:mastery.ok?"ok":"unavailable",history:rateLimited||raw.length<target.length?"partial":"ok",rankedStatus:ranked.ok?null:ranked.status,masteryStatus:mastery.ok?null:mastery.status},summary:{matches:sample.length,recentMatches:rows.length,wins:enough?wins:null,losses:enough?sample.length-wins:null,winRate:enough?Math.round(wins/sample.length*100):null,avgKda:avg(sample,"kda"),avgCsPerMin:avg(srSample,"csPerMin"),avgVisionPerMin:avg(srSample,"visionPerMin"),avgDamagePerMin:avg(sample,"damagePerMin"),primaryPosition,mainContext,contexts:modeSummaries.map((x:any)=>({name:x.name,games:x.games})),topChampions:tops(sample,"champion",3),confidence:sample.length>=8?"BOA":sample.length>=4?"EM FORMAÇÃO":sample.length?"INICIAL":"SEM AMOSTRA"},matches:rows,analysis:enough?{headline:sample.length<4?"AINDA ESTAMOS CONHECENDO ESTE JOGO":mainContext?"MOMENTO RECENTE: "+mainContext:"PADRÃO RECENTE",signals:["KDA médio de "+avg(sample,"kda")+" no histórico recente.",mainContext+" foi o modo mais frequente nesta amostra.",performanceSignal]}:{headline:"AINDA SEM PARTIDAS RECENTES PARA ANALISAR",signals:["Quando houver histórico disponível, o ZeroTwo separa padrões por modo.","ARAM, Arena, Normal e Ranked podem contribuir para encontrar um 02.","Métricas específicas só são comparadas quando fazem sentido naquele modo."]},cache:{requested:requestedLimit,availableIds:target.length,matchesLoaded:raw.length,cached:target.length-missing.length,fetched:fetchedNow,pending:Math.max(0,target.length-raw.length),cacheWriteFailures,rateLimited}});
 });
