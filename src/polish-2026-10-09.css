@@ -157,3 +157,28 @@ body:has(.publicPlayerResult) .ztLanguageSwitcher{
   font-size:12px;
   line-height:1.5;
 }
+
+
+/* 2026-10-09 chapter navigation fix.
+   .gamingLanding previously had overflow:hidden, making it an implicit
+   vertical scroll container and preventing position:sticky from following
+   the document scroll. overflow:clip clips decoration without creating one. */
+.gamingLanding{
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+}
+.riotStoryNav{
+  overscroll-behavior-x:contain;
+  touch-action:pan-x pan-y;
+}
+.riotStoryNav a:focus-visible{
+  outline:2px solid #75ddff!important;
+  outline-offset:-3px!important;
+}
+#riot-life-story [id^="riot-"]:focus{
+  outline:none;
+}
+#riot-life-story [id^="riot-"]:focus-visible{
+  outline:2px solid rgba(117,221,255,.8);
+  outline-offset:3px;
+}
