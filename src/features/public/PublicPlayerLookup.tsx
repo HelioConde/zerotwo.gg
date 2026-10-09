@@ -146,10 +146,10 @@ export function PublicPlayerLookup(){
   <div className="playerIdentityRanks">
    {data.ranked?.length>0?data.ranked.slice(0,2).map((r:any)=><span key={r.queue}><small>{r.queue}</small><b>{r.tier} {r.rank}</b><em>{r.lp} LP · {r.winRate}% WR</em></span>):<span><small>RANK OFICIAL</small><b>{data.status?.ranked==='unavailable'?'INDISPONÍVEL':'SEM RANK'}</b><em>{data.status?.ranked==='unavailable'?'Falha temporária da Riot':'nesta consulta'}</em></span>}
   </div>
-  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><div className="playerLocaleActions" role="group" aria-label="Idioma da Riot Life">
+  <div className="playerIdentityActions"><a className="playerQuickPrimary" href="#riot-life-story">LER RIOT LIFE ↓</a><a href="#riot-evidence">EVIDÊNCIAS</a><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button><div className="playerLocaleActions" role="group" aria-label="Idioma da Riot Life">
      <button type="button" title="Português (Brasil)" onClick={()=>setLanguage('pt-BR')} aria-pressed={language==='pt-BR'} className={language==='pt-BR'?'active':''}>PT-BR</button>
      <button type="button" title="English" onClick={()=>setLanguage('en')} aria-pressed={language==='en'} className={language==='en'?'active':''}>EN</button>
-   </div><button className="playerShare" aria-live="polite" aria-label={shareStatus?'Link do perfil copiado':'Compartilhar esta Riot Life'} onClick={shareProfile}><Icon name={shareStatus?'check':'arrow'}/> {shareStatus||'COMPARTILHAR'}</button></div>
+   </div></div>
  </section>
  <section className="historyDepthPanel" aria-label="Profundidade do histórico" aria-live="polite">
   <div><small>HISTÓRICO OBSERVADO</small><b>{data.matches?.length||0} partidas carregadas</b><p>Começamos com uma amostra menor para preservar velocidade e limites da API. Os dados da Riot podem ser expandidos para até 100 partidas.</p>
