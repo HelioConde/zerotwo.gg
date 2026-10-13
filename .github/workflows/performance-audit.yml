@@ -1,0 +1,48 @@
+name: ZeroTwo Lighthouse Performance
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy ZeroTwo.gg to Pages"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zerotwo-lighthouse
+  cancel-in-progress: true
+
+jobs:
+  laboratory:
+    name: Lighthouse — live Pages, mobile and desktop
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Lighthouse and Chromium
+        run: |
+          npm install --no-save --no-package-lock lighthouse@12.8.2 playwright@1.56.0
+          npx playwright install --with-deps chromium
+      - name: Lighthouse published homepage, mobile and desktop
+        env:
+          TARGET_URL: https://helioconde.github.io/zerotwo.gg/
+        run: |
+          mkdir -p performance-artifacts
+          export CHROME_PATH="$(node -p "require('playwright').chromium.executablePath()")"
+          echo "Using Chromium from Playwright install."
+          npx lighthouse "$TARGET_URL" --quiet --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=performance-artifacts/mobile --max-wait-for-load=45000
+          npx lighthouse "$TARGET_URL" --quiet --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" --preset=desktop --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=performance-artifacts/desktop --max-wait-for-load=45000
+          node scripts/summarize-lighthouse.mjs
+      - name: Upload Lighthouse evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerotwo-lighthouse-lab
+          path: performance-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
