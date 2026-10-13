@@ -9,8 +9,13 @@ const accountTables=[
  'riot_life_snapshots','valorant_user_matches','valorant_accounts','riot_rso_states',
  'player_dna_snapshots','client_event_logs','riot_accounts','profiles'
 ];
+const sharedAppTables=[
+  'chibi_recorded_matches','chibi_riot_account_links',
+  'tft_museum_collections','tft_museum_match_archive',
+  'tft_museum_public_shares','tft_museum_state','tft_museum_watch_profiles'
+];
 const exempt=['zerotwo_privacy_requests']; // FK on delete SET NULL; handled separately.
-const untracked=existing.filter(name=>!accountTables.includes(name)&&!exempt.includes(name));
+const untracked=existing.filter(name=>!accountTables.includes(name)&&!exempt.includes(name)&&!sharedAppTables.includes(name));
 const missing=accountTables.filter(name=>!existing.includes(name));
 console.log('Verified user-scoped schema tables:',existing.join(', '));
 if(untracked.length)console.log('::warning title=ZeroTwo data inventory::Additional user_id tables require review: '+untracked.join(', '));

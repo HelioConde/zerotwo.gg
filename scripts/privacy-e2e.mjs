@@ -1,3 +1,4 @@
+// E2E deliberately begins only after the schema and shared-identity safety deployments.
 // Disposable-account integration test. Run only in isolated GitHub Actions.
 // No real user account, PUUID, Riot key or persistent test data is touched.
 import {createClient} from '@supabase/supabase-js';
@@ -54,6 +55,8 @@ try{
     action:'delete_account',confirmation:'DELETE MY ZEROTWO ACCOUNT'}});
   if(removed.error||removed.data?.ok!==true)
     throw Error('Account deletion failed after: '+String(removed.data?.completed||[]));
+  assert.equal(removed.data?.authDeleted,true,'Disposable account should delete global Auth when no shared app data');
+  assert.equal(removed.data?.sharedAuthRetained,false,'Disposable account was erroneously classified as shared');
   assert.equal(await snapshots(),0);
   const gone=await admin.auth.admin.getUserById(id);
   assert.ok(gone.error||!gone.data?.user,'Deleted Auth account still exists');

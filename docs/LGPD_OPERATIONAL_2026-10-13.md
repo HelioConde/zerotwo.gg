@@ -21,3 +21,9 @@ Deve ser definido um endereço privado do ZeroTwo antes de considerar concluído
 ## Compartilhamento com Chibi/TFT (auditoria de 13/10/2026)
 O projeto de Supabase também armazena dados Chibi/TFT. A exclusão automática do ZeroTwo faz uma verificação de tabelas compartilhadas antes de limpar dados e impede a exclusão da identidade Auth enquanto houver registros de outros produtos. Só remove registros ZeroTwo; a confirmação diferencia quando o login global permanece. Se não for possível verificar os dados compartilhados, a operação é rejeitada sem começar a exclusão. A conta de teste descartável é excluída apenas quando não há dados compartilhados.
 A tabela \`riot_life_snapshots\` estava ausente no banco apesar de existir no repositório. O deploy agora aplica a migração original com RLS e recarrega o esquema PostgREST. Não deletar dados Chibi/TFT.
+
+## Correção de esquema e identidade compartilhada — 13/10/2026
+- Identificado via auditoria de schema: o banco também contém dados Chibi/TFT; exclusão no ZeroTwo deve preservar esses registros.
+- O deploy de funções passou a aplicar `20261001_riot_life_memory.sql` e `20260927_valorant_rso.sql` em conjunto com o esquema do inbox, com RLS habilitado e refresh do cache PostgREST.
+- Verificação de compartilhamento do usuário é obrigatória e falha fechada antes de apagar registros ZeroTwo. O serviço só apaga a identidade Auth quando não existem dados nos aplicativos compartilhados.
+- O teste com conta descartável foi preparado para confirmar o resultado do novo esquema. O teste anterior falhou no insert por tabela ausente (PGRST205) antes de qualquer exclusão de conta real.
