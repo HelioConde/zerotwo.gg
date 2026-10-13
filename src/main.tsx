@@ -149,10 +149,10 @@ function App(){
   },[]);
 
   const isAuthDialogOpen=authOpen&&(!session||needsOnboarding||!authReady);
-  useEffect(()=>{
+  React.useLayoutEffect(()=>{
     if(!isAuthDialogOpen)return;
     const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
-    const frame=requestAnimationFrame(()=>authCloseRef.current?.focus());
+    authCloseRef.current?.focus();
     const handleKey=(event:KeyboardEvent)=>{
       if(event.key==='Escape'){event.preventDefault();setAuthOpen(false);return;}
       if(event.key!=='Tab')return;
@@ -169,7 +169,7 @@ function App(){
       }
     };
     document.addEventListener('keydown',handleKey);
-    return()=>{cancelAnimationFrame(frame);document.removeEventListener('keydown',handleKey);previousFocus?.focus({preventScroll:true});};
+    return()=>{document.removeEventListener('keydown',handleKey);previousFocus?.focus({preventScroll:true});};
   },[isAuthDialogOpen]);
 
   return <main className="gamingLanding">
