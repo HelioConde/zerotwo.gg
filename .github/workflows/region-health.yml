@@ -1,0 +1,39 @@
+name: ZeroTwo Cross-Region Health
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/region-health.mjs'
+      - '.github/workflows/region-health.yml'
+  schedule:
+    - cron: '17 10 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zerotwo-region-health
+  cancel-in-progress: true
+
+jobs:
+  regions:
+    name: Shallow Riot checks BR1 NA1 EUW1 KR
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check supported regional lookup endpoints and invalid routing
+        run: node scripts/region-health.mjs
+      - name: Upload sanitized findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerotwo-region-health
+          path: region-health-artifacts/
+          retention-days: 14
+          if-no-files-found: warn
