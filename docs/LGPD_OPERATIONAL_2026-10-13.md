@@ -30,3 +30,6 @@ A tabela \`riot_life_snapshots\` estava ausente no banco apesar de existir no re
 
 ## Grants explícitos de serviço
 O teste descartável detectou permissão 42501 ao consultar snapshots pelo acesso administrativo. A migração `20261013212500_zerotwo_privacy_service_grants.sql` concede permissões estritamente a `service_role` nas tabelas do ZeroTwo que existem. Nenhuma nova permissão `anon` ou `authenticated` é concedida; RLS existente permanece.
+
+## Proteção extra de acesso aos dados compartilhados
+Após passar a criar e apagar snapshots e registrar pedidos privados, o teste descartável identificou que a checagem da identidade compartilhada não conseguia confirmar todos os vínculos. `20261013213000_zerotwo_shared_identity_read.sql` concede a `service_role` exclusivamente **SELECT** nas tabelas Chibi/TFT necessárias para saber se o Auth global deve ser preservado. Não autoriza apagar ou modificar essas tabelas por meio do ZeroTwo.
