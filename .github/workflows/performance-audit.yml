@@ -24,17 +24,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Lighthouse and Chromium
-        run: |
-          npm install --no-save --no-package-lock lighthouse@12.8.2 playwright@1.56.0
-          npx playwright install --with-deps chromium
+      - name: Install Lighthouse (Chrome is preinstalled on ubuntu-latest)
+        run: npm install --no-save --no-package-lock lighthouse@12.8.2
       - name: Lighthouse published homepage, mobile and desktop
         env:
           TARGET_URL: https://helioconde.github.io/zerotwo.gg/
         run: |
           mkdir -p performance-artifacts
-          export CHROME_PATH="$(node -p "require('playwright').chromium.executablePath()")"
-          echo "Using Chromium from Playwright install."
+          export CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          test -x "$CHROME_PATH" || { echo "::error::Chrome not available on this runner"; exit 1; }
+          echo "Using preinstalled Chrome at $CHROME_PATH"
           npx lighthouse "$TARGET_URL" --quiet --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=performance-artifacts/mobile --max-wait-for-load=45000
           npx lighthouse "$TARGET_URL" --quiet --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" --preset=desktop --only-categories=performance,accessibility,best-practices,seo --output=json --output=html --output-path=performance-artifacts/desktop --max-wait-for-load=45000
           node scripts/summarize-lighthouse.mjs
