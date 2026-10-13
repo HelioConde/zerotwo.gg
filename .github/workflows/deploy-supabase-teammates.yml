@@ -43,6 +43,9 @@ jobs:
         with:
           version: latest
 
+      - name: Run privacy account-erasure unit tests (no production data)
+        run: deno test supabase/functions/privacy-manage/accountDeletion.test.ts
+
       - name: Deploy public player profile
         run: supabase functions deploy public-lol-profile --project-ref "$SUPABASE_PROJECT_ID"
 
