@@ -61,3 +61,11 @@ Ainda existem PNGs originais grandes nas artes finais (frequentemente acima de 2
 3. `npm run build`
 4. Visual QA desktop / laptop / mobile com checagem de imagens reais e captura de perfil
 5. Publicação do GitHub Pages após os jobs passarem
+
+## Publicação leve (13/10/2026)
+- **Otimização que realmente chega ao GitHub Pages:** `npm run build` gera WebP e o `postbuild` chama `scripts/prune-distribution-pngs.mjs`.
+- A limpeza de `dist/` remove 61 PNGs redundantes (**132,7 MB**) somente quando cada imagem já tem variante WebP válida.
+- CSS antigo e dois componentes que apontavam diretamente para PNG foram convertidos para WebP. O build bloqueia publicação quando ainda existe referência estática a PNG em CSS/HTML, e o Playwright valida imagens.
+- Um orçamento de **30 MB** para as variantes WebP finais impede crescimento acidental do pacote.
+- Os PNGs originais permanecem em `public/assets/zerotwo/` do repositório e podem ser editados normalmente; nenhum arquivo-fonte foi excluído.
+- Medição de 132,7 MB é economia de tamanho de arquivos descompactados na publicação, **não** redução exata de download por visitante; a página já usa carregamento sob demanda.

@@ -36,4 +36,10 @@ for (const name of pngs) {
 }
 const remaining = readdirSync(art).filter(n => n.toLowerCase().endsWith('.png'));
 if (remaining.length) throw Error('Original PNGs remain in public distribution');
-console.log('ZeroTwo release: excluded ' + removed + ' redundant PNGs (' + (originalBytes / 1e6).toFixed(1) + ' MB of unpacked files); all originals remain versioned in Git.');
+const webpFiles = readdirSync(art).filter(name => name.toLowerCase().endsWith('.webp'));
+const webpBytes = webpFiles.reduce((total, name) => total + statSync(join(art, name)).size, 0);
+const WEBP_BUDGET = 30_000_000;
+if (webpBytes > WEBP_BUDGET) {
+  throw Error('Release image budget exceeded: ' + (webpBytes / 1e6).toFixed(1) + ' MB / 30 MB');
+}
+console.log('ZeroTwo release: excluded ' + removed + ' redundant PNGs (' + (originalBytes / 1e6).toFixed(1) + ' MB of unpacked files); WebP artwork ' + (webpBytes / 1e6).toFixed(1) + ' MB (max 30 MB). All originals remain versioned in Git.');

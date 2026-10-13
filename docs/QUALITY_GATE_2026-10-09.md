@@ -39,3 +39,9 @@
 - Public Riot ID search stays usable even when an authenticated account has not completed onboarding.
 - Dedicated responsive UX for the extended-history control.
 - GitHub Actions visual QA screenshots use **synthetic fixture data** (not live Riot) for 1440 × 900 and 390 × 844 and test
+
+## Otimização adicional de distribuição (13/10/2026)
+- [x] Retirados do `dist/` os 61 PNGs duplicados (132,7 MB descompactados), mantendo os originais no GitHub.
+- [x] Build + Pages: [run 38432037355](https://github.com/HelioConde/zerotwo.gg/actions/runs/38432037355) aprovados.
+- [x] Playwright visual: [run 38432037221](https://github.com/HelioConde/zerotwo.gg/actions/runs/38432037221) aprovado.
+- [x] Orçamento de WebP de 30 MB no pós-build.
