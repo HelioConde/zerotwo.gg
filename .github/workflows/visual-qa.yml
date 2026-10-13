@@ -43,6 +43,9 @@ jobs:
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
           node scripts/visual-qa.mjs
+          # Separate Playwright CLI screenshots complement interaction tests.
+          npx playwright screenshot --browser chromium --viewport-size "1440,900" --wait-for-selector ".lookupSearch" --wait-for-timeout 1200 --full-page http://127.0.0.1:4173/zerotwo.gg/ visual-qa-artifacts/cli-desktop-home.png
+          npx playwright screenshot --browser chromium --viewport-size "390,844" --wait-for-selector ".lookupSearch" --wait-for-timeout 1200 --full-page http://127.0.0.1:4173/zerotwo.gg/ visual-qa-artifacts/cli-mobile-home.png
       - name: Upload visual evidence
         if: always()
         uses: actions/upload-artifact@v4
