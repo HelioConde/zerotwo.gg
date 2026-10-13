@@ -7,6 +7,7 @@ on:
     paths:
       - 'supabase/functions/public-lol-teammates/**'
       - 'supabase/functions/public-lol-profile/**'
+      - 'supabase/functions/privacy-manage/**'
       - 'supabase/functions/_shared/**'
       - 'supabase/config.toml'
       - '.github/workflows/deploy-supabase-teammates.yml'
@@ -47,3 +48,6 @@ jobs:
 
       - name: Deploy recurring teammates function
         run: supabase functions deploy public-lol-teammates --project-ref "$SUPABASE_PROJECT_ID"
+
+      - name: Deploy authenticated privacy manager
+        run: supabase functions deploy privacy-manage --project-ref "$SUPABASE_PROJECT_ID"
