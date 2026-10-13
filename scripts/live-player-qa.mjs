@@ -36,7 +36,12 @@ observations.privacy={
   denied:[401,403].includes(privacyCheck.status)
 };
 console.log('PRIVACY GATE',JSON.stringify(observations.privacy));
-let failed=!observations.privacy.denied;
+// Never send authenticated deletion requests in automated production checks.
+const privateRequestDenied=await invoke('privacy-manage',{action:'create_privacy_request',kind:'access',message:'Test without auth must not create a request'});
+const fullDeleteDenied=await invoke('privacy-manage',{action:'delete_account',confirmation:'DELETE MY ZEROTWO ACCOUNT'});
+observations.privacy.requestsDenied=[401,403].includes(privateRequestDenied.status);
+observations.privacy.accountDeletionDenied=[401,403].includes(fullDeleteDenied.status);
+let failed=!observations.privacy.denied||!observations.privacy.requestsDenied||!observations.privacy.accountDeletionDenied;
 const req={gameName:'AlchemyFlames',tagLine:'BR1',platform:'br1',region:'americas',limit:20};
 const profile=await invoke('public-lol-profile',req);
 const p=profile.result||{};

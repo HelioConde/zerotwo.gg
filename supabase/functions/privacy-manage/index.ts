@@ -41,6 +41,25 @@ Deno.serve(async req=>{
     return reply(200,{ok:true,scope:'riot_life_snapshots'});
   }
 
+  if(body.action==='create_privacy_request'){
+    if(Object.keys(body).some(k=>!['action','kind','message'].includes(k)) ||
+       !['access','correction','deletion','other'].includes(String(body.kind)) ||
+       typeof body.message!=='string' || body.message.trim().length<15 || body.message.length>1200)
+      return reply(400,{error:'invalid_request'});
+    if(!user.email)return reply(400,{error:'email_required'});
+    const since=new Date(Date.now()-24*60*60*1000).toISOString();
+    const {count,error:countError}=await admin.from('zerotwo_privacy_requests')
+      .select('id',{count:'exact',head:true}).eq('user_id',user.id).gte('created_at',since);
+    if(countError)return reply(503,{error:'request_inbox_unavailable'});
+    if((count||0)>=3)return reply(429,{error:'request_limit'});
+    const {data,error}=await admin.from('zerotwo_privacy_requests').insert({
+      user_id:user.id,reply_email:user.email,
+      request_type:body.kind,message:body.message.trim()
+    }).select('id').single();
+    if(error)return reply(503,{error:'request_inbox_unavailable'});
+    return reply(200,{ok:true,request_id:data.id,status:'received'});
+  }
+
   if(body.action==='delete_account'){
     if(body.confirmation!=='DELETE MY ZEROTWO ACCOUNT'||
        Object.keys(body).some(k=>k!=='action'&&k!=='confirmation'))

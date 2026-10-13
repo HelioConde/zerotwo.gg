@@ -24,6 +24,10 @@ export function PrivacyCenter({signedIn,onClose}:Props) {
   const [localCount,setLocalCount]=useState(()=>localKeys().length);
   const [status,setStatus]=useState('');
   const [busy,setBusy]=useState(false);
+  const [privacyKind,setPrivacyKind]=useState('access');
+  const [privacyMessage,setPrivacyMessage]=useState('');
+  const [requesting,setRequesting]=useState(false);
+
   useEffect(()=>{
     const previouslyFocused=document.activeElement instanceof HTMLElement?document.activeElement:null;
     closeRef.current?.focus();
@@ -72,6 +76,45 @@ export function PrivacyCenter({signedIn,onClose}:Props) {
     }finally{setBusy(false)}
   }
 
+  async function createPrivateRequest(){
+    if(!signedIn||requesting||privacyMessage.trim().length<15)return;
+    setRequesting(true);setStatus('');
+    try{
+      const {data,error}=await supabase.functions.invoke('privacy-manage',{body:{
+        action:'create_privacy_request',kind:privacyKind,message:privacyMessage.trim()
+      }});
+      if(error||data?.ok!==true){
+        setStatus(data?.error==='request_limit'
+          ?'Limite de três solicitações por 24 horas. Tente novamente amanhã.'
+          :'O pedido não foi registrado. Tente novamente mais tarde.');
+        return;
+      }
+      setPrivacyMessage('');
+      setStatus('Solicitação privada registrada. Referência: '+data.request_id+'. A equipe responderá pelo e-mail associado à conta.');
+    }catch{setStatus('Falha de conexão. Solicitação não confirmada.')}
+    finally{setRequesting(false)}
+  }
+
+  async function eraseMyAccount(){
+    if(!signedIn||busy)return;
+    const approval=window.prompt('Atenção: esta ação é permanente. Digite EXCLUIR para apagar sua conta ZeroTwo e dados associados. Seu histórico público da Riot NÃO será apagado.');
+    if(approval!=='EXCLUIR')return;
+    setBusy(true);setStatus('');
+    try{
+      const {data,error}=await supabase.functions.invoke('privacy-manage',{body:{
+        action:'delete_account',confirmation:'DELETE MY ZEROTWO ACCOUNT'
+      }});
+      if(error||data?.ok!==true){
+        setStatus('A exclusão completa não foi confirmada. Sua conta pode continuar ativa. Use o atendimento privado ou tente novamente; não considere os dados eliminados.');
+        return;
+      }
+      await supabase.auth.signOut({scope:'local'});
+      clearLocalData();
+      window.location.replace('/zerotwo.gg/');
+    }catch{setStatus('Erro de conexão. A exclusão da conta não foi confirmada.')}
+    finally{setBusy(false)}
+  }
+
   return <div className="ztPrivacyOverlay" role="dialog" aria-modal="true" aria-labelledby="zt-privacy-title" onMouseDown={e=>{if(e.target===e.currentTarget)onClose()}}>
     <div className="ztPrivacyPanel">
       <button ref={closeRef} className="ztPrivacyClose" type="button" aria-label="Fechar central de privacidade" onClick={onClose}>×</button>
@@ -101,6 +144,32 @@ export function PrivacyCenter({signedIn,onClose}:Props) {
           {busy?'Excluindo memórias…':'Excluir memórias em nuvem'}
         </button>
         {!signedIn&&<small>Entre na sua conta para habilitar a exclusão das memórias sincronizadas.</small>}
+      </section>
+      <section>
+        <h3>Solicitação LGPD privada</h3>
+        <p>Envie um pedido de acesso, correção ou exclusão pelo canal privado, sem publicar dados em uma issue do GitHub. Responderemos pelo e-mail da conta.</p>
+        <label className="ztPrivacyField">Tipo de solicitação
+          <select value={privacyKind} onChange={event=>setPrivacyKind(event.target.value)} disabled={!signedIn||requesting}>
+            <option value="access">Acesso aos meus dados</option>
+            <option value="correction">Correção</option>
+            <option value="deletion">Exclusão</option>
+            <option value="other">Outro assunto de privacidade</option>
+          </select>
+        </label>
+        <label className="ztPrivacyField">Descreva o pedido (sem senhas nem tokens)
+          <textarea rows={3} maxLength={1200} minLength={15} value={privacyMessage}
+            onChange={event=>setPrivacyMessage(event.target.value)} disabled={!signedIn||requesting}
+            placeholder="Descreva de forma breve quais dados ou direitos quer solicitar." />
+        </label>
+        <button className="ztPrivacyAction" type="button" disabled={!signedIn||requesting||privacyMessage.trim().length<15}
+          onClick={()=>void createPrivateRequest()}>{requesting?'Enviando…':'Registrar solicitação privada'}</button>
+        {!signedIn&&<small>É necessário entrar para identificar o titular de forma segura. A solicitação não fica pública.</small>}
+      </section>
+      <section>
+        <h3>Excluir minha conta ZeroTwo</h3>
+        <p>Remove definitivamente sua conta de autenticação e os registros de usuário identificados (perfil, Riot ID associado, snapshots, logs vinculados à conta e vínculos VALORANT). Não elimina partidas públicas da Riot nem caches gerais de jogo. Uma confirmação adicional é obrigatória.</p>
+        <button className="ztPrivacyDanger" type="button" disabled={!signedIn||busy||requesting}
+          onClick={()=>void eraseMyAccount()}>{busy?'Processando…':'Excluir minha conta permanentemente'}</button>
       </section>
       <div className="ztPrivacyLinks">
         <a href="/zerotwo.gg/privacidade/">Política de Privacidade</a>
