@@ -47,7 +47,7 @@ Deno.serve(async req=>{
       return reply(400,{error:'confirmation_required'});
     const result=await eraseAccountData(admin,user.id);
     if(!result.ok){
-      console.error('privacy-manage: incomplete deletion',result.error,result.table||'auth');
+      console.error('privacy-manage: incomplete deletion',result.error,('table' in result ? result.table : 'auth'));
       // Account remains active on failures; the user can retry or request assistance.
       return reply(503,{ok:false,error:result.error,scope:'partial',completed:result.completed});
     }

@@ -43,6 +43,11 @@ jobs:
         with:
           version: latest
 
+      - name: Setup Deno for privacy unit tests
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Run privacy account-erasure unit tests (no production data)
         run: deno test supabase/functions/privacy-manage/accountDeletion.test.ts
 
