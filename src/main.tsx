@@ -4,14 +4,13 @@ import './styles.css';
 import './ux-polish.css';
 import './redesign-2026.css';
 import './site-polish.css';
-import { supabase } from './supabase';
 import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
 import { I18nProvider, useLanguage } from './i18n';
 import { PublicPlayerLookup } from './features/public/PublicPlayerLookup';
-import { PrivacyCenter } from './components/PrivacyCenter';
 
 const Connect01=lazy(()=>import('./features/onboarding/Connect01').then(module=>({default:module.Connect01})));
+const PrivacyCenter=lazy(()=>import('./components/PrivacyCenter').then(module=>({default:module.PrivacyCenter})));
 
 type OwnRiotAccount={
   game_name:string;
@@ -57,6 +56,7 @@ function App(){
       return;
     }
 
+    const {supabase}=await import('./supabase');
     const [{data:p,error:pe},{data:r,error:re}]=await Promise.all([
       supabase.from('profiles').select('onboarding_complete').eq('user_id',s.user.id).maybeSingle(),
       supabase.from('riot_accounts').select('game_name,tag_line,platform').eq('user_id',s.user.id).maybeSingle()
@@ -118,31 +118,39 @@ function App(){
   },[]);
 
   useEffect(()=>{
-    supabase.auth.getSession().then(({data})=>{
-      setSession(data.session);
-      if(data.session?.user?.id)flushProductEvents(data.session.user.id);
-      // Returning signed-in users stay on the URL they intentionally opened.
-      routePlayer(data.session,{autoOpen:false});
-    });
-
-    const {data}=supabase.auth.onAuthStateChange((event,x)=>{
-      setSession(x);
-      if(x?.user?.id){
-        flushProductEvents(x.user.id);
-        if(event==='SIGNED_IN'){
-          ztLog(x.user.id,'auth_completed',{
-            area:'product_funnel',
-            context:{
-              provider:x.user.app_metadata?.provider||'unknown',
-              intent:sessionStorage.getItem('zt_pending_action')||'account'
-            }
-          });
+    // A public Riot ID search does not require authentication. Load Supabase
+    // after React's first paint so auth JavaScript doesn't block the hero.
+    let canceled=false;
+    let unsubscribe:(()=>void)|undefined;
+    void import('./supabase').then(({supabase})=>{
+      if(canceled)return;
+      supabase.auth.getSession().then(({data})=>{
+        if(canceled)return;
+        setSession(data.session);
+        if(data.session?.user?.id)void flushProductEvents(data.session.user.id);
+        void routePlayer(data.session,{autoOpen:false});
+      });
+      const {data}=supabase.auth.onAuthStateChange((event,x)=>{
+        if(canceled)return;
+        setSession(x);
+        if(x?.user?.id){
+          void flushProductEvents(x.user.id);
+          if(event==='SIGNED_IN'){
+            void ztLog(x.user.id,'auth_completed',{
+              area:'product_funnel',
+              context:{
+                provider:x.user.app_metadata?.provider||'unknown',
+                intent:sessionStorage.getItem('zt_pending_action')||'account'
+              }
+            });
+          }
         }
-      }
-      routePlayer(x,{autoOpen:event==='SIGNED_IN'});
-    });
-
-    return()=>data.subscription.unsubscribe();
+        void routePlayer(x,{autoOpen:event==='SIGNED_IN'});
+      });
+      unsubscribe=()=>data.subscription.unsubscribe();
+      if(canceled)unsubscribe();
+    }).catch(()=>{if(!canceled)setAuthReady(true);});
+    return()=>{canceled=true;unsubscribe?.();};
   },[]);
 
   const isAuthDialogOpen=authOpen&&(!session||needsOnboarding||!authReady);
@@ -186,6 +194,7 @@ function App(){
             <span className="accountDot"/> MINHA RIOT LIFE
           </button>
           <button className="logoutNav" onClick={async()=>{
+            const {supabase}=await import('./supabase');
             await supabase.auth.signOut();
             setSession(null);
             setOwnRiot(null);
@@ -199,7 +208,7 @@ function App(){
     </nav>
 
     <div id="zerotwo-content" tabIndex={-1}><PublicPlayerLookup key={publicReset}/></div>
-    {privacyOpen&&<PrivacyCenter signedIn={Boolean(session)} onClose={()=>{setPrivacyOpen(false);if(location.hash==="#privacy-center")history.replaceState({},document.title,location.pathname+location.search);}}/>}
+    {privacyOpen&&<Suspense fallback={<div className="clientLoading" role="status">CARREGANDO PRIVACIDADE…</div>}><PrivacyCenter signedIn={Boolean(session)} onClose={()=>{setPrivacyOpen(false);if(location.hash==="#privacy-center")history.replaceState({},document.title,location.pathname+location.search);}}/></Suspense>}
 
     {isAuthDialogOpen&&
       <div

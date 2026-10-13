@@ -1,4 +1,3 @@
-import { supabase } from '../supabase';
 
 export const LOG_SESSION_ID=(()=>{const k='zt_log_session';let v=sessionStorage.getItem(k);if(!v){v=crypto.randomUUID();sessionStorage.setItem(k,v)}return v})();
 const LOG_BLOCKED=/token|password|authorization|secret|cookie|puuid|api.?key|refresh|access/i;
@@ -33,6 +32,7 @@ function safeLogMessage(v?:string){
 export async function ztLog(userId:string|undefined,event_name:string,opts:LogOpts={}){
   if(!userId)return;
   try{
+    const {supabase}=await import('../supabase');
     await supabase.from('client_event_logs').insert({
       user_id:userId,
       session_id:LOG_SESSION_ID,
@@ -62,6 +62,7 @@ function bufferProductEvent(event_name:string,opts:ProductEventOpts={}){
 export async function ztProductEvent(event_name:string,opts:ProductEventOpts={}){
   if(!productAnalyticsEnabled())return;
   try{
+    const {supabase}=await import('../supabase');
     const {data}=await supabase.auth.getSession();
     const userId=data.session?.user?.id;
     if(userId){
