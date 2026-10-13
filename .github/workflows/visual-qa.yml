@@ -37,9 +37,12 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Check TypeScript
         run: npm run typecheck
+      - name: Build production bundle including CSS tree-shaking
+        run: npm run build
+
       - name: Run visual smoke and save captures
         run: |
-          npm run dev -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/zerotwo-vite.log 2>&1 &
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/zerotwo-vite.log 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
           node scripts/visual-qa.mjs
