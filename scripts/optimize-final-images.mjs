@@ -23,5 +23,20 @@ async function optimize(entry){
   generated++;
 }
 for(let i=0;i<entries.length;i+=3)await Promise.all(entries.slice(i,i+3).map(optimize));
+// A narrow hero composition for mobile — same art, fewer pixels/bytes.
+const hero='0b338a39-32cd-48f5-abb0-b31ac6c926dd';
+const sourceMobile=join(root,hero+'.png');
+const targetMobile=join(root,hero+'-mobile.webp');
+const mobileSourceStats=await stat(sourceMobile);
+let generateMobile=true;
+try {
+  const m=await stat(targetMobile);
+  if(m.mtimeMs>=mobileSourceStats.mtimeMs&&m.size>0)generateMobile=false;
+}catch{}
+if(generateMobile)await sharp(sourceMobile,{limitInputPixels:80_000_000})
+  .rotate().resize({width:880,withoutEnlargement:true})
+  .webp({quality:75,effort:4,smartSubsample:true}).toFile(targetMobile);
+const mobileBytes=(await stat(targetMobile)).size;
+console.log('ZeroTwo mobile hero: '+Math.round(mobileBytes/1024)+' KiB separate from the desktop hero.');
 if(entries.length!==generated)throw Error('Missing generated WebP variant');
 console.log('ZeroTwo final art:',generated,'WebP; original',Math.round(inputBytes/1e6),'MB, optimized',Math.round(outputBytes/1e6),'MB. Originals preserved.');

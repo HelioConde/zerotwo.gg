@@ -3328,7 +3328,7 @@ summary:focus-visible{
     background:
       linear-gradient(180deg,#05070a82 0%,#05070aa8 44%,#05070af5 100%),
       linear-gradient(90deg,#05070a66 0%,#05070a8f 50%,#05070a66 100%),
-      url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.webp') center top/auto 68% no-repeat!important;
+      url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd-mobile.webp') center top/auto 68% no-repeat!important;
     opacity:.82!important;
   }
   .homeLookup:not(.hasResult) .homeHeroCopy{

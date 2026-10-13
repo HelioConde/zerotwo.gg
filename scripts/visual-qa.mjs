@@ -87,8 +87,11 @@ try{
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
     assert.equal(await page.locator('.ztSeoFallback').count(),0,name+': React must replace fallback without duplicate SEO content');
     const lcpPreload=page.locator('head link[rel="preload"][as="image"][fetchpriority="high"]');
-    assert.equal(await lcpPreload.count(),1,name+': critical hero art should have exactly one high-priority preload');
-    assert.match(await lcpPreload.getAttribute('href'),/0b338a39.*\.webp$/,name+': preload must reference correct hero artwork');
+    const matchingPreloads=await lcpPreload.evaluateAll(links=>
+      links.filter(link=>!link.media||matchMedia(link.media).matches).map(link=>link.getAttribute('href'))
+    );
+    assert.equal(matchingPreloads.length,1,name+': must load only one viewport-specific critical hero');
+    assert.match(matchingPreloads[0],name==='mobile'?/-mobile\.webp$/:/0b338a39.*(?<!mobile)\.webp$/,name+': wrong hero preload for viewport');
     const ctaContrast=await page.locator('.homeLookup:not(.hasResult) .lookupSearch button[type="submit"]').first().evaluate(el=>{
       const rgb=color=>{const nums=color.match(/[\d.]+/g)?.map(Number)||[];return nums.slice(0,3).map(x=>{const v=x/255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;})};
       const c=getComputedStyle(el),a=rgb(c.color),b=rgb(c.backgroundColor);
