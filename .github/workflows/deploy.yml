@@ -58,6 +58,9 @@ jobs:
       - name: Vite build
         run: npm run build
 
+      - name: Check distributable size budgets
+        run: npm run audit:bundle
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 

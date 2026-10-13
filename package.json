@@ -10,6 +10,7 @@
     "typecheck": "tsc -b",
     "audit:images": "node scripts/audit-images.mjs",
     "audit:seo": "node scripts/audit-seo.mjs",
+    "audit:bundle": "node scripts/audit-bundle-budget.mjs",
     "generate:og": "node scripts/generate-og-image.mjs",
     "optimize:images": "node scripts/optimize-final-images.mjs",
     "prune:images": "node scripts/prune-distribution-pngs.mjs",
