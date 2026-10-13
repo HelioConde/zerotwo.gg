@@ -16,3 +16,8 @@ A operação autenticada \`delete_account\` exige confirmação explícita. O ba
 
 ## Solicitações sem conta
 Deve ser definido um endereço privado do ZeroTwo antes de considerar concluído o atendimento de titulares sem conta. Não publicar uma conta Gmail pessoal sem consentimento. O formulário autenticado não satisfaz sozinho todos os casos LGPD.
+
+
+## Compartilhamento com Chibi/TFT (auditoria de 13/10/2026)
+O projeto de Supabase também armazena dados Chibi/TFT. A exclusão automática do ZeroTwo faz uma verificação de tabelas compartilhadas antes de limpar dados e impede a exclusão da identidade Auth enquanto houver registros de outros produtos. Só remove registros ZeroTwo; a confirmação diferencia quando o login global permanece. Se não for possível verificar os dados compartilhados, a operação é rejeitada sem começar a exclusão. A conta de teste descartável é excluída apenas quando não há dados compartilhados.
+A tabela \`riot_life_snapshots\` estava ausente no banco apesar de existir no repositório. O deploy agora aplica a migração original com RLS e recarrega o esquema PostgREST. Não deletar dados Chibi/TFT.

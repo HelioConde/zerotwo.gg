@@ -97,7 +97,7 @@ export function PrivacyCenter({signedIn,onClose}:Props) {
 
   async function eraseMyAccount(){
     if(!signedIn||busy)return;
-    const approval=window.prompt('Atenção: esta ação é permanente. Digite EXCLUIR para apagar sua conta ZeroTwo e dados associados. Seu histórico público da Riot NÃO será apagado.');
+    const approval=window.prompt('Atenção: esta ação apaga os seus dados do ZeroTwo. Se o acesso for compartilhado com Chibi/TFT, a identidade de login será preservada. Digite EXCLUIR para confirmar.');
     if(approval!=='EXCLUIR')return;
     setBusy(true);setStatus('');
     try{
@@ -167,9 +167,9 @@ export function PrivacyCenter({signedIn,onClose}:Props) {
       </section>
       <section>
         <h3>Excluir minha conta ZeroTwo</h3>
-        <p>Remove definitivamente sua conta de autenticação e os registros de usuário identificados (perfil, Riot ID associado, snapshots, logs vinculados à conta e vínculos VALORANT). Não elimina partidas públicas da Riot nem caches gerais de jogo. Uma confirmação adicional é obrigatória.</p>
+        <p>Remove os registros do ZeroTwo (perfil, vínculos Riot, snapshots, logs e preferências antigas). Se o login estiver associado a Chibi/TFT, ele será mantido para não apagar dados desses produtos. Não apaga partidas públicas da Riot.</p>
         <button className="ztPrivacyDanger" type="button" disabled={!signedIn||busy||requesting}
-          onClick={()=>void eraseMyAccount()}>{busy?'Processando…':'Excluir minha conta permanentemente'}</button>
+          onClick={()=>void eraseMyAccount()}>{busy?'Processando…':'Excluir meus dados do ZeroTwo'}</button>
       </section>
       <div className="ztPrivacyLinks">
         <a href="/zerotwo.gg/privacidade/">Política de Privacidade</a>

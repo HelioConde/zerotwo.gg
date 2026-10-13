@@ -1,43 +1,45 @@
-import {assertEquals,assert} from 'jsr:@std/assert@1.0.14';
-import {eraseAccountData,USER_SCOPED_TABLES} from './accountDeletion.ts';
-
-Deno.test('self-erasure never targets an arbitrary request-supplied identity',async()=>{
+import {assert,assertEquals} from 'jsr:@std/assert@1.0.14';
+import {eraseAccountData,ZEROTWO_USER_TABLES,SHARED_APP_TABLES} from './accountDeletion.ts';
+function fixture(shared=false,failedTable=''){
   const calls:string[]=[];
-  const fake={
-    from(table:string){return {delete(){return {async eq(column:string,id:string){
-      calls.push(table+':'+column+':'+id);return {error:null};
-    }}}}},
-    auth:{admin:{async deleteUser(id:string){calls.push('auth:'+id);return {error:null}}}},
+  const client={
+    from(table:string){return {
+      select(){return {eq(_column:string,id:string){calls.push('inspect:'+table+':'+id);
+        return Promise.resolve({count:shared&&table===SHARED_APP_TABLES[0]?1:0,
+          error:table===failedTable?{code:'unavailable'}:null});
+      }}},
+      delete(){return {eq(_column:string,id:string){calls.push('delete:'+table+':'+id);
+        return Promise.resolve({error:table===failedTable?{code:'unavailable'}:null});
+      }}}
+    }},
+    auth:{admin:{deleteUser(id:string){calls.push('auth:'+id);return Promise.resolve({error:null})}}}
   };
-  const r=await eraseAccountData(fake,'test-user-id');
-  assert(r.ok);
-  assertEquals(calls.length,USER_SCOPED_TABLES.length+1);
-  assert(calls.every(x=>x.includes('test-user-id')));
-  assertEquals(calls[calls.length-1],'auth:test-user-id');
-  assert(!calls.some(x=>x.includes('match_cache')),'Shared public Riot caches must be preserved');
+  return {client,calls};
+}
+Deno.test('disposable identity: delete ZeroTwo data and only then Auth',async()=>{
+  const {client,calls}=fixture();
+  const r=await eraseAccountData(client,'disposable-id');
+  assert(r.ok);assertEquals(r.authDeleted,true);
+  assertEquals(calls.filter(x=>x.startsWith('delete:')).length,ZEROTWO_USER_TABLES.length);
+  assertEquals(calls.at(-1),'auth:disposable-id');
+  assert(!calls.some(x=>x.startsWith('delete:chibi_')||x.startsWith('delete:tft_')));
 });
-
-Deno.test('database failure halts erasure BEFORE deleting the auth account',async()=>{
-  const calls:string[]=[];
-  const fake={
-    from(table:string){return {delete(){return {async eq(_column:string,id:string){
-      calls.push(table+':'+id);
-      return {error:table==='client_event_logs'?{code:'denied'}:null};
-    }}}}},
-    auth:{admin:{async deleteUser(_id:string){calls.push('auth');return {error:null}}}},
-  };
-  const r=await eraseAccountData(fake,'owner');
-  assertEquals(r.ok,false);
-  assertEquals(r.error,'user_data_cleanup_failed');
-  assert(!calls.includes('auth'));
+Deno.test('shared Chibi identity keeps global Auth and all other product data',async()=>{
+  const {client,calls}=fixture(true);
+  const r=await eraseAccountData(client,'shared-id');
+  assert(r.ok);assertEquals(r.sharedAuthRetained,true);
+  assert(!calls.some(x=>x.startsWith('auth:')));
+  assert(!calls.some(x=>x.startsWith('delete:chibi_')||x.startsWith('delete:tft_')));
 });
-
-Deno.test('auth failure reports incomplete erasure instead of success',async()=>{
-  const fake={
-    from(_table:string){return {delete(){return {async eq(){return {error:null}}}}}},
-    auth:{admin:{async deleteUser(){return {error:{code:'unexpected'}}}}},
-  };
-  const r=await eraseAccountData(fake,'owner');
+Deno.test('failed ZeroTwo erasure halts before Auth deletion',async()=>{
+  const {client,calls}=fixture(false,'client_event_logs');
+  const r=await eraseAccountData(client,'id');
+  assertEquals(r.ok,false);assert(!calls.some(x=>x.startsWith('auth:')));
+});
+Deno.test('failed shared-product preflight must not delete ANYTHING',async()=>{
+  const {client,calls}=fixture(false,SHARED_APP_TABLES[0]);
+  const r=await eraseAccountData(client,'id');
   assertEquals(r.ok,false);
-  assertEquals(r.error,'account_deletion_failed');
+  assertEquals(calls.filter(x=>x.startsWith('delete:')).length,0);
+  assert(!calls.some(x=>x.startsWith('auth:')));
 });

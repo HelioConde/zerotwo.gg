@@ -51,21 +51,34 @@ jobs:
       - name: Run privacy account-erasure unit tests (no production data)
         run: deno test supabase/functions/privacy-manage/accountDeletion.test.ts
 
-      - name: Install private privacy inbox (idempotent RLS schema)
+      - name: Ensure Riot Life and VALORANT ownership tables + private inbox exist
         shell: bash
         run: |
           set -euo pipefail
-          jq -n --rawfile sql supabase/migrations/20261013210000_zerotwo_privacy_requests.sql '{query:$sql,read_only:false}' > /tmp/zt-privacy-query.json
-          status=$(curl --silent --show-error --retry 2 --retry-delay 3 --output /tmp/zt-privacy-response.json --write-out '%{http_code}' \
+          for sqlfile in \
+            supabase/migrations/20261001_riot_life_memory.sql \
+            supabase/migrations/20260927_valorant_rso.sql \
+            supabase/migrations/20261013210000_zerotwo_privacy_requests.sql; do
+            jq -n --rawfile sql "$sqlfile" '{query:$sql,read_only:false}' > /tmp/zt-schema-query.json
+            status=$(curl --silent --show-error --retry 2 --retry-delay 3 \
+              --output /tmp/zt-schema-response.json --write-out '%{http_code}' \
+              --request POST "https://api.supabase.com/v1/projects/$SUPABASE_PROJECT_ID/database/query" \
+              --header "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+              --header "Content-Type: application/json" \
+              --data-binary @/tmp/zt-schema-query.json)
+            if [[ "$status" != "201" ]]; then
+              echo "::error::ZeroTwo schema $sqlfile failed (HTTP $status)."
+              exit 1
+            fi
+            echo "ZeroTwo RLS schema installed from $sqlfile"
+          done
+          jq -n --arg sql "NOTIFY pgrst, 'reload schema';" '{query:$sql,read_only:false}' > /tmp/zt-schema-query.json
+          status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
             --request POST "https://api.supabase.com/v1/projects/$SUPABASE_PROJECT_ID/database/query" \
             --header "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
             --header "Content-Type: application/json" \
-            --data-binary @/tmp/zt-privacy-query.json)
-          if [[ "$status" != "201" ]]; then
-            echo "::error::Could not create private request inbox (HTTP $status). Do not deploy user-facing request form."
-            exit 1
-          fi
-          echo "Private LGPD request inbox schema applied with RLS enabled."
+            --data-binary @/tmp/zt-schema-query.json)
+          if [[ "$status" != "201" ]]; then echo "::error::PostgREST schema refresh failed"; exit 1; fi
 
       - name: Deploy public player profile
         run: supabase functions deploy public-lol-profile --project-ref "$SUPABASE_PROJECT_ID"
