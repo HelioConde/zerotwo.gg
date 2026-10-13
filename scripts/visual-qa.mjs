@@ -31,12 +31,12 @@ const response=(limit)=>({
 
 async function waitForDevServer(){
   const url='http://127.0.0.1:4173/zerotwo.gg/';
-  for(let attempt=0;attempt<60;attempt++){
+  for(let attempt=0;attempt<180;attempt++){
     try{
       const response=await fetch(url);
       if(response.ok)return;
     }catch{}
-    await new Promise(resolve=>setTimeout(resolve,250));
+    await new Promise(resolve=>setTimeout(resolve,1000));
   }
   throw new Error('Vite dev server did not become ready on port 4173.');
 }
