@@ -35,7 +35,7 @@ O arquivo original não é descartado: continua versionado no mesmo GitHub, mas 
 5. Os nomes de arte estavam distribuídos em vários componentes e alguns caminhos usavam o prefixo GitHub Pages fixo.
 
 ### Mudanças aplicadas
-- Nova camada final de CSS (`src/visual-media-2026-10-09.css`) com composições mais claras nas imagens da **home 01/02/03**, gradientes conservadores sobre texto e enquadramento específico para mobile.
+- Nova camada final de CSS (`src/site-polish.css`) com composições mais claras nas imagens da **home 01/02/03**, gradientes conservadores sobre texto e enquadramento específico para mobile.
 - Maior contraste dos detalhes do lado direito nos capítulos `riotDeepChapter`, `riotChapterGroup`, maestria e contexto, sem eliminar o sombreado necessário à leitura.
 - Tipografia secundária revisada para tamanho e contraste melhores.
 - Rotas de assets centralizadas em `src/lib/visualAssets.ts`, respeitando `import.meta.env.BASE_URL`.

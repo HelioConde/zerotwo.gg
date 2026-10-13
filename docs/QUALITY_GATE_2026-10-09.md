@@ -49,6 +49,6 @@ Never log complete secrets.
 - Public profile backend: `supabase/functions/public-lol-profile/index.ts`
 - Teammates backend: `supabase/functions/public-lol-teammates/index.ts`
 - Frontend: `src/features/public/PublicPlayerLookup.tsx`
-- UI: `src/polish-2026-10-09.css`
+- UI: `src/site-polish.css`
 
 **Gate status:** live data, production frontend build, desktop/mobile base UI, and synthetic screenshot tests passed. Backend rollout is blocked by an invalid Supabase personal access token stored in GitHub Actions; the live endpoint returns data but lacks the newer `status.ranked`/`status.mastery` fields, confirming that the backend version remains outdated. Real 100-match expansion and full mobile chapter rendering have not been approved yet. Do not claim 9.5/10 until those checks and the Supabase deploy succeed.

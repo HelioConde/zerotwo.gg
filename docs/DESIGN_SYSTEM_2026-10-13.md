@@ -18,9 +18,12 @@ O ZeroTwo prioriza uma história cinematográfica, com imagens à direita e bloc
 - Preferências de movimento reduzido respeitadas.
 
 ## Image to Code
-Traduzir referências visuais e assets presentes em \`src/lib/visualAssets.ts\` em componentes HTML/React e CSS. Manter img com proporção original, posição focal, contraste com gradientes e conteúdo DOM legível. Testar carregamento real (200 + naturalWidth), alinhamento das ilustrações, captions e ausência de overflow horizontal, também no mobile. CSS final: \`src/design-foundations-2026-10-13.css\` aplicado após os demais.
+Traduzir referências visuais e assets presentes em \`src/lib/visualAssets.ts\` em componentes HTML/React e CSS. Manter img com proporção original, posição focal, contraste com gradientes e conteúdo DOM legível. Testar carregamento real (200 + naturalWidth), alinhamento das ilustrações, captions e ausência de overflow horizontal, também no mobile. CSS final: \`src/site-polish.css\` aplicado após os demais.
 
 ## Testes automatizados
 \`scripts/visual-qa.mjs\` usa **Playwright API** para interações e o executável **Playwright CLI** para capturas independentes da página em desktop e mobile no GitHub Actions. Possui fixture **sintética** para testes desktop/laptop/mobile, screenshots, imagens, modos de leitura e expansão 20→100. Esta rodada acrescenta testes de Enter, erro acessível, foco e Escape do login. Evidências no artifact \`zerotwo-visual-qa\` do workflow \`ZeroTwo Visual QA\`.
 
 Não considerar os testes sintéticos como comprovação de funcionamento da API Riot nem aprovação visual automática. Revisar capturas geradas e as pendências em \`docs/QUALITY_GATE_2026-10-09.md\`, incluindo o deploy Supabase e histórico real de 100 partidas.
+
+## Consolidação CSS
+Seis camadas incrementais foram reunidas em `src/site-polish.css`, preservando a ordem de cascata das regras. Os CSS de narrativa carregados via lazy import permanecem separados para preservar o comportamento da página.

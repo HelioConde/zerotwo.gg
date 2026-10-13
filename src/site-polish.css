@@ -1,0 +1,897 @@
+/* Integrated from src/polish-2026-10-09.css. */
+/* Progressive Riot history: quiet, readable and consistent with the ZeroTwo dark UI. */
+.historyDepthPanel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin:14px 0 20px;
+  padding:18px 20px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:16px;
+  background:linear-gradient(118deg,rgba(255,71,126,.055),rgba(8,12,18,.96) 45%);
+}
+.historyDepthPanel>div{min-width:0;max-width:780px}
+.historyDepthPanel small{display:block;color:#ff91b0;font-size:11px;font-weight:800;letter-spacing:.75px}
+.historyDepthPanel b{display:block;margin-top:4px;color:#f3f5fa;font-size:15px;line-height:1.3}
+.historyDepthPanel p{margin:6px 0 0;color:#b7c0cc;font-size:12px;line-height:1.55}
+.historyDepthPanel .historyDepthWarning{
+  color:#ffd29d;
+  background:rgba(255,182,80,.06);
+  border-left:2px solid #ffc16b;
+  padding:5px 8px;
+  margin-top:9px;
+}
+.historyDepthPanel>button{
+  flex:0 0 auto;
+  min-height:45px;
+  padding:12px 17px;
+  background:#ff477e;
+  color:#fff;
+  border:1px solid #ff6996;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.35px;
+  line-height:1.25;
+  cursor:pointer;
+}
+.historyDepthPanel>button:disabled{opacity:.62;cursor:wait}
+.historyDepthPanel>button:hover:not(:disabled){background:#ec326e}
+.historyDepthPanel>button:focus-visible{outline:3px solid #ffb7d0;outline-offset:3px}
+@media(max-width:720px){
+  .historyDepthPanel{display:block;padding:17px 15px;margin:12px 0 20px}
+  .historyDepthPanel>button{width:100%;margin-top:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .historyDepthPanel *{scroll-behavior:auto!important;transition:none!important}
+}
+
+
+/* Oct 09 live account review: turn language choice into a profile control,
+   not a floating obstruction on top of the 20-chapter narrative. */
+body:has(.publicPlayerResult) .ztLanguageSwitcher{
+  display:none!important;
+}
+.publicPlayerResult .playerIdentityActions{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  min-width:270px;
+  gap:6px!important;
+}
+.publicPlayerResult .playerIdentityActions>.playerQuickPrimary{
+  grid-column:1/-1!important;
+}
+.publicPlayerResult .playerIdentityActions>.playerShare{
+  grid-row:auto!important;
+  grid-column:auto!important;
+}
+.publicPlayerResult .playerLocaleActions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  min-width:0;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:3px;
+  background:#080b10;
+}
+.publicPlayerResult .playerLocaleActions>button{
+  min-width:0;
+  min-height:28px;
+  flex:1 1 0;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#a0acbc;
+  font:800 10px/1.2 ui-monospace,monospace;
+  cursor:pointer;
+}
+.publicPlayerResult .playerLocaleActions>button.active{
+  background:linear-gradient(125deg,#ff477e,#af6be5);
+  color:white;
+}
+.publicPlayerResult .playerLocaleActions>button:focus-visible{
+  outline:2px solid #8ce5ff;
+  outline-offset:2px;
+}
+.publicPlayerResult .playerIdentityActions>a,
+.publicPlayerResult .playerIdentityActions>.playerShare{
+  font-size:9px!important;
+  min-height:39px!important;
+  padding-inline:8px!important;
+  line-height:1.3!important;
+}
+.publicPlayerResult .playerIdentityMain h2{
+  overflow-wrap:anywhere;
+}
+@media (max-width:1100px){
+  .publicPlayerResult .playerIdentityActions{
+    min-width:0;
+  }
+}
+@media(max-width:700px){
+  .publicPlayerResult .playerIdentityActions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  .publicPlayerResult .playerIdentityActions>.playerQuickPrimary{
+    min-height:44px!important;
+  }
+  .publicPlayerResult .playerIdentityActions>.playerShare{
+    grid-column:2;
+  }
+  .publicPlayerResult .playerLocaleActions{
+    grid-column:1/-1;
+    width:100%;
+    justify-self:stretch;
+    padding:4px;
+  }
+  .publicPlayerResult .playerLocaleActions>button{
+    min-height:36px;
+    font-size:11px;
+  }
+  .publicPlayerResult .historyDepthPanel{
+    margin:12px 0 18px;
+  }
+  .publicPlayerResult .historyDepthPanel b{
+    font-size:16px;
+  }
+  .publicPlayerResult .historyDepthPanel p{
+    font-size:12.5px;
+  }
+  .publicPlayerResult .historyDepthPanel>button{
+    font-size:12px;
+    min-height:47px;
+  }
+}
+
+/* Cold Riot API requests may approach 50s. Keep the current sample usable. */
+.historyDepthPanel .historyDepthProgress{
+  color:#b9e4ff!important;
+  background:rgba(117,221,255,.055);
+  border-left:2px solid #75ddff;
+  border-radius:0 7px 7px 0;
+  padding:8px 10px;
+  margin-top:11px;
+  max-width:72ch;
+  font-size:12px;
+  line-height:1.5;
+}
+
+
+/* 2026-10-09 chapter navigation fix.
+   .gamingLanding previously had overflow:hidden, making it an implicit
+   vertical scroll container and preventing position:sticky from following
+   the document scroll. overflow:clip clips decoration without creating one. */
+html,body,#root{
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+}
+.gamingLanding{
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+}
+.riotStoryNav{
+  overscroll-behavior-x:contain;
+  touch-action:pan-x pan-y;
+}
+.riotStoryNav a:focus-visible{
+  outline:2px solid #75ddff!important;
+  outline-offset:-3px!important;
+}
+#riot-life-story [id^="riot-"]:focus{
+  outline:none;
+}
+#riot-life-story [id^="riot-"]:focus-visible{
+  outline:2px solid rgba(117,221,255,.8);
+  outline-offset:3px;
+}
+
+/* Honest progress for a cold Riot Match-V5 request, without a fake percentage. */
+.historyDepthPanel .historyDepthProgress{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:12px;
+}
+.historyDepthProgress>span:last-child{flex:1;min-width:0}
+.historyDepthPanel .historyDepthProgress b{
+  margin:0 0 5px;
+  color:#b9e4ff;
+  font-size:13px;
+  line-height:1.35;
+  font-variant-numeric:tabular-nums;
+}
+.historyDepthPanel .historyDepthProgress small{
+  display:block;
+  color:#c6d3e1;
+  font:500 11px/1.55 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:0;
+  margin-top:3px;
+}
+.historyDepthPanel .historyDepthProgress small+small{color:#8299b0}
+.historyDepthSpinner{
+  display:block;
+  flex:0 0 16px;
+  width:16px;
+  height:16px;
+  margin-top:2px;
+  border:2px solid #75ddff43;
+  border-top-color:#75ddff;
+  border-radius:50%;
+  animation:riotLoadingSpin .9s linear infinite;
+}
+@keyframes riotLoadingSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .historyDepthSpinner{animation:none;border-style:dashed}
+}
+
+/* Integrated from src/profile-quick-nav-2026-10-09.css. */
+/* ZeroTwo profile quick actions — deliberate navigation, no dead hash links. */
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction{
+  grid-row:auto!important;
+  grid-column:auto!important;
+  min-height:39px!important;
+  width:100%;
+  padding:8px!important;
+  font:800 10px/1.35 ui-sans-serif,system-ui,sans-serif!important;
+  letter-spacing:.15px;
+  border-radius:8px;
+  border:1px solid #ffffff1c;
+  background:#141821;
+  color:#e4eaf2;
+  cursor:pointer;
+}
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction:hover{
+  border-color:#ff477e80;
+  color:white;
+  background:#1b1a28;
+}
+.publicPlayerResult .playerIdentityActions>.playerEvidenceAction:focus-visible{
+  outline:3px solid #75ddff;
+  outline-offset:2px;
+}
+.publicPlayerResult .profileQuickNav{
+  display:grid!important;
+  grid-template-columns:minmax(130px,.8fr) repeat(4,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:9px!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-width:none!important;
+  margin:0 0 15px!important;
+  padding:12px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:13px;
+  background:linear-gradient(110deg,#111420,#0a0e15 75%);
+}
+.publicPlayerResult .profileQuickNav>span{
+  padding-left:9px;
+  min-width:0;
+  font:850 10px/1.35 ui-monospace,monospace;
+  letter-spacing:.8px;
+  color:#b4c4d6;
+}
+.publicPlayerResult .profileQuickNav>button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-width:0;
+  min-height:44px;
+  padding:10px 7px;
+  border:1px solid #ffffff20;
+  border-radius:9px;
+  background:#141923;
+  color:#e9f0f7;
+  font:850 11px/1.3 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.15px;
+  cursor:pointer;
+  transition:border-color .16s,background .16s;
+}
+.publicPlayerResult .profileQuickNav>button:hover{
+  border-color:#ff6898aa;
+  background:#241724;
+}
+.publicPlayerResult .profileQuickNav>button:focus-visible{
+  outline:3px solid #75ddff;
+  outline-offset:2px;
+}
+.publicPlayerResult .profileQuickNav>button svg{
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+  color:#ff8eb1;
+}
+#riot-evidence{scroll-margin-top:90px}
+@media(max-width:700px){
+  .publicPlayerResult .playerIdentityActions>.playerEvidenceAction{
+    min-height:44px!important;
+    padding:8px!important;
+    font-size:11px!important;
+  }
+  .publicPlayerResult .playerIdentityActions>a,
+  .publicPlayerResult .playerIdentityActions>.playerShare{
+    font-size:11px!important;
+    min-height:44px!important;
+    letter-spacing:.08px!important;
+  }
+  .publicPlayerResult .profileQuickNav{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin:0 0 13px!important;
+    padding:12px!important;
+  }
+  .publicPlayerResult .profileQuickNav>span{
+    grid-column:1/-1;
+    padding:0 2px 3px;
+    font-size:10px;
+  }
+  .publicPlayerResult .profileQuickNav>button{
+    min-height:48px;
+    padding:10px;
+    font-size:12px;
+    justify-content:flex-start;
+  }
+  .publicPlayerResult .profileQuickNav>button svg{
+    width:17px;
+    height:17px;
+    flex-basis:17px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .publicPlayerResult .profileQuickNav>button{transition:none}
+}
+
+/* Integrated from src/zerotwo-art-2026-10-09.css. */
+/* ZeroTwo image asset integration: empty, connection failure, 9:16 Match Story. */
+.lookupErrorWithArt{
+  display:grid!important;
+  grid-template-columns:76px minmax(0,1fr);
+  align-items:center;
+  gap:15px!important;
+  padding:15px!important;
+  max-width:820px!important;
+  background:linear-gradient(110deg,rgba(38,10,27,.95),rgba(8,13,27,.96))!important;
+  border-color:rgba(255,103,143,.26)!important;
+}
+.lookupErrorWithArt>img{display:block;width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 10px 20px #60abff30)}
+.lookupErrorCopy{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.lookupErrorCopy>b{font-size:12px;color:#ffe4ed;line-height:1.25;letter-spacing:.2px}
+.lookupErrorCopy>span{font-size:11px;color:#c8a7b8;line-height:1.55}
+.lookupErrorCopy>button{
+  cursor:pointer;min-height:34px;margin-top:3px;border:1px solid #ff6ca35c;
+  border-radius:8px;padding:7px 12px;background:#ff477e1f;color:#ff9ac0;
+  font:800 10px system-ui,sans-serif;letter-spacing:.4px
+}
+.lookupErrorCopy>button:disabled{opacity:.55;cursor:wait}
+.empty02--illustrated{gap:10px!important;padding:32px 20px!important}
+.empty02--illustrated>img{display:block;width:clamp(100px,13vw,150px);height:clamp(100px,13vw,150px);object-fit:contain;margin:0 auto 7px;filter:drop-shadow(0 14px 24px #3f83fe17)}
+.empty02--illustrated>b{color:#f3f5ff;font-size:14px!important}
+.empty02--illustrated>p{font-size:12px!important;line-height:1.65!important}
+.empty02--illustrated>button{margin-top:9px;padding:10px 16px;border:1px solid #ff477e70;background:#ff477e16;color:#ffa5c4;font-weight:800;cursor:pointer}
+.riotSharePanel{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(190px,270px);
+  gap:clamp(22px,5vw,64px);
+  align-items:center;
+  margin:26px 0;
+  padding:clamp(23px,4vw,50px);
+  overflow:hidden;
+  border:1px solid rgba(93,147,255,.25);
+  border-radius:22px;
+  background:radial-gradient(ellipse at 90% 5%,#5845ca26,transparent 48%),
+    radial-gradient(ellipse at 12% 88%,#00c4ff12,transparent 50%),#070b16;
+}
+.riotShareCopy{min-width:0}
+.riotShareCopy>small{display:block;color:#79dfff;font:800 11px ui-monospace,monospace;letter-spacing:2px}
+.riotShareCopy>h3{margin:14px 0 14px;color:#f8fbff;font-size:clamp(29px,3.5vw,48px);line-height:1.07;letter-spacing:-1.6px;text-wrap:balance}
+.riotShareCopy>h3 span{color:#aa8dff}
+.riotShareCopy>p:not(.riotShareStatus){max-width:600px;margin:0;color:#b0bed1;font-size:14px;line-height:1.75}
+.riotShareFacts{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+.riotShareFacts>span{display:flex;flex-direction:column;gap:6px;padding:13px 17px;background:#0a1222;border:1px solid #b4d7ff1c;border-radius:10px;min-width:110px;max-width:100%}
+.riotShareFacts small{color:#90a4bb;font:800 10px ui-monospace,monospace;letter-spacing:.7px}
+.riotShareFacts b{color:#ecf5ff;font-size:15px;overflow-wrap:anywhere}
+.riotShareActions{display:flex;gap:10px;flex-wrap:wrap}
+.riotShareActions button{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;
+  padding:11px 16px;border:1px solid #8ad7fb;border-radius:10px;background:#75d9fa;
+  color:#06101f;font:900 12px system-ui,sans-serif;letter-spacing:.4px;cursor:pointer;
+  transition:transform .15s ease,background .15s ease
+}
+.riotShareActions button:hover:not(:disabled){transform:translateY(-2px);background:#a3e8ff}
+.riotShareActions button.riotShareSecondary{background:#141629;color:#e6d7ff;border-color:#ae8dff85}
+.riotShareActions button.riotShareSecondary:hover:not(:disabled){background:#24203b}
+.riotShareActions button:disabled{opacity:.5;cursor:wait}
+.riotShareActions .ztIcon{width:16px;height:16px}
+.riotShareStatus{min-height:20px;margin:13px 0 0;color:#9fafc5;font-size:12px;line-height:1.5}
+.riotSharePreview{
+  position:relative;isolation:isolate;width:100%;max-width:258px;aspect-ratio:9/16;
+  overflow:hidden;justify-self:center;border:1px solid #90dcff55;border-radius:16px;
+  background:#050b17;box-shadow:0 22px 65px #000b,0 0 50px #5368ff13
+}
+.riotSharePreview>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Match Story featured champion: portrait is a separate cinematic layer. */
+.riotSharePreview>img.riotSharePreviewBackground{z-index:0}
+.riotSharePreview>img.riotSharePreviewChampionArt{
+  z-index:1;inset:56.8% 0 auto;top:56.8%;width:100%;height:32.5%;
+  object-fit:cover;object-position:50% 42%;opacity:.97;
+  filter:saturate(1.08) contrast(1.09);
+}
+.riotSharePreviewChampionShade{
+  position:absolute;z-index:2;inset:55.7% 0 9.2%;pointer-events:none;
+  background:linear-gradient(180deg,rgba(3,7,19,.92),rgba(3,7,19,.35) 27%,rgba(3,7,19,.40) 63%,rgba(3,7,19,.94));
+}
+.riotSharePreview.hasChampion .riotSharePreviewContent{
+  z-index:3;
+  background:linear-gradient(180deg,#03071360 0%,#03071380 24%,#030713ce 50%,#0307131a 65%,#03071335 80%,#03071390 100%);
+}
+.riotSharePreview.hasChampion .riotSharePreviewContext,
+.riotSharePreview.hasChampion .riotSharePreviewChampion,
+.riotSharePreview.hasChampion .riotSharePreviewFoot,
+.riotSharePreview.hasChampion .riotSharePreviewContent>small:not(:first-child){
+  text-shadow:0 2px 8px #02050dee,0 0 12px #02050dee;
+}
+
+.riotSharePreviewContent{
+  position:absolute;z-index:1;inset:0;display:flex;flex-direction:column;align-items:center;
+  gap:7px;padding:22px 12px 16px;text-align:center;color:#f5faff;
+  background:linear-gradient(180deg,#03071360 0%,#03071380 24%,#030713ce 50%,#0307138f 79%,#03071390 100%)
+}
+.riotSharePreviewContent>small:first-child{font:900 9px ui-monospace,monospace;color:#82dfff;letter-spacing:1px}
+.riotSharePreviewContent>strong{margin-top:25px;font-size:15px;line-height:1.1;letter-spacing:-.4px}
+.riotSharePreviewContent>em{font-size:11px;font-style:normal;color:#b8c8e7;overflow-wrap:anywhere;max-width:100%}
+.riotSharePreviewStat{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;margin:30px 0 16px;padding:13px 6px;background:#071226ba;border:1px solid #82dcff55}
+.riotSharePreviewStat>small{color:#7de3ff;font:900 8px ui-monospace,monospace;letter-spacing:.4px}
+.riotSharePreviewStat>b{font-size:59px;line-height:1.18;color:#fff}
+.riotSharePreviewStat>span{color:#abbdd3;font-size:9px}
+.riotSharePreviewContent>small:not(:first-child){font:800 9px ui-monospace,monospace;color:#8ce3ff;letter-spacing:.4px}
+.riotSharePreviewContext{font-size:20px;color:#f5faff;overflow-wrap:anywhere}
+.riotSharePreviewContent>span:not(.riotSharePreviewChampion):not(.riotSharePreviewFoot){color:#aebfd7;font-size:10px}
+.riotSharePreviewChampion{display:flex;flex-direction:column;gap:4px;margin-top:9px;color:#caa6ff;font-size:8px;font-weight:800}
+.riotSharePreviewChampion>b{color:#fff;font-size:12px}
+.riotSharePreviewFoot{margin-top:auto;font-size:7px;color:#ced8e8;line-height:1.4;letter-spacing:.1px}
+@media(max-width:760px){
+  .riotSharePanel{grid-template-columns:1fr;padding:24px 18px;gap:25px;border-radius:16px}
+  .riotShareCopy>h3{font-size:clamp(28px,7vw,39px)}
+  .riotShareFacts{margin:18px 0}
+  .riotShareActions button{flex:1 1 185px}
+  .riotSharePreview{max-width:225px}
+}
+@media(max-width:480px){
+  .lookupErrorWithArt{grid-template-columns:56px minmax(0,1fr);gap:9px!important}
+  .lookupErrorWithArt>img{width:56px;height:56px}
+  .lookupErrorCopy>b{font-size:10px}
+  .lookupErrorCopy>span{font-size:10px}
+  .riotShareFacts>span{flex:1 1 125px;padding:10px}
+  .riotShareFacts b{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+  .riotShareActions button{transition:none}
+  .riotShareActions button:hover:not(:disabled){transform:none}
+}
+
+/* Integrated from src/visual-media-2026-10-09.css. */
+/* ZeroTwo image audit 09/10 — give artwork breathing room without sacrificing readability.
+ * Asset files are kept separate from UI content. In particular, the 02/03 home
+ * scenes must render when scrolled into view, not disappear under solid overlays.
+ */
+.homeJourney .homeJourneyChapter {
+  isolation:isolate;
+  border-color:rgba(173,198,255,.17)!important;
+  transition:border-color .18s ease,box-shadow .18s ease;
+}
+.homeJourney .homeJourneyChapter:hover {
+  border-color:rgba(169,203,255,.35)!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.35),0 0 40px rgba(107,99,234,.09)!important;
+}
+.homeJourney .homeJourneyChapter>.homeJourneyArt {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  opacity:.92!important;
+  object-fit:cover!important;
+  object-position:74% 47%!important;
+  filter:saturate(1.06) contrast(1.09)!important;
+  transform:scale(1.006);
+}
+.homeJourney .homeJourneyRemember>.homeJourneyArt {object-position:75% 48%!important}
+.homeJourney .homeJourneyPeople>.homeJourneyArt {object-position:76% 47%!important}
+.homeJourney .homeJourneyChapter:before {
+  z-index:1!important;
+  opacity:1!important;
+  background:linear-gradient(90deg,
+    rgba(5,8,15,.98) 0%,rgba(5,8,15,.91) 31%,
+    rgba(5,8,15,.66) 54%,rgba(5,8,15,.20) 78%,rgba(5,8,15,.30) 100%)!important;
+}
+.homeJourney .homeJourneyChapter>div,.homeJourney .homeJourneyChapter>aside,
+.homeJourney .homeJourneyChapter>.homeJourneyNo {position:relative;z-index:2}
+.homeJourney .homeJourneyChapter h2 {text-wrap:balance}
+.homeJourney .homeJourneyChapter p {
+  color:#c2cadb!important;
+  font-size:clamp(12px,1.06vw,14px)!important;
+  line-height:1.58!important;
+}
+.homeJourney .homeJourneyChapter>aside {
+  background:rgba(3,7,17,.83)!important;
+  border-color:rgba(188,214,255,.25)!important;
+  backdrop-filter:blur(12px);
+}
+.homeJourney .homeJourneyChapter>aside small {
+  font-size:11px!important;
+  color:#a8b5cb!important;
+  line-height:1.5!important;
+}
+.homeJourney .homeJourneyChapter>aside b{font-size:12px!important;line-height:1.3!important}
+.homeJourney .homeJourneyEnd>.homeJourneyEndArt{opacity:.67!important;filter:saturate(1.15)!important}
+.homeJourney .homeJourneyEnd:before {
+  background:linear-gradient(90deg,#06080df6 0%,#06080ddc 42%,#06080d60 100%)!important
+}
+/* Long-form chapters: keep the data readable but restore photographic separation. */
+#riot-life-story .riotDeepChapter>.riotDeepArt {
+  opacity:.66!important;
+  filter:saturate(1.03) contrast(1.08) brightness(.97)!important;
+  object-position:75% 45%;
+}
+#riot-life-story .riotDeepChapter>.riotDeepArtSecondary {opacity:.27!important}
+#riot-life-story .riotDeepChapter>.riotDeepArtShade {
+  background:linear-gradient(90deg,
+    rgba(5,9,16,.99) 0%,rgba(5,9,16,.93) 29%,
+    rgba(5,9,16,.74) 53%,rgba(5,9,16,.38) 82%,rgba(5,9,16,.28) 100%),
+    linear-gradient(0deg,rgba(5,9,16,.6),transparent 60%)!important;
+}
+#riot-life-story .riotDeepCopy p,#riot-life-story .riotChapterCopy p,
+#riot-life-story .riotChapterGroupIntro p {
+  color:#b7c2d1!important;
+  font-size:clamp(12px,1vw,14px)!important;
+  line-height:1.65!important;
+}
+#riot-life-story .riotChapterGroupIntro>.riotGroupArtwork,
+#riot-life-story .riotChapterGroupIntro .riotGroupArtwork{opacity:.65!important}
+#riot-life-story .riotChapterGroupIntro .riotGroupArtworkShade {
+  background:linear-gradient(90deg,#050910f9 0%,#050910db 39%,#05091070 78%,#05091040 100%)!important;
+}
+#riot-life-story .riotMasteryArtwork{opacity:.54!important}
+#riot-life-story .riotLifeIntroArtwork {opacity:.40!important}
+#riot-life-story .riotNarrativeArt{opacity:.62!important}
+#riot-life-story .riotChapterHeroMetric,#riot-life-story .riotDeepMetrics>span{
+  backdrop-filter:blur(10px);
+}
+@media(max-width:760px){
+  .homeJourney .homeJourneyChapter{isolation:isolate;min-height:395px!important}
+  .homeJourney .homeJourneyChapter>.homeJourneyArt {
+    opacity:.90!important;
+    object-position:63% 38%!important;
+    transform:none;
+  }
+  .homeJourney .homeJourneyChapter:before {
+    background:linear-gradient(0deg,
+      rgba(5,8,15,.99) 0%,rgba(5,8,15,.96) 38%,
+      rgba(5,8,15,.66) 63%,rgba(5,8,15,.14) 100%)!important;
+  }
+  .homeJourney .homeJourneyChapter>div {padding-top:112px!important}
+  .homeJourney .homeJourneyChapter p{font-size:13px!important;line-height:1.65!important}
+  .homeJourney .homeJourneyChapter>aside{min-height:86px!important}
+  .homeJourney .homeJourneyEnd:before {
+    background:linear-gradient(0deg,#06080dfa 0%,#06080deb 45%,#06080d38 100%)!important;
+  }
+  #riot-life-story .riotDeepChapter>.riotDeepArt {
+    opacity:.50!important;
+    object-position:70% 28%;
+  }
+  #riot-life-story .riotDeepChapter>.riotDeepArtSecondary{opacity:.14!important}
+  #riot-life-story .riotDeepChapter>.riotDeepArtShade {
+    background:linear-gradient(0deg,
+      rgba(5,9,16,.99) 0%,rgba(5,9,16,.91) 52%,
+      rgba(5,9,16,.38) 100%)!important;
+  }
+  #riot-life-story .riotGroupArtwork{opacity:.43!important}
+  #riot-life-story .riotMasteryArtwork{opacity:.32!important}
+  #riot-life-story .riotNarrativeArt{opacity:.42!important}
+  #riot-life-story .riotDeepCopy p,#riot-life-story .riotChapterCopy p,
+  #riot-life-story .riotChapterGroupIntro p{font-size:12px!important;line-height:1.62!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .homeJourney .homeJourneyChapter{transition:none}
+  .homeJourney .homeJourneyChapter>.homeJourneyArt{transform:none}
+}
+
+/* Integrated from src/riot-change-cinematic-2026-10-09.css. */
+/* ZeroTwo // Riot Life chapter 04.
+   The splash depicts the champion most played in the NEWER comparable window,
+   while the underlying statistics stay on an opaque data surface. */
+#riot-life-story #riot-change .riotWindowCompare{
+  padding-top:clamp(24px,3.2vw,37px)!important;
+  padding-bottom:clamp(27px,3.4vw,42px)!important;
+  background:radial-gradient(ellipse at 89% 5%,rgba(96,69,179,.13),transparent 45%),
+    linear-gradient(180deg,#080c15,#060910)!important;
+}
+#riot-life-story #riot-change .riotWindowCompare>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(236px,310px);
+  gap:clamp(16px,2.5vw,30px);
+  align-items:center;
+  min-width:0;
+}
+#riot-life-story #riot-change .riotCompareHeading{min-width:0}
+#riot-life-story #riot-change .riotCompareHeading>small{
+  display:block;color:#ff85b0!important;font-size:11px!important;
+  font-weight:850;letter-spacing:.75px;line-height:1.4;
+}
+#riot-life-story #riot-change .riotCompareHeading h4{
+  max-width:20ch;
+  margin:9px 0 12px;
+  font-size:clamp(27px,3vw,38px)!important;
+  line-height:1.06;
+  letter-spacing:-.8px;
+  text-wrap:balance;
+}
+#riot-life-story #riot-change .riotCompareHeading p{
+  max-width:50ch!important;
+  color:#b6c3d6!important;
+  font-size:clamp(12px,1.12vw,14px)!important;
+  line-height:1.62!important;
+}
+#riot-life-story #riot-change .riotCompareChampion{
+  position:relative;isolation:isolate;
+  min-width:0;min-height:176px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  border:1px solid rgba(176,142,255,.38);
+  border-radius:16px;
+  background:radial-gradient(ellipse at 72% 22%,rgba(129,78,207,.35),transparent 55%),
+    linear-gradient(140deg,#172237,#090c17 75%);
+  box-shadow:0 18px 32px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.03);
+}
+#riot-life-story #riot-change .riotCompareChampionArt{
+  position:absolute;z-index:0;inset:0;
+  display:block;width:100%;height:100%;
+  object-fit:cover;object-position:51% 37%;
+  filter:contrast(1.07) saturate(1.08);
+  opacity:.96;
+}
+#riot-life-story #riot-change .riotCompareChampionOverlay{
+  position:absolute;z-index:1;inset:0;
+  background:linear-gradient(0deg,rgba(5,8,20,.98) 0%,rgba(5,8,20,.84) 25%,
+      rgba(5,8,20,.29) 64%,rgba(5,8,20,.12) 100%),
+    linear-gradient(90deg,rgba(8,10,20,.28),transparent 55%);
+  pointer-events:none;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;gap:5px;
+  min-width:0;padding:16px 19px 17px;
+  text-shadow:0 2px 10px #03040bef;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel small{
+  color:#c9b2ff!important;font:850 10px/1.2 ui-monospace,monospace!important;
+  letter-spacing:.9px;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel strong{
+  color:#fff;font-size:clamp(23px,2.15vw,29px);
+  font-weight:900;line-height:1.1;
+  overflow-wrap:anywhere;
+}
+#riot-life-story #riot-change .riotCompareChampionLabel span{
+  color:#d3dcf0;font-size:12px;line-height:1.3;
+}
+#riot-life-story #riot-change .riotCompareGrid{
+  gap:12px!important;margin-top:24px;
+}
+#riot-life-story #riot-change .riotCompareGrid article{
+  padding:clamp(15px,1.8vw,20px)!important;
+  min-height:135px;
+  border:1px solid rgba(180,206,255,.14);
+  border-radius:15px;
+  background:rgba(5,10,19,.97);
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+}
+#riot-life-story #riot-change .riotCompareGrid article>small{
+  color:#b1c6e8!important;
+  font:850 10px/1.3 ui-monospace,monospace!important;
+  letter-spacing:.65px;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div{
+  gap:clamp(7px,1vw,14px);
+  margin-top:13px;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span{min-width:0}
+#riot-life-story #riot-change .riotCompareGrid article>div>span em{
+  color:#92a7c4!important;font-size:10px!important;
+  letter-spacing:.3px;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span b{
+  margin-top:6px;
+  font-size:clamp(21px,2.05vw,27px)!important;
+  line-height:1.18;
+  letter-spacing:-.45px;
+  font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>span:last-child b{
+  color:#f9fbff;
+}
+#riot-life-story #riot-change .riotCompareGrid article>div>i{
+  color:#7a92b5;font-size:18px;
+}
+#riot-life-story #riot-change .riotCompareGrid .riotCompareDelta{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  margin:13px 0 0;
+  color:#b0c0d5;
+  font-size:13px!important;
+  line-height:1.35!important;
+  font-weight:850;
+  font-variant-numeric:tabular-nums;
+}
+#riot-life-story #riot-change .riotCompareGrid .riotCompareDelta small{
+  color:#95a3b8!important;font:800 9px/1.25 ui-monospace,monospace!important;
+  letter-spacing:.65px;
+}
+#riot-life-story #riot-change .riotCompareGrid article[data-tone="up"] .riotCompareDelta{color:#8de3f9}
+#riot-life-story #riot-change .riotCompareGrid article[data-tone="down"] .riotCompareDelta{color:#ff96b8}
+#riot-life-story #riot-change .riotCompareMeta{
+  gap:12px!important;margin-top:12px;
+}
+#riot-life-story #riot-change .riotCompareMeta>span{
+  min-width:0;padding:14px 16px;
+  border:1px solid rgba(180,206,255,.11);
+  border-radius:12px;background:rgba(6,10,19,.92);
+}
+#riot-life-story #riot-change .riotCompareMeta small{
+  color:#9cb0cd!important;font-size:10px!important;
+  line-height:1.35!important;
+}
+#riot-life-story #riot-change .riotCompareMeta b{
+  color:#ecf3ff!important;font-size:13px!important;
+  line-height:1.45!important;overflow-wrap:anywhere;
+}
+@media(max-width:1000px){
+  #riot-life-story #riot-change .riotWindowCompare>header{
+    grid-template-columns:minmax(0,1fr) minmax(200px,270px);
+  }
+  #riot-life-story #riot-change .riotCompareGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #riot-life-story #riot-change .riotCompareMeta{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:700px){
+  #riot-life-story #riot-change .riotWindowCompare{
+    padding:24px 17px 29px!important;
+  }
+  #riot-life-story #riot-change .riotWindowCompare>header{
+    grid-template-columns:minmax(0,1fr);
+    gap:18px;
+  }
+  #riot-life-story #riot-change .riotCompareHeading h4{
+    font-size:clamp(25px,7vw,33px)!important;
+  }
+  #riot-life-story #riot-change .riotCompareChampion{
+    min-height:174px;width:100%;max-width:100%;
+  }
+  #riot-life-story #riot-change .riotCompareChampionArt{
+    object-position:50% 33%;
+  }
+  #riot-life-story #riot-change .riotCompareGrid{
+    grid-template-columns:minmax(0,1fr);
+    gap:10px!important;margin-top:18px;
+  }
+  #riot-life-story #riot-change .riotCompareGrid article{
+    min-height:125px;padding:16px!important;
+  }
+  #riot-life-story #riot-change .riotCompareGrid article>div>span b{
+    font-size:clamp(21px,6vw,26px)!important;
+  }
+  #riot-life-story #riot-change .riotCompareMeta{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
+
+/* Integrated from src/design-foundations-2026-10-13.css. */
+/* ZeroTwo — consistent UI foundations; keep cinematic artwork visible */
+:root{
+  --zt-surface:#101621;
+  --zt-raised:#18202e;
+  --zt-border:rgba(172,195,231,.24);
+  --zt-text:#f7f9ff;
+  --zt-muted:#bfccdf;
+  --zt-accent:#ff6698;
+  --zt-focus:#8bdeff;
+  --zt-radius:14px;
+}
+html{scroll-padding-top:96px}
+#zerotwo-content{min-width:0}
+#zerotwo-content:focus{outline:none}
+.gamingLanding :where(button,a,input,select,summary):focus-visible{
+  outline:3px solid var(--zt-focus)!important;outline-offset:3px!important
+}
+.gamingLanding .ztGlobalSkip{
+  position:fixed!important;inset:12px auto auto 12px!important;z-index:100000!important;
+  display:inline-flex;align-items:center;min-height:46px;max-width:calc(100vw - 24px);
+  padding:10px 16px;border:2px solid var(--zt-focus);border-radius:10px;
+  background:#07111d;color:#fff;font:800 13px/1.4 system-ui,sans-serif;
+  text-decoration:none;transform:translateY(-150%);opacity:0;pointer-events:none
+}
+.gamingLanding .ztGlobalSkip:focus-visible{
+  transform:translateY(0);opacity:1;pointer-events:auto
+}
+.gamingLanding .gameNav button{min-height:44px}
+.gamingLanding .navlinks{gap:clamp(6px,1.2vw,18px)}
+.homeLookup .lookupIntro>p{
+  max-width:750px;color:var(--zt-muted)!important;
+  font-size:clamp(15px,1.3vw,17px)!important;line-height:1.7!important
+}
+.homeLookup .lookupSearch{max-width:100%;border-radius:var(--zt-radius)}
+.homeLookup .lookupSearch :where(input,select,button){min-height:48px;font-size:16px}
+.homeLookup .lookupSearch input{min-width:0}
+.homeLookup .lookupSearch input[aria-invalid="true"]{box-shadow:inset 0 -2px 0 #ff88a8}
+.homeLookup .lookupHelp,.homeLookup .lookupHelp span{
+  color:#bac8dd;font-size:12px;line-height:1.55
+}
+.homeLookup .lookupError{border-color:rgba(255,126,165,.54)}
+.homeLookup .lookupErrorCopy>span{color:#f0b9cb;font-size:13px;line-height:1.6}
+.homeJourney .homeJourneyChapter p{
+  font-size:clamp(14px,1.1vw,16px)!important;color:#d0d8e8!important;
+  line-height:1.7!important
+}
+.homeJourney .homeJourneyChapter>aside small{
+  font-size:12px!important;color:#c0ccdf!important
+}
+.homeJourney .homeJourneyChapter>aside b{font-size:13px!important}
+.publicPlayerResult .playerIdentityMain h2{overflow-wrap:anywhere}
+.publicPlayerResult .playerIdentityMain p{color:#c2d0e1!important}
+.publicPlayerResult .profileQuickNav{
+  border-color:var(--zt-border)!important;
+  background:linear-gradient(120deg,rgba(19,28,43,.96),rgba(10,15,25,.98))!important
+}
+.publicPlayerResult .profileQuickNav>span{font-size:11px!important}
+.publicPlayerResult .profileQuickNav>button{
+  border-color:var(--zt-border)!important;
+  background:var(--zt-raised)!important;color:var(--zt-text)!important;
+  font-size:12px!important;min-height:48px!important
+}
+.publicPlayerResult .profileQuickNav>button:hover{
+  background:#2c2038!important;border-color:var(--zt-accent)!important
+}
+.publicPlayerResult .playerIdentityActions :where(button,a){min-height:44px}
+.publicPlayerResult .historyDepthPanel p{font-size:13px;line-height:1.65}
+.publicPlayerResult .historyDepthPanel>button{min-height:46px}
+#riot-life-story .riotStoryIntro p,
+#riot-life-story .riotDeepCopy p,
+#riot-life-story .riotChapterCopy p,
+#riot-life-story .riotChapterGroupIntro p{
+  color:#cfdaea!important;font-size:clamp(14px,1.1vw,16px)!important;
+  line-height:1.7!important
+}
+#riot-life-story .riotDeepMetrics>span small,
+#riot-life-story .riotChapterHeroMetric small{color:#cad8ea!important}
+#riot-life-story .riotStoryNav a,
+#riot-life-story .riotReadingOptions button,
+#riot-life-story .riotChapterJump select{min-height:44px}
+.gamingLanding .gameDataVault summary{min-height:48px;cursor:pointer}
+.gamingLanding .authOverlayClose{min-width:44px;min-height:44px;border-radius:10px}
+.gamingLanding .authOverlayPanel{
+  max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain
+}
+@media(max-width:760px){
+  html{scroll-padding-top:76px}
+  .gamingLanding .navlinks{gap:6px}
+  .homeLookup .lookupIntro>p{font-size:15px!important;line-height:1.7!important}
+  .homeJourney .homeJourneyChapter p{font-size:14px!important}
+  #riot-life-story .riotDeepCopy p,
+  #riot-life-story .riotChapterCopy p,
+  #riot-life-story .riotChapterGroupIntro p{font-size:14px!important}
+  .gamingLanding .authOverlayPanel{max-height:calc(100dvh - 16px)}
+}
+@media(max-width:390px){
+  .publicPlayerResult .profileQuickNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .homeLookup .lookupSearch input{font-size:16px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .gamingLanding :where(button,a,input,select,summary){transition-duration:.01ms!important}
+}
