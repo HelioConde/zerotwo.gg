@@ -1,0 +1,34 @@
+name: ZeroTwo Privacy Retention
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 8 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  prune-resolved:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: bieihhaobdztjyoweewa
+    steps:
+      - uses: actions/checkout@v4
+      - name: Erase privacy tickets 90 days after resolution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_ACCESS_TOKEN" || { echo "::error::Missing PAT"; exit 1; }
+          jq -n --arg sql "with expired as (delete from public.zerotwo_privacy_requests where status in ('resolved','rejected') and resolved_at < now()-interval '90 days' returning id) select count(*)::int as expired_count from expired" '{query:$sql,read_only:false}' > /tmp/zt-retention-query.json
+          status=$(curl --silent --show-error --output /tmp/zt-retention-response.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            --header "Content-Type: application/json" \
+            --request POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+            --data-binary @/tmp/zt-retention-query.json)
+          if [ "$status" != "201" ]; then
+            echo "::error::Privacy retention operation failed (HTTP $status)."
+            exit 1
+          fi
+          echo "Privacy retention ran; resolved/rejected tickets beyond 90 days are pruned."

@@ -1,0 +1,44 @@
+name: ZeroTwo Privacy Schema Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/audit-privacy-schema.mjs'
+      - '.github/workflows/privacy-schema-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: bieihhaobdztjyoweewa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inventory database user_id columns only, never user rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -n --arg sql "select table_name from information_schema.columns where table_schema='public' and column_name='user_id' order by table_name" '{query:$sql,read_only:true}' > /tmp/zt-query.json
+          status=$(curl --silent --show-error --output /tmp/zerotwo-privacy-schema.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            --header "Content-Type: application/json" \
+            --request POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+            --data-binary @/tmp/zt-query.json)
+          test "$status" = "201" || { echo "::error::Database metadata API HTTP $status"; exit 1; }
+          node scripts/audit-privacy-schema.mjs
+      - name: Upload table names only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerotwo-privacy-schema
+          path: privacy-schema-artifacts/
+          retention-days: 7
+          if-no-files-found: warn
