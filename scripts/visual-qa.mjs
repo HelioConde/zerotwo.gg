@@ -100,8 +100,27 @@ try{
     }
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-home.png',fullPage:true,animations:'disabled'});
-    await page.locator('input[aria-label="Riot ID para buscar jogador"]').fill('ZeroTwo Fixture#BR1');
-    await page.getByRole('button',{name:/VER RIOT LIFE/}).click();
+    // Real keyboard, validation and dialog regression tests (synthetic fixture).
+    const searchInput=page.getByRole('textbox',{name:'Riot ID para buscar jogador'});
+    assert.equal(await page.getByRole('search',{name:'Pesquisar jogador pelo Riot ID'}).count(),1,name+': search landmark missing');
+    await searchInput.fill('SemTag');
+    await searchInput.press('Enter');
+    assert.match(await page.locator('#riot-id-error').innerText(),/Nome#TAG/);
+    assert.equal(await searchInput.getAttribute('aria-invalid'),'true',name+': invalid search not announced');
+    await searchInput.fill('ZeroTwo Fixture#BR1');
+    assert.equal(await searchInput.getAttribute('aria-invalid'),'false',name+': editing must clear error');
+    await searchInput.focus();
+    await page.evaluate(()=>window.dispatchEvent(new CustomEvent('zt:open-auth')));
+    const dialog=page.getByRole('dialog',{name:'Entrar no ZeroTwo'});
+    await dialog.waitFor({state:'visible',timeout:15000});
+    const closeButton=dialog.getByRole('button',{name:'Fechar janela de login'});
+    assert.equal(await closeButton.evaluate(el=>el===document.activeElement),true,name+': dialog does not receive focus');
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(await dialog.evaluate(el=>el.contains(document.activeElement)),true,name+': dialog allows focus escape');
+    await page.keyboard.press('Escape');
+    await dialog.waitFor({state:'detached',timeout:5000});
+    assert.equal(await searchInput.evaluate(el=>el===document.activeElement),true,name+': dialog does not restore focus');
+    await searchInput.press('Enter');
     await page.locator('.historyDepthPanel').waitFor({timeout:25000});
     assert.notEqual(
       await page.locator('.homeLookup.hasResult .homeHero').evaluate(el=>getComputedStyle(el).position),

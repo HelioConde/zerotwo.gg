@@ -8,6 +8,7 @@ import './profile-quick-nav-2026-10-09.css';
 import './zerotwo-art-2026-10-09.css';
 import './visual-media-2026-10-09.css';
 import './riot-change-cinematic-2026-10-09.css';
+import './design-foundations-2026-10-13.css';
 import { supabase } from './supabase';
 import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
@@ -30,6 +31,7 @@ function App(){
   const [needsOnboarding,setNeedsOnboarding]=useState(false);
   const [ownRiot,setOwnRiot]=useState<OwnRiotAccount|null>(null);
   const [authOpen,setAuthOpen]=useState(false);
+  const authCloseRef=React.useRef<HTMLButtonElement|null>(null);
   const [publicReset,setPublicReset]=useState(0);
   function showPublicRoute(url:string){
     window.history.pushState({},document.title,url);
@@ -146,8 +148,33 @@ function App(){
     return()=>data.subscription.unsubscribe();
   },[]);
 
+  const isAuthDialogOpen=authOpen&&(!session||needsOnboarding||!authReady);
+  useEffect(()=>{
+    if(!isAuthDialogOpen)return;
+    const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+    const frame=requestAnimationFrame(()=>authCloseRef.current?.focus());
+    const handleKey=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){event.preventDefault();setAuthOpen(false);return;}
+      if(event.key!=='Tab')return;
+      const dialog=authCloseRef.current?.closest('[role="dialog"]');
+      if(!dialog)return;
+      const focusable=Array.from(dialog.querySelectorAll<HTMLElement>(
+        'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+      )).filter(element=>element.getClientRects().length>0);
+      if(!focusable.length)return;
+      if(event.shiftKey&&(document.activeElement===focusable[0]||!dialog.contains(document.activeElement))){
+        event.preventDefault();focusable[focusable.length-1].focus();
+      }else if(!event.shiftKey&&(document.activeElement===focusable[focusable.length-1]||!dialog.contains(document.activeElement))){
+        event.preventDefault();focusable[0].focus();
+      }
+    };
+    document.addEventListener('keydown',handleKey);
+    return()=>{cancelAnimationFrame(frame);document.removeEventListener('keydown',handleKey);previousFocus?.focus({preventScroll:true});};
+  },[isAuthDialogOpen]);
+
   return <main className="gamingLanding">
-    <nav className="gameNav">
+    <a className="skipToContent ztGlobalSkip" href="#zerotwo-content">PULAR PARA O CONTEÚDO PRINCIPAL</a>
+    <nav className="gameNav" aria-label="Navegação principal">
       <button className="brand brandButton" onClick={()=>goHome()}>
         <b className="brandMark"><img src="/zerotwo.gg/assets/zerotwo/zerotwo-mark.svg" alt=""/></b>
         ZERO<span>TWO</span><small>.GG</small>
@@ -174,9 +201,9 @@ function App(){
       </div>
     </nav>
 
-    <PublicPlayerLookup key={publicReset}/>
+    <div id="zerotwo-content" tabIndex={-1}><PublicPlayerLookup key={publicReset}/></div>
 
-    {authOpen&&(!session||needsOnboarding||!authReady)&&
+    {isAuthDialogOpen&&
       <div
         className="authOverlay"
         role="dialog"
@@ -185,7 +212,7 @@ function App(){
         onMouseDown={e=>{if(e.target===e.currentTarget)setAuthOpen(false)}}
       >
         <div className="authOverlayPanel">
-          <button className="authOverlayClose" aria-label="Fechar" onClick={()=>setAuthOpen(false)}>×</button>
+          <button ref={authCloseRef} type="button" className="authOverlayClose" aria-label="Fechar janela de login" onClick={()=>setAuthOpen(false)}>×</button>
           <Suspense fallback={<div className="clientLoading">ABRINDO LOGIN<span>...</span></div>}>
             <Connect01
               session={session}
