@@ -86,6 +86,17 @@ try{
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
     assert.equal(await page.locator('.ztSeoFallback').count(),0,name+': React must replace fallback without duplicate SEO content');
+    const lcpPreload=page.locator('head link[rel="preload"][as="image"][fetchpriority="high"]');
+    assert.equal(await lcpPreload.count(),1,name+': critical hero art should have exactly one high-priority preload');
+    assert.match(await lcpPreload.getAttribute('href'),/0b338a39.*\.webp$/,name+': preload must reference correct hero artwork');
+    const ctaContrast=await page.locator('.homeLookup:not(.hasResult) .lookupSearch button[type="submit"]').first().evaluate(el=>{
+      const rgb=color=>{const nums=color.match(/[\d.]+/g)?.map(Number)||[];return nums.slice(0,3).map(x=>{const v=x/255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;})};
+      const c=getComputedStyle(el),a=rgb(c.color),b=rgb(c.backgroundColor);
+      const luminance=x=>x[0]*.2126+x[1]*.7152+x[2]*.0722;
+      const l1=luminance(a),l2=luminance(b);
+      return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
+    });
+    assert.ok(ctaContrast>=4.5,name+': search CTA fails WCAG AA contrast ('+ctaContrast.toFixed(2)+')');
     // Regressions in source artwork should not silently restore PNG requests.
     const backdrop=page.locator('.homeHeroBackdrop').first();
     const background=await backdrop.evaluate(el=>getComputedStyle(el).backgroundImage);
@@ -108,6 +119,12 @@ try{
       console.log('PASS '+name+': home artwork '+(index+1)+' decoded');
     }
     await page.evaluate(()=>window.scrollTo(0,0));
+    const footerTargets=await page.locator('footer.siteFooter .siteFooterNav a').evaluateAll(links=>
+      links.map(link=>({text:link.textContent?.trim()||'',height:link.getBoundingClientRect().height}))
+    );
+    assert.ok(footerTargets.length>=7,name+': missing footer links');
+    assert.ok(footerTargets.every(link=>link.height>=24),
+      name+': inaccessible footer touch target '+JSON.stringify(footerTargets.filter(link=>link.height<24)));
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-home.png',fullPage:true,animations:'disabled'});
     // Real keyboard, validation and dialog regression tests (synthetic fixture).
     const searchInput=page.getByRole('textbox',{name:'Riot ID para buscar jogador'});

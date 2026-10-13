@@ -921,3 +921,40 @@ html{scroll-padding-top:96px}
 .ztPrivacyStatus{background:#14283c;border-left:3px solid #90dfff;padding:10px 14px;border-radius:5px}
 .ztPrivacyPanel :is(button,a,input):focus-visible{outline:3px solid #8bdeff;outline-offset:3px}
 @media(max-width:600px){.ztPrivacyOverlay{padding:8px;align-items:flex-start}.ztPrivacyPanel{max-height:calc(100dvh - 16px);margin:auto 0}.ztPrivacyToggle{align-items:flex-start}}
+
+/* Lighthouse audit 2026-10-13: WCAG contrast, touch target size and readable body text.
+   Hero background is separately preloaded with high priority from index.html. */
+.homeLookup .lookupIntro form.lookupSearch > button[type="submit"]{
+  color:#170b18!important; /* Contrast > 4.5:1 against the site's #ff477e CTA */
+}
+.siteFooterNav a{
+  min-height:32px;
+  display:inline-flex;
+  align-items:center;
+  font-size:13px!important;
+  line-height:1.4;
+}
+.siteFooterNav section{gap:6px}
+.siteFooterLegal,.gamingLanding>.siteFooter>small,.gamingLanding>footer>small{
+  font-size:12px!important;
+  line-height:1.65!important;
+}
+.homeSeoIntent article p{font-size:13px!important;line-height:1.65}
+.homeTransparency article p{font-size:13px!important;line-height:1.6}
+.homeTransparency article b{font-size:13px!important}
+.homeTransparency article small{font-size:12px!important}
+.homeTransparency>header p{font-size:13px!important}
+.homeTransparency>header>small{font-size:12px!important}
+.homeSeoGuides small{font-size:12px!important}
+.homeSeoIntent>header>small{font-size:12px!important}
+.homeHeroFacts small{font-size:12px!important;letter-spacing:.1px}
+.homeLookup:not(.hasResult) .homeHeroCopy>small{font-size:12px!important}
+.homeLookup:not(.hasResult) .lookupTrust span{font-size:12px!important}
+.homeJourneyEnd small{font-size:12px!important}
+.homeJourneyEnd button{font-size:12px!important}
+@media(max-width:760px){
+  .homeTransparency article{grid-template-columns:24px minmax(0,1fr)}
+  .homeHeroFacts{flex-wrap:wrap}
+  .siteFooterNav a{min-height:36px}
+  .gamingLanding .gameNav .navCtaButton{font-size:12px!important}
+}

@@ -11,19 +11,19 @@ const RiotLifeExperience=lazy(()=>import('./RiotLifeExperience').then(module=>({
 function HomeExperience(){
  return <section className="homeJourney" id="experience">
   <section className="homeJourneyChapter homeJourneyDiscover">
-   <img className="homeJourneyArt" loading="lazy" decoding="async" src={VISUAL_ASSETS.home.discover} alt="" aria-hidden="true"/>
+   <img className="homeJourneyArt" loading="lazy" decoding="async" fetchPriority="low" src={VISUAL_ASSETS.home.discover} alt="" aria-hidden="true"/>
    <span className="homeJourneyNo">01</span>
    <div><small>DESCUBRA</small><h2>UM NÚMERO BOM É ÚTIL.<br/><span>UMA HISTÓRIA É MEMORÁVEL.</span></h2><p>O ZeroTwo não abre com uma parede de estatísticas. Primeiro ele escolhe o que realmente marcou a janela disponível e transforma isso em uma leitura curta.</p></div>
    <aside><Icon name="spark"/><b>UMA DESCOBERTA POR VEZ</b><small>sem repetir o mesmo KDA em cinco cards</small></aside>
   </section>
   <section className="homeJourneyChapter homeJourneyRemember">
-   <img className="homeJourneyArt" loading="lazy" decoding="async" src={VISUAL_ASSETS.home.remember} alt="" aria-hidden="true"/>
+   <img className="homeJourneyArt" loading="lazy" decoding="async" fetchPriority="low" src={VISUAL_ASSETS.home.remember} alt="" aria-hidden="true"/>
    <span className="homeJourneyNo">02</span>
    <div><small>LEMBRE</small><h2>SUA CONTA <span>MUDA DE FASE.</span></h2><p>Quando campeão, modo, ritmo ou frequência mudam, isso vira um novo capítulo. A memória cresce conforme você volta ao site.</p></div>
    <aside><Icon name="sync"/><b>TIME MACHINE + ERAS</b><small>comparação só quando existe mudança</small></aside>
   </section>
   <section className="homeJourneyChapter homeJourneyPeople">
-   <img className="homeJourneyArt" loading="lazy" decoding="async" src={VISUAL_ASSETS.home.people} alt="" aria-hidden="true"/>
+   <img className="homeJourneyArt" loading="lazy" decoding="async" fetchPriority="low" src={VISUAL_ASSETS.home.people} alt="" aria-hidden="true"/>
    <span className="homeJourneyNo">03</span>
    <div><small>RECONHEÇA</small><h2>ALGUNS NOMES <span>VOLTAM A APARECER.</span></h2><p>Jogadores recorrentes entram como parte da história social da sua amostra — sem chamar isso de amizade, química ou compatibilidade.</p></div>
    <aside><Icon name="user"/><b>PLAYERS TIMELINE</b><small>quem entrou, ficou ou deixou de aparecer</small></aside>
@@ -61,7 +61,7 @@ function HomeExperience(){
    <a className="homeMethodologyLink" href="/zerotwo.gg/como-funciona/">COMO O ZEROTWO CALCULA E ORGANIZA OS DADOS →</a>
   </section>
   <section className="homeJourneyEnd">
-   <img className="homeJourneyArt homeJourneyEndArt" loading="lazy" decoding="async" src={VISUAL_ASSETS.home.closing} alt="" aria-hidden="true"/>
+   <img className="homeJourneyArt homeJourneyEndArt" loading="lazy" decoding="async" fetchPriority="low" src={VISUAL_ASSETS.home.closing} alt="" aria-hidden="true"/>
    <div><small>ZEROTWO // RIOT LIFE</small><h2>MENOS DASHBOARD.<br/><span>MAIS DESCOBERTA.</span></h2></div>
    <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>PESQUISAR UM RIOT ID ↑</button>
   </section>
