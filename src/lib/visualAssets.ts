@@ -8,7 +8,7 @@
 export const zerotwoArt=(fileName:string)=>
   // Vite dev and GitHub Pages expect a literal comma in these legacy filenames.
   // Encode accents/spaces, but keep commas in the pathname.
-  import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(fileName).replace(/%2C/gi,',');
+  import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent(fileName.replace(/\.png$/i,'.webp')).replace(/%2C/gi,',');
 
 export const VISUAL_ASSETS={
   home:{

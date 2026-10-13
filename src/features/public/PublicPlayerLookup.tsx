@@ -119,12 +119,12 @@ export function PublicPlayerLookup(){
   };
  },[ddragonLocale]);
  function apiMessage(error:any,response:any){
-  if(response?.message)return String(response.message);
-  const code=Number(error?.context?.status||0);
+  const code=Number(error?.context?.status||response?.status||0);
   if(code===429)return 'A Riot atingiu o limite temporário de consultas. Tente novamente em instantes.';
   if(code===401||code===403)return 'O serviço de dados Riot não autorizou esta consulta. Tente novamente mais tarde.';
   if(code===404)return 'Jogador ou dados não encontrados. Confira o Riot ID e o servidor.';
   if(code>=500)return 'Os dados da Riot estão temporariamente indisponíveis. Tente novamente.';
+  if(response?.message)return String(response.message);
   return 'Não foi possível completar a pesquisa. Verifique a conexão e tente novamente.';
  }
  const regionFor=(p:string)=>['br1','na1','la1','la2'].includes(p)?'americas':['kr','jp1'].includes(p)?'asia':['ph2','sg2','th2','tw2','vn2'].includes(p)?'sea':'europe';
@@ -141,7 +141,8 @@ export function PublicPlayerLookup(){
   if(error||extended?.error){setDepthError(apiMessage(error,extended));return}
   if((extended?.matches?.length||0)<(data.matches?.length||0)){setDepthError('A atualização retornou uma amostra menor. Os dados atuais foram preservados.');return}
   setData(extended);
-  if(extended?.cache?.pending>0)setDepthError('Parte do histórico ainda não está disponível. Você pode tentar completar a análise depois.');
+  if(extended?.cache?.rateLimited)setDepthError('A Riot limitou temporariamente a consulta. Suas partidas carregadas foram preservadas; tente novamente em instantes.');
+  else if(extended?.cache?.pending>0)setDepthError('Parte do histórico ainda não está disponível. Você pode tentar completar a análise depois.');
  }
  function jumpToProfileSection(id:string){
   const element=document.getElementById(id);

@@ -58,6 +58,7 @@ try{
     const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'});
     const page=await context.newPage();
     page.on('pageerror',err=>errors.push(name+': '+err.message));
+    let simulateRiotRateLimit=false;
     await page.route('**/functions/v1/public-lol-profile',async route=>{
       if(route.request().method()==='OPTIONS'){
         await route.fulfill({status:204,headers:{
@@ -67,6 +68,10 @@ try{
       }
       const body=route.request().postDataJSON()||{};
       const limit=Math.min(100,Math.max(1,Number(body.limit||20)));
+      if(limit===100&&simulateRiotRateLimit){
+        await route.fulfill({status:429,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({error:true,message:'Rate limit'})});
+        return;
+      }
       if(limit===100)await new Promise(resolve=>setTimeout(resolve,850)); // Cold-request UX fixture
       await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(response(limit))});
     });
@@ -313,6 +318,12 @@ try{
     }
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-chapter-nav.png',fullPage:false,animations:'disabled'});
     await page.screenshot({path:'visual-qa-artifacts/'+name+'-profile-fixture-20.png',fullPage:false,animations:'disabled'});
+    simulateRiotRateLimit=true;
+    await page.getByRole('button',{name:/ANALISAR ATÉ 100 PARTIDAS/}).click();
+    await page.locator('.historyDepthWarning[role="alert"]').waitFor({state:'visible',timeout:8000});
+    assert.match(await page.locator('.historyDepthWarning[role="alert"]').innerText(),/limite temporário/i,name+': 429 needs friendly retry message');
+    assert.match(await page.locator('.historyDepthPanel').innerText(),/20 partidas carregadas/,name+': 429 must preserve old history');
+    simulateRiotRateLimit=false;
     await page.getByRole('button',{name:/ANALISAR ATÉ 100 PARTIDAS/}).click();
     await page.locator('.historyDepthProgress').waitFor({state:'visible',timeout:3000});
     assert.match(await page.locator('.historyDepthProgress').innerText(),/pode levar cerca de um minuto/);

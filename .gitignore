@@ -5,3 +5,6 @@ dist
 !.env.example
 .DS_Store
 *.log
+
+# Generated automatically at dev/build time. Source PNGs remain tracked.
+public/assets/zerotwo/*.webp

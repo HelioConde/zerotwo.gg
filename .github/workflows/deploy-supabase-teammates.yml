@@ -29,7 +29,11 @@ jobs:
         shell: bash
         run: |
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
-            echo "::error::SUPABASE_ACCESS_TOKEN is not configured. The Edge Function was NOT deployed."
+            echo "::error::SUPABASE_ACCESS_TOKEN is missing. Add a Supabase Personal Access Token under repository Settings > Secrets and variables > Actions. No functions deployed."
+            exit 1
+          fi
+          if [[ "$SUPABASE_ACCESS_TOKEN" != sbp_* ]]; then
+            echo "::error::SUPABASE_ACCESS_TOKEN must start with sbp_. Project publishable/anon/service_role keys are NOT CLI access tokens. No functions deployed."
             exit 1
           fi
 

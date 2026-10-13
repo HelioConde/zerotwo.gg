@@ -11,8 +11,9 @@
     "audit:images": "node scripts/audit-images.mjs",
     "audit:seo": "node scripts/audit-seo.mjs",
     "generate:og": "node scripts/generate-og-image.mjs",
-    "predev": "npm run generate:og",
-    "prebuild": "npm run generate:og",
+    "optimize:images": "node scripts/optimize-final-images.mjs",
+    "predev": "npm run generate:og && npm run optimize:images",
+    "prebuild": "npm run generate:og && npm run optimize:images",
     "preaudit:seo": "npm run generate:og"
   },
   "dependencies": {
