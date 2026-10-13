@@ -895,3 +895,29 @@ html{scroll-padding-top:96px}
   html{scroll-behavior:auto}
   .gamingLanding :where(button,a,input,select,summary){transition-duration:.01ms!important}
 }
+
+/* ZeroTwo 13/10/2026 — accessible privacy center and optional analytics. */
+.ztPrivacyFooterButton{display:block;appearance:none;border:0;background:none;padding:0;color:#bfccdf;font:inherit;text-align:left;cursor:pointer}
+.ztPrivacyFooterButton:hover{color:#fff;text-decoration:underline}
+.ztPrivacyOverlay{position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.84);display:flex;justify-content:center;align-items:center;padding:18px;overflow:auto}
+.ztPrivacyPanel{position:relative;width:min(590px,100%);max-height:min(90dvh,850px);overflow-y:auto;overscroll-behavior:contain;background:#101621;color:#f7f9ff;border:1px solid #ffffff29;border-radius:18px;padding:clamp(20px,4vw,36px);box-shadow:0 24px 90px #000a}
+.ztPrivacyPanel>small{color:#ff96b5;font-size:11px;letter-spacing:.1em;font-weight:900}
+.ztPrivacyPanel h2{font-size:clamp(25px,4vw,34px);letter-spacing:-1px;line-height:1.13;margin:10px 38px 12px 0}
+.ztPrivacyPanel h2 span{color:#ff6698}
+.ztPrivacyPanel p{font-size:14px;line-height:1.65;color:#c3cddd;margin:8px 0}
+.ztPrivacyPanel section{border-top:1px solid #ffffff1a;margin-top:18px;padding-top:18px}
+.ztPrivacyPanel h3{font-size:16px;color:#fff;margin:0 0 5px}
+.ztPrivacyPanel section small{display:block;color:#b6c4d7;font-size:12px;margin-top:8px;line-height:1.5}
+.ztPrivacyClose{position:absolute;top:16px;right:16px;width:44px;height:44px;display:grid;place-items:center;border:1px solid #ffffff3b;border-radius:11px;background:#1d283a;color:white;font-size:24px;cursor:pointer}
+.ztPrivacyToggle{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer}
+.ztPrivacyToggle b{display:block;font-size:15px;color:#fff}
+.ztPrivacyToggle input{width:24px;height:24px;flex-shrink:0;accent-color:#ff6698}
+.ztPrivacyAction,.ztPrivacyDanger{min-height:44px;max-width:100%;padding:10px 16px;border-radius:10px;color:white;font-size:13px;font-weight:850;cursor:pointer}
+.ztPrivacyAction{background:#243f57;border:1px solid #83ddf988}
+.ztPrivacyDanger{background:#502632;border:1px solid #ff93a18a}
+.ztPrivacyDanger:disabled{opacity:.45;cursor:not-allowed}
+.ztPrivacyLinks{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
+.ztPrivacyLinks a{color:#9be4fa;font-size:13px;text-decoration:underline}
+.ztPrivacyStatus{background:#14283c;border-left:3px solid #90dfff;padding:10px 14px;border-radius:5px}
+.ztPrivacyPanel :is(button,a,input):focus-visible{outline:3px solid #8bdeff;outline-offset:3px}
+@media(max-width:600px){.ztPrivacyOverlay{padding:8px;align-items:flex-start}.ztPrivacyPanel{max-height:calc(100dvh - 16px);margin:auto 0}.ztPrivacyToggle{align-items:flex-start}}

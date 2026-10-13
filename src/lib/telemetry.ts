@@ -3,6 +3,14 @@ import { supabase } from '../supabase';
 export const LOG_SESSION_ID=(()=>{const k='zt_log_session';let v=sessionStorage.getItem(k);if(!v){v=crypto.randomUUID();sessionStorage.setItem(k,v)}return v})();
 const LOG_BLOCKED=/token|password|authorization|secret|cookie|puuid|api.?key|refresh|access/i;
 const PRODUCT_BUFFER_KEY='zt_product_event_buffer';
+const ANALYTICS_KEY='zt_analytics_opt_in';
+export function productAnalyticsEnabled(){
+  try{return localStorage.getItem(ANALYTICS_KEY)==='true';}catch{return false;}
+}
+export function setProductAnalyticsEnabled(value:boolean){
+  try{localStorage.setItem(ANALYTICS_KEY,value?'true':'false');}catch{}
+  if(!value)try{sessionStorage.removeItem(PRODUCT_BUFFER_KEY);}catch{}
+}
 
 type ProductEventOpts={area?:string,context?:any};
 type LogOpts={level?:'debug'|'info'|'warn'|'error',area?:string,message?:string,context?:any,duration_ms?:number};
@@ -52,18 +60,24 @@ function bufferProductEvent(event_name:string,opts:ProductEventOpts={}){
 }
 
 export async function ztProductEvent(event_name:string,opts:ProductEventOpts={}){
+  if(!productAnalyticsEnabled())return;
   try{
     const {data}=await supabase.auth.getSession();
     const userId=data.session?.user?.id;
     if(userId){
+      if(!productAnalyticsEnabled())return;
       ztLog(userId,event_name,{area:opts.area||'product',context:opts.context});
       return;
     }
   }catch{}
-  bufferProductEvent(event_name,opts);
+  if(productAnalyticsEnabled())bufferProductEvent(event_name,opts);
 }
 
 export async function flushProductEvents(userId:string){
+  if(!productAnalyticsEnabled()){
+    try{sessionStorage.removeItem(PRODUCT_BUFFER_KEY);}catch{}
+    return;
+  }
   let events:any[]=[];
   try{
     events=JSON.parse(sessionStorage.getItem(PRODUCT_BUFFER_KEY)||'[]');
@@ -78,6 +92,7 @@ export async function flushProductEvents(userId:string){
 }
 
 export function ztLogOnce(userId:string,event_name:string,opts:ProductEventOpts={}){
+  if(!productAnalyticsEnabled())return;
   const key='zt_once_'+event_name;
   try{
     if(sessionStorage.getItem(key))return;

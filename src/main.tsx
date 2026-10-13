@@ -9,6 +9,7 @@ import { ztLog, flushProductEvents } from './lib/telemetry';
 import { Icon } from './components/ZeroTwoUI';
 import { I18nProvider, useLanguage } from './i18n';
 import { PublicPlayerLookup } from './features/public/PublicPlayerLookup';
+import { PrivacyCenter } from './components/PrivacyCenter';
 
 const Connect01=lazy(()=>import('./features/onboarding/Connect01').then(module=>({default:module.Connect01})));
 
@@ -26,6 +27,7 @@ function App(){
   const [needsOnboarding,setNeedsOnboarding]=useState(false);
   const [ownRiot,setOwnRiot]=useState<OwnRiotAccount|null>(null);
   const [authOpen,setAuthOpen]=useState(false);
+  const [privacyOpen,setPrivacyOpen]=useState(()=>location.hash==='#privacy-center');
   const authCloseRef=React.useRef<HTMLButtonElement|null>(null);
   const [publicReset,setPublicReset]=useState(0);
   function showPublicRoute(url:string){
@@ -197,6 +199,7 @@ function App(){
     </nav>
 
     <div id="zerotwo-content" tabIndex={-1}><PublicPlayerLookup key={publicReset}/></div>
+    {privacyOpen&&<PrivacyCenter signedIn={Boolean(session)} onClose={()=>{setPrivacyOpen(false);if(location.hash==="#privacy-center")history.replaceState({},document.title,location.pathname+location.search);}}/>}
 
     {isAuthDialogOpen&&
       <div
@@ -235,6 +238,7 @@ function App(){
           <a href="/zerotwo.gg/sobre/">Sobre</a>
           <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
           <a href="/zerotwo.gg/privacidade/">Privacidade</a>
+          <button className="ztPrivacyFooterButton" type="button" onClick={()=>setPrivacyOpen(true)}>Meus dados e privacidade</button>
           <a href="/zerotwo.gg/termos/">Termos de uso</a>
         </section>
         <section>
