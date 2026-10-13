@@ -1,4 +1,5 @@
-// E2E deliberately begins only after the schema and shared-identity safety deployments.
+// E2E deliberately begins only after all RLS schema and service-role grants deployed.
+// Uses a disposable account only; never delete or modify real users.
 // Disposable-account integration test. Run only in isolated GitHub Actions.
 // No real user account, PUUID, Riot key or persistent test data is touched.
 import {createClient} from '@supabase/supabase-js';
