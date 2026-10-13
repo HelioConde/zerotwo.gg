@@ -29,7 +29,14 @@ async function invoke(slug,body){
   return {status:response.status,elapsedMs:Date.now()-started,result};
 }
 
-let failed=false;
+// A request without user authentication must never delete cloud snapshots.
+const privacyCheck=await invoke('privacy-manage',{action:'delete_riot_life_snapshots'});
+observations.privacy={
+  unauthenticatedHttpStatus:privacyCheck.status,
+  denied:[401,403].includes(privacyCheck.status)
+};
+console.log('PRIVACY GATE',JSON.stringify(observations.privacy));
+let failed=!observations.privacy.denied;
 const req={gameName:'AlchemyFlames',tagLine:'BR1',platform:'br1',region:'americas',limit:20};
 const profile=await invoke('public-lol-profile',req);
 const p=profile.result||{};
@@ -85,7 +92,22 @@ if(profile.status!==200||!observations.profile.identityMatched||!Array.isArray(p
   } else console.log('LIVE DEEP HISTORY',JSON.stringify(observations.expandedHistory));
 }
 
+// npm run dev generates responsive WebP artwork during predev.
+// On a clean runner, wait for the Vite server before starting real-browser QA.
+async function waitForAppReady(){
+  const url='http://127.0.0.1:4173/zerotwo.gg/';
+  for(let attempt=0;attempt<150;attempt++){
+    try{
+      const r=await fetch(url,{signal:AbortSignal.timeout(2200)});
+      if(r.ok)return;
+    }catch{}
+    await new Promise(resolve=>setTimeout(resolve,1000));
+  }
+  throw new Error('Dev server did not become ready after predev image generation');
+}
+
 try {
+  await waitForAppReady();
   const {chromium}=await import('playwright');
   const browser=await chromium.launch({headless:true});
   try{

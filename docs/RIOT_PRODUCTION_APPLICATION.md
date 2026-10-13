@@ -1,6 +1,8 @@
 # ZeroTwo.gg — Riot Production API Application Draft
 
-Status: **working prototype / not yet submitted**
+Status: **protótipo validado tecnicamente em 13/10/2026; categoria e aprovação da chave de produção Riot ainda não verificadas**.
+
+**Escopo público confirmado:** busca por Riot ID, rank, maestria, histórico 20→100 e capítulos Riot Life. Trechos antigos relativos a Find Your 02 e 02 Sync abaixo descrevem ideias planejadas e não devem ser enviados como funcionalidades publicadas sem revalidação.
 
 Public prototype: https://helioconde.github.io/zerotwo.gg/
 
@@ -225,7 +227,7 @@ The product displays Riot's required independent-product disclaimer in the publi
 
 ## Production request rationale
 
-The working prototype currently uses a Development API key during development. ZeroTwo requires a Production API key before opening the product for public player consumption at scale.
+The active key type is not exposed by the repository. Confirm its production approval in the Riot Developer Portal before inviting public traffic; never treat a working API response as evidence of production entitlement. ZeroTwo requires a Production API key before opening the product for public player consumption at scale.
 
 Production access is needed to:
 

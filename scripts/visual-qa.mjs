@@ -108,6 +108,28 @@ try{
     // Real keyboard, validation and dialog regression tests (synthetic fixture).
     const searchInput=page.getByRole('textbox',{name:'Riot ID para buscar jogador'});
     assert.equal(await page.getByRole('search',{name:'Pesquisar jogador pelo Riot ID'}).count(),1,name+': search landmark missing');
+    // Accessibility, consent and data minimization (without an authenticated account).
+    await page.evaluate(()=>{
+      localStorage.removeItem('zt_analytics_opt_in');
+      localStorage.setItem('zt_recent_players','[{"riotId":"Sample#BR1","platform":"br1"}]');
+      sessionStorage.setItem('zt_product_event_buffer','[]');
+    });
+    const privacyTrigger=page.getByRole('button',{name:'Meus dados e privacidade'});
+    await privacyTrigger.click();
+    const privacy=page.getByRole('dialog',{name:'CENTRAL DE PRIVACIDADE.'});
+    await privacy.waitFor({state:'visible'});
+    assert.equal(await privacy.getByRole('checkbox').isChecked(),false,name+': analytics must default to opt-out');
+    assert.equal(await privacy.getByRole('button',{name:'Excluir memórias em nuvem'}).isDisabled(),true,name+': cloud deletion requires login');
+    await privacy.getByRole('checkbox').check();
+    assert.equal(await page.evaluate(()=>localStorage.getItem('zt_analytics_opt_in')),'true',name+': analytics preference must persist');
+    await privacy.getByRole('checkbox').uncheck();
+    assert.equal(await page.evaluate(()=>sessionStorage.getItem('zt_product_event_buffer')),null,name+': disabling analytics clears buffered events');
+    page.once('dialog',dialog=>dialog.accept());
+    await privacy.getByRole('button',{name:'Limpar dados locais'}).click();
+    assert.equal(await page.evaluate(()=>localStorage.getItem('zt_recent_players')),null,name+': local data must be cleared');
+    await page.keyboard.press('Escape');
+    await privacy.waitFor({state:'detached'});
+    assert.equal(await privacyTrigger.evaluate(el=>el===document.activeElement),true,name+': privacy modal must restore focus');
     await searchInput.fill('SemTag');
     await searchInput.press('Enter');
     assert.match(await page.locator('#riot-id-error').innerText(),/Nome#TAG/);
