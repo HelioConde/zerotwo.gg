@@ -239,6 +239,8 @@ function App(){
           <small>ZEROTWO</small>
           <a href="/zerotwo.gg/sobre/">Sobre</a>
           <a href="/zerotwo.gg/como-funciona/">Como funciona</a>
+          <a href="/zerotwo.gg/privacidade/">Privacidade</a>
+          <a href="/zerotwo.gg/termos/">Termos de uso</a>
         </section>
         <section>
           <small>GUIAS</small>

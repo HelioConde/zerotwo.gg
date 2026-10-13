@@ -9,7 +9,7 @@ const site='https://helioconde.github.io/zerotwo.gg/';
 const directories=[
   'guias','estatisticas-lol','riot-id','maestria-lol','historico-lol',
   'como-funciona','rank-lol','arena-lol','lol-stats-tracker',
-  'sobre','glossario-lol'
+  'sobre','glossario-lol','privacidade','termos'
 ];
 const pages=['',...directories];
 const urls=new Set();
