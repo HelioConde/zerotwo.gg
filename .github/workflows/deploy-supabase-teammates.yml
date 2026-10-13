@@ -58,7 +58,8 @@ jobs:
           for sqlfile in \
             supabase/migrations/20261001_riot_life_memory.sql \
             supabase/migrations/20260927_valorant_rso.sql \
-            supabase/migrations/20261013210000_zerotwo_privacy_requests.sql; do
+            supabase/migrations/20261013210000_zerotwo_privacy_requests.sql \
+            supabase/migrations/20261013212500_zerotwo_privacy_service_grants.sql; do
             jq -n --rawfile sql "$sqlfile" '{query:$sql,read_only:false}' > /tmp/zt-schema-query.json
             status=$(curl --silent --show-error --retry 2 --retry-delay 3 \
               --output /tmp/zt-schema-response.json --write-out '%{http_code}' \

@@ -27,3 +27,6 @@ A tabela \`riot_life_snapshots\` estava ausente no banco apesar de existir no re
 - O deploy de funções passou a aplicar `20261001_riot_life_memory.sql` e `20260927_valorant_rso.sql` em conjunto com o esquema do inbox, com RLS habilitado e refresh do cache PostgREST.
 - Verificação de compartilhamento do usuário é obrigatória e falha fechada antes de apagar registros ZeroTwo. O serviço só apaga a identidade Auth quando não existem dados nos aplicativos compartilhados.
 - O teste com conta descartável foi preparado para confirmar o resultado do novo esquema. O teste anterior falhou no insert por tabela ausente (PGRST205) antes de qualquer exclusão de conta real.
+
+## Grants explícitos de serviço
+O teste descartável detectou permissão 42501 ao consultar snapshots pelo acesso administrativo. A migração `20261013212500_zerotwo_privacy_service_grants.sql` concede permissões estritamente a `service_role` nas tabelas do ZeroTwo que existem. Nenhuma nova permissão `anon` ou `authenticated` é concedida; RLS existente permanece.

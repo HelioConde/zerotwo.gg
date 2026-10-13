@@ -7,7 +7,9 @@ assert.ok(Array.isArray(rows)&&rows.length>0,'No metadata returned; privacy audi
 const existing=rows.map(row=>String(row.table_name||'')).filter(Boolean).sort();
 const accountTables=[
  'riot_life_snapshots','valorant_user_matches','valorant_accounts','riot_rso_states',
- 'player_dna_snapshots','client_event_logs','riot_accounts','profiles'
+ 'player_dna_snapshots','client_event_logs','riot_accounts','profiles',
+ 'duo_experience_feedback','player_discovery_settings','player_match_feedback',
+ 'riot_legacy_public_profiles','riot_legacy_rso_states','test_player_interactions'
 ];
 const sharedAppTables=[
   'chibi_recorded_matches','chibi_riot_account_links',
