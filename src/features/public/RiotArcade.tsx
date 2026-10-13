@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { zerotwoArt } from '../../lib/visualAssets';
 
 type Props={data:any};
 
@@ -46,7 +47,7 @@ export function RiotArcade({data}:Props){
   const active=questions.find(q=>!answers[q.id])||questions[questions.length-1];
   const finished=answered>=questions.length;
 
-  const historyArt=import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent('VOCÊ CONHECE O SEU PRÓPRIO HISTÓRICO.png');
+  const historyArt=zerotwoArt('VOCÊ CONHECE O SEU PRÓPRIO HISTÓRICO.png');
 
   return <section className="riotArcade riotArcadeWithArt">
     <img className="riotArcadeArt" loading="lazy" decoding="async" src={historyArt} alt="" aria-hidden="true"/>

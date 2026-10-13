@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '../../components/ZeroTwoUI';
+import { zerotwoArt } from '../../lib/visualAssets';
 import { useLanguage } from '../../i18n';
 
 type Props={data:any;champions:any;ddv:string};
@@ -116,7 +117,7 @@ export function MyRiotPatch({data,champions,ddv}:Props){
     return()=>{alive=false};
   },[data,champions,ddv,championUses,itemUses,ddragonLocale,language]);
 
-  const patchArt=import.meta.env.BASE_URL+'assets/zerotwo/'+encodeURIComponent('O PATCH, MAS SÓ A PARTE QUE ENCOSTA EM VOCÊ.png');
+  const patchArt=zerotwoArt('O PATCH, MAS SÓ A PARTE QUE ENCOSTA EM VOCÊ.png');
 
   return <section className="myRiotPatch myRiotPatchWithArt" id="my-riot-patch">
     <img className="myRiotPatchArt" loading="lazy" decoding="async" src={patchArt} alt="" aria-hidden="true"/>

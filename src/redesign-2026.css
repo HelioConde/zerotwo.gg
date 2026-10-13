@@ -3136,7 +3136,7 @@ summary:focus-visible{
   background:
     linear-gradient(180deg,rgba(5,7,10,.18) 0%,rgba(5,7,10,.08) 48%,#05070ad9 100%),
     linear-gradient(90deg,rgba(5,7,10,.18) 0%,rgba(5,7,10,.60) 27%,rgba(5,7,10,.82) 50%,rgba(5,7,10,.60) 73%,rgba(5,7,10,.18) 100%),
-    url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.png') center center/cover no-repeat!important;
+    url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.webp') center center/cover no-repeat!important;
 }
 .homeLookup:not(.hasResult) .homeHeroBackdrop:before{
   content:"";
@@ -3231,21 +3231,21 @@ summary:focus-visible{
   background-image:
     linear-gradient(90deg,#070a0ff5 0%,#070a0fe8 42%,#070a0f8f 72%,#070a0fa6 100%),
     linear-gradient(0deg,#070a0f 0%,transparent 55%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.png')!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.webp')!important;
   background-position:center!important;
 }
 .homeJourneyRemember{
   background-image:
     linear-gradient(90deg,#080a10f2 0%,#080a10e5 45%,#080a108c 74%,#080a10b8 100%),
     linear-gradient(0deg,#080a10 0%,transparent 58%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_13-2.png')!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_13-2.webp')!important;
   background-position:center 46%!important;
 }
 .homeJourneyPeople{
   background-image:
     linear-gradient(90deg,#061016f3 0%,#061016e8 44%,#0610168f 72%,#061016ad 100%),
     linear-gradient(0deg,#061016 0%,transparent 58%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_15-4.png')!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_15-4.webp')!important;
   background-position:center!important;
 }
 .homeJourneyChapter:before{
@@ -3290,7 +3290,7 @@ summary:focus-visible{
   background:
     linear-gradient(90deg,#06080ded 0%,#06080ddc 48%,#06080d8c 78%,#06080dad 100%),
     linear-gradient(0deg,#06080d,transparent 65%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center 54%/cover no-repeat!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.webp') center 54%/cover no-repeat!important;
   box-shadow:0 26px 80px #0007;
 }
 .homeJourneyEnd h2,
@@ -3306,13 +3306,13 @@ summary:focus-visible{
 .riotStoryIntro{
   background:
     linear-gradient(90deg,#080b10f4 0%,#080b10e7 60%,#080b10a8 100%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.png') center/cover no-repeat!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_14-3.webp') center/cover no-repeat!important;
   box-shadow:0 18px 55px #0004;
 }
 .loggedLifeHeroCopy{
   background:
     linear-gradient(90deg,#080b10f4 0%,#080b10dd 64%,#080b1099 100%),
-    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center/cover no-repeat!important;
+    url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.webp') center/cover no-repeat!important;
 }
 .playerIdentityStrip{
   filter:drop-shadow(0 16px 36px #0003);
@@ -3328,7 +3328,7 @@ summary:focus-visible{
     background:
       linear-gradient(180deg,#05070a82 0%,#05070aa8 44%,#05070af5 100%),
       linear-gradient(90deg,#05070a66 0%,#05070a8f 50%,#05070a66 100%),
-      url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.png') center top/auto 68% no-repeat!important;
+      url('/zerotwo.gg/assets/zerotwo/0b338a39-32cd-48f5-abb0-b31ac6c926dd.webp') center top/auto 68% no-repeat!important;
     opacity:.82!important;
   }
   .homeLookup:not(.hasResult) .homeHeroCopy{
@@ -3384,7 +3384,7 @@ summary:focus-visible{
     align-items:flex-end!important;
     background:
       linear-gradient(0deg,#06080df8 0%,#06080dcf 62%,#06080d78 100%),
-      url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.png') center/cover no-repeat!important;
+      url('/zerotwo.gg/assets/zerotwo/Imagem do ChatGPT 1 de out. de 2026, 17_10_12-1.webp') center/cover no-repeat!important;
   }
 }
 

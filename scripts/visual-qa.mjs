@@ -86,6 +86,10 @@ try{
     await page.goto('http://127.0.0.1:4173/zerotwo.gg/',{waitUntil:'domcontentloaded',timeout:30000});
     await page.locator('input[aria-label="Riot ID para buscar jogador"]').waitFor({timeout:15000});
     assert.equal(await page.locator('.ztSeoFallback').count(),0,name+': React must replace fallback without duplicate SEO content');
+    // Regressions in source artwork should not silently restore PNG requests.
+    const backdrop=page.locator('.homeHeroBackdrop').first();
+    const background=await backdrop.evaluate(el=>getComputedStyle(el).backgroundImage);
+    assert.ok(!/assets\/zerotwo\/[^)]*\.png/i.test(background),name+': legacy PNG background still requested');
     // Full-page screenshots do not automatically trigger below-fold loading.
     // Visit the four home chapters before capturing them, then verify real bytes
     // were decoded (not merely an HTML image placeholder).
