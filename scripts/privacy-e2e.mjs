@@ -54,8 +54,20 @@ try{
   await addSnapshot('second');
   const removed=await player.functions.invoke('privacy-manage',{body:{
     action:'delete_account',confirmation:'DELETE MY ZEROTWO ACCOUNT'}});
-  if(removed.error||removed.data?.ok!==true)
-    throw Error('Account deletion failed after: '+String(removed.data?.completed||[]));
+  if(removed.error||removed.data?.ok!==true){
+    // FunctionsHttpError hides non-2xx JSON in error.context. Show only
+    // allowlisted operational codes/table names; never log tokens or user IDs.
+    let detail=removed.data;
+    if(!detail&&removed.error?.context?.json){
+      try{detail=await removed.error.context.json()}catch{}
+    }
+    const code=String(detail?.error||'unavailable').replace(/[^a-z_]/g,'').slice(0,45);
+    const table=String(detail?.table||'not_supplied').replace(/[^a-z0-9_]/g,'').slice(0,60);
+    const completed=Array.isArray(detail?.completed)?detail.completed.length:0;
+    const http=Number(removed.error?.context?.status||0);
+    throw Error('Disposable account deletion denied: status='+http+' code='+code+
+      ' table='+table+' completed_tables='+completed);
+  }
   assert.equal(removed.data?.authDeleted,true,'Disposable account should delete global Auth when no shared app data');
   assert.equal(removed.data?.sharedAuthRetained,false,'Disposable account was erroneously classified as shared');
   assert.equal(await snapshots(),0);
