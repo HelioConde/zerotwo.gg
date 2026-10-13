@@ -895,15 +895,15 @@ function processElement(element:Element,language:ZtLanguage,refreshOriginal=fals
     if(current!==target)element.setAttribute(attr,target);
   }
 }
-function processTree(root:Node,language:ZtLanguage){
-  if(root.nodeType===Node.TEXT_NODE){processTextNode(root as Text,language);return}
+function processTree(root:Node,language:ZtLanguage,refreshOriginal=false){
+  if(root.nodeType===Node.TEXT_NODE){processTextNode(root as Text,language,refreshOriginal);return}
   if(root.nodeType!==Node.ELEMENT_NODE&&root.nodeType!==Node.DOCUMENT_FRAGMENT_NODE)return;
-  if(root.nodeType===Node.ELEMENT_NODE)processElement(root as Element,language);
+  if(root.nodeType===Node.ELEMENT_NODE)processElement(root as Element,language,refreshOriginal);
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT);
   let node=walker.nextNode();
   while(node){
-    if(node.nodeType===Node.TEXT_NODE)processTextNode(node as Text,language);
-    else if(node.nodeType===Node.ELEMENT_NODE)processElement(node as Element,language);
+    if(node.nodeType===Node.TEXT_NODE)processTextNode(node as Text,language,refreshOriginal);
+    else if(node.nodeType===Node.ELEMENT_NODE)processElement(node as Element,language,refreshOriginal);
     node=walker.nextNode();
   }
 }
@@ -913,6 +913,7 @@ function cleanup(){
 }
 
 let activeLanguage:ZtLanguage='pt-BR';
+let hadEnglishTranslation=false;
 export function getLanguage(){return activeLanguage}
 export function getLocale(){return activeLanguage==='en'?'en-US':'pt-BR'}
 
@@ -944,7 +945,13 @@ export function I18nProvider({children}:{children:React.ReactNode}){
     setMeta('meta[property="og:locale"]',english?'en_US':'pt_BR');
     setMeta('meta[name="twitter:title"]',title);
     setMeta('meta[name="twitter:description"]',description);
-    processTree(document.body,language);
+    // Portuguese is authored directly in JSX. Avoid walking every DOM node
+    // and installing a costly MutationObserver for the default PT-BR visitor.
+    // When switching back from English, restore the remembered source text.
+    if(english||hadEnglishTranslation)processTree(document.body,language,english);
+    hadEnglishTranslation=english;
+    window.dispatchEvent(new CustomEvent('zt:language-change',{detail:{language}}));
+    if(!english)return;
     const observer=new MutationObserver(records=>{
       for(const record of records){
         if(record.type==='characterData')processTextNode(record.target as Text,language,true);
@@ -954,7 +961,6 @@ export function I18nProvider({children}:{children:React.ReactNode}){
       cleanup();
     });
     observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:[...ATTRS]});
-    window.dispatchEvent(new CustomEvent('zt:language-change',{detail:{language}}));
     return()=>observer.disconnect();
   },[language]);
 
