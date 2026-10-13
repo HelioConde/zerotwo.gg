@@ -1,0 +1,59 @@
+name: ZeroTwo Disposable Privacy E2E
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/privacy-e2e.mjs'
+      - '.github/workflows/privacy-e2e.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  disposable:
+    name: Verify erasure on disposable account only
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: bieihhaobdztjyoweewa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Supabase client
+        run: npm install --ignore-scripts
+      - name: Retrieve ephemeral server key and verify disposable account deletion
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SUPABASE_ACCESS_TOKEN" || { echo "::error::Supabase PAT missing"; exit 1; }
+          trap 'rm -f /tmp/zt-admin-keys.json' EXIT
+          status=$(curl --silent --show-error --output /tmp/zt-admin-keys.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            "https://api.supabase.com/v1/projects/$PROJECT_REF/api-keys?reveal=true")
+          if [[ "$status" != "200" ]]; then
+            echo "::error::API Key Secrets read access unavailable (HTTP $status). No disposable account created."
+            exit 1
+          fi
+          ADMIN_KEY=$(node -e "
+            const fs=require('fs'),data=JSON.parse(fs.readFileSync('/tmp/zt-admin-keys.json','utf8'));
+            const list=Array.isArray(data)?data:Array.isArray(data?.data)?data.data:[];
+            const key=list.find(k=>k.type==='secret'&&String(k.api_key||'').startsWith('sb_secret_'))||
+              list.find(k=>k.name==='service_role'&&String(k.api_key||'').startsWith('eyJ'));
+            if(!key)process.exit(2);
+            process.stdout.write(key.api_key);
+          ") || { echo "::error::Server key not available. No account created."; exit 1; }
+          SUPABASE_TEST_ADMIN_KEY="$ADMIN_KEY" node scripts/privacy-e2e.mjs
+          unset ADMIN_KEY
+      - name: Upload sanitized evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerotwo-disposable-privacy
+          path: privacy-e2e-artifacts/
+          retention-days: 7
+          if-no-files-found: warn
