@@ -14,10 +14,11 @@
     "generate:og": "node scripts/generate-og-image.mjs",
     "optimize:images": "node scripts/optimize-final-images.mjs",
     "prune:images": "node scripts/prune-distribution-pngs.mjs",
-    "postbuild": "npm run prune:images",
+    "postbuild": "npm run purge:css && npm run prune:images",
     "predev": "npm run generate:og && npm run optimize:images",
     "prebuild": "npm run generate:og && npm run optimize:images",
-    "preaudit:seo": "npm run generate:og"
+    "preaudit:seo": "npm run generate:og",
+    "purge:css": "node scripts/purge-production-css.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "purgecss": "8.0.0"
   }
 }
