@@ -1,4 +1,16 @@
-# ZeroTwo.gg
+# ZeroTwo.gg — Riot Life
+
+**Uma experiência visual para explorar a identidade e a trajetória de um jogador de League of Legends a partir dos dados permitidos pela Riot.**
+
+[**Visão de produto**](docs/PRODUCT.md)
+
+**Jornada principal:** Riot ID → Riot Passport → Riot Life → análises de sessões, evolução, metagame pessoal e histórias de partidas.
+
+**Escopo público documentado:** League of Legends. Funcionalidades de VALORANT ou sociais que aparecem no código são experimentais e não devem ser anunciadas como parte da experiência pública atual.
+
+> Projeto independente, sujeito a permissões, limites e políticas de uso da Riot Games. Não apresente métricas ou comparações como previsões garantidas.
+
+---
 
 > **Your Riot life, interpreted.**
 
