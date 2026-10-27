@@ -1,6 +1,7 @@
 // Production smoke across three Riot routing clusters. Read-only API requests,
 // shallow sample (one match per profile), no user credentials, no PUUID logs.
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {summarize,stopLive,explanation} from './region-health-core.mjs';
 const src=readFileSync('src/supabase.ts','utf8');
 const key=src.match(/sb_publishable_[A-Za-z0-9_-]+/)?.[0];
 if(!key)throw Error('Public Supabase publishable key missing');
@@ -26,19 +27,14 @@ const report={timestamp:new Date().toISOString(),kind:'Shallow real Riot multi-r
 let fail=false;
 for(const test of cases){
   const result=await check({gameName:test.name,tagLine:test.tag,platform:test.platform,region:test.region,limit:1});
-  const row={region:test.region,platform:test.platform,httpStatus:result.status,elapsedMs:result.elapsedMs,
-    accountMatched:String(result.data?.player?.gameName||'').toLowerCase()===test.name.toLowerCase() &&
-      String(result.data?.player?.tagLine||'').toLowerCase()===test.tag.toLowerCase(),
-    matchesLoaded:Array.isArray(result.data?.matches)?result.data.matches.length:null,
-    rankedStatus:result.data?.status?.ranked||null,
-    masteryStatus:result.data?.status?.mastery||null,
-    rateLimited:result.data?.cache?.rateLimited||false,
-    errorCode:String(result.data?.error||'').slice(0,40)};
-  // A Riot account ID is global; check account AND region result, not arbitrary PUUID values.
+  const row=summarize(test,result);
+  // Do not log player names, PUUIDs, keys or complete response bodies.
   report.regions.push(row);
   if(result.status!==200||!row.accountMatched||row.rateLimited)fail=true;
   console.log('REGION GATE',JSON.stringify(row));
-  if(row.rateLimited||result.status===429){console.error('Riot rate limit reached; stop live checks to avoid amplification');break;}
+  const advice=explanation(row);
+  if(advice)console.error('REGION DIAGNOSTIC',advice);
+  if(stopLive(row))break;
   await new Promise(resolve=>setTimeout(resolve,800));
 }
 // Validation guard must return 400 without hitting Riot upstream.

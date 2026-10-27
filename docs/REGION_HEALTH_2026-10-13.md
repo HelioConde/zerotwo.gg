@@ -9,3 +9,10 @@ Synthetic 429 regression is already covered by \`scripts/visual-qa.mjs\`: preser
 \`ZeroTwo Live Account QA\` separately tests up to 100 actual matches on BR1, teammates, desktop/mobile user experience and anonymous privacy authorization checks. Do not run deep history on a frequent schedule.
 
 Privacy account-deletion tests use a fake service-role adapter and do not create or delete actual production users. An authenticated disposable-account E2E remains a separate required check.
+
+## 27/10/2026 — leitura de indisponibilidade Riot
+O monitor anterior recebeu HTTP 503 em BR1, NA1, EUW1 e KR (`error=player`) com 400 para uma região inválida. Esses HTTP 503 são reais, mas a resposta HTTP do Edge não expunha de modo suficiente se a API Riot havia retornado 401/403 ou se houve uma falha transitória.
+
+O monitor inclui agora `upstreamRiotStatus` e `failureType` sanitizados, sem nomes de usuário, PUUID, chaves ou payloads. Se a Riot recusar a chave com 401/403, a execução falha e interrompe novas regiões; 429 também interrompe. Uma indisponibilidade genérica continua sendo falha legítima, nunca uma aprovação fictícia.
+
+Em caso de autenticação recusada, conferir no Riot Developer Portal a validade e a categoria da chave e a variável `RIOT_API_KEY` armazenada como segredo da Supabase Edge Function. **Não colocar a chave no GitHub, no frontend ou nos logs.** Os testes sintéticos em PR não chamam as APIs Riot. O monitor diário da `main` permanece vermelho se a integração real estiver indisponível.

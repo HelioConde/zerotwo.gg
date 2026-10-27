@@ -6,9 +6,18 @@ on:
     branches: [main]
     paths:
       - 'scripts/region-health.mjs'
+      - 'scripts/region-health-core.mjs'
+      - 'scripts/region-health.test.mjs'
       - '.github/workflows/region-health.yml'
   schedule:
     - cron: '17 10 * * *'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/region-health.mjs'
+      - 'scripts/region-health-core.mjs'
+      - 'scripts/region-health.test.mjs'
+      - '.github/workflows/region-health.yml'
 
 permissions:
   contents: read
@@ -18,7 +27,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  unit:
+    name: Region diagnostics — synthetic tests (no Riot traffic)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate privacy and failure classification
+        run: |
+          node --check scripts/region-health.mjs
+          node --test scripts/region-health.test.mjs
   regions:
+    if: github.event_name != 'pull_request'
+    needs: unit
     name: Shallow Riot checks BR1 NA1 EUW1 KR
     runs-on: ubuntu-latest
     timeout-minutes: 8
