@@ -42,7 +42,7 @@ function sanitize(test,result,attempts){
     rankedStatus:typeof data.status?.ranked==='string'?data.status.ranked.slice(0,30):null,
     masteryStatus:typeof data.status?.mastery==='string'?data.status.mastery.slice(0,30):null,
     rateLimited:!!data.cache?.rateLimited,
-    errorCode:String(data.error||'').slice(0,40)
+    errorCode:['player','matches','unavailable','routing','riot_id','rate_limit'].includes(data.error)?data.error:'unknown'
   };
   row.reason=classifyRegionResult(row);
   return row;
