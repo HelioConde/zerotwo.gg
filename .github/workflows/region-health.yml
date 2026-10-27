@@ -6,6 +6,15 @@ on:
     branches: [main]
     paths:
       - 'scripts/region-health.mjs'
+      - 'scripts/region-health-classifier.mjs'
+      - 'tests/region-health-classifier.test.mjs'
+      - '.github/workflows/region-health.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/region-health.mjs'
+      - 'scripts/region-health-classifier.mjs'
+      - 'tests/region-health-classifier.test.mjs'
       - '.github/workflows/region-health.yml'
   schedule:
     - cron: '17 10 * * *'
@@ -14,11 +23,28 @@ permissions:
   contents: read
 
 concurrency:
-  group: zerotwo-region-health
+  group: zerotwo-region-health-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  classifier:
+    name: Test redacted failure classification
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate classifier and monitor syntax
+        run: |
+          node --check scripts/region-health.mjs
+          node --check scripts/region-health-classifier.mjs
+          node --test tests/region-health-classifier.test.mjs
+
   regions:
+    if: github.event_name != 'pull_request'
+    needs: classifier
     name: Shallow Riot checks BR1 NA1 EUW1 KR
     runs-on: ubuntu-latest
     timeout-minutes: 8
